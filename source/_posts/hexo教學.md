@@ -1,6 +1,8 @@
 ---
 title: hexo教學
 date: 2017-09-09 15:22:14
+categories:
+- tools
 tags:
 ---
 我之前一直想要自己寫blog，可以留下些記錄，但是一方面不想要自己架server，管理有點麻煩
