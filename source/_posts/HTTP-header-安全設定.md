@@ -1,7 +1,10 @@
 ---
 title: HTTP header 安全設定
 date: 2018-01-03 22:13:53
-tags: security 
+categories:
+- security
+tags:
+- web
 ---
 # 總覽
 根據[DEVCORE](https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/)，相關HTTP header可以如下分類

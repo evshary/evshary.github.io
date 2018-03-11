@@ -2,9 +2,9 @@
 title: dependency
 date: 2017-08-26 12:31:42
 categories:
-- GNU tool
+- 軟體開發
 tags:
-- Makefile
+- GNU tool
 ---
 
 # 問題

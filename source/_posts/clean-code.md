@@ -2,7 +2,7 @@
 title: clean code
 date: 2017-09-03 17:47:33
 categories:
-- 開發 
+- 軟體開發
 tags:
 ---
 這邊記錄一下我看clean code的筆記整理
