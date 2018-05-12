@@ -75,8 +75,8 @@ readelf很明顯就是觀察ELF檔案的專門工具，使用方式如下
   - -e：三者都印
 * 讀取資訊選項
   - -s：符號表
-  - -r：蟲定位資訊
-* 特別：
+  - -r：重定位資訊
+* 特別用法：
   - -a：所有標頭資訊全部印出
   - -xn：先用-S看要查看的Section數字，然後n填上該數字就可以hexdump那個section
 
@@ -189,7 +189,7 @@ Key to Flags:
 ## objdump取得ELF內容
 除了看ELF內的資訊外，我們可以進一步得到更細的資訊，包括dump內容和反組譯程式，這時候就要用objdump了
 
-* `objdump -s -j [section] [filename]`：把特定section dump出來
+* `objdump -s -j [section] [filename]`：把特定section完整dump出來
 * `objdump -h [filename]`：看有哪些section，跟readelf功用類似
 * `objdump -x [filename]`：把所有section都顯示出來
 * `objdump -d [filename]`：反組譯程式
