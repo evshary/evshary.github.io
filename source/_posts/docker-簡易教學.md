@@ -127,10 +127,10 @@ ENV PATH $PATH:/home/bin
 docker build .
 ```
 
-## 範例
+# 範例
 看完command可能還是不清楚怎麼用，這邊用安裝nginx的docker image來說明
 
-### 取得image
+## 取得image
 
 首先我們先搜尋nginx
 ```
@@ -159,7 +159,7 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 nginx               latest              ae513a47849c        11 days ago         109MB
 ```
 
-### 運行container
+## 運行container
 
 開始運行container，並且讓port 8080對應到nginx container的port 80，工作路徑為/home，然後執行bash
 ```
@@ -174,7 +174,7 @@ $ docker run -d -p 8080:80 -v shared_dir:/var/www:rw nginx
 $ docker exec -i -t 78fc bash
 ```
 
-### 操作運行中的container
+## 操作運行中的container
 
 看一下當前有的container
 ```
@@ -196,7 +196,7 @@ $ docker stop e2cf9ea13bb4
 $ docker start e2cf9ea13bb4
 ```
 
-### 提交改變成為新的image
+## 提交改變成為新的image
 
 看看該container有什麼改變
 ```
@@ -230,7 +230,7 @@ ae513a47849c        11 days ago          /bin/sh -c #(nop)  CMD ["nginx" "-g" "d
 <missing>           11 days ago          /bin/sh -c #(nop)  STOPSIGNAL [SIGTERM]         0B
 ```
 
-### 刪除container/images
+## 刪除container/images
 
 玩膩了，可以刪除images，記得要先刪掉container才行刪images喔
 ```
