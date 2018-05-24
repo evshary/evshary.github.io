@@ -17,10 +17,10 @@ tags:
 安裝詳細流程可以參考[如何在 macOS 上安裝 Docker CE](http://blog.itist.tw/2017/06/how-to-install-docker-ce-with-mac-os-and-os-x.html)，寫得非常清楚。
 
 ## ubuntu
-```sh
-sudo apt-get install docker.io
-sudo service docker start
-```
+Ubuntu的安裝方式也跟以前不一樣了，可參考官網的作法，[Get Docker CE for Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository)
+
+## Windows
+Windows的安裝教學連結[在此](https://docs.docker.com/docker-for-windows/install/#about-windows-containers)，值得注意的是只有Windows10才有支援Hyper-V，如果是其他版本就必須要安裝使用Virtualbox的Docker Toolbox來取代了。
 
 # 常用指令
 可以用一張圖職階概括大部分常用docker的指令，圖片來自[Docker —— 從入門到實踐  附錄一：命令查詢](https://philipzheng.gitbooks.io/docker_practice/content/appendix_command/)
