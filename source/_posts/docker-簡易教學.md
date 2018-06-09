@@ -108,14 +108,14 @@ docker history XXX
 
 下面是個範例
 ```
-# base image
+# base image
 FROM ubuntu:14.04
 
 # 執行的command
 RUN apt-get update
 RUN apt-get install -y nginx
 
-# open port
+# 要開的port，注意在run的時候還是要加上-p才能真正讓外部連接該port
 EXPOSE 80
 
 # 環境變數
@@ -124,7 +124,7 @@ ENV PATH $PATH:/home/bin
 
 建立image
 ```
-docker build .
+docker build -t repo_name:tag_name .
 ```
 
 # 範例
