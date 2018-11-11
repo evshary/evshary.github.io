@@ -100,9 +100,11 @@ tags:
 - 原理：
   - 當使用者用http連線，強制轉成https連線，這個選項只有在https連線的情況下才有用，如果是http會被忽略(因為可能有MITM)
 - 啟動方式：
+```
     Strict-Transport-Security: max-age=expireTime [; includeSubdomains]
     # max-age=expireTime: browser要記住這個網站要用https連線的時間
     # includeSubdomains: 哪些subdomain也都要同樣設定
+```
 - 可參考
   - [Mozilla HTTP Strict Transport Security](https://developer.mozilla.org/zh-CN/docs/Security/HTTP_Strict_Transport_Security): 詳細介紹這個header在哪些browser支援和有什麼選項
 
