@@ -2,7 +2,7 @@
 title: dependency
 date: 2017-08-26 12:31:42
 categories:
-- 軟體開發
+- 系統程式
 tags:
 - GNU tool
 ---
