@@ -73,7 +73,7 @@ gpg --edit-key [UID]
 ```
 3. 刪除已存入key的方式，如果有私鑰要先刪除
 ```
-# 先刪除私鑰
+# 先刪除私鑰
 gpg --delete-secret-key [UID]
 # 刪除公鑰
 gpg --delete-key [UID]

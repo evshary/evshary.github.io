@@ -101,5 +101,40 @@ disqus_shortname:
 ```
 後面填上自己在Disquz註冊的short name就可以囉！
 
+## LocalSearch的搜尋功能
+我們如果要blog支援搜尋功能，可參考[Hexo博客添加搜索功能](https://www.itfanr.cc/2017/10/27/add-search-function-to-hexo-blog/)，下面列出應該要做的步驟
+
+1. 首先要安裝`hexo-generator-searchdb`套件
+```
+npm install hexo-generator-searchdb --save
+```
+2. 接著在`_config.yml`新增如下設定
+```
+# Search
+search:
+  path: search.xml
+  field: post
+```
+3. 開啟`themes/[自己的主題]/_config.yml`enable local_search
+```
+# Local search
+local_search:
+  enable: true
+```
+4. 最後重新生成啟動即可
+```
+hexo clean
+hexo s -g
+```
+### 如果搜尋功能不斷轉圈圈
+通常會有一種情況搜尋功能會有問題，就是產生的search.xml有文字編碼錯誤
+
+1. 先檢查search.xml的語法，可使用[Validate an XML file](https://www.xmlvalidation.com/)這個線上網站
+2. 網站會告訴你哪邊有錯誤的編碼，可以直接進去修改
+3. 如果使用vscode的話可以從設定啟動renderControlCharacters，就會顯示錯誤的字元了
+4. 如果有必要可以直接把該字元複製並且使用全域搜尋並修正(因為我們沒辦法打出該字元)
+
+詳情可參考[HEXO-NexT的Local Search轉圈圈問題](https://guahsu.io/2017/12/Hexo-Next-LocalSearch-cant-work/)
+
 # 參考
 [使用hexo，如果换了电脑怎么更新博客？使用hexo，如果换了电脑怎么更新博客？](https://www.zhihu.com/question/21193762)
