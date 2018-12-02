@@ -14,7 +14,7 @@ tags:
 ## MAC
 如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的[XQuartz](https://www.xquartz.org/)即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考[Can't plot with gnuplot on my Mac](https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac)
 
-接下來安裝gnuplot的時候要特別注意，如果沒有加上`--with-x11`的話，可能會造成`Terminal type set to 'unknown'`的warning，可參考[Can't find x11 terminal in gnuplot Octave on Mac OS](https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os)
+接下來安裝gnuplot的時候要特別注意，如果沒有加上`--with-x11`的話，可能會造成`Terminal type set to 'unknown'`的warning，可參考[Can't find x11 terminal in gnuplot Octave on Mac OS](https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os)
 ```
 brew install gnuplot --with-x11
 ```
