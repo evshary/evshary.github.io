@@ -136,5 +136,32 @@ hexo s -g
 
 詳情可參考[HEXO-NexT的Local Search轉圈圈問題](https://guahsu.io/2017/12/Hexo-Next-LocalSearch-cant-work/)
 
+## RSS
+如果要在hexo上加上RSS訂閱，需要使用hexo-generator-feed套件
+
+1. 先安裝hexo-generator-feed
+```
+npm install hexo-generator-feed
+```
+2. 在`_config.yml`內加上如下內容
+```
+# RSS
+feed:
+    type: atom
+    path: atom.xml
+    limit: 10
+    hub:
+    content:
+    content_limit:
+    content_limit_delim: ' '
+```
+3. 最後重新生成啟動即可
+```
+hexo g
+hexo s
+```
+
+可參考[为hexo博客添加RSS订阅功能](https://segmentfault.com/a/1190000012647294)
+
 # 參考
 [使用hexo，如果换了电脑怎么更新博客？使用hexo，如果换了电脑怎么更新博客？](https://www.zhihu.com/question/21193762)
