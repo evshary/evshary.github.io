@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="前言在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。 Com">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些減少code size的方法">
+<meta property="og:url" content="http://evshary.github.io/2019/08/03/一些減少code-size的方法/index.html">
+<meta property="og:site_name" content="凛の魅力に溺死しろ">
+<meta property="og:description" content="前言在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。 Com">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-04T08:18:51.130Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些減少code size的方法">
+<meta name="twitter:description" content="前言在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。 Com">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://evshary.github.io/2019/08/03/一些減少code-size的方法/">
+
+
+
+
+
+  <title>一些減少code size的方法 | 凛の魅力に溺死しろ</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105315332-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">凛の魅力に溺死しろ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">どんな時でも余裕を持って優雅たれ</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/aboutme/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://evshary.github.io/2019/08/03/一些減少code-size的方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="evshary">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凛の魅力に溺死しろ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一些減少code size的方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-03T16:39:40+08:00">
+                2019-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/系統程式/" itemprop="url" rel="index">
+                    <span itemprop="name">系統程式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/03/一些減少code-size的方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/03/一些減少code-size的方法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
+<h1 id="Compile-Optimization"><a href="#Compile-Optimization" class="headerlink" title="Compile Optimization"></a>Compile Optimization</h1><p>首先我們可以看一下compiler是不是已經做過優化了，大家都知道gcc在編譯的時候可以選擇optimization的level，從0-3。0代表的是default，而隨著數字越高，對code size和execution time的優化就越高。</p>
+<p>大部分的人都會建議使用-O2，在code size和execution time取平衡，但是如果真的對code size十分在意的話，其實也可以使用-Os，代表的是-O2但是不包含部分會影響code size的優化。</p>
+<p>到底每個optimization的level是做了那些優化，可參考<a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html" target="_blank" rel="noopener">GCC的官方文件</a></p>
+<h1 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h1><p>strip算是最基本的降低code size工具，他會移除debug資訊(可供gdb使用的資訊)以及symbol table，因此size會降低許多。</p>
+<p>這邊簡單做個實驗：</p>
+<ul>
+<li><p>我們先寫個簡單程式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"func\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    func();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著來編譯，為了凸顯strip的效果，我們加上-g來加上gdb debug訊息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -g test.c -o test</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著我們可以用<code>nm -a test</code>來看到他的symbol table</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0000000000000000 a</span><br><span class="line">0000000000201030 b .bss</span><br><span class="line">0000000000201030 B __bss_start</span><br><span class="line">0000000000000000 n .comment</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>以及用<code>objdump -h test</code>來看到有哪些section header，可以發現有許多debug資訊</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"> 27 .debug_aranges 00000030  0000000000000000  0000000000000000  0000105d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 28 .debug_info   0000033a  0000000000000000  0000000000000000  0000108d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 29 .debug_abbrev 000000f6  0000000000000000  0000000000000000  000013c7  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 30 .debug_line   000000d4  0000000000000000  0000000000000000  000014bd  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 31 .debug_str    0000028a  0000000000000000  0000000000000000  00001591  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著執行<code>strip test</code>後，會發現symbol table已經消失了(無法使用nm)，以及沒有debug的section header。兩者size有極大差異。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 11152 Aug  4 11:34 test</span><br><span class="line">&gt; strip test</span><br><span class="line">&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h1><p>strip可以減少極大部分的code size，但是如果這樣還不夠的話，我們可以用objcopy把一些沒用到的section header移除掉，但是要提醒一下，這個移除幾乎不會影響太大，大概就幾百byte而已。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version test small_test</span><br><span class="line">-&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
+<p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html" target="_blank" rel="noopener">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
+<h1 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h1><p>我們知道程式裡面常常會有些程式碼(function/data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
+<p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
+<p>細節可以參考<a href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld" target="_blank" rel="noopener">How to remove unused C/C++ symbols with GCC and ld?</a>。</p>
+<h1 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h1><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
+<p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
+<h1 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h1><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
+<p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
+<p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
+<h1 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h1><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1/3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
+<p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
+<h1 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h1><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
+<p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
+<p>web壓縮的方式網路上有很多，有些甚至提供online的服務，例如<a href="https://htmlcompressor.com/compressor/" target="_blank" rel="noopener">HTMLCompressor</a>或是<a href="https://www.textfixer.com/html/compress-html-compression.php" target="_blank" rel="noopener">textfixer</a>等等，可以自己尋找適合的工具。</p>
+<h1 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h1><p>上面分享了許多方法，但最後我要先澄清一下，自己需要搞清楚到底不夠的是flash還是memory，上面的方法並不是做了兩個都一定會減少。舉個例子來說，移除沒有必要用到的大變數通常只會影響memory的使用率，因為compile出來firmware的size並沒有包括大變數(因為是bss section，未初始化區段)，而file system的壓縮通常也只會影響flash的使用率，除非firmware有把檔案預先從flash讀出來放在memory中。我想強調的是使用這些方法時，還是要有必備的系統觀以及對你的系統有一定熟悉程度。</p>
+<p>老實說軟體開發者最討厭的大概就是被各種硬體條件所限制，然而這些在embedded的世界中還是有很大的機會會遇到，特別是考量到成本的時候。雖然很討厭這類的問題，但是解決後其實還是蠻有成就感的。以上分享希望能夠幫助大家解決code size issue。</p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="http://linux.vbird.org/somepaper/20050117-jianfei.pdf" target="_blank" rel="noopener">程式減肥三步走</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/23/三年的工作省思/" rel="next" title="三年的工作省思">
+                <i class="fa fa-chevron-left"></i> 三年的工作省思
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="evshary">
+          <p class="site-author-name" itemprop="name">evshary</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Compile-Optimization"><span class="nav-number">2.</span> <span class="nav-text">Compile Optimization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#strip"><span class="nav-number">3.</span> <span class="nav-text">strip</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#objcopy"><span class="nav-number">4.</span> <span class="nav-text">objcopy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用-compile-option-來移除沒用到的-symbol"><span class="nav-number">5.</span> <span class="nav-text">利用 compile option 來移除沒用到的 symbol</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#觀察-map-file"><span class="nav-number">6.</span> <span class="nav-text">觀察 map file</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Remove-debug-message"><span class="nav-number">7.</span> <span class="nav-text">Remove debug message</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#移除沒用到的功能-library-、檔案"><span class="nav-number">8.</span> <span class="nav-text">移除沒用到的功能(library)、檔案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Compression"><span class="nav-number">9.</span> <span class="nav-text">Compression</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#結語"><span class="nav-number">10.</span> <span class="nav-text">結語</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考"><span class="nav-number">11.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">evshary</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://evshary.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://evshary.github.io/2019/08/03/一些減少code-size的方法/';
+          this.page.identifier = '2019/08/03/一些減少code-size的方法/';
+          this.page.title = '一些減少code size的方法';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://evshary.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="這邊記錄一下我看clean code的筆記整理不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種在C要這樣實踐很有難度，而且我看很多open source的project也都沒有遵循這樣的規範但是這本書還是很有參考價值的，至少會讓自己反省寫code時有沒有犯了這些問題。書中提到一個概念：  程式設計師有大半時間花在看code，因此好閱讀的code對快速寫程式是有幫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="clean code">
+<meta property="og:url" content="http://evshary.github.io/2017/09/03/clean-code/index.html">
+<meta property="og:site_name" content="凛の魅力に溺死しろ">
+<meta property="og:description" content="這邊記錄一下我看clean code的筆記整理不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種在C要這樣實踐很有難度，而且我看很多open source的project也都沒有遵循這樣的規範但是這本書還是很有參考價值的，至少會讓自己反省寫code時有沒有犯了這些問題。書中提到一個概念：  程式設計師有大半時間花在看code，因此好閱讀的code對快速寫程式是有幫">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-03T08:33:48.947Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="clean code">
+<meta name="twitter:description" content="這邊記錄一下我看clean code的筆記整理不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種在C要這樣實踐很有難度，而且我看很多open source的project也都沒有遵循這樣的規範但是這本書還是很有參考價值的，至少會讓自己反省寫code時有沒有犯了這些問題。書中提到一個概念：  程式設計師有大半時間花在看code，因此好閱讀的code對快速寫程式是有幫">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://evshary.github.io/2017/09/03/clean-code/">
+
+
+
+
+
+  <title>clean code | 凛の魅力に溺死しろ</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105315332-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">凛の魅力に溺死しろ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">どんな時でも余裕を持って優雅たれ</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/aboutme/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://evshary.github.io/2017/09/03/clean-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="evshary">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凛の魅力に溺死しろ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">clean code</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-03T17:47:33+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/軟體開發/" itemprop="url" rel="index">
+                    <span itemprop="name">軟體開發</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/03/clean-code/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/09/03/clean-code/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>這邊記錄一下我看clean code的筆記整理<br>不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種<br>在C要這樣實踐很有難度，而且我看很多open source的project也都沒有遵循這樣的規範<br>但是這本書還是很有參考價值的，至少會讓自己反省寫code時有沒有犯了這些問題。<br>書中提到一個概念：</p>
+<blockquote>
+<p>程式設計師有大半時間花在看code，因此好閱讀的code對快速寫程式是有幫助的</p>
+</blockquote>
+<p>我想這就是我從書裡得到最大的收穫吧！</p>
+<h1 id="有意義的名稱"><a href="#有意義的名稱" class="headerlink" title="有意義的名稱"></a>有意義的名稱</h1><ul>
+<li><p>讓程式碼的隱含性高，名稱和意圖符合</p>
+</li>
+<li><p>避免誤導<br>讓變數不會相似高(autocomplete好找)<br>像是l和1，0和O</p>
+</li>
+<li><p>產生有意義的區別<br>例如a1,a2、ProductInfo,ProductData,或是table, variable等等都看不出差別</p>
+</li>
+<li><p>使用能念出來的名稱<br>人類大腦有一大部分都專注在字詞的概念，字詞是可發音的，方便理解<br>方便同事間彼此溝通</p>
+</li>
+<li><p>使用可被搜尋的名字<br>使用單一字母變數或是數值常數很難被找到<br>例如<code>MAX_CLASSES_PER_STUDENT</code>比<code>7</code>還要好找，命名變數e幾乎每段程式碼都會用到<br>一般來說，長命名比短命名好，命名長度應該和scope作對應，範圍越大的應該要用比較容易識別的名字</p>
+</li>
+<li><p>避免編碼<br>這邊的編碼是指形態或視野，作者不推薦使用匈牙利標誌法，因為那是早期編譯器不會進形型態檢查，但是現在編譯器已經會做了，所以不需要浪費時間做這件事</p>
+<blockquote>
+<p>可是有時候在看code，有提示還是比較容易記憶的，見仁見智</p>
+</blockquote>
+</li>
+<li><p>成員的字首<br>不需要在變數前加上類似m_</p>
+</li>
+<li><p>類別方法命名<br>類別：要用名詞來命名<br>方法：用動詞命名，而且accessors要用get開頭、mutators用set、predicates要用is</p>
+</li>
+<li><p>使用一致性的詞彙<br>例如取得方法不要同時有get, fetch, retrieve</p>
+</li>
+<li><p>將命名放在有意義的上下文<br>例如state要配合address看才會知道是州，如果沒辦法配合上下文那就手動加上前綴，例如addrState</p>
+</li>
+<li><p>不要添加過多無意義資訊<br>例如每個變數名稱都加上特定前綴，會讓IDE無法幫你找變數</p>
+</li>
+</ul>
+<h1 id="函式"><a href="#函式" class="headerlink" title="函式"></a>函式</h1><ul>
+<li>函式要非常簡短，盡量低於20行</li>
+<li>函式內的縮排也不要大過一兩層</li>
+<li>做一件的函式是無法被區分成不同段落的，如宣告區、初始區等等</li>
+<li>降層準則：程式閱讀應該是由上而下敘事，希望每個函式後面都進接著下一層次的概念。</li>
+<li>函式應該做一件事，他們應該把這件事做好，而且他們應該只做這件事。</li>
+<li>函式參數最多不要超過三個，越少越好，如果需要超過三個，可以考慮使用物件代替</li>
+<li>越多參數要測試會越困難，而且參數有傳達概念的能力，讀者必須去了解它</li>
+<li>另外不要用輸出型參數，用回傳值</li>
+<li>分離指令和查詢(set和get)</li>
+<li>使用例外處理來取代回傳錯誤碼，讓使用者不需要一遇到錯誤碼就必須馬上處理錯誤</li>
+<li>結構化程式：雖然Dijkstra提到在一個函式內只能有一個return，不要有break和continue，以及goto，但是作者認為在小函式時可以適當使用，但是不應該用goto，因為只有大函式goto才有用處</li>
+</ul>
+<h1 id="註解"><a href="#註解" class="headerlink" title="註解"></a>註解</h1><ul>
+<li>適當使用註解是用來彌補我們用程式碼表達意圖的失敗</li>
+<li>沒有提供比程式碼更多資訊或是反而誤導的註解就是壞註解，當然過多資訊也是</li>
+<li>git已經提供修改紀錄，不該寫在註解中，包括程式碼的註解也應該拿掉</li>
+</ul>
+<h2 id="適合用註解的時機"><a href="#適合用註解的時機" class="headerlink" title="適合用註解的時機"></a>適合用註解的時機</h2><ul>
+<li>法律型註解</li>
+<li>資訊型的註解</li>
+<li>對意圖的解釋</li>
+<li>闡明</li>
+<li>對後果的告誡</li>
+<li>TODO</li>
+<li>放大重要性</li>
+<li>Javadoc</li>
+</ul>
+<h1 id="編排"><a href="#編排" class="headerlink" title="編排"></a>編排</h1><p>每個檔案應該大部分用200行，最多不超過500行</p>
+<h2 id="垂直距離"><a href="#垂直距離" class="headerlink" title="垂直距離"></a>垂直距離</h2><ul>
+<li>程式中，應該要用垂直空白區分思緒(兩個函式間)，而且如果兩個函式密且相關的話，不要放太多註解在兩者之間</li>
+<li>變數宣告：變數的宣告應該盡可能靠近變數被使用的地方</li>
+<li>實體變數(instance)：盡量集中在最上方或最下方，方便被查詢</li>
+<li>相依的函式應該放在同一區塊，相依性越高，彼此的垂直距離就要越短</li>
+</ul>
+<h2 id="水平距離"><a href="#水平距離" class="headerlink" title="水平距離"></a>水平距離</h2><ul>
+<li>通常程式設計師偏好短的程式碼，不一定要80，但不要超過120</li>
+<li>水平空白也可以用來表示優先權，例如乘法之間不要有空白，加減法則要</li>
+<li><p>水平的對齊也沒有必要，因為自動化編排程式會毀掉這樣的對齊，而且這樣會讓人忽略變數型態，只關注上下的對齊</p>
+<blockquote>
+<p>不過像define我就覺得有必要對齊，這樣方便觀看</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>    abc;</span><br><span class="line"><span class="keyword">float</span>  def;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>不要使用一行文，包括單行while加上分號，很容易搞錯</p>
+<blockquote>
+<p>這邊注意if如果是一行，也許加上大括號會比較好，常常會在下方加上其他敘述卻忘了加括號，這樣會有不同的行為</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="物件及資料結構"><a href="#物件及資料結構" class="headerlink" title="物件及資料結構"></a>物件及資料結構</h1><p>不要幫每個private都加上get, set，應該要思考怎樣才能隱藏更多資訊<br>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FuelTankCapacityInGallons()&#123;</span><br><span class="line">  double getGallonsOfGasoline();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>會差於<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">publice interface Vehicle&#123;</span><br><span class="line">  double getPercentFuelRemaining();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>因為使用者知道怎麼計算油量</p>
+<h2 id="資料與物件有反對稱性"><a href="#資料與物件有反對稱性" class="headerlink" title="資料與物件有反對稱性"></a>資料與物件有反對稱性</h2><p>結構化的程式碼容易添加新函式，而不需變更原有的資料結構<br>物件導向的程式碼容易添加新類別，而不用變動已有函式</p>
+<h1 id="錯誤處理"><a href="#錯誤處理" class="headerlink" title="錯誤處理"></a>錯誤處理</h1><ul>
+<li>如前所說，作者建議用例外事件而非錯誤碼</li>
+<li>不要使用java中的checked exception，因為如果底層函式被修改，會強制所有被呼叫的函式都要做錯誤檢查，會破壞函式封閉原則</li>
+<li>不要回傳null，會讓使用者需要做額外判斷</li>
+<li>傳遞null也會讓函式需要做額外判斷</li>
+</ul>
+<h1 id="邊界"><a href="#邊界" class="headerlink" title="邊界"></a>邊界</h1><p>當使用第三方軟體時，可以考慮製作一個介面來與第三方API銜接，這樣如果有大改動時，我們只需要修改介面即可</p>
+<h1 id="單元測試"><a href="#單元測試" class="headerlink" title="單元測試"></a>單元測試</h1><p>TDD(Test-Driven Development)有三大準則</p>
+<ol>
+<li>在撰寫一個單元測試前，不可以撰寫任何產品程式</li>
+<li>只撰寫剛好無法通過的單元測試，不能編譯也算無法通過</li>
+<li>只撰寫剛好能通過當前測試失敗的產品程式<br>以上準則可以讓程式設計師被限制在30s的循環：測試程式和產品程式是一起被撰寫的。</li>
+</ol>
+<p>一個測試一個assert，但作者認為不需要嚴格遵守，盡可能少即可<br>一個測試一個概念</p>
+<p>FIRST</p>
+<ul>
+<li>Fast：測試要夠快，能夠快速執行，讓人有意願去執行</li>
+<li>Independent：測試程式不應該互相依賴，會讓人更難尋找錯誤</li>
+<li>Repeatable：可以在任何環境下執行</li>
+<li>Self-Validating：要輸出boolean告知程式成功或失敗，而非去看log主觀判斷</li>
+<li>Timely：單元測試要再寫產品程式之前，這樣才能寫出可被測試的程式</li>
+</ul>
+<h1 id="類別"><a href="#類別" class="headerlink" title="類別"></a>類別</h1><ul>
+<li>Single Responsibility Principle(SRP)：單一職責原則</li>
+<li>一個類別或模組應該只有一個被修改的理由</li>
+<li>保持類別的凝聚性(每個變數被多個method使用)：這樣會得到許多小class</li>
+</ul>
+<h1 id="系統"><a href="#系統" class="headerlink" title="系統"></a>系統</h1><p>軟體系統相較於實體系統來說是獨特的，如果我們持續保持適當的關注點分離，軟體系統的架構就能遞增地成長</p>
+<h1 id="羽化"><a href="#羽化" class="headerlink" title="羽化"></a>羽化</h1><p>遵守四個原則：</p>
+<ol>
+<li>執行完所有測試：有測試就會消除整理程式碼會破壞程式的恐慌</li>
+<li>沒有重複的部分</li>
+<li>表達程式設計師的本意</li>
+<li>最小化類別和方法的數量：這條守則的優先權是最低的</li>
+</ol>
+<h1 id="平行化"><a href="#平行化" class="headerlink" title="平行化"></a>平行化</h1><ul>
+<li>物件是處理過程的抽象化，執行緒是排程的抽象化</li>
+<li>平行化是去耦合的抽象化，讓「做什麼」和「什麼時候做」分開</li>
+<li>另外也可以解決response time和throughput的限制</li>
+</ul>
+<h2 id="迷思"><a href="#迷思" class="headerlink" title="迷思"></a>迷思</h2><p>X 平行化總是能改善效能<br>X 撰寫平行化程式並不需要修改原有的設計<br>O 平行化會帶來額外負擔<br>O 正確的平行化是複雜的<br>O 平行化的錯誤通常不容易重複出現</p>
+<h2 id="平行化防禦方法"><a href="#平行化防禦方法" class="headerlink" title="平行化防禦方法"></a>平行化防禦方法</h2><ul>
+<li>單一職責原則(SRP)：保持平行化程式碼與其他程式有清楚劃分</li>
+<li>限制資料視野：嚴格限制共享資料的存取次數</li>
+<li>使用資料的副本：複製唯讀副本，減少共享資料次數</li>
+<li>執行緒盡可能獨立運行</li>
+<li>另外也要保持同步區塊的簡短，因為cost高</li>
+<li>優雅的關閉平行化程式碼，注意能讓子thread可以關閉</li>
+</ul>
+<h2 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h2><ul>
+<li>不要因為系統後來通過測試就忽略失敗，因為未來會有越來越多錯誤建立在有缺陷的基礎上</li>
+<li>先讓非執行緒的程式碼可以運作，不要兩者同時debug</li>
+<li>讓執行緒是可以自我調校</li>
+<li>執行比處理器還多的執行緒，bug會越容易找到</li>
+<li>在不同平台執行</li>
+<li>調整程式碼，使其產生失敗</li>
+</ul>
+<h1 id="Bad-Smell"><a href="#Bad-Smell" class="headerlink" title="Bad Smell"></a>Bad Smell</h1><h2 id="註解-1"><a href="#註解-1" class="headerlink" title="註解"></a>註解</h2><ul>
+<li>無效、沒意義、不適當的註解</li>
+<li>被註解掉的程式碼</li>
+</ul>
+<h2 id="開發環境"><a href="#開發環境" class="headerlink" title="開發環境"></a>開發環境</h2><ul>
+<li>需要多個步驟建立專案或系統</li>
+<li>需要多個步驟進行測試</li>
+</ul>
+<h2 id="函式-1"><a href="#函式-1" class="headerlink" title="函式"></a>函式</h2><ul>
+<li>過多參數</li>
+<li>輸出行參數</li>
+<li>旗標參數</li>
+<li>被遺棄的函式</li>
+</ul>
+<h2 id="一般狀況"><a href="#一般狀況" class="headerlink" title="一般狀況"></a>一般狀況</h2><ul>
+<li>同份原始碼有多種語言</li>
+<li>明顯該有的行為沒被實現(最小驚奇原則)</li>
+<li>在邊界上的不正確行為：不要依賴直覺，為邊界條件寫測試程式</li>
+<li>無視安全規範：不要關閉編譯器的警告</li>
+<li>重複的程式碼：這是最重要的規範之一</li>
+<li>在錯誤抽象層次上的程式碼：高層次概念都要在基底類別</li>
+<li>基底類別相依於其衍生類別</li>
+<li>過多資訊：應該要把暴露在介面上的資訊減少</li>
+<li>被遺棄的程式碼</li>
+<li>垂直分隔：如前所示</li>
+<li>不一致性：維持命名一致性</li>
+<li>雜亂程式：保持原始檔整潔</li>
+<li>人為耦合：不要將變數隨意宣告，然後就留在某處</li>
+<li>特色留戀：類別的方法應該只對同一類別裡的變數和函式感興趣，不應該操作其他類的變數或函式</li>
+<li>選擇型參數：在函式尾端加上true, false</li>
+<li>模糊的意圖：盡可能讓程式碼有表達力</li>
+<li>錯置的職責：像是要把常數放在讀者認為他應該要在的地方</li>
+<li>使用具解釋性的變數：將計算過程拆解成富有意義名稱的暫存變數</li>
+<li>函數名稱要說到做到</li>
+<li>了解演算法：不是調整函式做到想讓其做到的事，而是確定解決方法是正確，並且讓函式明顯透露出是怎麼運作的</li>
+<li>用多型取代if-else和switch-case</li>
+<li>遵循標準的慣例：用團隊的慣例</li>
+<li>用有名稱的常數取代魔術數字</li>
+<li>要精確：不要有模擬兩可的程式碼，精確表達該函式要做什麼</li>
+<li>封裝條件判斷：<code>if(shouldBeDeleted(timer))</code>取代<code>if(timer.hasExpired() &amp;&amp; !timre.isRecurrent())</code></li>
+<li>避免否定條件判斷</li>
+<li>函式只該做一件事</li>
+<li>不要隨意：如果程式碼保持一致性，這樣後來修改的人就會按造前面的原則改</li>
+<li>封裝邊界條件：如果a+1常被用到，那就用b=a+1取代，這點跟refactoring似乎不太一樣</li>
+</ul>
+<h2 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h2><ul>
+<li>選擇有描述性的名稱</li>
+<li>在適當的抽象層次使用適當的名稱</li>
+<li>越大的scope就要用較長的名稱</li>
+</ul>
+<h2 id="測試-1"><a href="#測試-1" class="headerlink" title="測試"></a>測試</h2><ul>
+<li>不足夠的測試程式</li>
+<li>不要跳過簡單的測試</li>
+<li>對程式錯誤處進行詳細測試</li>
+<li>測試要夠快速</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/27/code-review/" rel="next" title="code review">
+                <i class="fa fa-chevron-left"></i> code review
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/09/hexo教學/" rel="prev" title="hexo教學">
+                hexo教學 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="evshary">
+          <p class="site-author-name" itemprop="name">evshary</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#有意義的名稱"><span class="nav-number">1.</span> <span class="nav-text">有意義的名稱</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函式"><span class="nav-number">2.</span> <span class="nav-text">函式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#註解"><span class="nav-number">3.</span> <span class="nav-text">註解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#適合用註解的時機"><span class="nav-number">3.1.</span> <span class="nav-text">適合用註解的時機</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#編排"><span class="nav-number">4.</span> <span class="nav-text">編排</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#垂直距離"><span class="nav-number">4.1.</span> <span class="nav-text">垂直距離</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#水平距離"><span class="nav-number">4.2.</span> <span class="nav-text">水平距離</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#物件及資料結構"><span class="nav-number">5.</span> <span class="nav-text">物件及資料結構</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#資料與物件有反對稱性"><span class="nav-number">5.1.</span> <span class="nav-text">資料與物件有反對稱性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#錯誤處理"><span class="nav-number">6.</span> <span class="nav-text">錯誤處理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#邊界"><span class="nav-number">7.</span> <span class="nav-text">邊界</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#單元測試"><span class="nav-number">8.</span> <span class="nav-text">單元測試</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#類別"><span class="nav-number">9.</span> <span class="nav-text">類別</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系統"><span class="nav-number">10.</span> <span class="nav-text">系統</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#羽化"><span class="nav-number">11.</span> <span class="nav-text">羽化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#平行化"><span class="nav-number">12.</span> <span class="nav-text">平行化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#迷思"><span class="nav-number">12.1.</span> <span class="nav-text">迷思</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平行化防禦方法"><span class="nav-number">12.2.</span> <span class="nav-text">平行化防禦方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#測試"><span class="nav-number">12.3.</span> <span class="nav-text">測試</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bad-Smell"><span class="nav-number">13.</span> <span class="nav-text">Bad Smell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#註解-1"><span class="nav-number">13.1.</span> <span class="nav-text">註解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#開發環境"><span class="nav-number">13.2.</span> <span class="nav-text">開發環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函式-1"><span class="nav-number">13.3.</span> <span class="nav-text">函式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一般狀況"><span class="nav-number">13.4.</span> <span class="nav-text">一般狀況</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命名"><span class="nav-number">13.5.</span> <span class="nav-text">命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#測試-1"><span class="nav-number">13.6.</span> <span class="nav-text">測試</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">evshary</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://evshary.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://evshary.github.io/2017/09/03/clean-code/';
+          this.page.identifier = '2017/09/03/clean-code/';
+          this.page.title = 'clean code';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://evshary.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

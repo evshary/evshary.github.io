@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="GNU tool,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="比較shared/static library程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。     static library shared library     優點 不需要考慮執行環境的相依性問題 使用空間小(檔案和記憶體)、更換library不用重build   缺點 執行檔極大、更換library需">
+<meta name="keywords" content="GNU tool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="淺談函式庫">
+<meta property="og:url" content="http://evshary.github.io/2018/05/12/淺談函式庫/index.html">
+<meta property="og:site_name" content="凛の魅力に溺死しろ">
+<meta property="og:description" content="比較shared/static library程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。     static library shared library     優點 不需要考慮執行環境的相依性問題 使用空間小(檔案和記憶體)、更換library不用重build   缺點 執行檔極大、更換library需">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-03T08:33:48.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="淺談函式庫">
+<meta name="twitter:description" content="比較shared/static library程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。     static library shared library     優點 不需要考慮執行環境的相依性問題 使用空間小(檔案和記憶體)、更換library不用重build   缺點 執行檔極大、更換library需">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://evshary.github.io/2018/05/12/淺談函式庫/">
+
+
+
+
+
+  <title>淺談函式庫 | 凛の魅力に溺死しろ</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105315332-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">凛の魅力に溺死しろ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">どんな時でも余裕を持って優雅たれ</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/aboutme/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://evshary.github.io/2018/05/12/淺談函式庫/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="evshary">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凛の魅力に溺死しろ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">淺談函式庫</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-12T15:28:37+08:00">
+                2018-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/系統程式/" itemprop="url" rel="index">
+                    <span itemprop="name">系統程式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/12/淺談函式庫/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/12/淺談函式庫/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared/static library"></a>比較shared/static library</h1><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>static library</th>
+<th>shared library</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>優點</td>
+<td>不需要考慮執行環境的相依性問題</td>
+<td>使用空間小(檔案和記憶體)、更換library不用重build</td>
+</tr>
+<tr>
+<td>缺點</td>
+<td>執行檔極大、更換library需重build</td>
+<td>在異地執行可能會因為相依性無法執行</td>
+</tr>
+</tbody>
+</table>
+<h1 id="動態函式庫"><a href="#動態函式庫" class="headerlink" title="動態函式庫"></a>動態函式庫</h1><p>在開始前，先確定幾個名詞</p>
+<ul>
+<li>soname：代表特定library的名稱，如libmylib.so.1，最後面的1是version</li>
+<li>real name：實際放有library程式的檔案名稱，名稱會包含三個版號，分別為version, minor和release，如libmylib.so.1.0.0<ul>
+<li>version代表原介面有移除或改變，與舊版本不相容</li>
+<li>minor代表新增介面，舊介面沒改</li>
+<li>release代表程式修正，介面沒改</li>
+</ul>
+</li>
+<li>linker name：用於連結時的名稱，不含版號的soname，如libmylib。通常會link到實際的real name。</li>
+</ul>
+<h2 id="如何編譯"><a href="#如何編譯" class="headerlink" title="如何編譯"></a>如何編譯</h2><p>首先我們先把<code>.c</code>編譯成<code>.o</code>，這邊要加上-fPIC的參數</p>
+<p>這個原因是要產生Position Independent code，確保code segment在動態連結時不用花時間重新定位，而且重新定位會造成無法和其他process共享.text區段。</p>
+<p>事實上，如果不加-fPIC也是可以產生library，但是產生的執行檔就需要另外存有重新定位的資訊(.rel.dyn區段)，而且會有上述的問題。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c -fPIC hello.c world.c</span><br></pre></td></tr></table></figure></p>
+<p>接下來就是產生shared library了，解釋一下參數的意思</p>
+<ul>
+<li><code>-shared</code>：代表要編成shared library</li>
+<li><code>-Wl</code>：是用來傳遞參數給linker，讓-soname和libmylib.so.1傳給linker處理</li>
+<li><code>-soname</code>：用來指名soname為libmylib.so.1</li>
+<li><code>-o</code>：最後library會被輸出成libmylib.so.1.0.0<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -shared -Wl,-soname,libmylib.so.1 -o libmylib.so.1.0.0 hello.o world.o</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>soname很重要，就如同前面所提，可以讓開發者和應用程式表示兼容標準，可以用objdump確認soname<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -p libmylib.so.1.0.0 | grep SONAME</span><br><span class="line">  SONAME               libmylib.so.1</span><br></pre></td></tr></table></figure></p>
+<p>完成後再用ln建立soname和linker name兩個檔案<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ln -s libmylib.so.1.0.0 libmylib.so</span><br><span class="line">$ ln -s libmylib.so.1.0.0 libmylib.so.1</span><br></pre></td></tr></table></figure></p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>如果有人要使用的話，下列兩種方式都可以。不過要注意目錄下如果同時有static和shared會使用shared為主，如果要static就要加上-static編靜態函式庫<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main.c libmylib.so -o a.out</span><br><span class="line">$ gcc main.c -L. -lmylib -o a.out</span><br></pre></td></tr></table></figure></p>
+<p>但是shared library執行的時候還是需要有library才能執行，所以要把.so安裝到系統中，有三種方法：</p>
+<ol>
+<li>把libmylib.so.1 放到系統常見的library目錄，如/lib, /usr/lib</li>
+<li>設定<code>/etc/ld.so.conf</code> ，加入一個新的library搜尋目錄，並執行ldconfig更新<code>/etc/ld.so.cache</code></li>
+<li>設定LD_LIBRARY_PATH 環境變數來搜尋library，如<code>LD_LIBRARY_PATH=. ./a.out</code></li>
+</ol>
+<p>這邊提一下一般而言找library的順序</p>
+<ol>
+<li><code>LD_LIBRARY_PATH</code>或<code>LD_AOUT_LIBRARY_PATH</code>環境變數所指的路徑</li>
+<li>從<code>ld.so.cache</code>的記錄來找shared library。</li>
+<li><code>/lib</code>,<code>/usr/lib</code>內的檔案</li>
+</ol>
+<h2 id="查看shared-library的關係-ldd"><a href="#查看shared-library的關係-ldd" class="headerlink" title="查看shared library的關係 - ldd"></a>查看shared library的關係 - ldd</h2><p>我們要怎麼知道某個執行檔有使用到哪些library呢？這時候就要用到ldd這個指令了。</p>
+<p>ldd其實是一個shell script，它會把檔案所用到library一一列出，包括library會用到的library。</p>
+<p>舉例來說，如果我們不用ldd，其實是可以從ELF的Dynamic Section獲得shared library資訊<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -d /bin/cat</span><br><span class="line"></span><br><span class="line">Dynamic section at offset 0x7dd8 contains 26 entries:</span><br><span class="line">  Tag        Type                         Name/Value</span><br><span class="line"> 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]</span><br><span class="line"> 0x000000000000000c (INIT)               0x15e8</span><br><span class="line"> 0x000000000000000d (FINI)               0x5a4c</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>我們看到NEEDED就是需要的dynamic library，但是這個library可能也需要其他library。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -d /lib/x86_64-linux-gnu/libc.so.6</span><br><span class="line"></span><br><span class="line">Dynamic section at offset 0x198ba0 contains 26 entries:</span><br><span class="line">  Tag        Type                         Name/Value</span><br><span class="line"> 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]</span><br><span class="line"> 0x000000000000000e (SONAME)             Library soname: [libc.so.6]</span><br><span class="line"> 0x000000000000000c (INIT)               0x20050</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>因此我們知道/bin/cat需要libc.so.6，而libc.so.6還需要ld-linux-x86-64.so.2。這樣尋找實在太麻煩了，其實我們可以直接用ldd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ldd /bin/cat</span><br><span class="line">        linux-vdso.so.1 (0x00007fff8613c000)</span><br><span class="line">        libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f654a3bf000)</span><br><span class="line">        /lib64/ld-linux-x86-64.so.2 (0x00007f654a967000)</span><br></pre></td></tr></table></figure></p>
+<p>看，是不是很輕鬆呢？</p>
+<h1 id="靜態函式庫"><a href="#靜態函式庫" class="headerlink" title="靜態函式庫"></a>靜態函式庫</h1><p>會有static library的概念是，如果我有很多.o檔，那每次要引用其實都不是很方便，所以最好的方法還是可以打包起來，也就是使用ar指令。</p>
+<h2 id="如何編譯-1"><a href="#如何編譯-1" class="headerlink" title="如何編譯"></a>如何編譯</h2><p>static libary建立方式很簡單，一樣要先建立.o<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c test1.c test2.c</span><br></pre></td></tr></table></figure></p>
+<p>接下來開始打包，參數意義如下</p>
+<ul>
+<li>r：代表加入新檔案或取代現有檔案</li>
+<li>c：.a檔不存在時不會跳錯誤訊息</li>
+<li>u：根據timestamp保留檔案</li>
+<li>s：建立索引，加快連結速度<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ar rcs libtest.a test1.o test2.o</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果要顯示函式庫 libstack.a 的內容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ar -tv libtest.a</span><br><span class="line">rw-r--r-- 0/0   1464 Jan  1 00:00 1970 test1.o</span><br><span class="line">rw-r--r-- 0/0   1464 Jan  1 00:00 1970 test2.o</span><br></pre></td></tr></table></figure></p>
+<p>如果要從libtest.a中取出test1.o<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ar -x libtest.a test1.o</span><br></pre></td></tr></table></figure></p>
+<h2 id="如何使用-1"><a href="#如何使用-1" class="headerlink" title="如何使用"></a>如何使用</h2><p>編譯方法一樣很簡單，有兩種<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c libtest.a</span><br><span class="line"># 也可以使用gcc的-l，-L代表要搜尋的目錄位置，-l會捨去library的lib開頭</span><br><span class="line">gcc main.c -L. -ltest</span><br></pre></td></tr></table></figure></p>
+<h1 id="symbol衝突"><a href="#symbol衝突" class="headerlink" title="symbol衝突"></a>symbol衝突</h1><p>假設我們在創建library時遇到symbol衝突會發生什麼事呢？這邊我們分三種情況探討</p>
+<p>首先先創三個檔案</p>
+<p>hello.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hello\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>world.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"world\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>main.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="shared-library連結時，object-file有衝突"><a href="#shared-library連結時，object-file有衝突" class="headerlink" title="shared library連結時，object file有衝突"></a>shared library連結時，object file有衝突</h2><p>嘗試編譯與連結<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c -fPIC hello.c world.c</span><br><span class="line">$ gcc -shared -o libmylib.so hello.o world.o</span><br><span class="line">world.o: In function `test&apos;:</span><br><span class="line">world.c:(.text+0x0): multiple definition of `test&apos;</span><br><span class="line">hello.o:hello.c:(.text+0x0): first defined here</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br></pre></td></tr></table></figure></p>
+<p>會發現出現錯誤，原因是動態連結跟一般編譯一樣會檢查symbol是否重複</p>
+<h2 id="static-library打包時，object-file有衝突"><a href="#static-library打包時，object-file有衝突" class="headerlink" title="static library打包時，object file有衝突"></a>static library打包時，object file有衝突</h2><p>那如果是用static library呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c hello.c world.c</span><br><span class="line">$ ar crs libhello.a hello.o</span><br><span class="line">$ ar crs libworld.a world.o</span><br><span class="line">$ gcc -o main.out main.c libhello.a libworld.a</span><br><span class="line">hello</span><br></pre></td></tr></table></figure></p>
+<p>發現居然沒事，這個原因是因為ar只有打包功能不負責檢查。可是問題來了，到底是執行哪個呢？答案是看順序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -o main.out main.c libhello.a libworld.a</span><br><span class="line">$ ./main.out</span><br><span class="line">hello</span><br><span class="line">$ gcc -o main.out main.c libworld.a libhello.a </span><br><span class="line">$ ./main.out</span><br><span class="line">world</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用shared-library時，不同library有衝突"><a href="#使用shared-library時，不同library有衝突" class="headerlink" title="使用shared library時，不同library有衝突"></a>使用shared library時，不同library有衝突</h2><p>那如果是兩個shared library彼此間有函數衝突的現象呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -fPIC -shared -o libhello.so  hello.c</span><br><span class="line">$ gcc -fPIC -shared -o libworld.so  world.c</span><br><span class="line">$ gcc -o main.out libhello.so libworld.so main.c</span><br></pre></td></tr></table></figure></p>
+<p>結果一樣沒有錯誤，原因是在動態連結時會使用最先看到的symbol，所以順序不同就有不同結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -o main.out libhello.so libworld.so main.c </span><br><span class="line">$ LD_LIBRARY_PATH=. ./main.out</span><br><span class="line">hello</span><br><span class="line">$ gcc -o main.out libworld.so libhello.so main.c </span><br><span class="line">$ LD_LIBRARY_PATH=. ./main.out</span><br><span class="line">world</span><br></pre></td></tr></table></figure></p>
+<p>這個特性也跟LD_PRELOAD有關，我們可以用LD_PRELOAD來抽換shared library就是因為連結時會先使用先看到的symbol。當然這也曾經造成了一些危害，例如goahead的<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-17562" target="_blank" rel="noopener">CVE-2017-17562</a>。</p>
+<h1 id="執行中載入library"><a href="#執行中載入library" class="headerlink" title="執行中載入library"></a>執行中載入library</h1><p>除了執行開始時載入library外，我們也可以用程式來載入<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 動態載入所需的header</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="comment">// 載入指定library</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flag)</span></span>;</span><br><span class="line"><span class="comment">// 透過symbol name取得symbol在library的記憶體位址</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">dlsym</span><span class="params">(<span class="keyword">void</span> *handle, <span class="keyword">const</span> <span class="keyword">char</span> *symbol)</span></span>;</span><br><span class="line"><span class="comment">// 關閉dlopen開啟的handler</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span> *handle)</span></span>;</span><br><span class="line"><span class="comment">// 傳回錯誤訊息。</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">dlerror</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>範例：dltest.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">void</span> *handle;</span><br><span class="line">  <span class="keyword">void</span> (*f)();</span><br><span class="line">  <span class="keyword">char</span> *error;</span><br><span class="line">  <span class="comment">/* 開啟之前所撰寫的libmylib.so 程式庫 */</span></span><br><span class="line">  handle = dlopen(<span class="string">"./libmylib.so"</span>, RTLD_LAZY);</span><br><span class="line">  <span class="keyword">if</span>( !handle ) &#123;</span><br><span class="line">    <span class="built_in">fputs</span>( dlerror(), <span class="built_in">stderr</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* 取得hello function 的address */</span></span><br><span class="line">  f = dlsym(handle, <span class="string">"hello"</span>);</span><br><span class="line">  <span class="keyword">if</span>(( error=dlerror())!=<span class="literal">NULL</span>) &#123;</span><br><span class="line">    <span class="built_in">fputs</span>(error, <span class="built_in">stderr</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* 呼叫function */</span></span><br><span class="line">  f();</span><br><span class="line">  <span class="comment">/* 結束handler */</span></span><br><span class="line">  dlclose(handle);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>記得編譯時要連結dl library<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gcc dltest.c -ldl</span><br><span class="line">$ LD_LIBRARY_PATH=. ./a.out</span><br></pre></td></tr></table></figure></p>
+<h1 id="library公開symbols管理"><a href="#library公開symbols管理" class="headerlink" title="library公開symbols管理"></a>library公開symbols管理</h1><p>有時候我們並不希望所提供的library會把所有symbol都洩漏出去，這時候大部分的人都會使用static限制外部呼叫。但是當這個函式在library中其他檔案會引用到，那就沒辦法設為static了。</p>
+<p>那該怎麼辦呢？這邊有兩個方法：</p>
+<h2 id="使用-version-script"><a href="#使用-version-script" class="headerlink" title="使用 version script"></a>使用 version script</h2><p>首先我們先創兩個檔案當範例</p>
+<p>test.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"test\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>func.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"func\n"</span>);</span><br><span class="line">  test();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然後我們編成shared library，並且看看symbol<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -fPIC -c test.c func.c</span><br><span class="line">$ gcc -shared -o libmylib.so test.o func.o</span><br><span class="line">$ nm -D libmylib.so | grep -v &apos;_&apos;  # -D 代表顯示dynmaic部分，-v 代表反向選擇</span><br><span class="line">00000000000005e8 T func</span><br><span class="line">                 U puts</span><br><span class="line">00000000000005d5 T test</span><br></pre></td></tr></table></figure></p>
+<p>可以看到test還是被暴露出來了，但是明明test應該只想要在library中被使用而已。</p>
+<p>這時候我們可以試試GNU linker的version script。<br>libmylib.map<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  global: func;</span><br><span class="line">  local: *;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>這個意思是只要顯示func，其他function都要隱藏。然後我們link的時候加上version script試看看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -shared -o libmylib.so test.o func.o -Wl,--version-script,libmylib.map</span><br><span class="line">$ nm -D libmylib.so | grep -v &apos;_&apos;</span><br><span class="line">00000000000004e8 T func</span><br><span class="line">                 U puts</span><br></pre></td></tr></table></figure></p>
+<p>成功隱藏test了！</p>
+<h2 id="使用attribute語法"><a href="#使用attribute語法" class="headerlink" title="使用attribute語法"></a>使用<strong>attribute</strong>語法</h2><p>除了使用version script以外，也可以用gcc特有的語法，<code>__attribute__((visibility(&quot;default&quot;)))</code></p>
+<p>首先我們先改寫要公開的函式，代表我們只要暴露func()給外界看到</p>
+<p>func.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line">__attribute__((visibility(<span class="string">"default"</span>))) <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"func\n"</span>);</span><br><span class="line">  test();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然後在編譯成.o時要記得加上<code>-fvisibility=hidden</code>，把其他function都隱藏起來。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c -fPIC test.c func.c -fvisibility=hidden</span><br><span class="line">$ gcc -shared -o libmylib.so test.o func.o</span><br><span class="line">$ nm -D libmylib.so | grep -v &apos;_&apos;</span><br><span class="line">00000000000005a8 T func</span><br><span class="line">                 U puts</span><br></pre></td></tr></table></figure></p>
+<p>達到的效果和version script一樣！</p>
+<h2 id="用version-script控制版本"><a href="#用version-script控制版本" class="headerlink" title="用version script控制版本"></a>用version script控制版本</h2><p>這邊我們再多談談version script其他的用法，其實他除了管理要暴露出來的symbol外，我們也可以依照版本控制library要暴露出來的function。</p>
+<p>首先我們先出第一版程式<br>libtest.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"num=%d\n"</span>, num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>libtest1.h<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> num)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>version1.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libtest1.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  func(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然後正常編譯執行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -fPIC -c libtest.c</span><br><span class="line">$ gcc -shared -o libtest.so libtest.o</span><br><span class="line">$ gcc -L. -ltest -o version1.out version1.c</span><br><span class="line">$ LD_LIBRARY_PATH=. ./version1.out</span><br><span class="line">num=1</span><br></pre></td></tr></table></figure></p>
+<p>很順利正常執行，那我們假設現在要出第二個版本可以怎麼做</p>
+<p>libtest2.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func_1</span><span class="params">(<span class="keyword">int</span> num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"num=%d\n"</span>, num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func_2</span><span class="params">(<span class="keyword">int</span> num1, <span class="keyword">int</span> num2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"num1=%d, num2=%d\n"</span>, num1, num2);</span><br><span class="line">&#125;</span><br><span class="line">__asm__(<span class="string">".symver func_1,func@LIBTEST_1.0"</span>);</span><br><span class="line">__asm__(<span class="string">".symver func_2,func@@LIBTEST_2.0"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>稍微解釋一下，首先先實作兩個function，然後再用後面兩個<code>__asm__</code>的<code>symver</code>來把同樣symbol加上版號，至於第二行<code>@@</code>的意思代表為預設版本。</p>
+<p>接下來的部分就一樣撰寫新的程式</p>
+<p>libtest2.h<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> num1, <span class="keyword">int</span> num2)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>version2.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libtest2.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  func(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然後這時候就要出動version script了</p>
+<p>libtest2.map<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LIBTEST_1.0 &#123;</span><br><span class="line">  global: func;</span><br><span class="line">  local: *;</span><br><span class="line">&#125;;</span><br><span class="line">LIBTEST_2.0 &#123;</span><br><span class="line">  global: func;</span><br><span class="line">&#125;LIBTEST_1.0;</span><br></pre></td></tr></table></figure></p>
+<p>然後我們編譯並執行看看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -fPIC -c libtest2.c</span><br><span class="line">$ gcc -shared -o libtest.so libtest2.o -Wl,--version-script,libtest2.map</span><br><span class="line">$ gcc -L. -ltest -o version2.out version2.c</span><br><span class="line">$ LD_LIBRARY_PATH=. ./version1.out</span><br><span class="line">num=1</span><br><span class="line">$ LD_LIBRARY_PATH=. ./version2.out</span><br><span class="line">num1=1, num2=2</span><br></pre></td></tr></table></figure></p>
+<p>可以看到兩者執行結果不同，為什麼會這樣呢？我們先看一下他們連結到的symbol<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -a version1.out  | grep func</span><br><span class="line">000000601018  000500000007 R_X86_64_JUMP_SLO 0000000000000000 func + 0</span><br><span class="line">     5: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND func</span><br><span class="line">    51: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND func</span><br><span class="line">＄ readelf -a version2.out  | grep func</span><br><span class="line">000000601018  000100000007 R_X86_64_JUMP_SLO 0000000000000000 func@LIBTEST_2.0 + 0</span><br><span class="line">     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND func@LIBTEST_2.0 (2)</span><br><span class="line">    46: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND func@@LIBTEST_2.0</span><br></pre></td></tr></table></figure></p>
+<p>可以看到version1.out是使用<code>func</code>，而version2.out的symbol就是<code>func@@LIBTEST_2.0</code>。那同樣是引用相同library，到底是怎麼知道要呼叫哪個func呢？在呼叫<code>func</code>的情況下，會自動找到最初的版本也就是<code>func@LIBTEST_1.0</code>。而之後的程式編譯時link library則會去找default的版本，也就是有兩個@的<code>func@@LIBTEST_2.0</code>，所以就不會有搞混的情況發生了。</p>
+<p>這個方法在要維持兼容性的情況下非常好用，可以在不影響舊版的情況下改變函式規格。</p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="http://www.books.com.tw/products/0010587783" target="_blank" rel="noopener">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/12/docker-簡易教學/" rel="next" title="docker 簡易教學">
+                <i class="fa fa-chevron-left"></i> docker 簡易教學
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/13/openssl-library-example/" rel="prev" title="使用 openssl 工具與函式庫">
+                使用 openssl 工具與函式庫 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="evshary">
+          <p class="site-author-name" itemprop="name">evshary</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#比較shared-static-library"><span class="nav-number">1.</span> <span class="nav-text">比較shared/static library</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#動態函式庫"><span class="nav-number">2.</span> <span class="nav-text">動態函式庫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何編譯"><span class="nav-number">2.1.</span> <span class="nav-text">如何編譯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">2.2.</span> <span class="nav-text">如何使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看shared-library的關係-ldd"><span class="nav-number">2.3.</span> <span class="nav-text">查看shared library的關係 - ldd</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#靜態函式庫"><span class="nav-number">3.</span> <span class="nav-text">靜態函式庫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何編譯-1"><span class="nav-number">3.1.</span> <span class="nav-text">如何編譯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用-1"><span class="nav-number">3.2.</span> <span class="nav-text">如何使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#symbol衝突"><span class="nav-number">4.</span> <span class="nav-text">symbol衝突</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#shared-library連結時，object-file有衝突"><span class="nav-number">4.1.</span> <span class="nav-text">shared library連結時，object file有衝突</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static-library打包時，object-file有衝突"><span class="nav-number">4.2.</span> <span class="nav-text">static library打包時，object file有衝突</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用shared-library時，不同library有衝突"><span class="nav-number">4.3.</span> <span class="nav-text">使用shared library時，不同library有衝突</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#執行中載入library"><span class="nav-number">5.</span> <span class="nav-text">執行中載入library</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#library公開symbols管理"><span class="nav-number">6.</span> <span class="nav-text">library公開symbols管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-version-script"><span class="nav-number">6.1.</span> <span class="nav-text">使用 version script</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用attribute語法"><span class="nav-number">6.2.</span> <span class="nav-text">使用attribute語法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用version-script控制版本"><span class="nav-number">6.3.</span> <span class="nav-text">用version script控制版本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考"><span class="nav-number">7.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">evshary</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://evshary.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://evshary.github.io/2018/05/12/淺談函式庫/';
+          this.page.identifier = '2018/05/12/淺談函式庫/';
+          this.page.title = '淺談函式庫';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://evshary.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

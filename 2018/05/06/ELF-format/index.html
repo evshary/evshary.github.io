@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="GNU tool,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="簡介程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。 ELF全名是Executable and Linking Format，在Linux中是編譯後的binary、object檔規範，也就是說我們從source code編譯後產生的檔案格式就是ELF了。 ELF的格式可">
+<meta name="keywords" content="GNU tool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="關於ELF的兩三事">
+<meta property="og:url" content="http://evshary.github.io/2018/05/06/ELF-format/index.html">
+<meta property="og:site_name" content="凛の魅力に溺死しろ">
+<meta property="og:description" content="簡介程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。 ELF全名是Executable and Linking Format，在Linux中是編譯後的binary、object檔規範，也就是說我們從source code編譯後產生的檔案格式就是ELF了。 ELF的格式可">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-03T08:33:48.912Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="關於ELF的兩三事">
+<meta name="twitter:description" content="簡介程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。 ELF全名是Executable and Linking Format，在Linux中是編譯後的binary、object檔規範，也就是說我們從source code編譯後產生的檔案格式就是ELF了。 ELF的格式可">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://evshary.github.io/2018/05/06/ELF-format/">
+
+
+
+
+
+  <title>關於ELF的兩三事 | 凛の魅力に溺死しろ</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105315332-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">凛の魅力に溺死しろ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">どんな時でも余裕を持って優雅たれ</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/aboutme/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://evshary.github.io/2018/05/06/ELF-format/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="evshary">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凛の魅力に溺死しろ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">關於ELF的兩三事</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-06T15:22:27+08:00">
+                2018-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/系統程式/" itemprop="url" rel="index">
+                    <span itemprop="name">系統程式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/06/ELF-format/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/06/ELF-format/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。</p>
+<p>ELF全名是Executable and Linking Format，在Linux中是編譯後的binary、object檔規範，也就是說我們從source code編譯後產生的檔案格式就是ELF了。</p>
+<p>ELF的格式可以從兩種角度來看，第一種是Link的時候，第二種是執行的時候。兩者都一樣會有ELF header，但是底下的組成概念就完全不一樣。</p>
+<p>Link的時候：</p>
+<table>
+<thead>
+<tr>
+<th>ELF header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Program Header Table(Optional)</td>
+</tr>
+<tr>
+<td>Section 1</td>
+</tr>
+<tr>
+<td>Section 2</td>
+</tr>
+<tr>
+<td>…</td>
+</tr>
+<tr>
+<td>Section N</td>
+</tr>
+<tr>
+<td>Section Header Table</td>
+</tr>
+</tbody>
+</table>
+<p>執行的時候：</p>
+<table>
+<thead>
+<tr>
+<th>ELF header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Program Header Table</td>
+</tr>
+<tr>
+<td>Segment 1</td>
+</tr>
+<tr>
+<td>Segment 2</td>
+</tr>
+<tr>
+<td>…</td>
+</tr>
+<tr>
+<td>Segment N</td>
+</tr>
+<tr>
+<td>Section Header Table(Optional)</td>
+</tr>
+</tbody>
+</table>
+<p>兩者最大的差異是Link的時候是以Section為觀點，用Section Header Table來當索引，指向各個Section。執行的時候則是用Segment為觀點，一個Segment可能是多個Section所組成，然後再用Program Header Table指向各個Segment。</p>
+<h1 id="觀察ELF的方法"><a href="#觀察ELF的方法" class="headerlink" title="觀察ELF的方法"></a>觀察ELF的方法</h1><p>那要如何觀察ELF呢？如果你嘗試用記事本打開應該只會看到一團不知所云的亂碼，所以我們底下會透過各種工具的使用教學來解釋ELF格式。</p>
+<h2 id="查看執行檔-od"><a href="#查看執行檔-od" class="headerlink" title="查看執行檔 - od"></a>查看執行檔 - od</h2><p>首先我們可以試著使用od這個指令來看檔案內容。od全名是octal dump，顧名思義就是用八進制來印內容，但他並不僅僅如此而已。</p>
+<p>od指令的格式：<code>od -t [顯示格式] -A [偏移量使用的基數] [filename]</code></p>
+<ul>
+<li>-t：後面可接型態(d, o, x…)、一次顯示的byte數(數字)、是否顯示ASCII code(z)</li>
+<li>-A：偏移量有(d, o, x, n)，n代表不顯示偏移量</li>
+<li>-v：不省略重複的內容</li>
+</ul>
+<p>我們最常用格式：</p>
+<ul>
+<li><code>od -t x1 -A x [filename]</code>：代表用16進制來顯示檔案，偏移量是16的倍數</li>
+<li><code>od -t x1z -A x [filename]</code>：同上，但是多加上顯示ASCII code</li>
+</ul>
+<p>那我們來看看ELF檔長什麼樣子，這邊以大家最常用的ls為例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ od -t x1z -A x /bin/ls | less</span><br><span class="line">000000 7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00  &gt;.ELF............&lt;</span><br><span class="line">000010 02 00 3e 00 01 00 00 00 90 48 40 00 00 00 00 00  &gt;..&gt;......H@.....&lt;</span><br><span class="line">000020 40 00 00 00 00 00 00 00 00 a7 01 00 00 00 00 00  &gt;@...............&lt;</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+<p>可以看到前面有個<code>7f 45 4c 46</code>開頭，ASCII是<code>.ELF</code>(.代表非可見字元，這邊是0x7f也就是\177)，這個就是傳說中的ELF magic code了。不過這邊先停一下，如果我們要繼續用hex來看其實有點累，所以先換個工具來試試吧！</p>
+<h2 id="使用readelf來觀察ELF資訊"><a href="#使用readelf來觀察ELF資訊" class="headerlink" title="使用readelf來觀察ELF資訊"></a>使用readelf來觀察ELF資訊</h2><p>readelf很明顯就是觀察ELF檔案的專門工具，使用方式如下</p>
+<ul>
+<li>格式：<code>readelf [選項] [filename]</code></li>
+<li>讀取標頭選項<ul>
+<li>-h：印 ELF header</li>
+<li>-l：印 Program Header Table</li>
+<li>-S：印 Section Header Table</li>
+<li>-e：三者都印</li>
+</ul>
+</li>
+<li>讀取資訊選項<ul>
+<li>-s：符號表</li>
+<li>-r：重定位資訊</li>
+</ul>
+</li>
+<li>特別用法：<ul>
+<li>-a：所有標頭資訊全部印出</li>
+<li>-xn：先用-S看要查看的Section數字，然後n填上該數字就可以hexdump那個section</li>
+</ul>
+</li>
+</ul>
+<p>那我們來看看ls的ELF header長什麼樣。從下面可以看到，除了剛剛看到的Magic code外，還有版本、適用哪個OS/ABI、在哪個機器平台運行、entry point adddress等等。</p>
+<p>值得注意的是這邊有紀錄Program Header、Section Header的開始位址、大小、數量，所以我們可以用這個資訊找到Program/Section Header。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -h /bin/ls</span><br><span class="line">ELF 檔頭：</span><br><span class="line">  魔術位元組：   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</span><br><span class="line">  類別:                              ELF64</span><br><span class="line">  資料:                              2 的補數，小尾序(little endian)</span><br><span class="line">  版本:                              1 (current)</span><br><span class="line">  OS/ABI:                            UNIX - System V</span><br><span class="line">  ABI 版本:                          0</span><br><span class="line">  類型:                              EXEC (可執行檔案)</span><br><span class="line">  系統架構:                          Advanced Micro Devices X86-64</span><br><span class="line">  版本:                              0x1</span><br><span class="line">  進入點位址：               0x404890</span><br><span class="line">  程式標頭起點：          64 (檔案內之位元組)</span><br><span class="line">  區段標頭起點：          108288 (檔案內之位元組)</span><br><span class="line">  旗標：             0x0</span><br><span class="line">  此標頭的大小：       64 (位元組)</span><br><span class="line">  程式標頭大小：       56 (位元組)</span><br><span class="line">  Number of program headers:         9</span><br><span class="line">  區段標頭大小：         64 (位元組)</span><br><span class="line">  區段標頭數量：         28</span><br><span class="line">  字串表索引區段標頭： 27</span><br></pre></td></tr></table></figure></p>
+<p>而Program Header的部分，我們可以看到有9個Segement，以及實際的位址在哪。另外有個「區段到節區映射中」(Section to Segment mapping)，這就是多個Section如何組成一個Segment的對應。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -l /bin/ls</span><br><span class="line">Elf 檔案類型為 EXEC (可執行檔案)</span><br><span class="line">進入點 0x404890</span><br><span class="line">共有 9 個程式標頭，開始於偏移量 64</span><br><span class="line"></span><br><span class="line">程式標頭：</span><br><span class="line">  類型           偏移量             虛擬位址           實體位址</span><br><span class="line">                 檔案大小          記憶大小              旗標   對齊</span><br><span class="line">  PHDR           0x0000000000000040 0x0000000000400040 0x0000000000400040</span><br><span class="line">                 0x00000000000001f8 0x00000000000001f8  R E    8</span><br><span class="line">  INTERP         0x0000000000000238 0x0000000000400238 0x0000000000400238</span><br><span class="line">                 0x000000000000001c 0x000000000000001c  R      1</span><br><span class="line">      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]</span><br><span class="line">  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000400000</span><br><span class="line">                 0x0000000000019d44 0x0000000000019d44  R E    200000</span><br><span class="line">  LOAD           0x0000000000019df0 0x0000000000619df0 0x0000000000619df0</span><br><span class="line">                 0x0000000000000804 0x0000000000001570  RW     200000</span><br><span class="line">  DYNAMIC        0x0000000000019e08 0x0000000000619e08 0x0000000000619e08</span><br><span class="line">                 0x00000000000001f0 0x00000000000001f0  RW     8</span><br><span class="line">  NOTE           0x0000000000000254 0x0000000000400254 0x0000000000400254</span><br><span class="line">                 0x0000000000000044 0x0000000000000044  R      4</span><br><span class="line">  GNU_EH_FRAME   0x000000000001701c 0x000000000041701c 0x000000000041701c</span><br><span class="line">                 0x000000000000072c 0x000000000000072c  R      4</span><br><span class="line">  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000</span><br><span class="line">                 0x0000000000000000 0x0000000000000000  RW     10</span><br><span class="line">  GNU_RELRO      0x0000000000019df0 0x0000000000619df0 0x0000000000619df0</span><br><span class="line">                 0x0000000000000210 0x0000000000000210  R      1</span><br><span class="line"></span><br><span class="line"> 區段到節區映射中:</span><br><span class="line">  節區段...</span><br><span class="line">   00</span><br><span class="line">   01     .interp</span><br><span class="line">   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gn                                   u.version .gnu.version_r .rela.dyn .rela.plt .init .plt .text .fini .rodata .eh_                                   frame_hdr .eh_frame</span><br><span class="line">   03     .init_array .fini_array .jcr .dynamic .got .got.plt .data .bss</span><br><span class="line">   04     .dynamic</span><br><span class="line">   05     .note.ABI-tag .note.gnu.build-id</span><br><span class="line">   06     .eh_frame_hdr</span><br><span class="line">   07</span><br><span class="line">   08     .init_array .fini_array .jcr .dynamic .got</span><br></pre></td></tr></table></figure>
+<p>Section Header的話會仔細列出這個ELF所包含的所有Section以及位址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -S /bin/ls</span><br><span class="line"></span><br><span class="line">共有 28 個區段標頭，從偏移量 0x1a700 開始：</span><br><span class="line"></span><br><span class="line">區段標頭：</span><br><span class="line">  [號] 名稱              類型             位址              偏移量</span><br><span class="line">       大小              全體大小         旗標   連結  資訊  對齊</span><br><span class="line">  [ 0]                   NULL             0000000000000000  00000000</span><br><span class="line">       0000000000000000  0000000000000000           0     0     0</span><br><span class="line">  [ 1] .interp           PROGBITS         0000000000400238  00000238</span><br><span class="line">       000000000000001c  0000000000000000   A       0     0     1</span><br><span class="line">  [ 2] .note.ABI-tag     NOTE             0000000000400254  00000254</span><br><span class="line">       0000000000000020  0000000000000000   A       0     0     4</span><br><span class="line">  [ 3] .note.gnu.build-i NOTE             0000000000400274  00000274</span><br><span class="line">       0000000000000024  0000000000000000   A       0     0     4</span><br><span class="line">  [ 4] .gnu.hash         GNU_HASH         0000000000400298  00000298</span><br><span class="line">       0000000000000068  0000000000000000   A       5     0     8</span><br><span class="line">...</span><br><span class="line">  [24] .data             PROGBITS         000000000061a3a0  0001a3a0</span><br><span class="line">       0000000000000254  0000000000000000  WA       0     0     32</span><br><span class="line">  [25] .bss              NOBITS           000000000061a600  0001a5f4</span><br><span class="line">       0000000000000d60  0000000000000000  WA       0     0     32</span><br><span class="line">  [26] .gnu_debuglink    PROGBITS         0000000000000000  0001a5f4</span><br><span class="line">       0000000000000008  0000000000000000           0     0     1</span><br><span class="line">  [27] .shstrtab         STRTAB           0000000000000000  0001a5fc</span><br><span class="line">       00000000000000fe  0000000000000000           0     0     1</span><br><span class="line">Key to Flags:</span><br><span class="line">  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)</span><br><span class="line">  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)</span><br><span class="line">  O (extra OS processing required) o (OS specific), p (processor specific)</span><br></pre></td></tr></table></figure>
+<h2 id="objdump取得ELF內容"><a href="#objdump取得ELF內容" class="headerlink" title="objdump取得ELF內容"></a>objdump取得ELF內容</h2><p>除了看ELF內的資訊外，我們可以進一步得到更細的資訊，包括dump內容和反組譯程式，這時候就要用objdump了</p>
+<ul>
+<li><code>objdump -s -j [section] [filename]</code>：把特定section完整dump出來</li>
+<li><code>objdump -h [filename]</code>：看有哪些section，跟readelf功用類似</li>
+<li><code>objdump -x [filename]</code>：把所有section都顯示出來</li>
+<li><code>objdump -d [filename]</code>：反組譯程式</li>
+<li><code>objdump -d -S [filename]</code>：反組譯程式加上行數</li>
+<li><code>objdump -d -l [filename]</code>：反組譯程式加上source code</li>
+</ul>
+<p>同樣以ls為例，可以看到我們把text section的內容印出來了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -s -j .text /bin/ls</span><br><span class="line"></span><br><span class="line">/bin/ls：     檔案格式 elf64-x86-64</span><br><span class="line"></span><br><span class="line">Contents of section .text:</span><br><span class="line"> 4028a0 50b9882c 4100baa6 0e0000be 36374100  P..,A.......67A.</span><br><span class="line"> 4028b0 bf983c41 00e896fb ffff660f 1f440000  ..&lt;A......f..D..</span><br><span class="line"> 4028c0 41574156 41554154 554889f5 5389fb48  AWAVAUATUH..S..H</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<h2 id="objcopy-strip修改ELF檔案"><a href="#objcopy-strip修改ELF檔案" class="headerlink" title="objcopy/strip修改ELF檔案"></a>objcopy/strip修改ELF檔案</h2><p>objcopy最主要的功能就是可以把文件作轉換，一部份或全部的內容copy另一個文件中</p>
+<ul>
+<li><code>objcopy -S -R .comment -R .note [input filename] [output filename]</code>：把編譯出來的symbol移除不必要的section(-S代表去掉symbol, relocation的訊息)</li>
+<li><code>objcopy -O binary -j [section] [input filename] [output filename]</code>：也可以把某個section拿出來</li>
+</ul>
+<p>關於移除不必要的section部分，其實strip就可以做到了，只要用<code>strip [filename]</code>即可。</p>
+<h3 id="objcopy進階用法"><a href="#objcopy進階用法" class="headerlink" title="objcopy進階用法"></a>objcopy進階用法</h3><p>objcopy可以做到把檔案變成ELF格式，提供給我們linking，這樣我們就可以避免檔案的讀取。</p>
+<p>這邊用個簡單的範例，假設我們想要把某個文字檔包在程式內部(其實可以用圖片比較有感覺，只是我不想寫太複雜的程式)</p>
+<p>先創立text.txt<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This is test txt.</span><br></pre></td></tr></table></figure></p>
+<p>然後把text.txt變成object file<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objcopy -I binary -O elf64-x86-64 -B i386:x86-64 text.txt text.o</span><br></pre></td></tr></table></figure></p>
+<p>如果這時候show object資訊的話<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -x text.o</span><br><span class="line"></span><br><span class="line">text.o：     檔案格式 elf64-x86-64</span><br><span class="line">text.o</span><br><span class="line">系統架構：i386:x86-64， 旗標 0x00000010：</span><br><span class="line">HAS_SYMS</span><br><span class="line">起始位址 0x0000000000000000</span><br><span class="line"></span><br><span class="line">區段：</span><br><span class="line">索引名稱          大小      VMA               LMA               檔案關閉 對齊</span><br><span class="line">  0 .data         00000012  0000000000000000  0000000000000000  00000040  2**0</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">0000000000000000 l    d  .data  0000000000000000 .data</span><br><span class="line">0000000000000000 g       .data  0000000000000000 _binary_test_txt_start</span><br><span class="line">0000000000000012 g       .data  0000000000000000 _binary_test_txt_end</span><br><span class="line">0000000000000012 g       *ABS*  0000000000000000 _binary_test_txt_size</span><br></pre></td></tr></table></figure></p>
+<p>symsymbola把下面那些symbol放入test.c內，即可使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">extern char _binary_text_txt_start[];</span><br><span class="line">extern char _binary_text_txt_end[];</span><br><span class="line">extern char _binary_text_txt_size[];</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    char *ptr = _binary_text_txt_start;</span><br><span class="line">    printf(&quot;text.txt=%s\r\n&quot;, ptr);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>編譯並執行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ gcc test.o test.o -o a.out</span><br><span class="line">% ./a.out</span><br><span class="line">text.txt=This is test txt.</span><br></pre></td></tr></table></figure></p>
+<h2 id="nm觀察symbol"><a href="#nm觀察symbol" class="headerlink" title="nm觀察symbol"></a>nm觀察symbol</h2><p>剛剛提了那麼多都是以ELF內的各種section為主，但是我們實際開發程式其實還是比較重視symbol，那我們有簡單方式可以看symbol嗎？這時候就要用到nm了。</p>
+<ul>
+<li><code>nm [filename]</code>：可以顯示symbol的數值、型態、名稱</li>
+<li><code>nm --size-sort -r -S [filename]</code>：由大到小顯示symbol的數值、大小、型態、名稱</li>
+</ul>
+<p>舉個例子，我們可以看到下面執行結果symbol由大到小排序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ nm --size-sort -r -S test</span><br><span class="line">00008464 00000064 T __libc_csu_init</span><br><span class="line">00008444 00000020 T main</span><br><span class="line">000084c8 00000004 T __libc_csu_fini</span><br><span class="line">000084d4 00000004 R _IO_stdin_used</span><br><span class="line">00011028 00000001 b completed.9228</span><br></pre></td></tr></table></figure></p>
+<p>關於常見型態的部分可參考下表：</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>類型(大寫代表global、小寫是local)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text section</td>
+<td>T/t</td>
+</tr>
+<tr>
+<td>data section</td>
+<td>D/d</td>
+</tr>
+<tr>
+<td>Read only</td>
+<td>R/r</td>
+</tr>
+<tr>
+<td>BSS</td>
+<td>B/b</td>
+</tr>
+<tr>
+<td>未定義(如extern)</td>
+<td>U</td>
+</tr>
+</tbody>
+</table>
+<h1 id="addr2line從位址轉成symbol"><a href="#addr2line從位址轉成symbol" class="headerlink" title="addr2line從位址轉成symbol"></a>addr2line從位址轉成symbol</h1><p>有時候我們執行程式會只知道位址，但是想要從位址得到到底是在程式哪行掛掉</p>
+<ul>
+<li><code>addr2line -f -e [filename] [address]</code>：-f代表要顯示是哪個function，-e代表address是來自該執行檔</li>
+</ul>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>本篇文章主要簡單介紹ELF的結構，然後我們可以用 od、readelf、objdump、objcopy/strip、nm, addr2line 幾個工具觀察ELF的格式。如果想要有進一步的認識，建議可以研究參考的連結。</p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="http://www.books.com.tw/products/0010587783" target="_blank" rel="noopener">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="http://ccckmit.wikidot.com/lk:elf" target="_blank" rel="noopener">陳鍾誠的網站 - 目的檔格式 (ELF)</a></li>
+<li><a href="https://paper.seebug.org/papers/Archive/refs/elf/Understanding_ELF.pdf" target="_blank" rel="noopener">ELF 格式解析</a></li>
+<li><a href="https://blog.csdn.net/xzongyuan/article/details/21082959" target="_blank" rel="noopener">objcopy给目标文件设计一个段</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/28/心流與人生/" rel="next" title="心流與人生">
+                <i class="fa fa-chevron-left"></i> 心流與人生
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/12/docker-簡易教學/" rel="prev" title="docker 簡易教學">
+                docker 簡易教學 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="evshary">
+          <p class="site-author-name" itemprop="name">evshary</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#簡介"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#觀察ELF的方法"><span class="nav-number">2.</span> <span class="nav-text">觀察ELF的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看執行檔-od"><span class="nav-number">2.1.</span> <span class="nav-text">查看執行檔 - od</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用readelf來觀察ELF資訊"><span class="nav-number">2.2.</span> <span class="nav-text">使用readelf來觀察ELF資訊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#objdump取得ELF內容"><span class="nav-number">2.3.</span> <span class="nav-text">objdump取得ELF內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#objcopy-strip修改ELF檔案"><span class="nav-number">2.4.</span> <span class="nav-text">objcopy/strip修改ELF檔案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#objcopy進階用法"><span class="nav-number">2.4.1.</span> <span class="nav-text">objcopy進階用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nm觀察symbol"><span class="nav-number">2.5.</span> <span class="nav-text">nm觀察symbol</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#addr2line從位址轉成symbol"><span class="nav-number">3.</span> <span class="nav-text">addr2line從位址轉成symbol</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#總結"><span class="nav-number">4.</span> <span class="nav-text">總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">evshary</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://evshary.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://evshary.github.io/2018/05/06/ELF-format/';
+          this.page.identifier = '2018/05/06/ELF-format/';
+          this.page.title = '關於ELF的兩三事';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://evshary.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
