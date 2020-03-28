@@ -163,5 +163,37 @@ hexo s
 
 可參考[为hexo博客添加RSS订阅功能](https://segmentfault.com/a/1190000012647294)
 
+## 增加live2d
+
+1. 先安裝必要的npm包
+```
+npm install hexo-helper-live2d --save
+npm install live2d-widget-model-shizuku --save
+```
+2. 設定`_config.yml`
+```
+# live2d
+# https://github.com/EYHN/hexo-helper-live2d
+live2d:
+  enable: true
+  scriptFrom: local
+  pluginRootPath: live2dw/
+  pluginJsPath: lib/
+  pluginModelPath: assets/
+  tagMode: false
+  debug: false
+  model:
+    use: live2d-widget-model-shizuku
+  display:
+    position: left
+```
+3. 最後重新生成啟動即可
+```
+hexo g
+hexo s
+```
+
+可參考[用Live2D让看板喵入住你的Hexo博客吧\(^o^)/~](https://11.tt/posts/2018/how-to-play-with-live2d-on-hexo/)
+
 # 參考
 [使用hexo，如果换了电脑怎么更新博客？使用hexo，如果换了电脑怎么更新博客？](https://www.zhihu.com/question/21193762)
