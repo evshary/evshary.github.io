@@ -3,11 +3,11 @@
   <title>凛の魅力に溺死しろ</title>
   
   <subtitle>どんな時でも余裕を持って優雅たれ</subtitle>
-  <link href="http://evshary.github.io/atom.xml" rel="self"/>
+  <link href="http://evshary.com/atom.xml" rel="self"/>
   
-  <link href="http://evshary.github.io/"/>
+  <link href="http://evshary.com/"/>
   <updated>2019-08-04T08:18:51.130Z</updated>
-  <id>http://evshary.github.io/</id>
+  <id>http://evshary.com/</id>
   
   <author>
     <name>evshary</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>一些減少code size的方法</title>
-    <link href="http://evshary.github.io/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/"/>
-    <id>http://evshary.github.io/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</id>
+    <link href="http://evshary.com/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/"/>
+    <id>http://evshary.com/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</id>
     <published>2019-08-03T08:39:40.000Z</published>
     <updated>2019-08-04T08:18:51.130Z</updated>
     
@@ -34,15 +34,15 @@
     
     
     
-    <category term="系統程式" scheme="http://evshary.github.io/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
+    <category term="系統程式" scheme="http://evshary.com/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
     
     
   </entry>
   
   <entry>
     <title>三年的工作省思</title>
-    <link href="http://evshary.github.io/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/"/>
-    <id>http://evshary.github.io/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</id>
+    <link href="http://evshary.com/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/"/>
+    <id>http://evshary.com/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</id>
     <published>2019-06-23T12:29:02.000Z</published>
     <updated>2019-08-03T08:33:48.954Z</updated>
     
@@ -57,17 +57,17 @@
     
     
     
-    <category term="自我反省" scheme="http://evshary.github.io/categories/%E8%87%AA%E6%88%91%E5%8F%8D%E7%9C%81/"/>
+    <category term="自我反省" scheme="http://evshary.com/categories/%E8%87%AA%E6%88%91%E5%8F%8D%E7%9C%81/"/>
     
     
-    <category term="自我成長" scheme="http://evshary.github.io/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
+    <category term="自我成長" scheme="http://evshary.com/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
     
   </entry>
   
   <entry>
     <title>IPython Notebook - Jupyter教學</title>
-    <link href="http://evshary.github.io/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/"/>
-    <id>http://evshary.github.io/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</id>
+    <link href="http://evshary.com/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/"/>
+    <id>http://evshary.com/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</id>
     <published>2018-12-02T14:03:13.000Z</published>
     <updated>2019-08-03T08:33:48.946Z</updated>
     
@@ -82,15 +82,15 @@
     
     
     
-    <category term="tools" scheme="http://evshary.github.io/categories/tools/"/>
+    <category term="tools" scheme="http://evshary.com/categories/tools/"/>
     
     
   </entry>
   
   <entry>
     <title>ARM CortexM3/4權限切換</title>
-    <link href="http://evshary.github.io/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/"/>
-    <id>http://evshary.github.io/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/</id>
+    <link href="http://evshary.com/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/"/>
+    <id>http://evshary.com/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/</id>
     <published>2018-12-02T07:04:44.000Z</published>
     <updated>2019-08-03T08:33:48.911Z</updated>
     
@@ -105,15 +105,15 @@
     
     
     
-    <category term="ARM" scheme="http://evshary.github.io/categories/ARM/"/>
+    <category term="ARM" scheme="http://evshary.com/categories/ARM/"/>
     
     
   </entry>
   
   <entry>
     <title>gnuplot：報告必備的繪圖工具</title>
-    <link href="http://evshary.github.io/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/"/>
-    <id>http://evshary.github.io/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</id>
+    <link href="http://evshary.com/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/"/>
+    <id>http://evshary.com/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</id>
     <published>2018-12-02T02:15:18.000Z</published>
     <updated>2019-08-03T08:33:48.951Z</updated>
     
@@ -128,15 +128,15 @@
     
     
     
-    <category term="tools" scheme="http://evshary.github.io/categories/tools/"/>
+    <category term="tools" scheme="http://evshary.com/categories/tools/"/>
     
     
   </entry>
   
   <entry>
     <title>ffmpeg影音處理工具</title>
-    <link href="http://evshary.github.io/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/"/>
-    <id>http://evshary.github.io/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</id>
+    <link href="http://evshary.com/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/"/>
+    <id>http://evshary.com/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</id>
     <published>2018-12-01T02:16:12.000Z</published>
     <updated>2019-08-03T08:33:48.950Z</updated>
     
@@ -151,15 +151,15 @@
     
     
     
-    <category term="tools" scheme="http://evshary.github.io/categories/tools/"/>
+    <category term="tools" scheme="http://evshary.com/categories/tools/"/>
     
     
   </entry>
   
   <entry>
     <title>dd - 資料處理的好工具</title>
-    <link href="http://evshary.github.io/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/"/>
-    <id>http://evshary.github.io/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</id>
+    <link href="http://evshary.com/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/"/>
+    <id>http://evshary.com/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</id>
     <published>2018-11-25T10:27:45.000Z</published>
     <updated>2019-08-03T08:33:48.950Z</updated>
     
@@ -174,15 +174,15 @@
     
     
     
-    <category term="tools" scheme="http://evshary.github.io/categories/tools/"/>
+    <category term="tools" scheme="http://evshary.com/categories/tools/"/>
     
     
   </entry>
   
   <entry>
     <title>youtube-dl網路影片下載器</title>
-    <link href="http://evshary.github.io/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/"/>
-    <id>http://evshary.github.io/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</id>
+    <link href="http://evshary.com/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/"/>
+    <id>http://evshary.com/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</id>
     <published>2018-11-25T03:38:01.000Z</published>
     <updated>2019-08-03T08:33:48.953Z</updated>
     
@@ -197,15 +197,15 @@
     
     
     
-    <category term="tools" scheme="http://evshary.github.io/categories/tools/"/>
+    <category term="tools" scheme="http://evshary.com/categories/tools/"/>
     
     
   </entry>
   
   <entry>
     <title>「被討厭的勇氣」-擁有承擔責任的勇氣</title>
-    <link href="http://evshary.github.io/2018/10/21/%E3%80%8C%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3%E3%80%8D-%E6%93%81%E6%9C%89%E6%89%BF%E6%93%94%E8%B2%AC%E4%BB%BB%E7%9A%84%E5%8B%87%E6%B0%A3/"/>
-    <id>http://evshary.github.io/2018/10/21/%E3%80%8C%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3%E3%80%8D-%E6%93%81%E6%9C%89%E6%89%BF%E6%93%94%E8%B2%AC%E4%BB%BB%E7%9A%84%E5%8B%87%E6%B0%A3/</id>
+    <link href="http://evshary.com/2018/10/21/%E3%80%8C%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3%E3%80%8D-%E6%93%81%E6%9C%89%E6%89%BF%E6%93%94%E8%B2%AC%E4%BB%BB%E7%9A%84%E5%8B%87%E6%B0%A3/"/>
+    <id>http://evshary.com/2018/10/21/%E3%80%8C%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3%E3%80%8D-%E6%93%81%E6%9C%89%E6%89%BF%E6%93%94%E8%B2%AC%E4%BB%BB%E7%9A%84%E5%8B%87%E6%B0%A3/</id>
     <published>2018-10-21T02:02:38.000Z</published>
     <updated>2019-08-03T08:33:48.953Z</updated>
     
@@ -220,17 +220,17 @@
     
     
     
-    <category term="讀書心得" scheme="http://evshary.github.io/categories/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97/"/>
+    <category term="讀書心得" scheme="http://evshary.com/categories/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97/"/>
     
     
-    <category term="自我成長" scheme="http://evshary.github.io/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
+    <category term="自我成長" scheme="http://evshary.com/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
     
   </entry>
   
   <entry>
     <title>GnuPG教學</title>
-    <link href="http://evshary.github.io/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/"/>
-    <id>http://evshary.github.io/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</id>
+    <link href="http://evshary.com/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/"/>
+    <id>http://evshary.com/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</id>
     <published>2018-10-14T03:37:34.000Z</published>
     <updated>2019-08-03T08:33:48.913Z</updated>
     
@@ -245,17 +245,17 @@
     
     
     
-    <category term="tools" scheme="http://evshary.github.io/categories/tools/"/>
+    <category term="tools" scheme="http://evshary.com/categories/tools/"/>
     
     
-    <category term="GNU tool" scheme="http://evshary.github.io/tags/GNU-tool/"/>
+    <category term="GNU tool" scheme="http://evshary.com/tags/GNU-tool/"/>
     
   </entry>
   
   <entry>
     <title>軟技能：軟體界的「原則」</title>
-    <link href="http://evshary.github.io/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E8%BB%9F%E9%AB%94%E7%95%8C%E7%9A%84%E3%80%8C%E5%8E%9F%E5%89%87%E3%80%8D/"/>
-    <id>http://evshary.github.io/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E8%BB%9F%E9%AB%94%E7%95%8C%E7%9A%84%E3%80%8C%E5%8E%9F%E5%89%87%E3%80%8D/</id>
+    <link href="http://evshary.com/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E8%BB%9F%E9%AB%94%E7%95%8C%E7%9A%84%E3%80%8C%E5%8E%9F%E5%89%87%E3%80%8D/"/>
+    <id>http://evshary.com/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E8%BB%9F%E9%AB%94%E7%95%8C%E7%9A%84%E3%80%8C%E5%8E%9F%E5%89%87%E3%80%8D/</id>
     <published>2018-07-04T13:18:29.000Z</published>
     <updated>2019-08-03T08:33:48.955Z</updated>
     
@@ -270,17 +270,17 @@
     
     
     
-    <category term="讀書心得" scheme="http://evshary.github.io/categories/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97/"/>
+    <category term="讀書心得" scheme="http://evshary.com/categories/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97/"/>
     
     
-    <category term="自我成長" scheme="http://evshary.github.io/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
+    <category term="自我成長" scheme="http://evshary.com/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
     
   </entry>
   
   <entry>
     <title>Linux和程式的互動</title>
-    <link href="http://evshary.github.io/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/"/>
-    <id>http://evshary.github.io/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</id>
+    <link href="http://evshary.com/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/"/>
+    <id>http://evshary.com/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</id>
     <published>2018-06-12T11:37:27.000Z</published>
     <updated>2019-08-03T08:33:48.947Z</updated>
     
@@ -295,17 +295,17 @@
     
     
     
-    <category term="Linux" scheme="http://evshary.github.io/categories/Linux/"/>
+    <category term="Linux" scheme="http://evshary.com/categories/Linux/"/>
     
     
-    <category term="GNU tool" scheme="http://evshary.github.io/tags/GNU-tool/"/>
+    <category term="GNU tool" scheme="http://evshary.com/tags/GNU-tool/"/>
     
   </entry>
   
   <entry>
     <title>gcc常用擴充功能</title>
-    <link href="http://evshary.github.io/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/"/>
-    <id>http://evshary.github.io/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</id>
+    <link href="http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/"/>
+    <id>http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</id>
     <published>2018-06-09T08:50:13.000Z</published>
     <updated>2019-08-03T08:33:48.951Z</updated>
     
@@ -320,17 +320,17 @@
     
     
     
-    <category term="系統程式" scheme="http://evshary.github.io/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
+    <category term="系統程式" scheme="http://evshary.com/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
     
     
-    <category term="GNU tool" scheme="http://evshary.github.io/tags/GNU-tool/"/>
+    <category term="GNU tool" scheme="http://evshary.com/tags/GNU-tool/"/>
     
   </entry>
   
   <entry>
     <title>linker script 簡單教學</title>
-    <link href="http://evshary.github.io/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/"/>
-    <id>http://evshary.github.io/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</id>
+    <link href="http://evshary.com/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/"/>
+    <id>http://evshary.com/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</id>
     <published>2018-06-02T07:56:33.000Z</published>
     <updated>2019-08-03T08:33:48.952Z</updated>
     
@@ -345,17 +345,17 @@
     
     
     
-    <category term="系統程式" scheme="http://evshary.github.io/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
+    <category term="系統程式" scheme="http://evshary.com/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
     
     
-    <category term="GNU tool" scheme="http://evshary.github.io/tags/GNU-tool/"/>
+    <category term="GNU tool" scheme="http://evshary.com/tags/GNU-tool/"/>
     
   </entry>
   
   <entry>
     <title>稀缺其實是一種陷阱</title>
-    <link href="http://evshary.github.io/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/"/>
-    <id>http://evshary.github.io/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/</id>
+    <link href="http://evshary.com/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/"/>
+    <id>http://evshary.com/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/</id>
     <published>2018-05-27T02:45:57.000Z</published>
     <updated>2019-08-03T08:33:48.955Z</updated>
     
@@ -370,17 +370,17 @@
     
     
     
-    <category term="讀書心得" scheme="http://evshary.github.io/categories/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97/"/>
+    <category term="讀書心得" scheme="http://evshary.com/categories/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97/"/>
     
     
-    <category term="自我成長" scheme="http://evshary.github.io/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
+    <category term="自我成長" scheme="http://evshary.com/tags/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/"/>
     
   </entry>
   
   <entry>
     <title>C語言的行內組譯</title>
-    <link href="http://evshary.github.io/2018/05/20/C-Inline-Assembly/"/>
-    <id>http://evshary.github.io/2018/05/20/C-Inline-Assembly/</id>
+    <link href="http://evshary.com/2018/05/20/C-Inline-Assembly/"/>
+    <id>http://evshary.com/2018/05/20/C-Inline-Assembly/</id>
     <published>2018-05-20T07:02:39.000Z</published>
     <updated>2019-08-03T08:33:48.911Z</updated>
     
@@ -395,19 +395,19 @@
     
     
     
-    <category term="程式語言" scheme="http://evshary.github.io/categories/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/"/>
+    <category term="程式語言" scheme="http://evshary.com/categories/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/"/>
     
-    <category term="C" scheme="http://evshary.github.io/categories/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/C/"/>
+    <category term="C" scheme="http://evshary.com/categories/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/C/"/>
     
     
-    <category term="GNU tool" scheme="http://evshary.github.io/tags/GNU-tool/"/>
+    <category term="GNU tool" scheme="http://evshary.com/tags/GNU-tool/"/>
     
   </entry>
   
   <entry>
     <title>使用 openssl 工具與函式庫</title>
-    <link href="http://evshary.github.io/2018/05/13/openssl-library-example/"/>
-    <id>http://evshary.github.io/2018/05/13/openssl-library-example/</id>
+    <link href="http://evshary.com/2018/05/13/openssl-library-example/"/>
+    <id>http://evshary.com/2018/05/13/openssl-library-example/</id>
     <published>2018-05-13T09:34:33.000Z</published>
     <updated>2019-08-03T08:33:48.952Z</updated>
     
@@ -422,15 +422,15 @@
     
     
     
-    <category term="protocol" scheme="http://evshary.github.io/categories/protocol/"/>
+    <category term="protocol" scheme="http://evshary.com/categories/protocol/"/>
     
     
   </entry>
   
   <entry>
     <title>淺談函式庫</title>
-    <link href="http://evshary.github.io/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/"/>
-    <id>http://evshary.github.io/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/</id>
+    <link href="http://evshary.com/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/"/>
+    <id>http://evshary.com/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/</id>
     <published>2018-05-12T07:28:37.000Z</published>
     <updated>2019-08-03T08:33:48.955Z</updated>
     
@@ -445,17 +445,17 @@
     
     
     
-    <category term="系統程式" scheme="http://evshary.github.io/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
+    <category term="系統程式" scheme="http://evshary.com/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
     
     
-    <category term="GNU tool" scheme="http://evshary.github.io/tags/GNU-tool/"/>
+    <category term="GNU tool" scheme="http://evshary.com/tags/GNU-tool/"/>
     
   </entry>
   
   <entry>
     <title>docker 簡易教學</title>
-    <link href="http://evshary.github.io/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/"/>
-    <id>http://evshary.github.io/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/</id>
+    <link href="http://evshary.com/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/"/>
+    <id>http://evshary.com/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/</id>
     <published>2018-05-12T02:10:01.000Z</published>
     <updated>2019-08-03T08:33:48.950Z</updated>
     
@@ -470,15 +470,15 @@
     
     
     
-    <category term="tools" scheme="http://evshary.github.io/categories/tools/"/>
+    <category term="tools" scheme="http://evshary.com/categories/tools/"/>
     
     
   </entry>
   
   <entry>
     <title>關於ELF的兩三事</title>
-    <link href="http://evshary.github.io/2018/05/06/ELF-format/"/>
-    <id>http://evshary.github.io/2018/05/06/ELF-format/</id>
+    <link href="http://evshary.com/2018/05/06/ELF-format/"/>
+    <id>http://evshary.com/2018/05/06/ELF-format/</id>
     <published>2018-05-06T07:22:27.000Z</published>
     <updated>2019-08-03T08:33:48.912Z</updated>
     
@@ -493,10 +493,10 @@
     
     
     
-    <category term="系統程式" scheme="http://evshary.github.io/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
+    <category term="系統程式" scheme="http://evshary.com/categories/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/"/>
     
     
-    <category term="GNU tool" scheme="http://evshary.github.io/tags/GNU-tool/"/>
+    <category term="GNU tool" scheme="http://evshary.com/tags/GNU-tool/"/>
     
   </entry>
   

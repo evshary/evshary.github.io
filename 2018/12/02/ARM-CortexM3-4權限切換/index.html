@@ -21,12 +21,12 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"evshary.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="簡介最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的mini-arm-os和pikoRT，相關程式碼放在arm-os-4fun。最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。 這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。原本我是在qemu上面跑STM32虛擬機，但">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARM CortexM3&#x2F;4權限切換">
-<meta property="og:url" content="http://evshary.github.io/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/index.html">
+<meta property="og:url" content="http://evshary.com/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/index.html">
 <meta property="og:site_name" content="凛の魅力に溺死しろ">
 <meta property="og:description" content="簡介最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的mini-arm-os和pikoRT，相關程式碼放在arm-os-4fun。最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。 這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。原本我是在qemu上面跑STM32虛擬機，但">
 <meta property="og:locale" content="en_US">
@@ -38,7 +38,7 @@
 <meta name="twitter:image" content="https://community.arm.com/cfs-file/__key/communityserver-blogs-components-weblogfiles/00-00-00-21-42/6470.handler_2D00_thread.PNG">
 
 
-<link rel="canonical" href="http://evshary.github.io/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/">
+<link rel="canonical" href="http://evshary.com/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/">
 
 
 <script class="page-configurations">
@@ -273,7 +273,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://evshary.github.io/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/">
+    <link itemprop="mainEntityOfPage" href="http://evshary.com/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -624,7 +624,7 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "http://evshary.github.io/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/";
+    this.page.url = "http://evshary.com/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/";
     this.page.identifier = "2018/12/02/ARM-CortexM3-4權限切換/";
     this.page.title = "ARM CortexM3/4權限切換";
     };

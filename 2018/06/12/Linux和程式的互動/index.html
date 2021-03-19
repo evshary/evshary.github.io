@@ -21,12 +21,12 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"evshary.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="簡介這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。 程式如何執行main一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似.&#x2F;a.out的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。 下面例子我們以Kernel v4.17為例  首先">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux和程式的互動">
-<meta property="og:url" content="http://evshary.github.io/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/index.html">
+<meta property="og:url" content="http://evshary.com/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/index.html">
 <meta property="og:site_name" content="凛の魅力に溺死しろ">
 <meta property="og:description" content="簡介這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。 程式如何執行main一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似.&#x2F;a.out的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。 下面例子我們以Kernel v4.17為例  首先">
 <meta property="og:locale" content="en_US">
@@ -37,7 +37,7 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://evshary.github.io/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/">
+<link rel="canonical" href="http://evshary.com/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/">
 
 
 <script class="page-configurations">
@@ -272,7 +272,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://evshary.github.io/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/">
+    <link itemprop="mainEntityOfPage" href="http://evshary.com/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -490,7 +490,7 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "http://evshary.github.io/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/";
+    this.page.url = "http://evshary.com/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/";
     this.page.identifier = "2018/06/12/Linux和程式的互動/";
     this.page.title = "Linux和程式的互動";
     };

@@ -21,12 +21,12 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"evshary.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="簡介GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性__attribute__。 內建函式要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上 -fno-builtin選項，通常-fno-builtin是為了幫助我們確保程式的結果是如同我們所想像的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gcc常用擴充功能">
-<meta property="og:url" content="http://evshary.github.io/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:url" content="http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/index.html">
 <meta property="og:site_name" content="凛の魅力に溺死しろ">
 <meta property="og:description" content="簡介GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性__attribute__。 內建函式要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上 -fno-builtin選項，通常-fno-builtin是為了幫助我們確保程式的結果是如同我們所想像的">
 <meta property="og:locale" content="en_US">
@@ -37,7 +37,7 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://evshary.github.io/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/">
+<link rel="canonical" href="http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/">
 
 
 <script class="page-configurations">
@@ -272,7 +272,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://evshary.github.io/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/">
+    <link itemprop="mainEntityOfPage" href="http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -528,7 +528,7 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "http://evshary.github.io/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/";
+    this.page.url = "http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/";
     this.page.identifier = "2018/06/09/gcc常用擴充功能/";
     this.page.title = "gcc常用擴充功能";
     };
