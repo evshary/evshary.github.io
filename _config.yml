@@ -12,7 +12,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://evshary.github.io
+url: http://evshary.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -89,13 +89,13 @@ search:
 
 # RSS
 feed:
-    type: atom
-    path: atom.xml
-    limit: 20
-    hub:
-    content:
-    content_limit:
-    content_limit_delim: ' '
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
+  content_limit:
+  content_limit_delim: ' '
 
 # live2d
 # https://github.com/EYHN/hexo-helper-live2d
