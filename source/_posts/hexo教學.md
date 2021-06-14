@@ -14,7 +14,7 @@ Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介�
 這邊一開始要先安裝好 git 和 npm，兩者的使用就不在這邊多提了。
 
 1. 先在 GitHub 上創立一個新的 repo，像我的話就是 `evshary.github.io`
-2. clone 下來並且創立 master 和 source 兩個 branch，這兩個 branch 分別有不同用途，master 用來放顯示的網頁，source 用來放產生網頁的原始檔
+2. clone 下來並且創立 main 和 source 兩個 branch，這兩個 branch 分別有不同用途，main 用來放顯示的網頁，source 用來放產生網頁的原始檔
 3. 首先先切到 source 的 branch，然後開始安裝 hexo (當然要先裝好 npm)
 ```
 # 安裝 hexo command line tool
@@ -25,11 +25,13 @@ npm install hexo-deployer-git --save
 hexo init
 npm install
 ```
-4. 修改 `_config.yml` 的 deploy 參數，branch 改為 master，這個代表的意思是我們會把產生的網頁放到 master 這個 branch 上
+4. 修改 `_config.yml` 的 deploy 參數，branch 改為 main，這個代表的意思是我們會把產生的網頁放到 main 這個 branch 上
 5. 執行 `hexo g` 來產生顯示的網頁
 6. 當我們修改好 blog，就可以把 source 的 branch commit 並且 push 上 GitHub
-7. 最後執行 `hexo d` 就可以上傳網頁了，這個動作代表著把 master push 上 GitHub
+7. 最後執行 `hexo d` 就可以上傳網頁了，這個動作代表著把 main push 上 GitHub
 8. 未來的使用都是在 source 的 branch 下 commit 並 push，然後才用`hexo d` 上傳
+
+備註：`hexo d`的上傳可以用 GitHub Action 取代，只要 source branch 有更新，就會自動在 main branch 產生 blog 結果。相關設定可以參考[這邊的範例](https://github.com/evshary/evshary.github.io/blob/source/.github/workflows/deploy.yaml)
 
 # 重裝
 
