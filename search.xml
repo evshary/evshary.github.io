@@ -1,6 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ARM CortexM3/4權限切換</title>
+    <url>/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近我在研究怎麼在ARM Cortex M3/4上面跑一個自己寫的OS，最主要是參考jserv的<a href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
+<p>這邊首先要探討的是Cortex M3/4上面有的權限模式，以及它們是怎麼進行切換等細節。<br>原本我是在qemu上面跑<a href="http://beckus.github.io/qemu_stm32/">STM32虛擬機</a>，但是後來發現好像跟真實硬體有點不一致，所以後來我都在STM32F429的硬體上面來測試了。</p>
+<h1 id="Cortex-M權限設計"><a href="#Cortex-M權限設計" class="headerlink" title="Cortex M權限設計"></a>Cortex M權限設計</h1><p>首先我們先了解Cortex上面有哪些權限模式，處理器上面有兩種Operation Modes：Thread mode和Handler mode。</p>
+<ul>
+<li>Thread Mode：一般程式運行的狀態。</li>
+<li>Handler Mode：處理exception的狀態。</li>
+</ul>
+<p>然而除了這個以外，還有不同的Privilege Levels，避免一般使用者可以存取敏感資源。</p>
+<ul>
+<li>Privileged：可以存取所有資源，在CPU reset之後就是privileged。</li>
+<li>Unprivileged：通常是讓OS中userspace的程式運行用的，在幾個方面存取資源是受限的。<ul>
+<li>MSR、MRS指令存取上會有限制。</li>
+<li>無法存取system timer、NVIC。</li>
+<li>有些memory無法存取。</li>
+</ul>
+</li>
+</ul>
+<p>Operation Modes和Privilege Levels的關係如下所示，Unprivileged不能進入Handler Mode的。</p>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>Privileged Level</th>
+<th>Unprivileged Level</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Handler Mode</td>
+<td>O(state1)</td>
+<td>X</td>
+</tr>
+<tr>
+<td>Thread Mode</td>
+<td>O(state2)</td>
+<td>O(state3)</td>
+</tr>
+</tbody></table>
+<ul>
+<li>上面標註的state 1-3是為了方便我們後面講解而標的。</li>
+</ul>
+<h1 id="如何切換權限與模式"><a href="#如何切換權限與模式" class="headerlink" title="如何切換權限與模式"></a>如何切換權限與模式</h1><p>關於切換的部分可參考下圖，圖片來源<a href="https://community.arm.com/processors/b/blog/posts/a-tour-of-the-cortex-m3-core">A tour of the Cortex-M3 Core</a></p>
+<p><img src="https://community.arm.com/cfs-file/__key/communityserver-blogs-components-weblogfiles/00-00-00-21-42/6470.handler_2D00_thread.PNG" alt="模式切換"></p>
+<p>下面我們先看怎麼樣從state2,state3進入state1，也就是發生exception，然後再從state1回來。</p>
+<h2 id="Exception-Entry"><a href="#Exception-Entry" class="headerlink" title="Exception Entry"></a>Exception Entry</h2><p>進入exception有兩種情況：</p>
+<ol>
+<li>目前我們在thread mode</li>
+<li>preempts：發生的exception比目前我們所在的exception權限還高</li>
+</ol>
+<p>發生exception時，ARM會自動把當前的register的資訊存起來，順序為xPSR, PC, LR, R12, R3, R2, R1, R0。儲存的方式就是push到當前的stack中，可能是main stack(SP=MSP)，也可能是process stack(SP=PSP)。</p>
+<table>
+<thead>
+<tr>
+<th>address</th>
+<th>register</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SP+00</td>
+<td>R0 &lt;- SP after exception</td>
+</tr>
+<tr>
+<td>SP+0x04</td>
+<td>R1</td>
+</tr>
+<tr>
+<td>SP+0x08</td>
+<td>R2</td>
+</tr>
+<tr>
+<td>SP+0x0C</td>
+<td>R3</td>
+</tr>
+<tr>
+<td>SP+0x10</td>
+<td>R12</td>
+</tr>
+<tr>
+<td>SP+0x14</td>
+<td>LR</td>
+</tr>
+<tr>
+<td>SP+0x18</td>
+<td>PC</td>
+</tr>
+<tr>
+<td>SP+0x1C</td>
+<td>xPSR</td>
+</tr>
+<tr>
+<td>SP+0x20</td>
+<td>xxx &lt;- SP before exception</td>
+</tr>
+</tbody></table>
+<p>完成後接著會開始執行exception handler，並且把EXC_RETURN寫入LR。</p>
+<h2 id="Exception-Return"><a href="#Exception-Return" class="headerlink" title="Exception Return"></a>Exception Return</h2><p>要從exception跳還必須要符合兩個條件：</p>
+<ol>
+<li>目前正在Handler Mode。</li>
+<li>PC的值是合法的EXC_RETURN。</li>
+</ol>
+<p>關於EXC_RETURN的值，其實代表了ARM從handler mode回去的路徑，有三種可能：</p>
+<ol>
+<li>目前是nested exception，回去上層還是handler mode。</li>
+<li>是由privileged thread mode呼叫的，也就是要回到state2。</li>
+<li>是由unprivileged thread mode呼叫的，也就是要回到state3。</li>
+</ol>
+<p>因此EXC_RETURN有三個可能的值</p>
+<table>
+<thead>
+<tr>
+<th>EXC_RETURN</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0xFFFFFFF1</td>
+<td>Return to Handler mode.<br>Exception return gets state from the main stack.<br>Execution uses MSP after return.</td>
+</tr>
+<tr>
+<td>0xFFFFFFF9</td>
+<td>Return to Thread mode.<br>Exception Return get state from the main stack.<br>Execution uses MSP after return.</td>
+</tr>
+<tr>
+<td>0xFFFFFFFD</td>
+<td>Return to Thread mode.<br>Exception return gets state from the process stack.<br>Execution uses PSP after return.</td>
+</tr>
+</tbody></table>
+<h2 id="Privileged-to-Unprivileged"><a href="#Privileged-to-Unprivileged" class="headerlink" title="Privileged to Unprivileged"></a>Privileged to Unprivileged</h2><p>接著我們要來探討怎麼從Privileged進入Unprivileged，也就是state2進入state3的部分。</p>
+<p>如果要進入Unprivileged，那必須使用到特殊register - control。</p>
+<table>
+<thead>
+<tr>
+<th>bit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CONTROL[1]</td>
+<td>0：Use MSP, 1: Use PSP</td>
+</tr>
+<tr>
+<td>CONTROL[0]</td>
+<td>0：Privileged thread mode, 1：Unprivileged thread mode</td>
+</tr>
+</tbody></table>
+<p>要特別注意操作control register一定要用MRS和MSR register</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># CONTROL值搬到R0</span><br><span class="line">MRS R0, CONTROL</span><br><span class="line"># R0的值放入CONTROL</span><br><span class="line">MSR CONTROL, R0</span><br></pre></td></tr></table></figure>
+<p>進入Unprivileged Thread Mode的操作</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MOV R0, 3</span><br><span class="line">MSR CONTROL, R0</span><br></pre></td></tr></table></figure>
+
+<h1 id="ARM在切換上面的設計"><a href="#ARM在切換上面的設計" class="headerlink" title="ARM在切換上面的設計"></a>ARM在切換上面的設計</h1><p>ARM在處理nested exception上有自己的一套做法來加快速度，確保高優先權的exception能更快被執行到，達到更高的即時性(real-time)。</p>
+<p>下面介紹兩種在Cortex M上面的機制：</p>
+<ul>
+<li>tail-chained：<ul>
+<li>情況：如果發生exception1的時候又發生exception2，但是exception2的優先權沒有高於exception1，必須等待。</li>
+<li>原本：一般來說exception1結束的時候會先pop stack，然後再push stack進入處理exception2。</li>
+<li>改進：exception1到exception2中間的pop&amp;push其實是沒意義的，所以ARM Cortex M會在exception1結束後直接執行exception2，減少了中間的浪費。</li>
+</ul>
+</li>
+<li>late-arriving<ul>
+<li>情況：如果發生exception1並且執行state saving(上面說的push register)，這時候有更高優先權的exception2進來，發生preempts。</li>
+<li>原本：會中斷exception1的state saving，優先讓給exception2。</li>
+<li>改進：exception2其實也是需要state saving，所以繼續維持state saving，然後直接執行exception2。當exception2結束後，就又可以使用tail-chained的模式來執行exception1。</li>
+</ul>
+</li>
+</ul>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p>關於Cortex M相關的資料非常推薦下面兩本書籍，都有中文的翻譯。JosephYiu有參與ARM Cortex M的設計，比較有權威性。</p>
+<ul>
+<li><a href="https://www.books.com.tw/products/CN11146482">ARM Cortex-M3權威指南</a></li>
+<li><a href="https://www.tenlong.com.tw/products/9787302402923">ARM Cortex-M3與Cortex-M4權威指南, 3/e ARM Cortex-M3与Cortex-M4权威指南</a></li>
+</ul>
+<p>可參考jserv老師和學生撰寫的rtenv+簡介，裡面也有提到ARM CM3權限的部分。</p>
+<ul>
+<li><a href="http://wiki.csie.ncku.edu.tw/embedded/rtenv">rtenv+</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ARM</category>
+      </categories>
+  </entry>
+  <entry>
     <title>關於ELF的兩三事</title>
     <url>/2018/05/06/ELF-format/</url>
     <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。</p>
@@ -199,76 +381,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><ul>
-<li>指令<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Ubuntu</span><br><span class="line">sudo apt-get install gnupg</span><br><span class="line"># MAX</span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure></li>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
-</ul>
-</li>
-</ul>
-<h2 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h2><ol>
-<li>先產生key<ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"># 如果gen key發生問題，可用如下指令後再一次</span><br><span class="line">gpgconf --kill gpg-agent</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"># 也可以直接放到.gnupg內</span><br><span class="line">gpg --gen-revoke [UID] &gt; ~&#x2F;.gnupg&#x2F;revocation-[UID].crt</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --export [UID]</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>如果是要把朋友的公鑰放入已知道人的清單<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure></li>
-<li>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h2><h3 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h3><ol>
-<li>查看目前的鑰匙<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 列出所有公鑰</span><br><span class="line">gpg --list-keys</span><br><span class="line"># 同時看簽名</span><br><span class="line">gpg --list-sigs </span><br><span class="line"># 列出所有私鑰</span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure></li>
-<li>編輯key(對key簽名也是用同樣的方法)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure></li>
-<li>刪除已存入key的方式，如果有私鑰要先刪除<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 先刪除私鑰</span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"># 刪除公鑰</span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h3><ol>
-<li>首先先搜尋對象的public key<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp:&#x2F;&#x2F;pgp.mit.edu --search-keys &#39;Linus Torvalds&#39;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp:&#x2F;&#x2F;pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure></li>
-<li>可查看與更新朋友的public key<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="import-export"><a href="#import-export" class="headerlink" title="import/export"></a>import/export</h3><ol>
-<li>除了搜尋以外，也可以用import/export的方式管理朋友的公鑰<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --export -ao public_keys_list.txt</span><br></pre></td></tr></table></figure></li>
-<li>import/export自己的金鑰<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># export 公鑰</span><br><span class="line">gpg --armor --output public-key.asc --export [UID]</span><br><span class="line"># export 私鑰</span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"># import</span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h2><ol>
-<li>假設我們要傳送secret.tgz給朋友，可以先進行加密<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc </span><br></pre></td></tr></table></figure></li>
-<li>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure></li>
-<li>如果要確認發信人身份<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 先對檔案簽名</span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"># 驗證檔案身份</span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C語言的行內組譯</title>
     <url>/2018/05/20/C-Inline-Assembly/</url>
     <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
@@ -368,6 +480,76 @@
       <categories>
         <category>程式語言</category>
         <category>C</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><ul>
+<li>指令<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Ubuntu</span><br><span class="line">sudo apt-get install gnupg</span><br><span class="line"># MAX</span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure></li>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+</ul>
+</li>
+</ul>
+<h2 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h2><ol>
+<li>先產生key<ul>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"># 如果gen key發生問題，可用如下指令後再一次</span><br><span class="line">gpgconf --kill gpg-agent</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"># 也可以直接放到.gnupg內</span><br><span class="line">gpg --gen-revoke [UID] &gt; ~&#x2F;.gnupg&#x2F;revocation-[UID].crt</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --export [UID]</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>如果是要把朋友的公鑰放入已知道人的清單<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure></li>
+<li>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h2><h3 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h3><ol>
+<li>查看目前的鑰匙<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 列出所有公鑰</span><br><span class="line">gpg --list-keys</span><br><span class="line"># 同時看簽名</span><br><span class="line">gpg --list-sigs </span><br><span class="line"># 列出所有私鑰</span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure></li>
+<li>編輯key(對key簽名也是用同樣的方法)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure></li>
+<li>刪除已存入key的方式，如果有私鑰要先刪除<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 先刪除私鑰</span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"># 刪除公鑰</span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h3><ol>
+<li>首先先搜尋對象的public key<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp:&#x2F;&#x2F;pgp.mit.edu --search-keys &#39;Linus Torvalds&#39;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp:&#x2F;&#x2F;pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure></li>
+<li>可查看與更新朋友的public key<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="import-export"><a href="#import-export" class="headerlink" title="import/export"></a>import/export</h3><ol>
+<li>除了搜尋以外，也可以用import/export的方式管理朋友的公鑰<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --export -ao public_keys_list.txt</span><br></pre></td></tr></table></figure></li>
+<li>import/export自己的金鑰<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># export 公鑰</span><br><span class="line">gpg --armor --output public-key.asc --export [UID]</span><br><span class="line"># export 私鑰</span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"># import</span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h2><ol>
+<li>假設我們要傳送secret.tgz給朋友，可以先進行加密<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc </span><br></pre></td></tr></table></figure></li>
+<li>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure></li>
+<li>如果要確認發信人身份<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 先對檔案簽名</span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"># 驗證檔案身份</span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>tools</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
@@ -637,185 +819,123 @@
       </tags>
   </entry>
   <entry>
-    <title>ARM CortexM3/4權限切換</title>
-    <url>/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近我在研究怎麼在ARM Cortex M3/4上面跑一個自己寫的OS，最主要是參考jserv的<a href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
-<p>這邊首先要探討的是Cortex M3/4上面有的權限模式，以及它們是怎麼進行切換等細節。<br>原本我是在qemu上面跑<a href="http://beckus.github.io/qemu_stm32/">STM32虛擬機</a>，但是後來發現好像跟真實硬體有點不一致，所以後來我都在STM32F429的硬體上面來測試了。</p>
-<h1 id="Cortex-M權限設計"><a href="#Cortex-M權限設計" class="headerlink" title="Cortex M權限設計"></a>Cortex M權限設計</h1><p>首先我們先了解Cortex上面有哪些權限模式，處理器上面有兩種Operation Modes：Thread mode和Handler mode。</p>
-<ul>
-<li>Thread Mode：一般程式運行的狀態。</li>
-<li>Handler Mode：處理exception的狀態。</li>
+    <title>code review</title>
+    <url>/2017/08/27/code-review/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
+<p><strong>重要：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</strong></p>
+<h1 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h1><ol>
+<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
+<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
+<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
+<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
+<li>備份功能：確保至少有兩個人知道code的意思。</li>
+</ol>
+<h1 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h1><ul>
+<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
+<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
 </ul>
-<p>然而除了這個以外，還有不同的Privilege Levels，避免一般使用者可以存取敏感資源。</p>
-<ul>
-<li>Privileged：可以存取所有資源，在CPU reset之後就是privileged。</li>
-<li>Unprivileged：通常是讓OS中userspace的程式運行用的，在幾個方面存取資源是受限的。<ul>
-<li>MSR、MRS指令存取上會有限制。</li>
-<li>無法存取system timer、NVIC。</li>
-<li>有些memory無法存取。</li>
+<h1 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h1><ul>
+<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
+<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
+<li>相互尊重：<ul>
+<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
+<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
+</ul>
+</li>
+<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
+</ul>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h2><ul>
+<li>說明code review規則，以及建立正確的心態</li>
+<li>事先訂定公司開發的文化，如coding style，命名規則</li>
+<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
+</ul>
+<h2 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h2><ul>
+<li>開發時間需要預估code review的時間</li>
+<li>先規劃如何將大功能切成小部分：<ul>
+<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
+<li>如果功能出了大問題，也可以把風險控制在最小</li>
 </ul>
 </li>
 </ul>
-<p>Operation Modes和Privilege Levels的關係如下所示，Unprivileged不能進入Handler Mode的。</p>
-<table>
-<thead>
-<tr>
-<th>-</th>
-<th>Privileged Level</th>
-<th>Unprivileged Level</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Handler Mode</td>
-<td>O(state1)</td>
-<td>X</td>
-</tr>
-<tr>
-<td>Thread Mode</td>
-<td>O(state2)</td>
-<td>O(state3)</td>
-</tr>
-</tbody></table>
-<ul>
-<li>上面標註的state 1-3是為了方便我們後面講解而標的。</li>
-</ul>
-<h1 id="如何切換權限與模式"><a href="#如何切換權限與模式" class="headerlink" title="如何切換權限與模式"></a>如何切換權限與模式</h1><p>關於切換的部分可參考下圖，圖片來源<a href="https://community.arm.com/processors/b/blog/posts/a-tour-of-the-cortex-m3-core">A tour of the Cortex-M3 Core</a></p>
-<p><img src="https://community.arm.com/cfs-file/__key/communityserver-blogs-components-weblogfiles/00-00-00-21-42/6470.handler_2D00_thread.PNG" alt="模式切換"></p>
-<p>下面我們先看怎麼樣從state2,state3進入state1，也就是發生exception，然後再從state1回來。</p>
-<h2 id="Exception-Entry"><a href="#Exception-Entry" class="headerlink" title="Exception Entry"></a>Exception Entry</h2><p>進入exception有兩種情況：</p>
-<ol>
-<li>目前我們在thread mode</li>
-<li>preempts：發生的exception比目前我們所在的exception權限還高</li>
-</ol>
-<p>發生exception時，ARM會自動把當前的register的資訊存起來，順序為xPSR, PC, LR, R12, R3, R2, R1, R0。儲存的方式就是push到當前的stack中，可能是main stack(SP=MSP)，也可能是process stack(SP=PSP)。</p>
-<table>
-<thead>
-<tr>
-<th>address</th>
-<th>register</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SP+00</td>
-<td>R0 &lt;- SP after exception</td>
-</tr>
-<tr>
-<td>SP+0x04</td>
-<td>R1</td>
-</tr>
-<tr>
-<td>SP+0x08</td>
-<td>R2</td>
-</tr>
-<tr>
-<td>SP+0x0C</td>
-<td>R3</td>
-</tr>
-<tr>
-<td>SP+0x10</td>
-<td>R12</td>
-</tr>
-<tr>
-<td>SP+0x14</td>
-<td>LR</td>
-</tr>
-<tr>
-<td>SP+0x18</td>
-<td>PC</td>
-</tr>
-<tr>
-<td>SP+0x1C</td>
-<td>xPSR</td>
-</tr>
-<tr>
-<td>SP+0x20</td>
-<td>xxx &lt;- SP before exception</td>
-</tr>
-</tbody></table>
-<p>完成後接著會開始執行exception handler，並且把EXC_RETURN寫入LR。</p>
-<h2 id="Exception-Return"><a href="#Exception-Return" class="headerlink" title="Exception Return"></a>Exception Return</h2><p>要從exception跳還必須要符合兩個條件：</p>
-<ol>
-<li>目前正在Handler Mode。</li>
-<li>PC的值是合法的EXC_RETURN。</li>
-</ol>
-<p>關於EXC_RETURN的值，其實代表了ARM從handler mode回去的路徑，有三種可能：</p>
-<ol>
-<li>目前是nested exception，回去上層還是handler mode。</li>
-<li>是由privileged thread mode呼叫的，也就是要回到state2。</li>
-<li>是由unprivileged thread mode呼叫的，也就是要回到state3。</li>
-</ol>
-<p>因此EXC_RETURN有三個可能的值</p>
-<table>
-<thead>
-<tr>
-<th>EXC_RETURN</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0xFFFFFFF1</td>
-<td>Return to Handler mode.<br>Exception return gets state from the main stack.<br>Execution uses MSP after return.</td>
-</tr>
-<tr>
-<td>0xFFFFFFF9</td>
-<td>Return to Thread mode.<br>Exception Return get state from the main stack.<br>Execution uses MSP after return.</td>
-</tr>
-<tr>
-<td>0xFFFFFFFD</td>
-<td>Return to Thread mode.<br>Exception return gets state from the process stack.<br>Execution uses PSP after return.</td>
-</tr>
-</tbody></table>
-<h2 id="Privileged-to-Unprivileged"><a href="#Privileged-to-Unprivileged" class="headerlink" title="Privileged to Unprivileged"></a>Privileged to Unprivileged</h2><p>接著我們要來探討怎麼從Privileged進入Unprivileged，也就是state2進入state3的部分。</p>
-<p>如果要進入Unprivileged，那必須使用到特殊register - control。</p>
-<table>
-<thead>
-<tr>
-<th>bit</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CONTROL[1]</td>
-<td>0：Use MSP, 1: Use PSP</td>
-</tr>
-<tr>
-<td>CONTROL[0]</td>
-<td>0：Privileged thread mode, 1：Unprivileged thread mode</td>
-</tr>
-</tbody></table>
-<p>要特別注意操作control register一定要用MRS和MSR register</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># CONTROL值搬到R0</span><br><span class="line">MRS R0, CONTROL</span><br><span class="line"># R0的值放入CONTROL</span><br><span class="line">MSR CONTROL, R0</span><br></pre></td></tr></table></figure>
-<p>進入Unprivileged Thread Mode的操作</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MOV R0, 3</span><br><span class="line">MSR CONTROL, R0</span><br></pre></td></tr></table></figure>
-
-<h1 id="ARM在切換上面的設計"><a href="#ARM在切換上面的設計" class="headerlink" title="ARM在切換上面的設計"></a>ARM在切換上面的設計</h1><p>ARM在處理nested exception上有自己的一套做法來加快速度，確保高優先權的exception能更快被執行到，達到更高的即時性(real-time)。</p>
-<p>下面介紹兩種在Cortex M上面的機制：</p>
-<ul>
-<li>tail-chained：<ul>
-<li>情況：如果發生exception1的時候又發生exception2，但是exception2的優先權沒有高於exception1，必須等待。</li>
-<li>原本：一般來說exception1結束的時候會先pop stack，然後再push stack進入處理exception2。</li>
-<li>改進：exception1到exception2中間的pop&amp;push其實是沒意義的，所以ARM Cortex M會在exception1結束後直接執行exception2，減少了中間的浪費。</li>
-</ul>
-</li>
-<li>late-arriving<ul>
-<li>情況：如果發生exception1並且執行state saving(上面說的push register)，這時候有更高優先權的exception2進來，發生preempts。</li>
-<li>原本：會中斷exception1的state saving，優先讓給exception2。</li>
-<li>改進：exception2其實也是需要state saving，所以繼續維持state saving，然後直接執行exception2。當exception2結束後，就又可以使用tail-chained的模式來執行exception1。</li>
+<h2 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h2><ul>
+<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
+<li>如果有使用分析工具，先使用工具產生報表<ul>
+<li>review時可以針對上面的重點討論</li>
+<li>減少review的effort</li>
 </ul>
 </li>
 </ul>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p>關於Cortex M相關的資料非常推薦下面兩本書籍，都有中文的翻譯。JosephYiu有參與ARM Cortex M的設計，比較有權威性。</p>
-<ul>
-<li><a href="https://www.books.com.tw/products/CN11146482">ARM Cortex-M3權威指南</a></li>
-<li><a href="https://www.tenlong.com.tw/products/9787302402923">ARM Cortex-M3與Cortex-M4權威指南, 3/e ARM Cortex-M3与Cortex-M4权威指南</a></li>
+<h2 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h2><ul>
+<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
+<li>code review時間不要超過半小時</li>
+<li>利用checklist來檢查<ul>
+<li>功能需求是什麼？設計方式是否有達到目的？</li>
+<li>是否可以做未來擴充？</li>
+<li>是否足夠安全？有沒有邏輯漏洞？</li>
+<li>Error handling和corner case是否都有處理好？</li>
+<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
+<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
+<li>效能是否可以再提升？</li>
 </ul>
-<p>可參考jserv老師和學生撰寫的rtenv+簡介，裡面也有提到ARM CM3權限的部分。</p>
-<ul>
-<li><a href="http://wiki.csie.ncku.edu.tw/embedded/rtenv">rtenv+</a></li>
+</li>
+<li>review過程不改code，用todo list先記錄</li>
 </ul>
+<h2 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h2><ul>
+<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
+<li>review後要留下紀錄提供學習使用</li>
+<li>定期開會評估code review流程和效用<ul>
+<li>review的方式要不要調整？</li>
+<li>工具是否要調整？</li>
+<li>checklist是否要更新？</li>
+</ul>
+</li>
+</ul>
+<h1 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h1><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
+<ul>
+<li>統一Glossary：<ul>
+<li>可以使用wiki等文件建立</li>
+</ul>
+</li>
+<li>找重複程式碼：<ul>
+<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
+</ul>
+</li>
+<li>判斷複雜度：<ul>
+<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
+<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
+</ul>
+</li>
+<li>分析綜合品質：<ul>
+<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
+<li>Adlint：Open source，但似乎很久沒更新了</li>
+<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
+</ul>
+</li>
+<li>程式法風格：<ul>
+<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
+<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
+</ul>
+</li>
+</ul>
+<h1 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h1><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
+<h2 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h2><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
+<ul>
+<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
+<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
+<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
+</ul>
+<h1 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h1><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
+<ol>
+<li>執行前後，bug減少的數量(這是品質部分)</li>
+<li>執行前後，團隊多花費的時間(這是成本部分)</li>
+<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
+<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
+<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
+</ol>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。<br><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看<br><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述<br><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章<br><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度<br><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</p>
 ]]></content>
       <categories>
-        <category>ARM</category>
+        <category>軟體開發</category>
       </categories>
   </entry>
   <entry>
@@ -1029,6 +1149,198 @@
       </categories>
   </entry>
   <entry>
+    <title>dependency</title>
+    <url>/2017/08/26/dependency/</url>
+    <content><![CDATA[<h1 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h1><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;private.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test=%d\n&quot;</span>, PRIV_VALUE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>test.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _TEST_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _TEST_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>private.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _PRIVATE_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _PRIVATE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PRIV_VALUE 3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>然後假設我們的Makefile是這樣寫</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CC&#x3D;gcc</span><br><span class="line">OBJ&#x3D;$(patsubst %.c,%.o,$(wildcard *.c))</span><br><span class="line">BIN&#x3D;main.out</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">    $(CC) -c $^</span><br><span class="line"></span><br><span class="line">all: $(OBJ)</span><br><span class="line">    $(CC) $^ -o $(BIN)</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">    rm *.o $(BIN)</span><br></pre></td></tr></table></figure>
+<p>我們試著修改private.h的MACRO值，就會發現重新make結果還是不變，需要重新make clean</p>
+<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>可以使用gcc的特殊option</p>
+<ul>
+<li>gcc -M xxx.c: 找出所有相依檔</li>
+<li>gcc -MM xxx.c: 同-M，但不含系統檔<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">main.o: main.c test.h</span><br></pre></td></tr></table></figure></li>
+<li>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test.o: test.c test.h</span><br><span class="line">          </span><br><span class="line">test.h:</span><br></pre></td></tr></table></figure></li>
+<li>-MF file: 輸出的dependency檔案名</li>
+<li>-MD: 同-M -MF</li>
+<li>-MMD: 同-MM -MF</li>
+<li>-MT: 可以更改dependency檔案內的目標，可參考<a href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转] </a></li>
+</ul>
+<p>因此只要把Makefile改成這樣即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CC&#x3D;gcc</span><br><span class="line">OBJ&#x3D;$(patsubst %.c,%.o,$(wildcard *.c))</span><br><span class="line">BIN&#x3D;main.out</span><br><span class="line"></span><br><span class="line">all: $(OBJ)</span><br><span class="line">    $(CC) $^ -o $(BIN)</span><br><span class="line"></span><br><span class="line">-include $(OBJ:.o&#x3D;.d)</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">    $(CC) -c $&lt;</span><br><span class="line">    $(CC) -MM $&lt; &gt; $*.d</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">    rm *.o $(BIN) *.d</span><br></pre></td></tr></table></figure>
+
+<p><code>-</code>代表如果有錯誤不要停止執行，<code>$(OBJ:.o=.d)</code>代表把.o換成.d，因此會變成類似</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test.o: test.c private.h test.h</span><br><span class="line">main.o: main.c test.h</span><br></pre></td></tr></table></figure>
+
+<p>由於該rule底下沒有statement，所以會直接對應<code>%.o: %.c</code></p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
+<li><a href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>系統程式</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dd - 資料處理的好工具</title>
+    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
+<h1 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h1><h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><ul>
+<li>輸入輸出參數<ul>
+<li>if=FILE：輸入名稱</li>
+<li>of=FILE：輸出名稱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[input_file] of&#x3D;[output_file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h2><ul>
+<li>做相對應的轉換<code>conv=CONVS</code><ul>
+<li>lcase：大寫字母換小寫</li>
+<li>ucase：小寫字母換大寫</li>
+<li>nocreat：不要建立輸出檔案</li>
+<li>notrunc：input小於output時，仍維持output大小</li>
+<li>fdatasync：讓資料同步寫入硬碟</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 轉為小寫</span><br><span class="line">dd if&#x3D;[input_file] of&#x3D;[output_file] conv&#x3D;lcase</span><br></pre></td></tr></table></figure>
+
+<h2 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h2><ul>
+<li>bs=[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
+<li>ibs=[bytes]：指定每次讀取的block size(default 512 bytes)</li>
+<li>obs=[bytes]：指定每次寫入的block size(default 512 bytes)</li>
+</ul>
+</li>
+<li>count=[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
+<li>seek=[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
+<li>skip=[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
+</ul>
+<h1 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h1><ul>
+<li>大小寫轉換<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 換大寫</span><br><span class="line">dd if&#x3D;[input] of&#x3D;[output] conv&#x3D;ucase</span><br><span class="line"># 換小寫</span><br><span class="line">dd if&#x3D;[input] of&#x3D;[output] conv&#x3D;lcase</span><br></pre></td></tr></table></figure></li>
+<li>產生一個特定大小的檔案<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 內容為空的1KB檔案</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;[output] bs&#x3D;1024 count&#x3D;1</span><br><span class="line"># 內容為亂數的1MB檔案</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;urandom of&#x3D;[output] bs&#x3D;1m count&#x3D;1</span><br></pre></td></tr></table></figure></li>
+<li>把特定檔案的開頭512 byte清空<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;[output] bs&#x3D;512 count&#x3D;1 conv&#x3D;notrunc</span><br></pre></td></tr></table></figure></li>
+<li>備份硬碟<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[來源] of&#x3D;[目標]</span><br><span class="line"># 例如從&#x2F;dev&#x2F;sda備份到&#x2F;dev&#x2F;sdb</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;sda of&#x3D;&#x2F;dev&#x2F;sdb</span><br></pre></td></tr></table></figure></li>
+<li>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a><ol>
+<li>先觀察/dev/cdrom<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i &#x2F;dev&#x2F;cdrom | grep -i -E &#39;block size|volume size&#39;</span><br></pre></td></tr></table></figure></li>
+<li>然後應該會出現類似如下內容<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure></li>
+<li>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;&#x2F;dev&#x2F;cdrom of&#x3D;test.iso bs&#x3D;&lt;block size from above&gt; count&#x3D;&lt;volume size from above&gt;</span><br><span class="line"># 以上述例子</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;cdrom of&#x3D;outputCD.iso bs&#x3D;2048 count&#x3D;327867</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a><ul>
+<li>拆分檔案，例如把檔案切成好幾個1G<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[大檔案] of&#x3D;[part1] bs&#x3D;1m count&#x3D;1024</span><br><span class="line">dd if&#x3D;[大檔案] of&#x3D;[part2] bs&#x3D;1m count&#x3D;1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+<li>合併檔案，例如好幾個1G合併起來<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[part1] of&#x3D;大檔案 bs&#x3D;1m count&#x3D;1024</span><br><span class="line">dd if&#x3D;[part2] of&#x3D;大檔案 bs&#x3D;1m count&#x3D;1024 seek&#x3D;1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>gcc常用擴充功能</title>
+    <url>/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
+<h1 id="內建函式"><a href="#內建函式" class="headerlink" title="內建函式"></a>內建函式</h1><p>要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上<code> -fno-builtin</code>選項，通常<code>-fno-builtin</code>是為了幫助我們確保程式的結果是如同我們所想像的樣子呈現，而不會被一些最佳化改變樣子，方便設定breakpoint和debug。</p>
+<h2 id="找呼叫者"><a href="#找呼叫者" class="headerlink" title="找呼叫者"></a>找呼叫者</h2><p>首先我們先來談談找呼叫者這件事，我想大家應該都有經驗曾經發現程式死在某一行，但是卻不知道是誰呼叫的，這時候只能痛苦地去從stack反推return address。但是其實gcc內是有特殊內建函式可以幫助我們的，這邊介紹下面兩個好用函式。</p>
+<ul>
+<li><code>void *builtin_return_address(unsigned int LEVEL)</code>：找到函式的return address是什麼，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的下一個執行指令。</li>
+<li><code>void *builtin_frame_address(unsigned int LEVEL)</code>：找到函式的frame pointer，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的frame pointer。</li>
+</ul>
+<p>要注意的是LEVEL不能填變數，也就是編譯時必須確定該數字。</p>
+<h3 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h3><p>我們還是透過一個簡單的例子來說明一下</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test3</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">3</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;3: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test3\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test2</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test2\n&quot;</span>);</span><br><span class="line">    test3();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test1\n&quot;</span>);</span><br><span class="line">    test2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    test1();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好，那我們來編譯並執行看看</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ .&#x2F;test</span><br><span class="line">0: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test</span><br><span class="line">0: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">1: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test1</span><br><span class="line">0: ret_addr&#x3D;0x40076d frame_addr&#x3D;0x2bba8b60</span><br><span class="line">1: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">2: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test2</span><br><span class="line">0: ret_addr&#x3D;0x4006e1 frame_addr&#x3D;0x2bba8b40</span><br><span class="line">1: ret_addr&#x3D;0x40076d frame_addr&#x3D;0x2bba8b60</span><br><span class="line">2: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">3: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test3</span><br></pre></td></tr></table></figure>
+<p>可以看到每層function所對應的return address和frame address都被列出來，但是要怎麼驗證是否真的是這樣呢？我們把程式逆向一下看位置。這邊我們鎖定test1()的return address，也就是0x4007bc，應該是test()函式的呼叫test1()的下一行。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ objdump -d test</span><br><span class="line">...</span><br><span class="line">0000000000400770 &lt;test&gt;:</span><br><span class="line">  400770:       55                      push   %rbp</span><br><span class="line">  400771:       48 89 e5                mov    %rsp,%rbp</span><br><span class="line">...</span><br><span class="line">  4007b2:       e8 59 fc ff ff          callq  400410 &lt;puts@plt&gt;</span><br><span class="line">  4007b7:       e8 28 ff ff ff          callq  4006e4 &lt;test1&gt;</span><br><span class="line">  4007bc:       90                      nop</span><br><span class="line">  4007bd:       c9                      leaveq</span><br><span class="line">  4007be:       c3                      retq</span><br><span class="line"></span><br><span class="line">00000000004007bf &lt;main&gt;:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>的確，下一行nop的位置就是就是4007bc，符合我們的想法。</p>
+<h2 id="其他有用的builtin函式"><a href="#其他有用的builtin函式" class="headerlink" title="其他有用的builtin函式"></a>其他有用的builtin函式</h2><p>除了上面的例子，其實還有其他有用的builtin函式，這邊就只是列出來提供參考：</p>
+<ul>
+<li><code>int __builtin_types_compatible_p(TYPE1, TYPE2)</code>：檢查TYPE1和TYPE2是否是相同type，相同回傳1，否則為0。注意這邊const和非const會視為同種類型。</li>
+<li><code>TYPE __builtin_choose_expr(CONST_EXP, EXP1, EXP2)</code>：同<code>CONST_EXP?EXP1:EXP2</code>的概念，但是這個寫法會在編譯時就決定結果。常用方式是在寫macro時可以搭配<code>__builtin_types_compatible_p</code>當作CONST_EXP，選擇要呼叫什麼函式。</li>
+<li><code>int __builtin_constant_p(EXP)</code>：判斷EXP是否是常數。</li>
+<li><code>long __builtin_expect(long EXP, long C)</code>：預先知道EXP的值很大機率會是C，藉此做最佳化，kernel的likely和unlikely也是靠這個實現的。</li>
+<li><code>void __builtin_prefetch(const void *ADDR, int RW, int LOCALITY)</code>：把ADDR預先載入快取使用。<ul>
+<li>RW：1代表會寫入資料，0代表只會讀取</li>
+<li>LOCALITY：範圍是0~3，0代表用了馬上就不用(不用關心time locality)、3代表之後還會常用到</li>
+</ul>
+</li>
+<li><code>int __builtin_ffs (int X)</code>：回傳X中從最小位數開始計算第一個1的位置，例如<code>__builtin_ffs(0xc)=3</code>，當X是0時，回傳0。</li>
+<li><code>int __builtin_popcount (unsigned int X)</code>：在X中1的個數</li>
+<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X=0時undefined。</li>
+<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X=0時undefined。</li>
+<li><code>int __builtin_parity (unsigned int x)</code>：Ｘ值的parity。</li>
+</ul>
+<h1 id="attribute"><a href="#attribute" class="headerlink" title="__attribute__"></a><code>__attribute__</code></h1><h2 id="weak-amp-alias"><a href="#weak-amp-alias" class="headerlink" title="weak &amp; alias"></a>weak &amp; alias</h2><h3 id="測試是否支援某function"><a href="#測試是否支援某function" class="headerlink" title="測試是否支援某function"></a>測試是否支援某function</h3><p>通常會使用<code>__attribute__(weak)</code>是為了避免有函式衝突的狀況，我們看個例子<br>a.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">printf_test</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(printf_test)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Here is printf_test result: \n&quot;</span>);</span><br><span class="line">        printf_test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;We don&#x27;t support printf_test\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ make a</span><br><span class="line">$ .&#x2F;a</span><br><span class="line">This is main function</span><br><span class="line">We don&#39;t support printf_test</span><br></pre></td></tr></table></figure>
+<p>雖然我們沒有printf_test，但是直接編譯是會通過的，因為printf_test被視為weak，假設在連結時找不到，是會被填0的。</p>
+<p>那如果有printf_test的情況呢？我們加上b.c重新編譯看看</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printf_test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is b function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ .&#x2F;a.out</span><br><span class="line">This is main function</span><br><span class="line">Here is printf_test result:</span><br><span class="line">This is b function.</span><br></pre></td></tr></table></figure>
+<p>看起來就會執行printf_test了。這樣的功能對我們要動態看有無支援函式幫助很大。</p>
+<h3 id="為函式加上default值"><a href="#為函式加上default值" class="headerlink" title="為函式加上default值"></a>為函式加上default值</h3><p>這邊我們會用到alias的attribute，alias的話通常會跟weak一起使用，最常被用到的是幫不確定有無支援的函式加上default值。</p>
+<p>a.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_default</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Not support this function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_foo</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_bar</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    print_foo();</span><br><span class="line">    print_bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>b.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_foo</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;foo function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ .&#x2F;a.out</span><br><span class="line">This is main function</span><br><span class="line">foo function.</span><br><span class="line">Not support this function.</span><br></pre></td></tr></table></figure>
+<p>可以看到因為print_bar並沒有被宣告，所以最後會執行alias的print_default。</p>
+<h2 id="在main前後執行程式"><a href="#在main前後執行程式" class="headerlink" title="在main前後執行程式"></a>在main前後執行程式</h2><p>有時候會想要在main的執行前後可以做些事，這時候就會用到下面兩個attribute</p>
+<ul>
+<li>constructor：main前做事</li>
+<li>destructor：main之後做事</li>
+</ul>
+<p>讓我們看個範例</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">__attribute__((constructor))</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">before</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;before main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__attribute__((destructor))</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">after</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ .&#x2F;test</span><br><span class="line">before main</span><br><span class="line">This is main function</span><br><span class="line">after main</span><br></pre></td></tr></table></figure>
+<p>結果的確如我們所料。另外這邊有點要注意，跟前面不一樣的是，<code>__attribute__((constructor))</code>和<code>__attribute__((destructor))</code>必須放在函式前面，不然會有<code>error: attributes should be specified before the declarator in a function definition</code>的錯誤。</p>
+<h2 id="其他attribute"><a href="#其他attribute" class="headerlink" title="其他attribute"></a>其他attribute</h2><p>剩下還有一些有機會會用到的attribute，這邊就不多談，只列出來參考。</p>
+<ul>
+<li><code>__attribute__((section(&quot;section_name&quot;)))</code>：代表要把這個symbol放到<code>section_name</code>中</li>
+<li><code>__attribute__((used))</code>：不管有沒有被引用，這個symbol都不會被優化掉</li>
+<li><code>__attribute__((unused))</code>：沒有被引用到的時候也不會跳出警告</li>
+<li><code>__attribute__((deprecated))</code>：用到的時候會跳出警告，用來警示使用者這個函式將要廢棄</li>
+<li><code>__attribute__((stdcall))</code>：從右到左把參數放入stack，由callee(被呼叫者)把stack恢復正常</li>
+<li><code>__attribute__((cdecl))</code>：C語言預設的作法，從右到左把參數放入stack，由caller把stack恢復正常</li>
+<li><code>__attribute__((fastcall))</code>：頭兩個參數是用register來存放，剩下一樣放入stack</li>
+</ul>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="https://blog.csdn.net/jasonchen_gbd/article/details/44948523">gcc的__builtin_函数介绍</a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html">6.57 Other Built-in Functions Provided by GCC</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_a9303fd90101d5su.html"><code>__attribute__</code>之weak,alias属性</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>系統程式</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker 簡易教學</title>
     <url>/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h1 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><ul>
@@ -1124,186 +1436,6 @@
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
 <li><a href="https://peihsinsu.gitbooks.io/docker-note-book/content/">Docker學習筆記</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>code review</title>
-    <url>/2017/08/27/code-review/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
-<p><strong>重要：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</strong></p>
-<h1 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h1><ol>
-<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
-<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
-<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
-<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
-<li>備份功能：確保至少有兩個人知道code的意思。</li>
-</ol>
-<h1 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h1><ul>
-<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
-<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
-</ul>
-<h1 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h1><ul>
-<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
-<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
-<li>相互尊重：<ul>
-<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
-<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
-</ul>
-</li>
-<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
-</ul>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h2><ul>
-<li>說明code review規則，以及建立正確的心態</li>
-<li>事先訂定公司開發的文化，如coding style，命名規則</li>
-<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
-</ul>
-<h2 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h2><ul>
-<li>開發時間需要預估code review的時間</li>
-<li>先規劃如何將大功能切成小部分：<ul>
-<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
-<li>如果功能出了大問題，也可以把風險控制在最小</li>
-</ul>
-</li>
-</ul>
-<h2 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h2><ul>
-<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
-<li>如果有使用分析工具，先使用工具產生報表<ul>
-<li>review時可以針對上面的重點討論</li>
-<li>減少review的effort</li>
-</ul>
-</li>
-</ul>
-<h2 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h2><ul>
-<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
-<li>code review時間不要超過半小時</li>
-<li>利用checklist來檢查<ul>
-<li>功能需求是什麼？設計方式是否有達到目的？</li>
-<li>是否可以做未來擴充？</li>
-<li>是否足夠安全？有沒有邏輯漏洞？</li>
-<li>Error handling和corner case是否都有處理好？</li>
-<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
-<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
-<li>效能是否可以再提升？</li>
-</ul>
-</li>
-<li>review過程不改code，用todo list先記錄</li>
-</ul>
-<h2 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h2><ul>
-<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
-<li>review後要留下紀錄提供學習使用</li>
-<li>定期開會評估code review流程和效用<ul>
-<li>review的方式要不要調整？</li>
-<li>工具是否要調整？</li>
-<li>checklist是否要更新？</li>
-</ul>
-</li>
-</ul>
-<h1 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h1><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
-<ul>
-<li>統一Glossary：<ul>
-<li>可以使用wiki等文件建立</li>
-</ul>
-</li>
-<li>找重複程式碼：<ul>
-<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
-</ul>
-</li>
-<li>判斷複雜度：<ul>
-<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
-<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
-</ul>
-</li>
-<li>分析綜合品質：<ul>
-<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
-<li>Adlint：Open source，但似乎很久沒更新了</li>
-<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
-</ul>
-</li>
-<li>程式法風格：<ul>
-<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
-<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
-</ul>
-</li>
-</ul>
-<h1 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h1><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
-<h2 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h2><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
-<ul>
-<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
-<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
-<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
-</ul>
-<h1 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h1><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
-<ol>
-<li>執行前後，bug減少的數量(這是品質部分)</li>
-<li>執行前後，團隊多花費的時間(這是成本部分)</li>
-<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
-<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
-<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
-</ol>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。<br><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看<br><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述<br><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章<br><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度<br><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</p>
-]]></content>
-      <categories>
-        <category>軟體開發</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>dd - 資料處理的好工具</title>
-    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
-<h1 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h1><h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><ul>
-<li>輸入輸出參數<ul>
-<li>if=FILE：輸入名稱</li>
-<li>of=FILE：輸出名稱</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[input_file] of&#x3D;[output_file]</span><br></pre></td></tr></table></figure>
-
-<h2 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h2><ul>
-<li>做相對應的轉換<code>conv=CONVS</code><ul>
-<li>lcase：大寫字母換小寫</li>
-<li>ucase：小寫字母換大寫</li>
-<li>nocreat：不要建立輸出檔案</li>
-<li>notrunc：input小於output時，仍維持output大小</li>
-<li>fdatasync：讓資料同步寫入硬碟</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 轉為小寫</span><br><span class="line">dd if&#x3D;[input_file] of&#x3D;[output_file] conv&#x3D;lcase</span><br></pre></td></tr></table></figure>
-
-<h2 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h2><ul>
-<li>bs=[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
-<li>ibs=[bytes]：指定每次讀取的block size(default 512 bytes)</li>
-<li>obs=[bytes]：指定每次寫入的block size(default 512 bytes)</li>
-</ul>
-</li>
-<li>count=[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
-<li>seek=[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
-<li>skip=[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
-</ul>
-<h1 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h1><ul>
-<li>大小寫轉換<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 換大寫</span><br><span class="line">dd if&#x3D;[input] of&#x3D;[output] conv&#x3D;ucase</span><br><span class="line"># 換小寫</span><br><span class="line">dd if&#x3D;[input] of&#x3D;[output] conv&#x3D;lcase</span><br></pre></td></tr></table></figure></li>
-<li>產生一個特定大小的檔案<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 內容為空的1KB檔案</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;[output] bs&#x3D;1024 count&#x3D;1</span><br><span class="line"># 內容為亂數的1MB檔案</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;urandom of&#x3D;[output] bs&#x3D;1m count&#x3D;1</span><br></pre></td></tr></table></figure></li>
-<li>把特定檔案的開頭512 byte清空<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;[output] bs&#x3D;512 count&#x3D;1 conv&#x3D;notrunc</span><br></pre></td></tr></table></figure></li>
-<li>備份硬碟<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[來源] of&#x3D;[目標]</span><br><span class="line"># 例如從&#x2F;dev&#x2F;sda備份到&#x2F;dev&#x2F;sdb</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;sda of&#x3D;&#x2F;dev&#x2F;sdb</span><br></pre></td></tr></table></figure></li>
-<li>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a><ol>
-<li>先觀察/dev/cdrom<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i &#x2F;dev&#x2F;cdrom | grep -i -E &#39;block size|volume size&#39;</span><br></pre></td></tr></table></figure></li>
-<li>然後應該會出現類似如下內容<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure></li>
-<li>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;&#x2F;dev&#x2F;cdrom of&#x3D;test.iso bs&#x3D;&lt;block size from above&gt; count&#x3D;&lt;volume size from above&gt;</span><br><span class="line"># 以上述例子</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;cdrom of&#x3D;outputCD.iso bs&#x3D;2048 count&#x3D;327867</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a><ul>
-<li>拆分檔案，例如把檔案切成好幾個1G<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[大檔案] of&#x3D;[part1] bs&#x3D;1m count&#x3D;1024</span><br><span class="line">dd if&#x3D;[大檔案] of&#x3D;[part2] bs&#x3D;1m count&#x3D;1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
-<li>合併檔案，例如好幾個1G合併起來<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if&#x3D;[part1] of&#x3D;大檔案 bs&#x3D;1m count&#x3D;1024</span><br><span class="line">dd if&#x3D;[part2] of&#x3D;大檔案 bs&#x3D;1m count&#x3D;1024 seek&#x3D;1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
-<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -1464,91 +1596,53 @@
       </categories>
   </entry>
   <entry>
-    <title>gcc常用擴充功能</title>
-    <url>/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
-<h1 id="內建函式"><a href="#內建函式" class="headerlink" title="內建函式"></a>內建函式</h1><p>要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上<code> -fno-builtin</code>選項，通常<code>-fno-builtin</code>是為了幫助我們確保程式的結果是如同我們所想像的樣子呈現，而不會被一些最佳化改變樣子，方便設定breakpoint和debug。</p>
-<h2 id="找呼叫者"><a href="#找呼叫者" class="headerlink" title="找呼叫者"></a>找呼叫者</h2><p>首先我們先來談談找呼叫者這件事，我想大家應該都有經驗曾經發現程式死在某一行，但是卻不知道是誰呼叫的，這時候只能痛苦地去從stack反推return address。但是其實gcc內是有特殊內建函式可以幫助我們的，這邊介紹下面兩個好用函式。</p>
-<ul>
-<li><code>void *builtin_return_address(unsigned int LEVEL)</code>：找到函式的return address是什麼，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的下一個執行指令。</li>
-<li><code>void *builtin_frame_address(unsigned int LEVEL)</code>：找到函式的frame pointer，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的frame pointer。</li>
-</ul>
-<p>要注意的是LEVEL不能填變數，也就是編譯時必須確定該數字。</p>
-<h3 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h3><p>我們還是透過一個簡單的例子來說明一下</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test3</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">3</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;3: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test3\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test2</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test2\n&quot;</span>);</span><br><span class="line">    test3();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test1\n&quot;</span>);</span><br><span class="line">    test2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    test1();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>好，那我們來編譯並執行看看</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ .&#x2F;test</span><br><span class="line">0: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test</span><br><span class="line">0: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">1: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test1</span><br><span class="line">0: ret_addr&#x3D;0x40076d frame_addr&#x3D;0x2bba8b60</span><br><span class="line">1: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">2: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test2</span><br><span class="line">0: ret_addr&#x3D;0x4006e1 frame_addr&#x3D;0x2bba8b40</span><br><span class="line">1: ret_addr&#x3D;0x40076d frame_addr&#x3D;0x2bba8b60</span><br><span class="line">2: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">3: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test3</span><br></pre></td></tr></table></figure>
-<p>可以看到每層function所對應的return address和frame address都被列出來，但是要怎麼驗證是否真的是這樣呢？我們把程式逆向一下看位置。這邊我們鎖定test1()的return address，也就是0x4007bc，應該是test()函式的呼叫test1()的下一行。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ objdump -d test</span><br><span class="line">...</span><br><span class="line">0000000000400770 &lt;test&gt;:</span><br><span class="line">  400770:       55                      push   %rbp</span><br><span class="line">  400771:       48 89 e5                mov    %rsp,%rbp</span><br><span class="line">...</span><br><span class="line">  4007b2:       e8 59 fc ff ff          callq  400410 &lt;puts@plt&gt;</span><br><span class="line">  4007b7:       e8 28 ff ff ff          callq  4006e4 &lt;test1&gt;</span><br><span class="line">  4007bc:       90                      nop</span><br><span class="line">  4007bd:       c9                      leaveq</span><br><span class="line">  4007be:       c3                      retq</span><br><span class="line"></span><br><span class="line">00000000004007bf &lt;main&gt;:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p>的確，下一行nop的位置就是就是4007bc，符合我們的想法。</p>
-<h2 id="其他有用的builtin函式"><a href="#其他有用的builtin函式" class="headerlink" title="其他有用的builtin函式"></a>其他有用的builtin函式</h2><p>除了上面的例子，其實還有其他有用的builtin函式，這邊就只是列出來提供參考：</p>
-<ul>
-<li><code>int __builtin_types_compatible_p(TYPE1, TYPE2)</code>：檢查TYPE1和TYPE2是否是相同type，相同回傳1，否則為0。注意這邊const和非const會視為同種類型。</li>
-<li><code>TYPE __builtin_choose_expr(CONST_EXP, EXP1, EXP2)</code>：同<code>CONST_EXP?EXP1:EXP2</code>的概念，但是這個寫法會在編譯時就決定結果。常用方式是在寫macro時可以搭配<code>__builtin_types_compatible_p</code>當作CONST_EXP，選擇要呼叫什麼函式。</li>
-<li><code>int __builtin_constant_p(EXP)</code>：判斷EXP是否是常數。</li>
-<li><code>long __builtin_expect(long EXP, long C)</code>：預先知道EXP的值很大機率會是C，藉此做最佳化，kernel的likely和unlikely也是靠這個實現的。</li>
-<li><code>void __builtin_prefetch(const void *ADDR, int RW, int LOCALITY)</code>：把ADDR預先載入快取使用。<ul>
-<li>RW：1代表會寫入資料，0代表只會讀取</li>
-<li>LOCALITY：範圍是0~3，0代表用了馬上就不用(不用關心time locality)、3代表之後還會常用到</li>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 啟動</span><br><span class="line">gnuplot</span><br><span class="line"># 畫出sin(x)的圖</span><br><span class="line">plot sin(x)</span><br><span class="line"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span><br><span class="line">plot [x&#x3D;-10:10] [0:2] cos(x)</span><br><span class="line"># 清空之前的設定</span><br><span class="line">reset</span><br><span class="line"># 結束</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+<h2 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h2><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot &quot;data.txt&quot;</span><br></pre></td></tr></table></figure>
+<p>如果要開啟多個檔案</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plot &quot;data1.txt&quot;, &quot;data2.txt&quot;, &quot;data3.txt&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h2><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plot &quot;data.txt&quot;</span><br></pre></td></tr></table></figure>
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">load &quot;plot.plt&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h2><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 設定標題</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line"># x軸說明</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line"># y軸說明</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line"># 設定線條說明外框</span><br><span class="line">set key box</span><br><span class="line"># 不要線條說明</span><br><span class="line">set nokey</span><br><span class="line"># 如果要修改線條說明</span><br><span class="line">plot &quot;data1.txt&quot; title &quot;title 1&quot;, &quot;data2.txt&quot; title &quot;title 2&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h2><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 增加格線</span><br><span class="line">set grid</span><br><span class="line"># 數據連成一條線</span><br><span class="line">set style data lines</span><br><span class="line"># x軸的範圍</span><br><span class="line">set xrange [-10:10]</span><br><span class="line"># y軸的範圍</span><br><span class="line">set yrange [-10:10]</span><br><span class="line"># X軸的單位</span><br><span class="line">set xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span><br><span class="line">plot &quot;data.txt&quot; with lines linestyle 1 linewidth 1</span><br><span class="line"># 使用data.txt，pointtype為1，pointsize也為1</span><br><span class="line">plot &quot;data.txt&quot; with point pointtype 1 pointsize 1</span><br><span class="line"># 如果線和點都要的話</span><br><span class="line">plot &quot;data.txt&quot; with linespoints</span><br><span class="line"># 如果要變成長條圖的話</span><br><span class="line">plot &quot;data.txt&quot; with boxes</span><br></pre></td></tr></table></figure>
+<h2 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 要存成png檔案</span><br><span class="line">set terminal png</span><br><span class="line"># 可以加上size資訊</span><br><span class="line">set terminal png size 1200,800</span><br><span class="line"># 輸出圖片，這個指令會等待後續的plot</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line"># 輸出圖片</span><br><span class="line">plot .....</span><br><span class="line"># 記得要再改回x11</span><br><span class="line">set terminal x11</span><br></pre></td></tr></table></figure>
+<h2 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h2><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line">set terminal png</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line">plot &quot;data.txt&quot; with linespoints title &quot;title 1&quot;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li><code>int __builtin_ffs (int X)</code>：回傳X中從最小位數開始計算第一個1的位置，例如<code>__builtin_ffs(0xc)=3</code>，當X是0時，回傳0。</li>
-<li><code>int __builtin_popcount (unsigned int X)</code>：在X中1的個數</li>
-<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X=0時undefined。</li>
-<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X=0時undefined。</li>
-<li><code>int __builtin_parity (unsigned int x)</code>：Ｘ值的parity。</li>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line">set terminal png</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line"># 設定長條圖的size</span><br><span class="line">set boxwidth 0.3</span><br><span class="line">plot &quot;data.txt&quot; with boxes title &quot;title 1&quot;</span><br></pre></td></tr></table></figure>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1></li>
 </ul>
-<h1 id="attribute"><a href="#attribute" class="headerlink" title="__attribute__"></a><code>__attribute__</code></h1><h2 id="weak-amp-alias"><a href="#weak-amp-alias" class="headerlink" title="weak &amp; alias"></a>weak &amp; alias</h2><h3 id="測試是否支援某function"><a href="#測試是否支援某function" class="headerlink" title="測試是否支援某function"></a>測試是否支援某function</h3><p>通常會使用<code>__attribute__(weak)</code>是為了避免有函式衝突的狀況，我們看個例子<br>a.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">printf_test</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(printf_test)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Here is printf_test result: \n&quot;</span>);</span><br><span class="line">        printf_test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;We don&#x27;t support printf_test\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ make a</span><br><span class="line">$ .&#x2F;a</span><br><span class="line">This is main function</span><br><span class="line">We don&#39;t support printf_test</span><br></pre></td></tr></table></figure>
-<p>雖然我們沒有printf_test，但是直接編譯是會通過的，因為printf_test被視為weak，假設在連結時找不到，是會被填0的。</p>
-<p>那如果有printf_test的情況呢？我們加上b.c重新編譯看看</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printf_test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is b function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ .&#x2F;a.out</span><br><span class="line">This is main function</span><br><span class="line">Here is printf_test result:</span><br><span class="line">This is b function.</span><br></pre></td></tr></table></figure>
-<p>看起來就會執行printf_test了。這樣的功能對我們要動態看有無支援函式幫助很大。</p>
-<h3 id="為函式加上default值"><a href="#為函式加上default值" class="headerlink" title="為函式加上default值"></a>為函式加上default值</h3><p>這邊我們會用到alias的attribute，alias的話通常會跟weak一起使用，最常被用到的是幫不確定有無支援的函式加上default值。</p>
-<p>a.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_default</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Not support this function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_foo</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_bar</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    print_foo();</span><br><span class="line">    print_bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>b.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_foo</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;foo function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ .&#x2F;a.out</span><br><span class="line">This is main function</span><br><span class="line">foo function.</span><br><span class="line">Not support this function.</span><br></pre></td></tr></table></figure>
-<p>可以看到因為print_bar並沒有被宣告，所以最後會執行alias的print_default。</p>
-<h2 id="在main前後執行程式"><a href="#在main前後執行程式" class="headerlink" title="在main前後執行程式"></a>在main前後執行程式</h2><p>有時候會想要在main的執行前後可以做些事，這時候就會用到下面兩個attribute</p>
-<ul>
-<li>constructor：main前做事</li>
-<li>destructor：main之後做事</li>
-</ul>
-<p>讓我們看個範例</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">__attribute__((constructor))</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">before</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;before main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__attribute__((destructor))</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">after</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ .&#x2F;test</span><br><span class="line">before main</span><br><span class="line">This is main function</span><br><span class="line">after main</span><br></pre></td></tr></table></figure>
-<p>結果的確如我們所料。另外這邊有點要注意，跟前面不一樣的是，<code>__attribute__((constructor))</code>和<code>__attribute__((destructor))</code>必須放在函式前面，不然會有<code>error: attributes should be specified before the declarator in a function definition</code>的錯誤。</p>
-<h2 id="其他attribute"><a href="#其他attribute" class="headerlink" title="其他attribute"></a>其他attribute</h2><p>剩下還有一些有機會會用到的attribute，這邊就不多談，只列出來參考。</p>
-<ul>
-<li><code>__attribute__((section(&quot;section_name&quot;)))</code>：代表要把這個symbol放到<code>section_name</code>中</li>
-<li><code>__attribute__((used))</code>：不管有沒有被引用，這個symbol都不會被優化掉</li>
-<li><code>__attribute__((unused))</code>：沒有被引用到的時候也不會跳出警告</li>
-<li><code>__attribute__((deprecated))</code>：用到的時候會跳出警告，用來警示使用者這個函式將要廢棄</li>
-<li><code>__attribute__((stdcall))</code>：從右到左把參數放入stack，由callee(被呼叫者)把stack恢復正常</li>
-<li><code>__attribute__((cdecl))</code>：C語言預設的作法，從右到左把參數放入stack，由caller把stack恢復正常</li>
-<li><code>__attribute__((fastcall))</code>：頭兩個參數是用register來存放，剩下一樣放入stack</li>
-</ul>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="https://blog.csdn.net/jasonchen_gbd/article/details/44948523">gcc的__builtin_函数介绍</a></li>
-<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html">6.57 Other Built-in Functions Provided by GCC</a></li>
-<li><a href="http://blog.sina.com.cn/s/blog_a9303fd90101d5su.html"><code>__attribute__</code>之weak,alias属性</a></li>
+</li>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
 </ul>
 ]]></content>
       <categories>
-        <category>系統程式</category>
+        <category>tools</category>
       </categories>
-      <tags>
-        <tag>GNU tool</tag>
-      </tags>
   </entry>
   <entry>
     <title>linker script 簡單教學</title>
@@ -1721,6 +1815,38 @@
       </categories>
   </entry>
   <entry>
+    <title>port knocking</title>
+    <url>/2017/08/27/port-knocking/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
+<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><p>我這邊server是用Ubuntu, client是MAC環境。</p>
+<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install knockd</span><br></pre></td></tr></table></figure>
+<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
+
+<h1 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h1><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[options]</span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line">[openSSH]</span><br><span class="line">        sequence    &#x3D; 3389:udp,80:tcp,21:udp,53:tcp,23:udp</span><br><span class="line">        seq_timeout &#x3D; 5</span><br><span class="line">        command     &#x3D; &#x2F;sbin&#x2F;iptables -I INPUT 1 -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    &#x3D; syn</span><br><span class="line"></span><br><span class="line">[closeSSH]</span><br><span class="line">        sequence    &#x3D; 443:tcp,80:udp</span><br><span class="line">        seq_timeout &#x3D; 5</span><br><span class="line">        command     &#x3D; &#x2F;sbin&#x2F;iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    &#x3D; syn</span><br></pre></td></tr></table></figure>
+
+<p>功能大概看名字也可以猜出來</p>
+<ul>
+<li>sequence: 敲port的順序</li>
+<li>seq_timeout: 間隔時間</li>
+<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
+<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
+</ul>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h2><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo service knockd start</span><br></pre></td></tr></table></figure>
+<p>記得防火牆要先設定不讓外面的人進入</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h2 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h2><p>須先安裝knock</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
+
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+  </entry>
+  <entry>
     <title>youtube-dl網路影片下載器</title>
     <url>/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</url>
     <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
@@ -1783,36 +1909,22 @@
       </categories>
   </entry>
   <entry>
-    <title>port knocking</title>
-    <url>/2017/08/27/port-knocking/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
-<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><p>我這邊server是用Ubuntu, client是MAC環境。</p>
-<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install knockd</span><br></pre></td></tr></table></figure>
-<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
-
-<h1 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h1><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[options]</span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line">[openSSH]</span><br><span class="line">        sequence    &#x3D; 3389:udp,80:tcp,21:udp,53:tcp,23:udp</span><br><span class="line">        seq_timeout &#x3D; 5</span><br><span class="line">        command     &#x3D; &#x2F;sbin&#x2F;iptables -I INPUT 1 -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    &#x3D; syn</span><br><span class="line"></span><br><span class="line">[closeSSH]</span><br><span class="line">        sequence    &#x3D; 443:tcp,80:udp</span><br><span class="line">        seq_timeout &#x3D; 5</span><br><span class="line">        command     &#x3D; &#x2F;sbin&#x2F;iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    &#x3D; syn</span><br></pre></td></tr></table></figure>
-
-<p>功能大概看名字也可以猜出來</p>
-<ul>
-<li>sequence: 敲port的順序</li>
-<li>seq_timeout: 間隔時間</li>
-<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
-<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
-</ul>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h2><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo service knockd start</span><br></pre></td></tr></table></figure>
-<p>記得防火牆要先設定不讓外面的人進入</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
-
-<h2 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h2><p>須先安裝knock</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
-
-<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
+    <title>「深度學習的技術」讀後感</title>
+    <url>/2018/03/11/%E3%80%8C%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8D%E8%AE%80%E5%BE%8C%E6%84%9F/</url>
+    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">「深度學習的技術」</a>。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
+<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
+<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
+<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
+<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
+<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話<strong>「知識就像是金錢一樣，不花就等於不曾有過」</strong>，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
+<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>讀書心得</category>
       </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
   </entry>
   <entry>
     <title>「被討厭的勇氣」-擁有承擔責任的勇氣</title>
@@ -1848,6 +1960,49 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>一些減少code size的方法</title>
+    <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
+<h1 id="Compile-Optimization"><a href="#Compile-Optimization" class="headerlink" title="Compile Optimization"></a>Compile Optimization</h1><p>首先我們可以看一下compiler是不是已經做過優化了，大家都知道gcc在編譯的時候可以選擇optimization的level，從0-3。0代表的是default，而隨著數字越高，對code size和execution time的優化就越高。</p>
+<p>大部分的人都會建議使用-O2，在code size和execution time取平衡，但是如果真的對code size十分在意的話，其實也可以使用-Os，代表的是-O2但是不包含部分會影響code size的優化。</p>
+<p>到底每個optimization的level是做了那些優化，可參考<a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC的官方文件</a></p>
+<h1 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h1><p>strip算是最基本的降低code size工具，他會移除debug資訊(可供gdb使用的資訊)以及symbol table，因此size會降低許多。</p>
+<p>這邊簡單做個實驗：</p>
+<ul>
+<li>我們先寫個簡單程式：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;func\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    func();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>接著來編譯，為了凸顯strip的效果，我們加上-g來加上gdb debug訊息<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gcc -g test.c -o test</span><br></pre></td></tr></table></figure></li>
+<li>接著我們可以用<code>nm -a test</code>來看到他的symbol table<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0000000000000000 a</span><br><span class="line">0000000000201030 b .bss</span><br><span class="line">0000000000201030 B __bss_start</span><br><span class="line">0000000000000000 n .comment</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+<li>以及用<code>objdump -h test</code>來看到有哪些section header，可以發現有許多debug資訊<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"> 27 .debug_aranges 00000030  0000000000000000  0000000000000000  0000105d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 28 .debug_info   0000033a  0000000000000000  0000000000000000  0000108d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 29 .debug_abbrev 000000f6  0000000000000000  0000000000000000  000013c7  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 30 .debug_line   000000d4  0000000000000000  0000000000000000  000014bd  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 31 .debug_str    0000028a  0000000000000000  0000000000000000  00001591  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+<li>接著執行<code>strip test</code>後，會發現symbol table已經消失了(無法使用nm)，以及沒有debug的section header。兩者size有極大差異。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 11152 Aug  4 11:34 test</span><br><span class="line">&gt; strip test</span><br><span class="line">&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h1><p>strip可以減少極大部分的code size，但是如果這樣還不夠的話，我們可以用objcopy把一些沒用到的section header移除掉，但是要提醒一下，這個移除幾乎不會影響太大，大概就幾百byte而已。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version test small_test</span><br><span class="line">-&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
+
+<p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
+<h1 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h1><p>我們知道程式裡面常常會有些程式碼(function/data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
+<p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
+<p>細節可以參考<a href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C/C++ symbols with GCC and ld?</a>。</p>
+<h1 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h1><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
+<p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
+<h1 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h1><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
+<p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
+<p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
+<h1 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h1><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1/3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
+<p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
+<h1 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h1><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
+<p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
+<p>web壓縮的方式網路上有很多，有些甚至提供online的服務，例如<a href="https://htmlcompressor.com/compressor/">HTMLCompressor</a>或是<a href="https://www.textfixer.com/html/compress-html-compression.php">textfixer</a>等等，可以自己尋找適合的工具。</p>
+<h1 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h1><p>上面分享了許多方法，但最後我要先澄清一下，自己需要搞清楚到底不夠的是flash還是memory，上面的方法並不是做了兩個都一定會減少。舉個例子來說，移除沒有必要用到的大變數通常只會影響memory的使用率，因為compile出來firmware的size並沒有包括大變數(因為是bss section，未初始化區段)，而file system的壓縮通常也只會影響flash的使用率，除非firmware有把檔案預先從flash讀出來放在memory中。我想強調的是使用這些方法時，還是要有必備的系統觀以及對你的系統有一定熟悉程度。</p>
+<p>老實說軟體開發者最討厭的大概就是被各種硬體條件所限制，然而這些在embedded的世界中還是有很大的機會會遇到，特別是考量到成本的時候。雖然很討厭這類的問題，但是解決後其實還是蠻有成就感的。以上分享希望能夠幫助大家解決code size issue。</p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="http://linux.vbird.org/somepaper/20050117-jianfei.pdf">程式減肥三步走</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>系統程式</category>
+      </categories>
   </entry>
   <entry>
     <title>三年的工作省思</title>
@@ -2097,71 +2252,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dependency</title>
-    <url>/2017/08/26/dependency/</url>
-    <content><![CDATA[<h1 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h1><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;private.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test=%d\n&quot;</span>, PRIV_VALUE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>test.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _TEST_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _TEST_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<p>private.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _PRIVATE_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _PRIVATE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PRIV_VALUE 3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>然後假設我們的Makefile是這樣寫</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CC&#x3D;gcc</span><br><span class="line">OBJ&#x3D;$(patsubst %.c,%.o,$(wildcard *.c))</span><br><span class="line">BIN&#x3D;main.out</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">    $(CC) -c $^</span><br><span class="line"></span><br><span class="line">all: $(OBJ)</span><br><span class="line">    $(CC) $^ -o $(BIN)</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">    rm *.o $(BIN)</span><br></pre></td></tr></table></figure>
-<p>我們試著修改private.h的MACRO值，就會發現重新make結果還是不變，需要重新make clean</p>
-<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>可以使用gcc的特殊option</p>
-<ul>
-<li>gcc -M xxx.c: 找出所有相依檔</li>
-<li>gcc -MM xxx.c: 同-M，但不含系統檔<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">main.o: main.c test.h</span><br></pre></td></tr></table></figure></li>
-<li>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test.o: test.c test.h</span><br><span class="line">          </span><br><span class="line">test.h:</span><br></pre></td></tr></table></figure></li>
-<li>-MF file: 輸出的dependency檔案名</li>
-<li>-MD: 同-M -MF</li>
-<li>-MMD: 同-MM -MF</li>
-<li>-MT: 可以更改dependency檔案內的目標，可參考<a href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转] </a></li>
-</ul>
-<p>因此只要把Makefile改成這樣即可</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CC&#x3D;gcc</span><br><span class="line">OBJ&#x3D;$(patsubst %.c,%.o,$(wildcard *.c))</span><br><span class="line">BIN&#x3D;main.out</span><br><span class="line"></span><br><span class="line">all: $(OBJ)</span><br><span class="line">    $(CC) $^ -o $(BIN)</span><br><span class="line"></span><br><span class="line">-include $(OBJ:.o&#x3D;.d)</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">    $(CC) -c $&lt;</span><br><span class="line">    $(CC) -MM $&lt; &gt; $*.d</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">    rm *.o $(BIN) *.d</span><br></pre></td></tr></table></figure>
-
-<p><code>-</code>代表如果有錯誤不要停止執行，<code>$(OBJ:.o=.d)</code>代表把.o換成.d，因此會變成類似</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test.o: test.c private.h test.h</span><br><span class="line">main.o: main.c test.h</span><br></pre></td></tr></table></figure>
-
-<p>由於該rule底下沒有statement，所以會直接對應<code>%.o: %.c</code></p>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
-<li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
-<li><a href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>系統程式</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>心流與人生</title>
-    <url>/2018/04/28/%E5%BF%83%E6%B5%81%E8%88%87%E4%BA%BA%E7%94%9F/</url>
-    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
-<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
-<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
-<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
-<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
-<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
-<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
-<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
-<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>淺談函式庫</title>
     <url>/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/</url>
     <content><![CDATA[<h1 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared/static library"></a>比較shared/static library</h1><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
@@ -2334,33 +2424,17 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
       </tags>
   </entry>
   <entry>
-    <title>「深度學習的技術」讀後感</title>
-    <url>/2018/03/11/%E3%80%8C%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8D%E8%AE%80%E5%BE%8C%E6%84%9F/</url>
-    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">「深度學習的技術」</a>。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
-<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
-<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
-<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
-<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
-<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話<strong>「知識就像是金錢一樣，不花就等於不曾有過」</strong>，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
-<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>軟技能：軟體界的「原則」</title>
-    <url>/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E8%BB%9F%E9%AB%94%E7%95%8C%E7%9A%84%E3%80%8C%E5%8E%9F%E5%89%87%E3%80%8D/</url>
-    <content><![CDATA[<p>今天想要來介紹一本對軟體工程師來說很棒的書，叫做<a href="https://www.tenlong.com.tw/products/9787115429476">軟技能：代碼之外的生存指南 (Soft Skills : The software developer’s life manual) </a>。最一開始會關注到這本書是因為有人介紹說這本書堪稱是軟體界的「<a href="http://www.books.com.tw/products/0010782941">原則</a>」。由於對「原則」有還不錯的評價，所以就有了閱讀的興趣。這本書號稱是給軟體工程師看的書，但是裡面卻沒有任何一行程式碼，作者希望告訴讀者的是要成好的軟體工程師，不能只專注在專業上，要把重點放在「整個人」上。書中分享了如何找工作、自我營銷、自我學習等等，甚至還有理財、健身和愛情。同樣身為軟體工程師，我認為可以從前人身上觀察和學習他的經驗應該是蠻有幫助的，因此下面會分享幾個從書中學到比較重要的概念。</p>
-<p>第一個是就算是受聘於公司，也應該要當作自己是在經營生意。只有把「我」當成是一家公司看待，才能做出好的商業決策。在一般公司朝九晚六(如果沒加班的話)的生活，很容易把個人的思維限制住，認為就是把固定事情做好然後領固定的薪水。然而，如果從經濟學的角度來看，其實我們都是在販賣服務並且獲取報酬，只是販賣的對象是固定某個客戶而已。當可以用比較宏觀的角度看待工作的時候，就會發現可以選擇的策略比想像中多很多，例如開始評估自己所提供的服務和價錢跟當前市場狀況是否有吻合，不吻合的話就會進一步精進服務的內容(提升能力)，或是開拓其他可能的客戶(找其他公司)。這種心態上的轉變會讓我們不會只是被動接受現況，而會有積極的思維去影響現實，獲得更好的結果。</p>
-<p>再來關於自我行銷的方面作者也提到很多，自我行銷其實跟前面相呼應，如果要把工作當作在經營生意，怎麼讓潛在客戶知道自己就很重要。找工作最容易的方法是讓工作來找你，當別人有求於你時，就更容易得到比較好的條件。對軟體工程師來說，最好的行銷方式就是寫blog，有許多有價值的文章，自然知名度就會打開。書中強調了好幾次經營blog的重要性，然後還提到最重要的就是毅力，只要持之以恆地撰寫文章，就已經勝過大多數的同行了。雖然我本身已經有意識地在經營blog了，但是常常都只是想說留個紀錄供自己未來參考。然而作者反對這種做法，他認為如果要能吸引別人最重要的是出發點是對他人有益，如果能夠對他人產生價值，就會受到關注，因此文章不是自己寫開心就好。這對我過去寫文章的方式是一種震撼，現在開始會思考我的記錄事情的角度是否可以解決讀者遇到的問題，是否容易閱讀及理解。</p>
-<p>在變動很快的科技業中，如何自我學習是非常重要的，特別是軟體業，沒多久就有新的framework或程式語言出現，這些技術大概很難透過學校老師教導，只能靠著自己尋找資源去學習。書中作者介紹了十步學習法，不過我不打算在這裡細部講解這個方法，取而代之，我想分享作者提到的四個自學方式循環：學習、實踐、掌握、教授。我們不應該期待自己把某個領域學完後再開始應用，要盡量在最短時間內找到必須要學會的內容，然後就去實踐，從實踐過程中一定會遇到問題，這時再回去翻資料掌握這些問題，當有一定程度的理解後，嘗試跟他人分享，確認是否真的理解。透過這樣的循環，可以幫助自己更快掌握該領域知識。其實這套方法跟之前我看過的有效自學方式很類似，例如<a href="https://rocket.cafe/talks/85231">最小必要知識架構術</a>、<a href="https://www.drcleaner.com/zh-hans/%E6%9C%80%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%EF%BC%9A%E8%B4%B9%E6%9B%BC%E6%B3%95/">費曼法</a>，很明顯這些方法已經成為主流了。我想，不應該被傳統的學習概念(從基礎知識一步步慢慢學習)所限制，而是從應用面來學習，也就是知道自己要做到什麼，反推回去需要學習哪些知識，不但有效率，而且也更符合這個社會緊湊的腳步。</p>
-<p>關於時間管理的部分，作者推薦用使用番茄鐘(通常代表的是工作25min後休息5min)，如果不知道番茄鐘可以參考<a href="https://zh.wikipedia.org/zh-tw/%E7%95%AA%E8%8C%84%E5%B7%A5%E4%BD%9C%E6%B3%95">wiki的介紹</a>。這一年下來，其實我都是用番茄鐘來管理我的時間，目前也覺得透過番茄鐘，確實可以幫助專注力，然而我卻從書中發現自己並沒有善用番茄鐘最大的威力。番茄鐘並不只是用來幫助自己提升效率的工具，更重要的是可以用來幫助時間規劃。在時間管理上，最常遇到的問題就是不知道每項工作到底要花多少時間做完，而在固定時間內，到底可以做完多少事情。這兩個問題番茄鐘都幫忙解決了，透過把一項大任務切割成番茄鐘的長度，代表的是強迫自己分割大任務變成可估算完成時間的小任務，而每個人每天可以完成多少的番茄鐘是有數量限制的，也代表我們會很清楚每天可以做多少事情，這樣規劃方式可以加強預測工作進度的準確度。另外番茄鐘帶來的另一個好處是可以更安心地進行休閒活動，大家應該會有經驗如果去玩樂會有種罪惡感想逼自己去工作，如果清楚每日能做到的番茄鐘數量，那休息享樂時就不會感到內疚，因為每天該完成的工作都已經達成了！</p>
-<p>最後一點是關於自我弱點的方面，從小到大我們所受的教育都是要把缺點彌補起來，然而這在專業上其實是說不通的，大家應該常聽過樣樣通，樣樣鬆。與其告訴他人自己會很多東西，不如專精在比較小的領域(或是大領域中的某種應用)，也許在市場上並沒有那麼多的需求，但是錄取機率則會大幅增加。不過也是有要去彌補弱點的情況，那就是該弱點會大幅影響效率時。當不知道某項技術其實可以很容易達成某件事前，可能都會很排斥去學習，但其實只要花幾個小時就能獲得很大的效益，也就是常聽到的CP值很高。然而要怎麼找到這些CP值高的技術呢？我們可以記錄每個自己沒聽過技術的遇到頻率，當遇到頻率高於一定值時，那就代表有學習的價值。舉個例子，其實我有時候看經濟新聞都會聽到A輪、B輪等等名詞，但是都一直沒動力去搞懂，結果對新聞內容都一知半解。在看本書的理財部份時，作者有做一個簡單的解釋，結果花不到半小時，就對這些常見名詞有初步認識了，也變相了加深我對經濟新聞理解，像是這種知識就很值得花時間投資。</p>
-<p>當然這本書還有很多很有價值的內容，不過受限於篇幅，無法每個都說。如果對上面的分享心有戚戚焉的話，我想這本書應該蠻適合你。進入科技業也不過快三年而已，未來應該還有很長的職業生涯，如何好好經營是很大的課題。目前還是以多多參考前輩們的經驗以及不斷自我反省為主，找出真正適合自己的道路。</p>
+    <title>心流與人生</title>
+    <url>/2018/04/28/%E5%BF%83%E6%B5%81%E8%88%87%E4%BA%BA%E7%94%9F/</url>
+    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
+<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
+<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
+<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
+<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
+<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
+<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
+<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
+<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
@@ -2388,95 +2462,21 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
       </tags>
   </entry>
   <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
-
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 啟動</span><br><span class="line">gnuplot</span><br><span class="line"># 畫出sin(x)的圖</span><br><span class="line">plot sin(x)</span><br><span class="line"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span><br><span class="line">plot [x&#x3D;-10:10] [0:2] cos(x)</span><br><span class="line"># 清空之前的設定</span><br><span class="line">reset</span><br><span class="line"># 結束</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
-<h2 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h2><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot &quot;data.txt&quot;</span><br></pre></td></tr></table></figure>
-<p>如果要開啟多個檔案</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plot &quot;data1.txt&quot;, &quot;data2.txt&quot;, &quot;data3.txt&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h2><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plot &quot;data.txt&quot;</span><br></pre></td></tr></table></figure>
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">load &quot;plot.plt&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h2><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 設定標題</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line"># x軸說明</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line"># y軸說明</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line"># 設定線條說明外框</span><br><span class="line">set key box</span><br><span class="line"># 不要線條說明</span><br><span class="line">set nokey</span><br><span class="line"># 如果要修改線條說明</span><br><span class="line">plot &quot;data1.txt&quot; title &quot;title 1&quot;, &quot;data2.txt&quot; title &quot;title 2&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h2><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 增加格線</span><br><span class="line">set grid</span><br><span class="line"># 數據連成一條線</span><br><span class="line">set style data lines</span><br><span class="line"># x軸的範圍</span><br><span class="line">set xrange [-10:10]</span><br><span class="line"># y軸的範圍</span><br><span class="line">set yrange [-10:10]</span><br><span class="line"># X軸的單位</span><br><span class="line">set xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span><br><span class="line">plot &quot;data.txt&quot; with lines linestyle 1 linewidth 1</span><br><span class="line"># 使用data.txt，pointtype為1，pointsize也為1</span><br><span class="line">plot &quot;data.txt&quot; with point pointtype 1 pointsize 1</span><br><span class="line"># 如果線和點都要的話</span><br><span class="line">plot &quot;data.txt&quot; with linespoints</span><br><span class="line"># 如果要變成長條圖的話</span><br><span class="line">plot &quot;data.txt&quot; with boxes</span><br></pre></td></tr></table></figure>
-<h2 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 要存成png檔案</span><br><span class="line">set terminal png</span><br><span class="line"># 可以加上size資訊</span><br><span class="line">set terminal png size 1200,800</span><br><span class="line"># 輸出圖片，這個指令會等待後續的plot</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line"># 輸出圖片</span><br><span class="line">plot .....</span><br><span class="line"># 記得要再改回x11</span><br><span class="line">set terminal x11</span><br></pre></td></tr></table></figure>
-<h2 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h2><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line">set terminal png</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line">plot &quot;data.txt&quot; with linespoints title &quot;title 1&quot;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line">set terminal png</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line"># 設定長條圖的size</span><br><span class="line">set boxwidth 0.3</span><br><span class="line">plot &quot;data.txt&quot; with boxes title &quot;title 1&quot;</span><br></pre></td></tr></table></figure>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1></li>
-</ul>
-</li>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
-</ul>
+    <title>軟技能：軟體界的「原則」</title>
+    <url>/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E8%BB%9F%E9%AB%94%E7%95%8C%E7%9A%84%E3%80%8C%E5%8E%9F%E5%89%87%E3%80%8D/</url>
+    <content><![CDATA[<p>今天想要來介紹一本對軟體工程師來說很棒的書，叫做<a href="https://www.tenlong.com.tw/products/9787115429476">軟技能：代碼之外的生存指南 (Soft Skills : The software developer’s life manual) </a>。最一開始會關注到這本書是因為有人介紹說這本書堪稱是軟體界的「<a href="http://www.books.com.tw/products/0010782941">原則</a>」。由於對「原則」有還不錯的評價，所以就有了閱讀的興趣。這本書號稱是給軟體工程師看的書，但是裡面卻沒有任何一行程式碼，作者希望告訴讀者的是要成好的軟體工程師，不能只專注在專業上，要把重點放在「整個人」上。書中分享了如何找工作、自我營銷、自我學習等等，甚至還有理財、健身和愛情。同樣身為軟體工程師，我認為可以從前人身上觀察和學習他的經驗應該是蠻有幫助的，因此下面會分享幾個從書中學到比較重要的概念。</p>
+<p>第一個是就算是受聘於公司，也應該要當作自己是在經營生意。只有把「我」當成是一家公司看待，才能做出好的商業決策。在一般公司朝九晚六(如果沒加班的話)的生活，很容易把個人的思維限制住，認為就是把固定事情做好然後領固定的薪水。然而，如果從經濟學的角度來看，其實我們都是在販賣服務並且獲取報酬，只是販賣的對象是固定某個客戶而已。當可以用比較宏觀的角度看待工作的時候，就會發現可以選擇的策略比想像中多很多，例如開始評估自己所提供的服務和價錢跟當前市場狀況是否有吻合，不吻合的話就會進一步精進服務的內容(提升能力)，或是開拓其他可能的客戶(找其他公司)。這種心態上的轉變會讓我們不會只是被動接受現況，而會有積極的思維去影響現實，獲得更好的結果。</p>
+<p>再來關於自我行銷的方面作者也提到很多，自我行銷其實跟前面相呼應，如果要把工作當作在經營生意，怎麼讓潛在客戶知道自己就很重要。找工作最容易的方法是讓工作來找你，當別人有求於你時，就更容易得到比較好的條件。對軟體工程師來說，最好的行銷方式就是寫blog，有許多有價值的文章，自然知名度就會打開。書中強調了好幾次經營blog的重要性，然後還提到最重要的就是毅力，只要持之以恆地撰寫文章，就已經勝過大多數的同行了。雖然我本身已經有意識地在經營blog了，但是常常都只是想說留個紀錄供自己未來參考。然而作者反對這種做法，他認為如果要能吸引別人最重要的是出發點是對他人有益，如果能夠對他人產生價值，就會受到關注，因此文章不是自己寫開心就好。這對我過去寫文章的方式是一種震撼，現在開始會思考我的記錄事情的角度是否可以解決讀者遇到的問題，是否容易閱讀及理解。</p>
+<p>在變動很快的科技業中，如何自我學習是非常重要的，特別是軟體業，沒多久就有新的framework或程式語言出現，這些技術大概很難透過學校老師教導，只能靠著自己尋找資源去學習。書中作者介紹了十步學習法，不過我不打算在這裡細部講解這個方法，取而代之，我想分享作者提到的四個自學方式循環：學習、實踐、掌握、教授。我們不應該期待自己把某個領域學完後再開始應用，要盡量在最短時間內找到必須要學會的內容，然後就去實踐，從實踐過程中一定會遇到問題，這時再回去翻資料掌握這些問題，當有一定程度的理解後，嘗試跟他人分享，確認是否真的理解。透過這樣的循環，可以幫助自己更快掌握該領域知識。其實這套方法跟之前我看過的有效自學方式很類似，例如<a href="https://rocket.cafe/talks/85231">最小必要知識架構術</a>、<a href="https://www.drcleaner.com/zh-hans/%E6%9C%80%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%EF%BC%9A%E8%B4%B9%E6%9B%BC%E6%B3%95/">費曼法</a>，很明顯這些方法已經成為主流了。我想，不應該被傳統的學習概念(從基礎知識一步步慢慢學習)所限制，而是從應用面來學習，也就是知道自己要做到什麼，反推回去需要學習哪些知識，不但有效率，而且也更符合這個社會緊湊的腳步。</p>
+<p>關於時間管理的部分，作者推薦用使用番茄鐘(通常代表的是工作25min後休息5min)，如果不知道番茄鐘可以參考<a href="https://zh.wikipedia.org/zh-tw/%E7%95%AA%E8%8C%84%E5%B7%A5%E4%BD%9C%E6%B3%95">wiki的介紹</a>。這一年下來，其實我都是用番茄鐘來管理我的時間，目前也覺得透過番茄鐘，確實可以幫助專注力，然而我卻從書中發現自己並沒有善用番茄鐘最大的威力。番茄鐘並不只是用來幫助自己提升效率的工具，更重要的是可以用來幫助時間規劃。在時間管理上，最常遇到的問題就是不知道每項工作到底要花多少時間做完，而在固定時間內，到底可以做完多少事情。這兩個問題番茄鐘都幫忙解決了，透過把一項大任務切割成番茄鐘的長度，代表的是強迫自己分割大任務變成可估算完成時間的小任務，而每個人每天可以完成多少的番茄鐘是有數量限制的，也代表我們會很清楚每天可以做多少事情，這樣規劃方式可以加強預測工作進度的準確度。另外番茄鐘帶來的另一個好處是可以更安心地進行休閒活動，大家應該會有經驗如果去玩樂會有種罪惡感想逼自己去工作，如果清楚每日能做到的番茄鐘數量，那休息享樂時就不會感到內疚，因為每天該完成的工作都已經達成了！</p>
+<p>最後一點是關於自我弱點的方面，從小到大我們所受的教育都是要把缺點彌補起來，然而這在專業上其實是說不通的，大家應該常聽過樣樣通，樣樣鬆。與其告訴他人自己會很多東西，不如專精在比較小的領域(或是大領域中的某種應用)，也許在市場上並沒有那麼多的需求，但是錄取機率則會大幅增加。不過也是有要去彌補弱點的情況，那就是該弱點會大幅影響效率時。當不知道某項技術其實可以很容易達成某件事前，可能都會很排斥去學習，但其實只要花幾個小時就能獲得很大的效益，也就是常聽到的CP值很高。然而要怎麼找到這些CP值高的技術呢？我們可以記錄每個自己沒聽過技術的遇到頻率，當遇到頻率高於一定值時，那就代表有學習的價值。舉個例子，其實我有時候看經濟新聞都會聽到A輪、B輪等等名詞，但是都一直沒動力去搞懂，結果對新聞內容都一知半解。在看本書的理財部份時，作者有做一個簡單的解釋，結果花不到半小時，就對這些常見名詞有初步認識了，也變相了加深我對經濟新聞理解，像是這種知識就很值得花時間投資。</p>
+<p>當然這本書還有很多很有價值的內容，不過受限於篇幅，無法每個都說。如果對上面的分享心有戚戚焉的話，我想這本書應該蠻適合你。進入科技業也不過快三年而已，未來應該還有很長的職業生涯，如何好好經營是很大的課題。目前還是以多多參考前輩們的經驗以及不斷自我反省為主，找出真正適合自己的道路。</p>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>讀書心得</category>
       </categories>
-  </entry>
-  <entry>
-    <title>一些減少code size的方法</title>
-    <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
-<h1 id="Compile-Optimization"><a href="#Compile-Optimization" class="headerlink" title="Compile Optimization"></a>Compile Optimization</h1><p>首先我們可以看一下compiler是不是已經做過優化了，大家都知道gcc在編譯的時候可以選擇optimization的level，從0-3。0代表的是default，而隨著數字越高，對code size和execution time的優化就越高。</p>
-<p>大部分的人都會建議使用-O2，在code size和execution time取平衡，但是如果真的對code size十分在意的話，其實也可以使用-Os，代表的是-O2但是不包含部分會影響code size的優化。</p>
-<p>到底每個optimization的level是做了那些優化，可參考<a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC的官方文件</a></p>
-<h1 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h1><p>strip算是最基本的降低code size工具，他會移除debug資訊(可供gdb使用的資訊)以及symbol table，因此size會降低許多。</p>
-<p>這邊簡單做個實驗：</p>
-<ul>
-<li>我們先寫個簡單程式：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;func\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    func();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>接著來編譯，為了凸顯strip的效果，我們加上-g來加上gdb debug訊息<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gcc -g test.c -o test</span><br></pre></td></tr></table></figure></li>
-<li>接著我們可以用<code>nm -a test</code>來看到他的symbol table<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0000000000000000 a</span><br><span class="line">0000000000201030 b .bss</span><br><span class="line">0000000000201030 B __bss_start</span><br><span class="line">0000000000000000 n .comment</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
-<li>以及用<code>objdump -h test</code>來看到有哪些section header，可以發現有許多debug資訊<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"> 27 .debug_aranges 00000030  0000000000000000  0000000000000000  0000105d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 28 .debug_info   0000033a  0000000000000000  0000000000000000  0000108d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 29 .debug_abbrev 000000f6  0000000000000000  0000000000000000  000013c7  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 30 .debug_line   000000d4  0000000000000000  0000000000000000  000014bd  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 31 .debug_str    0000028a  0000000000000000  0000000000000000  00001591  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
-<li>接著執行<code>strip test</code>後，會發現symbol table已經消失了(無法使用nm)，以及沒有debug的section header。兩者size有極大差異。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 11152 Aug  4 11:34 test</span><br><span class="line">&gt; strip test</span><br><span class="line">&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h1 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h1><p>strip可以減少極大部分的code size，但是如果這樣還不夠的話，我們可以用objcopy把一些沒用到的section header移除掉，但是要提醒一下，這個移除幾乎不會影響太大，大概就幾百byte而已。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version test small_test</span><br><span class="line">-&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
-
-<p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
-<h1 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h1><p>我們知道程式裡面常常會有些程式碼(function/data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
-<p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
-<p>細節可以參考<a href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C/C++ symbols with GCC and ld?</a>。</p>
-<h1 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h1><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
-<p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
-<h1 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h1><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
-<p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
-<p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
-<h1 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h1><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1/3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
-<p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
-<h1 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h1><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
-<p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
-<p>web壓縮的方式網路上有很多，有些甚至提供online的服務，例如<a href="https://htmlcompressor.com/compressor/">HTMLCompressor</a>或是<a href="https://www.textfixer.com/html/compress-html-compression.php">textfixer</a>等等，可以自己尋找適合的工具。</p>
-<h1 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h1><p>上面分享了許多方法，但最後我要先澄清一下，自己需要搞清楚到底不夠的是flash還是memory，上面的方法並不是做了兩個都一定會減少。舉個例子來說，移除沒有必要用到的大變數通常只會影響memory的使用率，因為compile出來firmware的size並沒有包括大變數(因為是bss section，未初始化區段)，而file system的壓縮通常也只會影響flash的使用率，除非firmware有把檔案預先從flash讀出來放在memory中。我想強調的是使用這些方法時，還是要有必備的系統觀以及對你的系統有一定熟悉程度。</p>
-<p>老實說軟體開發者最討厭的大概就是被各種硬體條件所限制，然而這些在embedded的世界中還是有很大的機會會遇到，特別是考量到成本的時候。雖然很討厭這類的問題，但是解決後其實還是蠻有成就感的。以上分享希望能夠幫助大家解決code size issue。</p>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
-<li><a href="http://linux.vbird.org/somepaper/20050117-jianfei.pdf">程式減肥三步走</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>系統程式</category>
-      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
   </entry>
 </search>
