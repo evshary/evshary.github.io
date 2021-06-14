@@ -31,7 +31,7 @@
 <meta property="og:description" content="我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介面，而且還可以用 markdown 來寫">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2017-09-09T15:22:14.000Z">
-<meta property="article:modified_time" content="2021-06-14T07:49:00.640Z">
+<meta property="article:modified_time" content="2021-06-14T08:00:41.532Z">
 <meta property="article:author" content="evshary">
 <meta name="twitter:card" content="summary">
 
@@ -302,7 +302,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-06-14 07:49:00" itemprop="dateModified" datetime="2021-06-14T07:49:00+00:00">2021-06-14</time>
+        <time title="Modified: 2021-06-14 08:00:41" itemprop="dateModified" datetime="2021-06-14T08:00:41+00:00">2021-06-14</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -342,14 +342,15 @@
 <h1 id="第一次安裝"><a href="#第一次安裝" class="headerlink" title="第一次安裝"></a>第一次安裝</h1><p>這邊一開始要先安裝好 git 和 npm，兩者的使用就不在這邊多提了。</p>
 <ol>
 <li>先在 GitHub 上創立一個新的 repo，像我的話就是 <code>evshary.github.io</code></li>
-<li>clone 下來並且創立 master 和 source 兩個 branch，這兩個 branch 分別有不同用途，master 用來放顯示的網頁，source 用來放產生網頁的原始檔</li>
+<li>clone 下來並且創立 main 和 source 兩個 branch，這兩個 branch 分別有不同用途，main 用來放顯示的網頁，source 用來放產生網頁的原始檔</li>
 <li>首先先切到 source 的 branch，然後開始安裝 hexo (當然要先裝好 npm)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 安裝 hexo command line tool</span><br><span class="line">npm install -g hexo-cli</span><br><span class="line"># 安裝 deployer</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"># 初始化</span><br><span class="line">hexo init</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure></li>
-<li>修改 <code>_config.yml</code> 的 deploy 參數，branch 改為 master，這個代表的意思是我們會把產生的網頁放到 master 這個 branch 上</li>
+<li>修改 <code>_config.yml</code> 的 deploy 參數，branch 改為 main，這個代表的意思是我們會把產生的網頁放到 main 這個 branch 上</li>
 <li>執行 <code>hexo g</code> 來產生顯示的網頁</li>
 <li>當我們修改好 blog，就可以把 source 的 branch commit 並且 push 上 GitHub</li>
-<li>最後執行 <code>hexo d</code> 就可以上傳網頁了，這個動作代表著把 master push 上 GitHub</li>
+<li>最後執行 <code>hexo d</code> 就可以上傳網頁了，這個動作代表著把 main push 上 GitHub</li>
 <li>未來的使用都是在 source 的 branch 下 commit 並 push，然後才用<code>hexo d</code> 上傳</li>
 </ol>
+<p>備註：<code>hexo d</code>的上傳可以用 GitHub Action 取代，只要 source branch 有更新，就會自動在 main branch 產生 blog 結果。相關設定可以參考<a target="_blank" rel="noopener" href="https://github.com/evshary/evshary.github.io/blob/source/.github/workflows/deploy.yaml">這邊的範例</a></p>
 <h1 id="重裝"><a href="#重裝" class="headerlink" title="重裝"></a>重裝</h1><p>未來要在新電腦重建環境就不用像第一次那麼麻煩了</p>
 <ol>
 <li>首先在新電腦把 blog 的 repo clone 下來並切到 source 的 branch，如下面指令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone -b source git@github.com:[你的github帳號]&#x2F;[repo名稱].git</span><br></pre></td></tr></table></figure></li>
