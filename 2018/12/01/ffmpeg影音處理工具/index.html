@@ -31,7 +31,7 @@
 <meta property="og:description" content="簡介有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。 這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。 安裝MAC1brew install ffmpeg  使用轉檔-f代表format 1ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名] 有哪些格式可選可用如下指令 1ffmpeg -formats">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-12-01T10:16:12.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.567Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.052Z">
 <meta property="article:author" content="evshary">
 <meta name="twitter:card" content="summary">
 
@@ -302,7 +302,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -352,7 +352,7 @@
 <ul>
 <li>hflip：水平翻轉</li>
 <li>vflip：垂直翻轉</li>
-<li>transpose=1：順時針轉90度<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 水平翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"># 垂直翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"># 順時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;1 [輸出檔名]</span><br><span class="line"># 逆時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+<li>transpose&#x3D;1：順時針轉90度<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 水平翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"># 垂直翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"># 順時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;1 [輸出檔名]</span><br><span class="line"># 逆時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h2><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"># 在開始的時間抓一張圖</span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"># 從頭開始，每10秒抓一張圖</span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>

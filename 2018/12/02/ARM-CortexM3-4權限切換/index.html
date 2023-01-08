@@ -23,16 +23,16 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="簡介最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的mini-arm-os和pikoRT，相關程式碼放在arm-os-4fun。最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。 這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。原本我是在qemu上面跑STM32虛擬機，但">
+<meta name="description" content="簡介最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的mini-arm-os和pikoRT，相關程式碼放在arm-os-4fun。最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。 這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。原本我是在qemu上面跑">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARM CortexM3&#x2F;4權限切換">
 <meta property="og:url" content="http://evshary.com/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/index.html">
 <meta property="og:site_name" content="凛の魅力に溺死しろ">
-<meta property="og:description" content="簡介最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的mini-arm-os和pikoRT，相關程式碼放在arm-os-4fun。最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。 這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。原本我是在qemu上面跑STM32虛擬機，但">
+<meta property="og:description" content="簡介最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的mini-arm-os和pikoRT，相關程式碼放在arm-os-4fun。最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。 這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。原本我是在qemu上面跑">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://community.arm.com/cfs-file/__key/communityserver-blogs-components-weblogfiles/00-00-00-21-42/6470.handler_2D00_thread.PNG">
 <meta property="article:published_time" content="2018-12-02T15:04:44.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.567Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.052Z">
 <meta property="article:author" content="evshary">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://community.arm.com/cfs-file/__key/communityserver-blogs-components-weblogfiles/00-00-00-21-42/6470.handler_2D00_thread.PNG">
@@ -304,7 +304,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -340,8 +340,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近我在研究怎麼在ARM Cortex M3/4上面跑一個自己寫的OS，最主要是參考jserv的<a target="_blank" rel="noopener" href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a target="_blank" rel="noopener" href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a target="_blank" rel="noopener" href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
-<p>這邊首先要探討的是Cortex M3/4上面有的權限模式，以及它們是怎麼進行切換等細節。<br>原本我是在qemu上面跑<a target="_blank" rel="noopener" href="http://beckus.github.io/qemu_stm32/">STM32虛擬機</a>，但是後來發現好像跟真實硬體有點不一致，所以後來我都在STM32F429的硬體上面來測試了。</p>
+        <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的<a target="_blank" rel="noopener" href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a target="_blank" rel="noopener" href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a target="_blank" rel="noopener" href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
+<p>這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。<br>原本我是在qemu上面跑<a target="_blank" rel="noopener" href="http://beckus.github.io/qemu_stm32/">STM32虛擬機</a>，但是後來發現好像跟真實硬體有點不一致，所以後來我都在STM32F429的硬體上面來測試了。</p>
 <h1 id="Cortex-M權限設計"><a href="#Cortex-M權限設計" class="headerlink" title="Cortex M權限設計"></a>Cortex M權限設計</h1><p>首先我們先了解Cortex上面有哪些權限模式，處理器上面有兩種Operation Modes：Thread mode和Handler mode。</p>
 <ul>
 <li>Thread Mode：一般程式運行的狀態。</li>
@@ -388,7 +388,7 @@
 <li>目前我們在thread mode</li>
 <li>preempts：發生的exception比目前我們所在的exception權限還高</li>
 </ol>
-<p>發生exception時，ARM會自動把當前的register的資訊存起來，順序為xPSR, PC, LR, R12, R3, R2, R1, R0。儲存的方式就是push到當前的stack中，可能是main stack(SP=MSP)，也可能是process stack(SP=PSP)。</p>
+<p>發生exception時，ARM會自動把當前的register的資訊存起來，順序為xPSR, PC, LR, R12, R3, R2, R1, R0。儲存的方式就是push到當前的stack中，可能是main stack(SP&#x3D;MSP)，也可能是process stack(SP&#x3D;PSP)。</p>
 <table>
 <thead>
 <tr>
@@ -508,7 +508,7 @@
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p>關於Cortex M相關的資料非常推薦下面兩本書籍，都有中文的翻譯。JosephYiu有參與ARM Cortex M的設計，比較有權威性。</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.books.com.tw/products/CN11146482">ARM Cortex-M3權威指南</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9787302402923">ARM Cortex-M3與Cortex-M4權威指南, 3/e ARM Cortex-M3与Cortex-M4权威指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9787302402923">ARM Cortex-M3與Cortex-M4權威指南, 3&#x2F;e ARM Cortex-M3与Cortex-M4权威指南</a></li>
 </ul>
 <p>可參考jserv老師和學生撰寫的rtenv+簡介，裡面也有提到ARM CM3權限的部分。</p>
 <ul>

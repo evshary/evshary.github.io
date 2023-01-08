@@ -296,7 +296,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -396,7 +396,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -437,10 +437,10 @@
 <p>下面例子我們以Kernel v4.17為例</p>
 <ol>
 <li>首先 shell 會 fork 一個 process，然後再呼叫 exec 系列函數把該 process 置換成指定的程式</li>
-<li>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs/exec.c的1856行</a><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">do_execve</span><span class="params">(struct filename *filename,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">const</span> <span class="keyword">char</span> __user *<span class="keyword">const</span> __user *__argv,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">const</span> <span class="keyword">char</span> __user *<span class="keyword">const</span> __user *__envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">	<span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs&#x2F;exec.c的1856行</a><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">do_execve</span><span class="params">(struct filename *filename,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">const</span> <span class="keyword">char</span> __user *<span class="keyword">const</span> __user *__argv,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">const</span> <span class="keyword">char</span> __user *<span class="keyword">const</span> __user *__envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">	<span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>接著do_execveat_common會讀取struct linux_binprm，並且根據檔案格式尋找適合的binary header<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">do_execveat_common</span><span class="params">(<span class="keyword">int</span> fd, struct filename *filename,</span></span></span><br><span class="line"><span class="function"><span class="params">			      struct user_arg_ptr argv,</span></span></span><br><span class="line"><span class="function"><span class="params">			      struct user_arg_ptr envp,</span></span></span><br><span class="line"><span class="function"><span class="params">			      <span class="keyword">int</span> flags)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 重要的structure，保留執行檔的相關訊息</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">linux_binprm</span> *<span class="title">bprm</span>;</span></span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 打開要執行的ELF檔</span></span><br><span class="line">	file = do_open_execat(fd, filename, flags);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 生成mm_struct，供執行檔使用</span></span><br><span class="line">	retval = bprm_mm_init(bprm);</span><br><span class="line">	<span class="keyword">if</span> (retval)</span><br><span class="line">		<span class="keyword">goto</span> out_unmark;</span><br><span class="line">    <span class="comment">// 計算帶入的參數</span></span><br><span class="line">	bprm-&gt;argc = count(argv, MAX_ARG_STRINGS);</span><br><span class="line">	<span class="keyword">if</span> ((retval = bprm-&gt;argc) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取 header</span></span><br><span class="line">	retval = prepare_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 裡面會呼叫 search_binary_handler，根據檔案格式呼叫適合的binary_handler</span></span><br><span class="line">	retval = exec_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>ELF的binary handler位在<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs/binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">load_elf_binary</span><span class="params">(struct linux_binprm *bprm)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">	elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">	current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">	current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">	current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">	current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是/lib/ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a target="_blank" rel="noopener" href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc/elf/rtld.c</a>的_dl_start，針對環境變數做處理。</li>
+<li>ELF的binary handler位在<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs&#x2F;binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">load_elf_binary</span><span class="params">(struct linux_binprm *bprm)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">	elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">	current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">	current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">	current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">	current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是&#x2F;lib&#x2F;ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a target="_blank" rel="noopener" href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc&#x2F;elf&#x2F;rtld.c</a>的_dl_start，針對環境變數做處理。</li>
 </ol>
 <ul>
 <li>我們常見的LD_PRELOAD也是在這邊進行處理的</li>
@@ -463,12 +463,12 @@
 <h2 id="sysenter"><a href="#sysenter" class="headerlink" title="sysenter"></a>sysenter</h2><p>這部分也是只能在x86的平台上使用，會出現這個機制的理由是int 0x80的效率實在太差了。這邊的使用方式有點複雜，就不列出來了。</p>
 <h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><p>這三種方式的比較簡單統整一下</p>
 <p>syscall：現在主流，能在x64運行<br>int 0x80：只能在x86，效率差，已被捨棄<br>sysenter：只能在x86，用來替代int 0x80</p>
-<p>詳情可以參考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter/sysexit、syscall/sysret的原理与代码分析</a>，寫得非常詳細。</p>
+<p>詳情可以參考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a>，寫得非常詳細。</p>
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/eleven_xiy/article/details/77876702">Linux系统ELF程序的执行过程</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/conansonic/article/details/54236335">_dl_start源码分析</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter/sysexit、syscall/sysret的原理与代码分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a></li>
 </ul>
 
       
@@ -527,7 +527,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -592,8 +592,8 @@
 </li>
 <li><code>int __builtin_ffs (int X)</code>：回傳X中從最小位數開始計算第一個1的位置，例如<code>__builtin_ffs(0xc)=3</code>，當X是0時，回傳0。</li>
 <li><code>int __builtin_popcount (unsigned int X)</code>：在X中1的個數</li>
-<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X=0時undefined。</li>
-<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X=0時undefined。</li>
+<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X&#x3D;0時undefined。</li>
+<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X&#x3D;0時undefined。</li>
 <li><code>int __builtin_parity (unsigned int x)</code>：Ｘ值的parity。</li>
 </ul>
 <h1 id="attribute"><a href="#attribute" class="headerlink" title="__attribute__"></a><code>__attribute__</code></h1><h2 id="weak-amp-alias"><a href="#weak-amp-alias" class="headerlink" title="weak &amp; alias"></a>weak &amp; alias</h2><h3 id="測試是否支援某function"><a href="#測試是否支援某function" class="headerlink" title="測試是否支援某function"></a>測試是否支援某function</h3><p>通常會使用<code>__attribute__(weak)</code>是為了避免有函式衝突的狀況，我們看個例子<br>a.c</p>
@@ -696,7 +696,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -774,7 +774,7 @@
 
 <p>output-section-command 代表的就是我們要怎麼擺放每個 section。</p>
 <p>在這個例子裡可以看到有許多 LMA，除了 LMA 外，其實還有 VMA，它們兩個究竟有什麼不同呢？</p>
-<h3 id="LMA-VMA-的概念"><a href="#LMA-VMA-的概念" class="headerlink" title="LMA/VMA 的概念"></a>LMA/VMA 的概念</h3><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
+<h3 id="LMA-x2F-VMA-的概念"><a href="#LMA-x2F-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h3><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
 <p>link script 中設計了兩種位址：VMA 和 LMA</p>
 <table>
 <thead>
@@ -786,7 +786,7 @@
 </thead>
 <tbody><tr>
 <td>位置</td>
-<td>ROM/Flash</td>
+<td>ROM&#x2F;Flash</td>
 <td>RAM</td>
 </tr>
 <tr>
@@ -900,7 +900,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1000,7 +1000,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1124,7 +1124,7 @@
 <p>test.c</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0=&gt;之後要輸出到sum的register，%1=&gt;num1放入的register，%2=&gt;num2放入的register。</p>
+<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
 <p>當然最後執行結果也會和範例一一樣。</p>
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
@@ -1190,7 +1190,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1243,10 +1243,11 @@
 <li><code>-showcerts</code>：把cert的chain也列出來</li>
 <li><code>-curves</code>：指定要用的橢圓算法，client hello的extension中的elliptic_curves</li>
 <li><code>-sigalgs</code>：指定交換key要用的簽名方式，client hello的extension中的signature_algorithms</li>
-<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 最基本連線</span><br><span class="line">$ openssl s_client -connect [IP]:[port]</span><br><span class="line"># 看連線細節</span><br><span class="line">$ openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"># 指定連線方式</span><br><span class="line">$ openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"># 限制只能用TLS1.2連線</span><br><span class="line">$ openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure>
-<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># server開啟5678 port並且用server.key當private key，cert用server.pem</span><br><span class="line">$ openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 如果要看有哪些連線方式，可使用如下指令</span><br><span class="line">$ openssl ciphers ALL</span><br></pre></td></tr></table></figure></li>
+<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 最基本連線</span><br><span class="line">$ openssl s_client -connect [IP]:[port]</span><br><span class="line"># 看連線細節</span><br><span class="line">$ openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"># 指定連線方式</span><br><span class="line">$ openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"># 限制只能用TLS1.2連線</span><br><span class="line">$ openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure></li>
 </ul>
+<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># server開啟5678 port並且用server.key當private key，cert用server.pem</span><br><span class="line">$ openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 如果要看有哪些連線方式，可使用如下指令</span><br><span class="line">$ openssl ciphers ALL</span><br></pre></td></tr></table></figure>
+
 <h1 id="函式庫使用"><a href="#函式庫使用" class="headerlink" title="函式庫使用"></a>函式庫使用</h1><p>我們來介紹openssl的函式庫最基本的使用方式。</p>
 <h2 id="基本範例-client-amp-server"><a href="#基本範例-client-amp-server" class="headerlink" title="基本範例 - client &amp; server"></a>基本範例 - client &amp; server</h2><p>這邊寫了兩個client和server的基本範例當作參考，大家可以基於這兩者來拓展自己的程式。</p>
 <h3 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h3><p>ssl_client.c</p>
@@ -1323,7 +1324,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1359,7 +1360,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared/static library"></a>比較shared/static library</h1><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
+          <h1 id="比較shared-x2F-static-library"><a href="#比較shared-x2F-static-library" class="headerlink" title="比較shared&#x2F;static library"></a>比較shared&#x2F;static library</h1><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
 <table>
 <thead>
 <tr>
@@ -1401,12 +1402,13 @@
 <li><code>-soname</code>：用來指名soname為libmylib.so.1</li>
 <li><code>-o</code>：最後library會被輸出成libmylib.so.1.0.0<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -shared -Wl,-soname,libmylib.so.1 -o libmylib.so.1.0.0 hello.o world.o</span><br></pre></td></tr></table></figure>
 soname很重要，就如同前面所提，可以讓開發者和應用程式表示兼容標準，可以用objdump確認soname<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -p libmylib.so.1.0.0 | grep SONAME</span><br><span class="line">  SONAME               libmylib.so.1</span><br></pre></td></tr></table></figure>
-完成後再用ln建立soname和linker name兩個檔案<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ln -s libmylib.so.1.0.0 libmylib.so</span><br><span class="line">$ ln -s libmylib.so.1.0.0 libmylib.so.1</span><br></pre></td></tr></table></figure>
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2>如果有人要使用的話，下列兩種方式都可以。不過要注意目錄下如果同時有static和shared會使用shared為主，如果要static就要加上-static編靜態函式庫<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main.c libmylib.so -o a.out</span><br><span class="line">$ gcc main.c -L. -lmylib -o a.out</span><br></pre></td></tr></table></figure>
-但是shared library執行的時候還是需要有library才能執行，所以要把.so安裝到系統中，有三種方法：</li>
+完成後再用ln建立soname和linker name兩個檔案<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ln -s libmylib.so.1.0.0 libmylib.so</span><br><span class="line">$ ln -s libmylib.so.1.0.0 libmylib.so.1</span><br></pre></td></tr></table></figure></li>
 </ul>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>如果有人要使用的話，下列兩種方式都可以。不過要注意目錄下如果同時有static和shared會使用shared為主，如果要static就要加上-static編靜態函式庫</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main.c libmylib.so -o a.out</span><br><span class="line">$ gcc main.c -L. -lmylib -o a.out</span><br></pre></td></tr></table></figure>
+<p>但是shared library執行的時候還是需要有library才能執行，所以要把.so安裝到系統中，有三種方法：</p>
 <ol>
-<li>把libmylib.so.1 放到系統常見的library目錄，如/lib, /usr/lib</li>
+<li>把libmylib.so.1 放到系統常見的library目錄，如&#x2F;lib, &#x2F;usr&#x2F;lib</li>
 <li>設定<code>/etc/ld.so.conf</code> ，加入一個新的library搜尋目錄，並執行ldconfig更新<code>/etc/ld.so.cache</code></li>
 <li>設定LD_LIBRARY_PATH 環境變數來搜尋library，如<code>LD_LIBRARY_PATH=. ./a.out</code></li>
 </ol>
@@ -1422,7 +1424,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -d &#x2F;bin&#x2F;cat</span><br><span class="line"></span><br><span class="line">Dynamic section at offset 0x7dd8 contains 26 entries:</span><br><span class="line">  Tag        Type                         Name&#x2F;Value</span><br><span class="line"> 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]</span><br><span class="line"> 0x000000000000000c (INIT)               0x15e8</span><br><span class="line"> 0x000000000000000d (FINI)               0x5a4c</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>我們看到NEEDED就是需要的dynamic library，但是這個library可能也需要其他library。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -d &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6</span><br><span class="line"></span><br><span class="line">Dynamic section at offset 0x198ba0 contains 26 entries:</span><br><span class="line">  Tag        Type                         Name&#x2F;Value</span><br><span class="line"> 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]</span><br><span class="line"> 0x000000000000000e (SONAME)             Library soname: [libc.so.6]</span><br><span class="line"> 0x000000000000000c (INIT)               0x20050</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p>因此我們知道/bin/cat需要libc.so.6，而libc.so.6還需要ld-linux-x86-64.so.2。這樣尋找實在太麻煩了，其實我們可以直接用ldd</p>
+<p>因此我們知道&#x2F;bin&#x2F;cat需要libc.so.6，而libc.so.6還需要ld-linux-x86-64.so.2。這樣尋找實在太麻煩了，其實我們可以直接用ldd</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ldd &#x2F;bin&#x2F;cat</span><br><span class="line">        linux-vdso.so.1 (0x00007fff8613c000)</span><br><span class="line">        libc.so.6 &#x3D;&gt; &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6 (0x00007f654a3bf000)</span><br><span class="line">        &#x2F;lib64&#x2F;ld-linux-x86-64.so.2 (0x00007f654a967000)</span><br></pre></td></tr></table></figure>
 <p>看，是不是很輕鬆呢？</p>
 <h1 id="靜態函式庫"><a href="#靜態函式庫" class="headerlink" title="靜態函式庫"></a>靜態函式庫</h1><p>會有static library的概念是，如果我有很多.o檔，那每次要引用其實都不是很方便，所以最好的方法還是可以打包起來，也就是使用ar指令。</p>
@@ -1435,9 +1437,11 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 <li>u：根據timestamp保留檔案</li>
 <li>s：建立索引，加快連結速度<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ar rcs libtest.a test1.o test2.o</span><br></pre></td></tr></table></figure>
 如果要顯示函式庫 libstack.a 的內容<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ar -tv libtest.a</span><br><span class="line">rw-r--r-- 0&#x2F;0   1464 Jan  1 00:00 1970 test1.o</span><br><span class="line">rw-r--r-- 0&#x2F;0   1464 Jan  1 00:00 1970 test2.o</span><br></pre></td></tr></table></figure>
-如果要從libtest.a中取出test1.o<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ar -x libtest.a test1.o</span><br></pre></td></tr></table></figure>
-<h2 id="如何使用-1"><a href="#如何使用-1" class="headerlink" title="如何使用"></a>如何使用</h2>編譯方法一樣很簡單，有兩種<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c libtest.a</span><br><span class="line"># 也可以使用gcc的-l，-L代表要搜尋的目錄位置，-l會捨去library的lib開頭</span><br><span class="line">gcc main.c -L. -ltest</span><br></pre></td></tr></table></figure></li>
+如果要從libtest.a中取出test1.o<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ar -x libtest.a test1.o</span><br></pre></td></tr></table></figure></li>
 </ul>
+<h2 id="如何使用-1"><a href="#如何使用-1" class="headerlink" title="如何使用"></a>如何使用</h2><p>編譯方法一樣很簡單，有兩種</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c libtest.a</span><br><span class="line"># 也可以使用gcc的-l，-L代表要搜尋的目錄位置，-l會捨去library的lib開頭</span><br><span class="line">gcc main.c -L. -ltest</span><br></pre></td></tr></table></figure>
+
 <h1 id="symbol衝突"><a href="#symbol衝突" class="headerlink" title="symbol衝突"></a>symbol衝突</h1><p>假設我們在創建library時遇到symbol衝突會發生什麼事呢？這邊我們分三種情況探討</p>
 <p>首先先創三個檔案</p>
 <p>hello.c</p>
@@ -1577,7 +1581,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1634,7 +1638,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 <h2 id="container"><a href="#container" class="headerlink" title="container"></a>container</h2><ul>
 <li>看目前有哪些container正在跑<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure></li>
 <li>看包括所有停止的container<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure></li>
-<li>讓某個container開始/停止<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start/stop XXX</span><br></pre></td></tr></table></figure></li>
+<li>讓某個container開始&#x2F;停止<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start/stop XXX</span><br></pre></td></tr></table></figure></li>
 <li>刪除某container<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm XXX</span><br></pre></td></tr></table></figure></li>
 <li>看某個container資訊<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect XXX</span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -1644,7 +1648,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 </li>
 <li><p><code>-p port:port</code>: 代表port映射，例如<code>-p 8080:80</code>就是把 port 8080 對應到image的 port 80</p>
 </li>
-<li><p><code>-v dir:dir</code>: 代表映射目錄，例如<code>-v /home/share:/var/www:rw</code>就是把/home/share對應到image的/var/www，且權限為rw。路徑需要為絕對路徑。</p>
+<li><p><code>-v dir:dir</code>: 代表映射目錄，例如<code>-v /home/share:/var/www:rw</code>就是把&#x2F;home&#x2F;share對應到image的&#x2F;var&#x2F;www，且權限為rw。路徑需要為絕對路徑。</p>
 </li>
 <li><p><code>--rm</code>：當有container存在時自動移除</p>
 </li>
@@ -1681,9 +1685,9 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 <p>現在local端就有nginx的image了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">nginx               latest              ae513a47849c        11 days ago         109MB</span><br></pre></td></tr></table></figure>
 
-<h2 id="運行container"><a href="#運行container" class="headerlink" title="運行container"></a>運行container</h2><p>開始運行container，並且讓port 8080對應到nginx container的port 80，工作路徑為/home，然後執行bash</p>
+<h2 id="運行container"><a href="#運行container" class="headerlink" title="運行container"></a>運行container</h2><p>開始運行container，並且讓port 8080對應到nginx container的port 80，工作路徑為&#x2F;home，然後執行bash</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --rm -i -t -p 8080:80 -w &#x2F;home nginx bash</span><br></pre></td></tr></table></figure>
-<p>我們也可以選擇背景執行，並且把shared_dir對應到/var/www</p>
+<p>我們也可以選擇背景執行，並且把shared_dir對應到&#x2F;var&#x2F;www</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -d -p 8080:80 -v shared_dir:&#x2F;var&#x2F;www:rw nginx</span><br></pre></td></tr></table></figure>
 <p>一定有人會問這樣的情況下怎麼控制bash呢？我們可以用exec command</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker exec -i -t 78fc bash</span><br></pre></td></tr></table></figure>
@@ -1700,7 +1704,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 <p>可以從history看我們所做改變歷史</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker history new_nginx</span><br><span class="line">IMAGE               CREATED              CREATED BY                                      SIZE                COMMENT</span><br><span class="line">ed66214b3e3a        About a minute ago   nginx -g daemon off;                            2B                  New nginx</span><br><span class="line">ae513a47849c        11 days ago          &#x2F;bin&#x2F;sh -c #(nop)  CMD [&quot;nginx&quot; &quot;-g&quot; &quot;daemon…   0B</span><br><span class="line">&lt;missing&gt;           11 days ago          &#x2F;bin&#x2F;sh -c #(nop)  STOPSIGNAL [SIGTERM]         0B</span><br></pre></td></tr></table></figure>
 
-<h2 id="刪除container-images"><a href="#刪除container-images" class="headerlink" title="刪除container/images"></a>刪除container/images</h2><p>玩膩了，可以刪除images，記得要先刪掉container才行刪images喔</p>
+<h2 id="刪除container-x2F-images"><a href="#刪除container-x2F-images" class="headerlink" title="刪除container&#x2F;images"></a>刪除container&#x2F;images</h2><p>玩膩了，可以刪除images，記得要先刪掉container才行刪images喔</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker rm e2cf9ea13bb4</span><br><span class="line">$ docker rmi new_nginx</span><br><span class="line">Untagged: new_nginx:latest</span><br><span class="line">Deleted: sha256:ed66214b3e3a510a7cc47e341f64f6596560164d6f06a22f93dca8d05ecac081</span><br><span class="line">$ docker rmi nginx</span><br><span class="line">Deleted: sha256:ae513a47849c895a155ddfb868d6ba247f60240ec8495482eca74c4a2c13a881</span><br><span class="line">Deleted: sha256:160a8bd939a9421818f499ba4fbfaca3dd5c86ad7a6b97b6889149fd39bd91dd</span><br><span class="line">Deleted: sha256:f246685cc80c2faa655ba1ec9f0a35d44e52b6f83863dc16f46c5bca149bfefc</span><br><span class="line">Deleted: sha256:d626a8ad97a1f9c1f2c4db3814751ada64f60aed927764a3f994fcd88363b659</span><br></pre></td></tr></table></figure>
 
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
@@ -1764,7 +1768,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1894,8 +1898,8 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 </ul>
 </li>
 </ul>
-<p>那我們來看看ls的ELF header長什麼樣。從下面可以看到，除了剛剛看到的Magic code外，還有版本、適用哪個OS/ABI、在哪個機器平台運行、entry point adddress等等。</p>
-<p>值得注意的是這邊有紀錄Program Header、Section Header的開始位址、大小、數量，所以我們可以用這個資訊找到Program/Section Header。</p>
+<p>那我們來看看ls的ELF header長什麼樣。從下面可以看到，除了剛剛看到的Magic code外，還有版本、適用哪個OS&#x2F;ABI、在哪個機器平台運行、entry point adddress等等。</p>
+<p>值得注意的是這邊有紀錄Program Header、Section Header的開始位址、大小、數量，所以我們可以用這個資訊找到Program&#x2F;Section Header。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -h &#x2F;bin&#x2F;ls</span><br><span class="line">ELF 檔頭：</span><br><span class="line">  魔術位元組：   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</span><br><span class="line">  類別:                              ELF64</span><br><span class="line">  資料:                              2 的補數，小尾序(little endian)</span><br><span class="line">  版本:                              1 (current)</span><br><span class="line">  OS&#x2F;ABI:                            UNIX - System V</span><br><span class="line">  ABI 版本:                          0</span><br><span class="line">  類型:                              EXEC (可執行檔案)</span><br><span class="line">  系統架構:                          Advanced Micro Devices X86-64</span><br><span class="line">  版本:                              0x1</span><br><span class="line">  進入點位址：               0x404890</span><br><span class="line">  程式標頭起點：          64 (檔案內之位元組)</span><br><span class="line">  區段標頭起點：          108288 (檔案內之位元組)</span><br><span class="line">  旗標：             0x0</span><br><span class="line">  此標頭的大小：       64 (位元組)</span><br><span class="line">  程式標頭大小：       56 (位元組)</span><br><span class="line">  Number of program headers:         9</span><br><span class="line">  區段標頭大小：         64 (位元組)</span><br><span class="line">  區段標頭數量：         28</span><br><span class="line">  字串表索引區段標頭： 27</span><br></pre></td></tr></table></figure>
 
 <p>而Program Header的部分，我們可以看到有9個Segement，以及實際的位址在哪。另外有個「區段到節區映射中」(Section to Segment mapping)，這就是多個Section如何組成一個Segment的對應。</p>
@@ -1916,7 +1920,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 <p>同樣以ls為例，可以看到我們把text section的內容印出來了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -s -j .text &#x2F;bin&#x2F;ls</span><br><span class="line"></span><br><span class="line">&#x2F;bin&#x2F;ls：     檔案格式 elf64-x86-64</span><br><span class="line"></span><br><span class="line">Contents of section .text:</span><br><span class="line"> 4028a0 50b9882c 4100baa6 0e0000be 36374100  P..,A.......67A.</span><br><span class="line"> 4028b0 bf983c41 00e896fb ffff660f 1f440000  ..&lt;A......f..D..</span><br><span class="line"> 4028c0 41574156 41554154 554889f5 5389fb48  AWAVAUATUH..S..H</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
 
-<h2 id="objcopy-strip修改ELF檔案"><a href="#objcopy-strip修改ELF檔案" class="headerlink" title="objcopy/strip修改ELF檔案"></a>objcopy/strip修改ELF檔案</h2><p>objcopy最主要的功能就是可以把文件作轉換，一部份或全部的內容copy另一個文件中</p>
+<h2 id="objcopy-x2F-strip修改ELF檔案"><a href="#objcopy-x2F-strip修改ELF檔案" class="headerlink" title="objcopy&#x2F;strip修改ELF檔案"></a>objcopy&#x2F;strip修改ELF檔案</h2><p>objcopy最主要的功能就是可以把文件作轉換，一部份或全部的內容copy另一個文件中</p>
 <ul>
 <li><code>objcopy -S -R .comment -R .note [input filename] [output filename]</code>：把編譯出來的symbol移除不必要的section(-S代表去掉symbol, relocation的訊息)</li>
 <li><code>objcopy -O binary -j [section] [input filename] [output filename]</code>：也可以把某個section拿出來</li>
@@ -1957,19 +1961,19 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 </thead>
 <tbody><tr>
 <td>text section</td>
-<td>T/t</td>
+<td>T&#x2F;t</td>
 </tr>
 <tr>
 <td>data section</td>
-<td>D/d</td>
+<td>D&#x2F;d</td>
 </tr>
 <tr>
 <td>Read only</td>
-<td>R/r</td>
+<td>R&#x2F;r</td>
 </tr>
 <tr>
 <td>BSS</td>
-<td>B/b</td>
+<td>B&#x2F;b</td>
 </tr>
 <tr>
 <td>未定義(如extern)</td>
@@ -1980,7 +1984,7 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 <ul>
 <li><code>addr2line -f -e [filename] [address]</code>：-f代表要顯示是哪個function，-e代表address是來自該執行檔</li>
 </ul>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>本篇文章主要簡單介紹ELF的結構，然後我們可以用 od、readelf、objdump、objcopy/strip、nm, addr2line 幾個工具觀察ELF的格式。如果想要有進一步的認識，建議可以研究參考的連結。</p>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>本篇文章主要簡單介紹ELF的結構，然後我們可以用 od、readelf、objdump、objcopy&#x2F;strip、nm, addr2line 幾個工具觀察ELF的格式。如果想要有進一步的認識，建議可以研究參考的連結。</p>
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
 <li><a target="_blank" rel="noopener" href="http://ccckmit.wikidot.com/lk:elf">陳鍾誠的網站 - 目的檔格式 (ELF)</a></li>

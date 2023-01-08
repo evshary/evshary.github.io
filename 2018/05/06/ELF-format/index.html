@@ -31,7 +31,7 @@
 <meta property="og:description" content="簡介程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。 ELF全名是Executable and Linking Format，在Linux中是編譯後的binary、object檔規範，也就是說我們從source code編譯後產生的檔案格式就是ELF了。 ELF的格式可">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-05-06T15:22:27.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.567Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.052Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%80%E5%AF%9FELF%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">觀察ELF的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%9F%B7%E8%A1%8C%E6%AA%94-od"><span class="nav-number">2.1.</span> <span class="nav-text">查看執行檔 - od</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8readelf%E4%BE%86%E8%A7%80%E5%AF%9FELF%E8%B3%87%E8%A8%8A"><span class="nav-number">2.2.</span> <span class="nav-text">使用readelf來觀察ELF資訊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#objdump%E5%8F%96%E5%BE%97ELF%E5%85%A7%E5%AE%B9"><span class="nav-number">2.3.</span> <span class="nav-text">objdump取得ELF內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#objcopy-strip%E4%BF%AE%E6%94%B9ELF%E6%AA%94%E6%A1%88"><span class="nav-number">2.4.</span> <span class="nav-text">objcopy&#x2F;strip修改ELF檔案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#objcopy%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95"><span class="nav-number">2.4.1.</span> <span class="nav-text">objcopy進階用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nm%E8%A7%80%E5%AF%9Fsymbol"><span class="nav-number">2.5.</span> <span class="nav-text">nm觀察symbol</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#addr2line%E5%BE%9E%E4%BD%8D%E5%9D%80%E8%BD%89%E6%88%90symbol"><span class="nav-number">3.</span> <span class="nav-text">addr2line從位址轉成symbol</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text">總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%80%E5%AF%9FELF%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">觀察ELF的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%9F%B7%E8%A1%8C%E6%AA%94-od"><span class="nav-number">2.1.</span> <span class="nav-text">查看執行檔 - od</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8readelf%E4%BE%86%E8%A7%80%E5%AF%9FELF%E8%B3%87%E8%A8%8A"><span class="nav-number">2.2.</span> <span class="nav-text">使用readelf來觀察ELF資訊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#objdump%E5%8F%96%E5%BE%97ELF%E5%85%A7%E5%AE%B9"><span class="nav-number">2.3.</span> <span class="nav-text">objdump取得ELF內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#objcopy-x2F-strip%E4%BF%AE%E6%94%B9ELF%E6%AA%94%E6%A1%88"><span class="nav-number">2.4.</span> <span class="nav-text">objcopy&#x2F;strip修改ELF檔案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#objcopy%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95"><span class="nav-number">2.4.1.</span> <span class="nav-text">objcopy進階用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nm%E8%A7%80%E5%AF%9Fsymbol"><span class="nav-number">2.5.</span> <span class="nav-text">nm觀察symbol</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#addr2line%E5%BE%9E%E4%BD%8D%E5%9D%80%E8%BD%89%E6%88%90symbol"><span class="nav-number">3.</span> <span class="nav-text">addr2line從位址轉成symbol</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text">總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -303,7 +303,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -433,8 +433,8 @@
 </ul>
 </li>
 </ul>
-<p>那我們來看看ls的ELF header長什麼樣。從下面可以看到，除了剛剛看到的Magic code外，還有版本、適用哪個OS/ABI、在哪個機器平台運行、entry point adddress等等。</p>
-<p>值得注意的是這邊有紀錄Program Header、Section Header的開始位址、大小、數量，所以我們可以用這個資訊找到Program/Section Header。</p>
+<p>那我們來看看ls的ELF header長什麼樣。從下面可以看到，除了剛剛看到的Magic code外，還有版本、適用哪個OS&#x2F;ABI、在哪個機器平台運行、entry point adddress等等。</p>
+<p>值得注意的是這邊有紀錄Program Header、Section Header的開始位址、大小、數量，所以我們可以用這個資訊找到Program&#x2F;Section Header。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -h &#x2F;bin&#x2F;ls</span><br><span class="line">ELF 檔頭：</span><br><span class="line">  魔術位元組：   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</span><br><span class="line">  類別:                              ELF64</span><br><span class="line">  資料:                              2 的補數，小尾序(little endian)</span><br><span class="line">  版本:                              1 (current)</span><br><span class="line">  OS&#x2F;ABI:                            UNIX - System V</span><br><span class="line">  ABI 版本:                          0</span><br><span class="line">  類型:                              EXEC (可執行檔案)</span><br><span class="line">  系統架構:                          Advanced Micro Devices X86-64</span><br><span class="line">  版本:                              0x1</span><br><span class="line">  進入點位址：               0x404890</span><br><span class="line">  程式標頭起點：          64 (檔案內之位元組)</span><br><span class="line">  區段標頭起點：          108288 (檔案內之位元組)</span><br><span class="line">  旗標：             0x0</span><br><span class="line">  此標頭的大小：       64 (位元組)</span><br><span class="line">  程式標頭大小：       56 (位元組)</span><br><span class="line">  Number of program headers:         9</span><br><span class="line">  區段標頭大小：         64 (位元組)</span><br><span class="line">  區段標頭數量：         28</span><br><span class="line">  字串表索引區段標頭： 27</span><br></pre></td></tr></table></figure>
 
 <p>而Program Header的部分，我們可以看到有9個Segement，以及實際的位址在哪。另外有個「區段到節區映射中」(Section to Segment mapping)，這就是多個Section如何組成一個Segment的對應。</p>
@@ -455,7 +455,7 @@
 <p>同樣以ls為例，可以看到我們把text section的內容印出來了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -s -j .text &#x2F;bin&#x2F;ls</span><br><span class="line"></span><br><span class="line">&#x2F;bin&#x2F;ls：     檔案格式 elf64-x86-64</span><br><span class="line"></span><br><span class="line">Contents of section .text:</span><br><span class="line"> 4028a0 50b9882c 4100baa6 0e0000be 36374100  P..,A.......67A.</span><br><span class="line"> 4028b0 bf983c41 00e896fb ffff660f 1f440000  ..&lt;A......f..D..</span><br><span class="line"> 4028c0 41574156 41554154 554889f5 5389fb48  AWAVAUATUH..S..H</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
 
-<h2 id="objcopy-strip修改ELF檔案"><a href="#objcopy-strip修改ELF檔案" class="headerlink" title="objcopy/strip修改ELF檔案"></a>objcopy/strip修改ELF檔案</h2><p>objcopy最主要的功能就是可以把文件作轉換，一部份或全部的內容copy另一個文件中</p>
+<h2 id="objcopy-x2F-strip修改ELF檔案"><a href="#objcopy-x2F-strip修改ELF檔案" class="headerlink" title="objcopy&#x2F;strip修改ELF檔案"></a>objcopy&#x2F;strip修改ELF檔案</h2><p>objcopy最主要的功能就是可以把文件作轉換，一部份或全部的內容copy另一個文件中</p>
 <ul>
 <li><code>objcopy -S -R .comment -R .note [input filename] [output filename]</code>：把編譯出來的symbol移除不必要的section(-S代表去掉symbol, relocation的訊息)</li>
 <li><code>objcopy -O binary -j [section] [input filename] [output filename]</code>：也可以把某個section拿出來</li>
@@ -496,19 +496,19 @@
 </thead>
 <tbody><tr>
 <td>text section</td>
-<td>T/t</td>
+<td>T&#x2F;t</td>
 </tr>
 <tr>
 <td>data section</td>
-<td>D/d</td>
+<td>D&#x2F;d</td>
 </tr>
 <tr>
 <td>Read only</td>
-<td>R/r</td>
+<td>R&#x2F;r</td>
 </tr>
 <tr>
 <td>BSS</td>
-<td>B/b</td>
+<td>B&#x2F;b</td>
 </tr>
 <tr>
 <td>未定義(如extern)</td>
@@ -519,7 +519,7 @@
 <ul>
 <li><code>addr2line -f -e [filename] [address]</code>：-f代表要顯示是哪個function，-e代表address是來自該執行檔</li>
 </ul>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>本篇文章主要簡單介紹ELF的結構，然後我們可以用 od、readelf、objdump、objcopy/strip、nm, addr2line 幾個工具觀察ELF的格式。如果想要有進一步的認識，建議可以研究參考的連結。</p>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>本篇文章主要簡單介紹ELF的結構，然後我們可以用 od、readelf、objdump、objcopy&#x2F;strip、nm, addr2line 幾個工具觀察ELF的格式。如果想要有進一步的認識，建議可以研究參考的連結。</p>
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
 <li><a target="_blank" rel="noopener" href="http://ccckmit.wikidot.com/lk:elf">陳鍾誠的網站 - 目的檔格式 (ELF)</a></li>

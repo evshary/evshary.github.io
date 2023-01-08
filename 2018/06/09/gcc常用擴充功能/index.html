@@ -31,7 +31,7 @@
 <meta property="og:description" content="簡介GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性__attribute__。 內建函式要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上 -fno-builtin選項，通常-fno-builtin是為了幫助我們確保程式的結果是如同我們所想像的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-06-09T16:50:13.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.567Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.052Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
@@ -303,7 +303,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -368,8 +368,8 @@
 </li>
 <li><code>int __builtin_ffs (int X)</code>：回傳X中從最小位數開始計算第一個1的位置，例如<code>__builtin_ffs(0xc)=3</code>，當X是0時，回傳0。</li>
 <li><code>int __builtin_popcount (unsigned int X)</code>：在X中1的個數</li>
-<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X=0時undefined。</li>
-<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X=0時undefined。</li>
+<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X&#x3D;0時undefined。</li>
+<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X&#x3D;0時undefined。</li>
 <li><code>int __builtin_parity (unsigned int x)</code>：Ｘ值的parity。</li>
 </ul>
 <h1 id="attribute"><a href="#attribute" class="headerlink" title="__attribute__"></a><code>__attribute__</code></h1><h2 id="weak-amp-alias"><a href="#weak-amp-alias" class="headerlink" title="weak &amp; alias"></a>weak &amp; alias</h2><h3 id="測試是否支援某function"><a href="#測試是否支援某function" class="headerlink" title="測試是否支援某function"></a>測試是否支援某function</h3><p>通常會使用<code>__attribute__(weak)</code>是為了避免有函式衝突的狀況，我們看個例子<br>a.c</p>

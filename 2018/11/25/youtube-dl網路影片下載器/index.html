@@ -31,7 +31,7 @@
 <meta property="og:description" content="簡介當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。 youtube-dl功能十分強大，也有很多參數可以調整，能下載的網站不只是youtube，也可以是其他熱門網站，例如Facebook等等，更重要的是這個工具有多個平台可以使用(Windows、Mac、Linux)">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-11-25T11:38:01.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.567Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.056Z">
 <meta property="article:author" content="evshary">
 <meta name="twitter:card" content="summary">
 
@@ -302,7 +302,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -348,12 +348,11 @@
 
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>這邊介紹一些常用的指令</p>
 <h2 id="支援"><a href="#支援" class="headerlink" title="支援"></a>支援</h2><ul>
-<li><p>確定有支援下載哪些影片網站，相關列表也可以從<a target="_blank" rel="noopener" href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure>
+<li>確定有支援下載哪些影片網站，相關列表也可以從<a target="_blank" rel="noopener" href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure></li>
+</ul>
 <h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>如果我們沒有指定格式的話，通常youtube-dl會幫我們挑最好的</p>
-</li>
-<li><p>指定下載的影片格式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 先查詢有哪些格式可下載</span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"># 指定下載格式</span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"># 或是用format code</span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure></li>
+<ul>
+<li>指定下載的影片格式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 先查詢有哪些格式可下載</span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"># 指定下載格式</span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"># 或是用format code</span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="輸出格式"><a href="#輸出格式" class="headerlink" title="輸出格式"></a>輸出格式</h2><p>由於官方的輸出格式預設有帶ID(<code>%(title)s-%(id)s.%(ext)s</code>)，我們可以將其去除</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -o &#39;%(title)s.%(ext)s&#39; [URL]</span><br></pre></td></tr></table></figure>

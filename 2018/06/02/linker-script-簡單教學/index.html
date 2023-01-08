@@ -31,7 +31,7 @@
 <meta property="og:description" content="簡介最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。 linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 undefined referen">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-06-02T15:56:33.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.567Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.052Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E5%96%AE%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">簡單範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">3.</span> <span class="nav-text">常用的功能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ENTRY"><span class="nav-number">3.1.</span> <span class="nav-text">ENTRY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MEMORY"><span class="nav-number">3.2.</span> <span class="nav-text">MEMORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KEEP"><span class="nav-number">3.3.</span> <span class="nav-text">KEEP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section-%E7%9A%84%E6%9C%AC%E9%AB%94"><span class="nav-number">3.4.</span> <span class="nav-text">section 的本體</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LMA-VMA-%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">LMA&#x2F;VMA 的概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E5%BE%97-section-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.5.</span> <span class="nav-text">取得 section 的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack-%E7%9A%84%E4%BD%8D%E5%9D%80"><span class="nav-number">3.6.</span> <span class="nav-text">Stack 的位址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">常見問題</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9Csection%E9%87%8D%E8%A4%87%E8%A2%AB%E4%BD%BF%E7%94%A8%EF%BC%8C%E6%9C%83%E7%99%BC%E7%94%9F%E4%BB%80%E9%BA%BC%E4%BA%8B%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">如果section重複被使用，會發生什麼事？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%8F%AA%E6%83%B3%E8%A6%81%E6%8A%8A%E6%9F%90%E5%80%8Blibrary%E7%9A%84-o%E6%94%BE%E5%85%A5%E7%9A%84%E8%A9%B1"><span class="nav-number">4.2.</span> <span class="nav-text">如果只想要把某個library的.o放入的話</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%88%91%E4%B8%8D%E6%83%B3%E8%A6%81%E6%8A%8A%E7%89%B9%E5%AE%9A%E6%AA%94%E6%A1%88%E7%9A%84section%E6%94%BE%E5%85%A5"><span class="nav-number">4.3.</span> <span class="nav-text">如果我不想要把特定檔案的section放入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E5%96%AE%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">簡單範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">3.</span> <span class="nav-text">常用的功能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ENTRY"><span class="nav-number">3.1.</span> <span class="nav-text">ENTRY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MEMORY"><span class="nav-number">3.2.</span> <span class="nav-text">MEMORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KEEP"><span class="nav-number">3.3.</span> <span class="nav-text">KEEP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section-%E7%9A%84%E6%9C%AC%E9%AB%94"><span class="nav-number">3.4.</span> <span class="nav-text">section 的本體</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LMA-x2F-VMA-%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">LMA&#x2F;VMA 的概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E5%BE%97-section-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.5.</span> <span class="nav-text">取得 section 的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack-%E7%9A%84%E4%BD%8D%E5%9D%80"><span class="nav-number">3.6.</span> <span class="nav-text">Stack 的位址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">常見問題</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9Csection%E9%87%8D%E8%A4%87%E8%A2%AB%E4%BD%BF%E7%94%A8%EF%BC%8C%E6%9C%83%E7%99%BC%E7%94%9F%E4%BB%80%E9%BA%BC%E4%BA%8B%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">如果section重複被使用，會發生什麼事？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%8F%AA%E6%83%B3%E8%A6%81%E6%8A%8A%E6%9F%90%E5%80%8Blibrary%E7%9A%84-o%E6%94%BE%E5%85%A5%E7%9A%84%E8%A9%B1"><span class="nav-number">4.2.</span> <span class="nav-text">如果只想要把某個library的.o放入的話</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%88%91%E4%B8%8D%E6%83%B3%E8%A6%81%E6%8A%8A%E7%89%B9%E5%AE%9A%E6%AA%94%E6%A1%88%E7%9A%84section%E6%94%BE%E5%85%A5"><span class="nav-number">4.3.</span> <span class="nav-text">如果我不想要把特定檔案的section放入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -303,7 +303,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -381,7 +381,7 @@
 
 <p>output-section-command 代表的就是我們要怎麼擺放每個 section。</p>
 <p>在這個例子裡可以看到有許多 LMA，除了 LMA 外，其實還有 VMA，它們兩個究竟有什麼不同呢？</p>
-<h3 id="LMA-VMA-的概念"><a href="#LMA-VMA-的概念" class="headerlink" title="LMA/VMA 的概念"></a>LMA/VMA 的概念</h3><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
+<h3 id="LMA-x2F-VMA-的概念"><a href="#LMA-x2F-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h3><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
 <p>link script 中設計了兩種位址：VMA 和 LMA</p>
 <table>
 <thead>
@@ -393,7 +393,7 @@
 </thead>
 <tbody><tr>
 <td>位置</td>
-<td>ROM/Flash</td>
+<td>ROM&#x2F;Flash</td>
 <td>RAM</td>
 </tr>
 <tr>

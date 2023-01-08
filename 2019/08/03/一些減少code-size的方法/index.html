@@ -31,7 +31,7 @@
 <meta property="og:description" content="前言在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。 Com">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-08-03T16:39:40.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.571Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.056Z">
 <meta property="article:author" content="evshary">
 <meta name="twitter:card" content="summary">
 
@@ -302,7 +302,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -355,15 +355,15 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version test small_test</span><br><span class="line">-&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
 
 <p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a target="_blank" rel="noopener" href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
-<h1 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h1><p>我們知道程式裡面常常會有些程式碼(function/data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
+<h1 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h1><p>我們知道程式裡面常常會有些程式碼(function&#x2F;data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
 <p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
-<p>細節可以參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C/C++ symbols with GCC and ld?</a>。</p>
+<p>細節可以參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C&#x2F;C++ symbols with GCC and ld?</a>。</p>
 <h1 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h1><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
 <p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
 <h1 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h1><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
 <p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
 <p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
-<h1 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h1><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1/3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
+<h1 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h1><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1&#x2F;3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
 <p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
 <h1 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h1><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
 <p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>

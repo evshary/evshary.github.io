@@ -296,7 +296,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -349,15 +349,15 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version test small_test</span><br><span class="line">-&gt; ls -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 test</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
 
 <p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a target="_blank" rel="noopener" href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
-<h1 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h1><p>我們知道程式裡面常常會有些程式碼(function/data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
+<h1 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h1><p>我們知道程式裡面常常會有些程式碼(function&#x2F;data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
 <p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
-<p>細節可以參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C/C++ symbols with GCC and ld?</a>。</p>
+<p>細節可以參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C&#x2F;C++ symbols with GCC and ld?</a>。</p>
 <h1 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h1><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
 <p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
 <h1 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h1><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
 <p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
 <p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
-<h1 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h1><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1/3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
+<h1 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h1><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1&#x2F;3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
 <p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
 <h1 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h1><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
 <p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
@@ -424,7 +424,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -466,8 +466,8 @@
 <p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
 <h2 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h2><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
 <p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
-<h2 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h2><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI/CD、code review的概念，剛好就在我的project上進行實驗。</p>
-<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI/CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
+<h2 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h2><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
+<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
 <h2 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h2><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
 <p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
 <p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
@@ -561,7 +561,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -691,7 +691,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -727,8 +727,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近我在研究怎麼在ARM Cortex M3/4上面跑一個自己寫的OS，最主要是參考jserv的<a target="_blank" rel="noopener" href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a target="_blank" rel="noopener" href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a target="_blank" rel="noopener" href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
-<p>這邊首先要探討的是Cortex M3/4上面有的權限模式，以及它們是怎麼進行切換等細節。<br>原本我是在qemu上面跑<a target="_blank" rel="noopener" href="http://beckus.github.io/qemu_stm32/">STM32虛擬機</a>，但是後來發現好像跟真實硬體有點不一致，所以後來我都在STM32F429的硬體上面來測試了。</p>
+          <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的<a target="_blank" rel="noopener" href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a target="_blank" rel="noopener" href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a target="_blank" rel="noopener" href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
+<p>這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。<br>原本我是在qemu上面跑<a target="_blank" rel="noopener" href="http://beckus.github.io/qemu_stm32/">STM32虛擬機</a>，但是後來發現好像跟真實硬體有點不一致，所以後來我都在STM32F429的硬體上面來測試了。</p>
 <h1 id="Cortex-M權限設計"><a href="#Cortex-M權限設計" class="headerlink" title="Cortex M權限設計"></a>Cortex M權限設計</h1><p>首先我們先了解Cortex上面有哪些權限模式，處理器上面有兩種Operation Modes：Thread mode和Handler mode。</p>
 <ul>
 <li>Thread Mode：一般程式運行的狀態。</li>
@@ -775,7 +775,7 @@
 <li>目前我們在thread mode</li>
 <li>preempts：發生的exception比目前我們所在的exception權限還高</li>
 </ol>
-<p>發生exception時，ARM會自動把當前的register的資訊存起來，順序為xPSR, PC, LR, R12, R3, R2, R1, R0。儲存的方式就是push到當前的stack中，可能是main stack(SP=MSP)，也可能是process stack(SP=PSP)。</p>
+<p>發生exception時，ARM會自動把當前的register的資訊存起來，順序為xPSR, PC, LR, R12, R3, R2, R1, R0。儲存的方式就是push到當前的stack中，可能是main stack(SP&#x3D;MSP)，也可能是process stack(SP&#x3D;PSP)。</p>
 <table>
 <thead>
 <tr>
@@ -895,7 +895,7 @@
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p>關於Cortex M相關的資料非常推薦下面兩本書籍，都有中文的翻譯。JosephYiu有參與ARM Cortex M的設計，比較有權威性。</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.books.com.tw/products/CN11146482">ARM Cortex-M3權威指南</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9787302402923">ARM Cortex-M3與Cortex-M4權威指南, 3/e ARM Cortex-M3与Cortex-M4权威指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9787302402923">ARM Cortex-M3與Cortex-M4權威指南, 3&#x2F;e ARM Cortex-M3与Cortex-M4权威指南</a></li>
 </ul>
 <p>可參考jserv老師和學生撰寫的rtenv+簡介，裡面也有提到ARM CM3權限的部分。</p>
 <ul>
@@ -958,7 +958,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1027,10 +1027,11 @@
 </li>
 <li>長條圖<ul>
 <li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">reset</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line">set terminal png</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line"># 設定長條圖的size</span><br><span class="line">set boxwidth 0.3</span><br><span class="line">plot &quot;data.txt&quot; with boxes title &quot;title 1&quot;</span><br></pre></td></tr></table></figure>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1></li>
+<li>使用在gnuplot中load如下plt檔<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">reset</span><br><span class="line">set title &quot;pic_title&quot;</span><br><span class="line">set xlabel &quot;x(unit)&quot;</span><br><span class="line">set ylabel &quot;y(unit)&quot;</span><br><span class="line">set terminal png</span><br><span class="line">set output &quot;output.png&quot;</span><br><span class="line"># 設定長條圖的size</span><br><span class="line">set boxwidth 0.3</span><br><span class="line">plot &quot;data.txt&quot; with boxes title &quot;title 1&quot;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
+</ul>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
 <li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
 <li><a target="_blank" rel="noopener" href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
@@ -1092,7 +1093,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1142,7 +1143,7 @@
 <ul>
 <li>hflip：水平翻轉</li>
 <li>vflip：垂直翻轉</li>
-<li>transpose=1：順時針轉90度<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 水平翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"># 垂直翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"># 順時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;1 [輸出檔名]</span><br><span class="line"># 逆時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+<li>transpose&#x3D;1：順時針轉90度<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 水平翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"># 垂直翻轉</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"># 順時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;1 [輸出檔名]</span><br><span class="line"># 逆時針轉90度</span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose&#x3D;2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h2><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"># 在開始的時間抓一張圖</span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"># 從頭開始，每10秒抓一張圖</span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
@@ -1230,7 +1231,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1269,8 +1270,8 @@
           <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
 <h1 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h1><h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><ul>
 <li>輸入輸出參數<ul>
-<li>if=FILE：輸入名稱</li>
-<li>of=FILE：輸出名稱</li>
+<li>if&#x3D;FILE：輸入名稱</li>
+<li>of&#x3D;FILE：輸出名稱</li>
 </ul>
 </li>
 </ul>
@@ -1289,14 +1290,14 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 轉為小寫</span><br><span class="line">dd if&#x3D;[input_file] of&#x3D;[output_file] conv&#x3D;lcase</span><br></pre></td></tr></table></figure>
 
 <h2 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h2><ul>
-<li>bs=[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
-<li>ibs=[bytes]：指定每次讀取的block size(default 512 bytes)</li>
-<li>obs=[bytes]：指定每次寫入的block size(default 512 bytes)</li>
+<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
+<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
+<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
 </ul>
 </li>
-<li>count=[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
-<li>seek=[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
-<li>skip=[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
+<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
+<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
+<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
 </ul>
 <h1 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h1><ul>
 <li>大小寫轉換<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 換大寫</span><br><span class="line">dd if&#x3D;[input] of&#x3D;[output] conv&#x3D;ucase</span><br><span class="line"># 換小寫</span><br><span class="line">dd if&#x3D;[input] of&#x3D;[output] conv&#x3D;lcase</span><br></pre></td></tr></table></figure></li>
@@ -1304,7 +1305,7 @@
 <li>把特定檔案的開頭512 byte清空<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;[output] bs&#x3D;512 count&#x3D;1 conv&#x3D;notrunc</span><br></pre></td></tr></table></figure></li>
 <li>備份硬碟<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dd if&#x3D;[來源] of&#x3D;[目標]</span><br><span class="line"># 例如從&#x2F;dev&#x2F;sda備份到&#x2F;dev&#x2F;sdb</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;sda of&#x3D;&#x2F;dev&#x2F;sdb</span><br></pre></td></tr></table></figure></li>
 <li>備份光碟，可參考<a target="_blank" rel="noopener" href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a><ol>
-<li>先觀察/dev/cdrom<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isoinfo -d -i &#x2F;dev&#x2F;cdrom | grep -i -E &#39;block size|volume size&#39;</span><br></pre></td></tr></table></figure></li>
+<li>先觀察&#x2F;dev&#x2F;cdrom<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isoinfo -d -i &#x2F;dev&#x2F;cdrom | grep -i -E &#39;block size|volume size&#39;</span><br></pre></td></tr></table></figure></li>
 <li>然後應該會出現類似如下內容<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure></li>
 <li>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dd if&#x3D;&#x2F;dev&#x2F;cdrom of&#x3D;test.iso bs&#x3D;&lt;block size from above&gt; count&#x3D;&lt;volume size from above&gt;</span><br><span class="line"># 以上述例子</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;cdrom of&#x3D;outputCD.iso bs&#x3D;2048 count&#x3D;327867</span><br></pre></td></tr></table></figure></li>
 </ol>
@@ -1375,7 +1376,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1421,12 +1422,11 @@
 
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>這邊介紹一些常用的指令</p>
 <h2 id="支援"><a href="#支援" class="headerlink" title="支援"></a>支援</h2><ul>
-<li><p>確定有支援下載哪些影片網站，相關列表也可以從<a target="_blank" rel="noopener" href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure>
+<li>確定有支援下載哪些影片網站，相關列表也可以從<a target="_blank" rel="noopener" href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure></li>
+</ul>
 <h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>如果我們沒有指定格式的話，通常youtube-dl會幫我們挑最好的</p>
-</li>
-<li><p>指定下載的影片格式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 先查詢有哪些格式可下載</span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"># 指定下載格式</span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"># 或是用format code</span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure></li>
+<ul>
+<li>指定下載的影片格式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 先查詢有哪些格式可下載</span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"># 指定下載格式</span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"># 或是用format code</span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="輸出格式"><a href="#輸出格式" class="headerlink" title="輸出格式"></a>輸出格式</h2><p>由於官方的輸出格式預設有帶ID(<code>%(title)s-%(id)s.%(ext)s</code>)，我們可以將其去除</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -o &#39;%(title)s.%(ext)s&#39; [URL]</span><br></pre></td></tr></table></figure>
@@ -1522,7 +1522,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1622,7 +1622,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1701,9 +1701,9 @@
 <li>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --keyserver hkp:&#x2F;&#x2F;pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure></li>
 <li>可查看與更新朋友的public key<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="import-export"><a href="#import-export" class="headerlink" title="import/export"></a>import/export</h3><ol>
-<li>除了搜尋以外，也可以用import/export的方式管理朋友的公鑰<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --export -ao public_keys_list.txt</span><br></pre></td></tr></table></figure></li>
-<li>import/export自己的金鑰<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># export 公鑰</span><br><span class="line">gpg --armor --output public-key.asc --export [UID]</span><br><span class="line"># export 私鑰</span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"># import</span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+<h3 id="import-x2F-export"><a href="#import-x2F-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h3><ol>
+<li>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --export -ao public_keys_list.txt</span><br></pre></td></tr></table></figure></li>
+<li>import&#x2F;export自己的金鑰<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># export 公鑰</span><br><span class="line">gpg --armor --output public-key.asc --export [UID]</span><br><span class="line"># export 私鑰</span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"># import</span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h2><ol>
 <li>假設我們要傳送secret.tgz給朋友，可以先進行加密<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc </span><br></pre></td></tr></table></figure></li>

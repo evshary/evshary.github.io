@@ -31,7 +31,7 @@
 <meta property="og:description" content="簡介有時候我們會在C的程式碼內看到asm&amp;#123;...&amp;#125;的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。 舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下： 123456&#x2F;* 一個nop指令 *&#x2F;asm(&quot;nop&quot;);&#x2F;* 多行要用\n隔開 *&#x2F;__asm__(&quot;nop\n&amp;q">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-05-20T15:02:39.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.567Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.052Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
@@ -303,7 +303,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -427,7 +427,7 @@
 <p>test.c</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0=&gt;之後要輸出到sum的register，%1=&gt;num1放入的register，%2=&gt;num2放入的register。</p>
+<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
 <p>當然最後執行結果也會和範例一一樣。</p>
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>

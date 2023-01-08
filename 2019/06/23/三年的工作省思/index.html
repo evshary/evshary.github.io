@@ -31,7 +31,7 @@
 <meta property="og:description" content="前言工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-06-23T20:29:02.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:54:41.571Z">
+<meta property="article:modified_time" content="2023-01-08T10:54:53.056Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="自我成長">
 <meta name="twitter:card" content="summary">
@@ -303,7 +303,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:54:41" itemprop="dateModified" datetime="2023-01-08T10:54:41+00:00">2023-01-08</time>
+        <time title="Modified: 2023-01-08 10:54:53" itemprop="dateModified" datetime="2023-01-08T10:54:53+00:00">2023-01-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -345,8 +345,8 @@
 <p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
 <h2 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h2><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
 <p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
-<h2 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h2><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI/CD、code review的概念，剛好就在我的project上進行實驗。</p>
-<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI/CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
+<h2 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h2><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
+<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
 <h2 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h2><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
 <p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
 <p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
