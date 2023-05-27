@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.1">
-
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -16,14 +14,12 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
-  </script>
-<meta name="description" content="簡介GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性__attribute__。 內建函式要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上 -fno-builtin選項，通常-fno-builtin是為了幫助我們確保程式的結果是如同我們所想像的">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="簡介GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性__attribute__。 內建函式要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上 -fno-builtin選項，通常-fno-builtin是為了幫助我們確保程式的結果是如同我們所想像的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gcc常用擴充功能">
 <meta property="og:url" content="http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/index.html">
@@ -31,7 +27,7 @@
 <meta property="og:description" content="簡介GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性__attribute__。 內建函式要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上 -fno-builtin選項，通常-fno-builtin是為了幫助我們確保程式的結果是如同我們所想像的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-06-09T16:50:13.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:56:16.404Z">
+<meta property="article:modified_time" content="2023-05-27T07:02:18.403Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
@@ -40,65 +36,26 @@
 <link rel="canonical" href="http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/">
 
 
-<script class="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'en'
-  };
-</script>
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/","path":"2018/06/09/gcc常用擴充功能/","title":"gcc常用擴充功能"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>gcc常用擴充功能 | 凛の魅力に溺死しろ</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-    <script>
-      if (CONFIG.hostname === location.hostname) {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-105315332-1');
-      }
-    </script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
 
 
 
 
   <noscript>
-  <style>
-  body { margin-top: 2rem; }
-
-  .use-motion .menu-item,
-  .use-motion .sidebar,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header {
-    visibility: visible;
-  }
-
-  .use-motion .header,
-  .use-motion .site-brand-container .toggle,
-  .use-motion .footer { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle,
-  .use-motion .custom-logo-image {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line {
-    transform: scaleX(1);
-  }
-
-  .search-pop-overlay, .sidebar-nav { display: none; }
-  .sidebar-panel { display: block; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
 </head>
 
@@ -106,8 +63,8 @@
   <div class="headband"></div>
 
   <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="Toggle navigation bar" role="button">
         <span class="toggle-line"></span>
@@ -120,14 +77,14 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">凛の魅力に溺死しろ</h1>
+      <p class="site-title">凛の魅力に溺死しろ</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">どんな時でも余裕を持って優雅たれ</p>
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -136,12 +93,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -174,15 +126,9 @@
     </div>
   </div>
 
-</div>
+</header>
         
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
   <aside class="sidebar">
 
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
@@ -203,63 +149,48 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">evshary</p>
   <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap site-overview-item animated">
+<div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
-  <div class="links-of-author site-overview-item animated">
+  <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
       </span>
   </div>
-
-
 
         </div>
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
 
     
-  <div class="back-to-top" role="button">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  </aside>
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
 
+    </div>
 
     <div class="main-inner post posts-expand">
 
@@ -277,11 +208,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="evshary">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="gcc常用擴充功能 | 凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -298,13 +234,13 @@
 
       <time title="Created: 2018-06-09 16:50:13" itemprop="dateCreated datePublished" datetime="2018-06-09T16:50:13+00:00">2018-06-09</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:56:16" itemprop="dateModified" datetime="2023-01-08T10:56:16+00:00">2023-01-08</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-05-27 07:02:18" itemprop="dateModified" datetime="2023-05-27T07:02:18+00:00">2023-05-27</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -338,8 +274,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
 <h1 id="內建函式"><a href="#內建函式" class="headerlink" title="內建函式"></a>內建函式</h1><p>要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上<code> -fno-builtin</code>選項，通常<code>-fno-builtin</code>是為了幫助我們確保程式的結果是如同我們所想像的樣子呈現，而不會被一些最佳化改變樣子，方便設定breakpoint和debug。</p>
 <h2 id="找呼叫者"><a href="#找呼叫者" class="headerlink" title="找呼叫者"></a>找呼叫者</h2><p>首先我們先來談談找呼叫者這件事，我想大家應該都有經驗曾經發現程式死在某一行，但是卻不知道是誰呼叫的，這時候只能痛苦地去從stack反推return address。但是其實gcc內是有特殊內建函式可以幫助我們的，這邊介紹下面兩個好用函式。</p>
 <ul>
@@ -349,11 +284,11 @@
 <p>要注意的是LEVEL不能填變數，也就是編譯時必須確定該數字。</p>
 <h3 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h3><p>我們還是透過一個簡單的例子來說明一下</p>
 <p>test.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test3</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">3</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;3: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test3\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test2</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test2\n&quot;</span>);</span><br><span class="line">    test3();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test1\n&quot;</span>);</span><br><span class="line">    test2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    test1();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test3</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">3</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;3: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test3\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test2</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test2\n&quot;</span>);</span><br><span class="line">    test3();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test1\n&quot;</span>);</span><br><span class="line">    test2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    test1();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>好，那我們來編譯並執行看看</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ .&#x2F;test</span><br><span class="line">0: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test</span><br><span class="line">0: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">1: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test1</span><br><span class="line">0: ret_addr&#x3D;0x40076d frame_addr&#x3D;0x2bba8b60</span><br><span class="line">1: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">2: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test2</span><br><span class="line">0: ret_addr&#x3D;0x4006e1 frame_addr&#x3D;0x2bba8b40</span><br><span class="line">1: ret_addr&#x3D;0x40076d frame_addr&#x3D;0x2bba8b60</span><br><span class="line">2: ret_addr&#x3D;0x4007bc frame_addr&#x3D;0x2bba8b80</span><br><span class="line">3: ret_addr&#x3D;0x4007c8 frame_addr&#x3D;0x2bba8ba0</span><br><span class="line">test3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ ./test</span><br><span class="line">0: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test</span><br><span class="line">0: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">1: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test1</span><br><span class="line">0: ret_addr=0x40076d frame_addr=0x2bba8b60</span><br><span class="line">1: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">2: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test2</span><br><span class="line">0: ret_addr=0x4006e1 frame_addr=0x2bba8b40</span><br><span class="line">1: ret_addr=0x40076d frame_addr=0x2bba8b60</span><br><span class="line">2: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">3: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test3</span><br></pre></td></tr></table></figure>
 <p>可以看到每層function所對應的return address和frame address都被列出來，但是要怎麼驗證是否真的是這樣呢？我們把程式逆向一下看位置。這邊我們鎖定test1()的return address，也就是0x4007bc，應該是test()函式的呼叫test1()的下一行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -d test</span><br><span class="line">...</span><br><span class="line">0000000000400770 &lt;test&gt;:</span><br><span class="line">  400770:       55                      push   %rbp</span><br><span class="line">  400771:       48 89 e5                mov    %rsp,%rbp</span><br><span class="line">...</span><br><span class="line">  4007b2:       e8 59 fc ff ff          callq  400410 &lt;puts@plt&gt;</span><br><span class="line">  4007b7:       e8 28 ff ff ff          callq  4006e4 &lt;test1&gt;</span><br><span class="line">  4007bc:       90                      nop</span><br><span class="line">  4007bd:       c9                      leaveq</span><br><span class="line">  4007be:       c3                      retq</span><br><span class="line"></span><br><span class="line">00000000004007bf &lt;main&gt;:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -d test</span><br><span class="line">...</span><br><span class="line">0000000000400770 &lt;test&gt;:</span><br><span class="line">  400770:       55                      push   %rbp</span><br><span class="line">  400771:       48 89 e5                mov    %rsp,%rbp</span><br><span class="line">...</span><br><span class="line">  4007b2:       e8 59 fc ff ff          callq  400410 &lt;puts@plt&gt;</span><br><span class="line">  4007b7:       e8 28 ff ff ff          callq  4006e4 &lt;test1&gt;</span><br><span class="line">  4007bc:       90                      nop</span><br><span class="line">  4007bd:       c9                      leaveq</span><br><span class="line">  4007be:       c3                      retq</span><br><span class="line"></span><br><span class="line">00000000004007bf &lt;main&gt;:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>的確，下一行nop的位置就是就是4007bc，符合我們的想法。</p>
 <h2 id="其他有用的builtin函式"><a href="#其他有用的builtin函式" class="headerlink" title="其他有用的builtin函式"></a>其他有用的builtin函式</h2><p>除了上面的例子，其實還有其他有用的builtin函式，這邊就只是列出來提供參考：</p>
 <ul>
@@ -373,20 +308,20 @@
 <li><code>int __builtin_parity (unsigned int x)</code>：Ｘ值的parity。</li>
 </ul>
 <h1 id="attribute"><a href="#attribute" class="headerlink" title="__attribute__"></a><code>__attribute__</code></h1><h2 id="weak-amp-alias"><a href="#weak-amp-alias" class="headerlink" title="weak &amp; alias"></a>weak &amp; alias</h2><h3 id="測試是否支援某function"><a href="#測試是否支援某function" class="headerlink" title="測試是否支援某function"></a>測試是否支援某function</h3><p>通常會使用<code>__attribute__(weak)</code>是為了避免有函式衝突的狀況，我們看個例子<br>a.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">printf_test</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(printf_test)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Here is printf_test result: \n&quot;</span>);</span><br><span class="line">        printf_test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;We don&#x27;t support printf_test\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ make a</span><br><span class="line">$ .&#x2F;a</span><br><span class="line">This is main function</span><br><span class="line">We don&#39;t support printf_test</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">printf_test</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak))</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(printf_test)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Here is printf_test result: \n&quot;</span>);</span><br><span class="line">        printf_test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;We don&#x27;t support printf_test\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ make a</span><br><span class="line">$ ./a</span><br><span class="line">This is main function</span><br><span class="line">We don&#x27;t support printf_test</span><br></pre></td></tr></table></figure>
 <p>雖然我們沒有printf_test，但是直接編譯是會通過的，因為printf_test被視為weak，假設在連結時找不到，是會被填0的。</p>
 <p>那如果有printf_test的情況呢？我們加上b.c重新編譯看看</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printf_test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is b function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ .&#x2F;a.out</span><br><span class="line">This is main function</span><br><span class="line">Here is printf_test result:</span><br><span class="line">This is b function.</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">printf_test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is b function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ ./a.out</span><br><span class="line">This is main function</span><br><span class="line">Here is printf_test result:</span><br><span class="line">This is b function.</span><br></pre></td></tr></table></figure>
 <p>看起來就會執行printf_test了。這樣的功能對我們要動態看有無支援函式幫助很大。</p>
 <h3 id="為函式加上default值"><a href="#為函式加上default值" class="headerlink" title="為函式加上default值"></a>為函式加上default值</h3><p>這邊我們會用到alias的attribute，alias的話通常會跟weak一起使用，最常被用到的是幫不確定有無支援的函式加上default值。</p>
 <p>a.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_default</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Not support this function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_foo</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_bar</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    print_foo();</span><br><span class="line">    print_bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_default</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Not support this function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_foo</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">print_bar</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    print_foo();</span><br><span class="line">    print_bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>b.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_foo</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;foo function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_foo</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;foo function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ .&#x2F;a.out</span><br><span class="line">This is main function</span><br><span class="line">foo function.</span><br><span class="line">Not support this function.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ ./a.out</span><br><span class="line">This is main function</span><br><span class="line">foo function.</span><br><span class="line">Not support this function.</span><br></pre></td></tr></table></figure>
 <p>可以看到因為print_bar並沒有被宣告，所以最後會執行alias的print_default。</p>
 <h2 id="在main前後執行程式"><a href="#在main前後執行程式" class="headerlink" title="在main前後執行程式"></a>在main前後執行程式</h2><p>有時候會想要在main的執行前後可以做些事，這時候就會用到下面兩個attribute</p>
 <ul>
@@ -395,9 +330,9 @@
 </ul>
 <p>讓我們看個範例</p>
 <p>test.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">__attribute__((constructor))</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">before</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;before main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__attribute__((destructor))</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">after</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">__attribute__((constructor))</span><br><span class="line"><span class="type">void</span> <span class="title function_">before</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;before main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__attribute__((destructor))</span><br><span class="line"><span class="type">void</span> <span class="title function_">after</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ .&#x2F;test</span><br><span class="line">before main</span><br><span class="line">This is main function</span><br><span class="line">after main</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ make test</span><br><span class="line">$ ./test</span><br><span class="line">before main</span><br><span class="line">This is main function</span><br><span class="line">after main</span><br></pre></td></tr></table></figure>
 <p>結果的確如我們所料。另外這邊有點要注意，跟前面不一樣的是，<code>__attribute__((constructor))</code>和<code>__attribute__((destructor))</code>必須放在函式前面，不然會有<code>error: attributes should be specified before the declarator in a function definition</code>的錯誤。</p>
 <h2 id="其他attribute"><a href="#其他attribute" class="headerlink" title="其他attribute"></a>其他attribute</h2><p>剩下還有一些有機會會用到的attribute，這邊就不多談，只列出來參考。</p>
 <ul>
@@ -455,28 +390,6 @@
     <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      const commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
 </div>
   </main>
 
@@ -492,18 +405,35 @@
   </span>
   <span class="author" itemprop="copyrightHolder">evshary</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
     </div>
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 
   
-<script src="/js/local-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
@@ -515,37 +445,8 @@
 
 
 
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"evshary","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
 
-<script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://evshary.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "http://evshary.com/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/";
-    this.page.identifier = "2018/06/09/gcc常用擴充功能/";
-    this.page.title = "gcc常用擴充功能";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://evshary.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left"},"log":false});</script></body>
+</body>
 </html>

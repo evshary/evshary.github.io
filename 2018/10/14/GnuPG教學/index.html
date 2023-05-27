@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.1">
-
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -16,14 +14,12 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
-  </script>
-<meta name="description" content="簡介GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。 使用安裝 指令1234# Ubuntusudo apt-get install gnupg# MAXbrew install gnupg GUI 其實現在GUI介面都做得很好看了，而且也很容易上手，建議">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="簡介GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。 使用安裝 指令1234# Ubuntusudo apt-get install gnupg# MAXbrew install gnupg GUI 其實現在GUI介面都做得很好看了，而且也很容易上手，建議">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GnuPG教學">
 <meta property="og:url" content="http://evshary.com/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/index.html">
@@ -31,7 +27,7 @@
 <meta property="og:description" content="簡介GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。 使用安裝 指令1234# Ubuntusudo apt-get install gnupg# MAXbrew install gnupg GUI 其實現在GUI介面都做得很好看了，而且也很容易上手，建議">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-10-14T11:37:34.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:56:16.404Z">
+<meta property="article:modified_time" content="2023-05-27T07:02:18.403Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
@@ -40,65 +36,26 @@
 <link rel="canonical" href="http://evshary.com/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/">
 
 
-<script class="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'en'
-  };
-</script>
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://evshary.com/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/","path":"2018/10/14/GnuPG教學/","title":"GnuPG教學"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>GnuPG教學 | 凛の魅力に溺死しろ</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-    <script>
-      if (CONFIG.hostname === location.hostname) {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-105315332-1');
-      }
-    </script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
 
 
 
 
   <noscript>
-  <style>
-  body { margin-top: 2rem; }
-
-  .use-motion .menu-item,
-  .use-motion .sidebar,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header {
-    visibility: visible;
-  }
-
-  .use-motion .header,
-  .use-motion .site-brand-container .toggle,
-  .use-motion .footer { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle,
-  .use-motion .custom-logo-image {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line {
-    transform: scaleX(1);
-  }
-
-  .search-pop-overlay, .sidebar-nav { display: none; }
-  .sidebar-panel { display: block; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
 </head>
 
@@ -106,8 +63,8 @@
   <div class="headband"></div>
 
   <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="Toggle navigation bar" role="button">
         <span class="toggle-line"></span>
@@ -120,14 +77,14 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">凛の魅力に溺死しろ</h1>
+      <p class="site-title">凛の魅力に溺死しろ</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">どんな時でも余裕を持って優雅たれ</p>
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -136,12 +93,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -174,15 +126,9 @@
     </div>
   </div>
 
-</div>
+</header>
         
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
   <aside class="sidebar">
 
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
@@ -203,63 +149,48 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">evshary</p>
   <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap site-overview-item animated">
+<div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
-  <div class="links-of-author site-overview-item animated">
+  <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
       </span>
   </div>
-
-
 
         </div>
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
 
     
-  <div class="back-to-top" role="button">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  </aside>
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
 
+    </div>
 
     <div class="main-inner post posts-expand">
 
@@ -277,11 +208,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="evshary">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GnuPG教學 | 凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -298,13 +234,13 @@
 
       <time title="Created: 2018-10-14 11:37:34" itemprop="dateCreated datePublished" datetime="2018-10-14T11:37:34+00:00">2018-10-14</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:56:16" itemprop="dateModified" datetime="2023-01-08T10:56:16+00:00">2023-01-08</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-05-27 07:02:18" itemprop="dateModified" datetime="2023-05-27T07:02:18+00:00">2023-05-27</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -338,10 +274,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><ul>
-<li>指令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Ubuntu</span><br><span class="line">sudo apt-get install gnupg</span><br><span class="line"># MAX</span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure></li>
+<li>指令<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Ubuntu</span><br><span class="line">sudo apt-get install gnupg</span><br><span class="line"># MAX</span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure></li>
 <li>GUI<ul>
 <li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
 <li>MAC的GUI tools可從<a target="_blank" rel="noopener" href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
@@ -354,42 +289,42 @@
 <li>真實姓名就填自己的英文名字，備註可填中文</li>
 <li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
 <li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"># 如果gen key發生問題，可用如下指令後再一次</span><br><span class="line">gpgconf --kill gpg-agent</span><br></pre></td></tr></table></figure></li>
+<li>最後會產生出user ID的hash(UID)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"># 如果gen key發生問題，可用如下指令後再一次</span><br><span class="line">gpgconf --kill gpg-agent</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"># 也可以直接放到.gnupg內</span><br><span class="line">gpg --gen-revoke [UID] &gt; ~&#x2F;.gnupg&#x2F;revocation-[UID].crt</span><br></pre></td></tr></table></figure></li>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"># 也可以直接放到.gnupg內</span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server<ul>
 <li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -ao mypublic.asc --export [UID]</span><br></pre></td></tr></table></figure></li>
+<li>-o：代表輸出檔名<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -ao mypublic.asc --export [UID]</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li>如果是要把朋友的公鑰放入已知道人的清單<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure></li>
-<li>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+<li>如果是要把朋友的公鑰放入已知道人的清單<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure></li>
+<li>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h2><h3 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h3><ol>
-<li>查看目前的鑰匙<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 列出所有公鑰</span><br><span class="line">gpg --list-keys</span><br><span class="line"># 同時看簽名</span><br><span class="line">gpg --list-sigs </span><br><span class="line"># 列出所有私鑰</span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure></li>
-<li>編輯key(對key簽名也是用同樣的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure></li>
-<li>刪除已存入key的方式，如果有私鑰要先刪除<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 先刪除私鑰</span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"># 刪除公鑰</span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+<li>查看目前的鑰匙<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 列出所有公鑰</span><br><span class="line">gpg --list-keys</span><br><span class="line"># 同時看簽名</span><br><span class="line">gpg --list-sigs </span><br><span class="line"># 列出所有私鑰</span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure></li>
+<li>編輯key(對key簽名也是用同樣的方法)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure></li>
+<li>刪除已存入key的方式，如果有私鑰要先刪除<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 先刪除私鑰</span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"># 刪除公鑰</span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h3><ol>
 <li>首先先搜尋對象的public key<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --keyserver hkp:&#x2F;&#x2F;pgp.mit.edu --search-keys &#39;Linus Torvalds&#39;</span><br></pre></td></tr></table></figure></li>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys &#x27;Linus Torvalds&#x27;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --keyserver hkp:&#x2F;&#x2F;pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure></li>
-<li>可查看與更新朋友的public key<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+<li>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure></li>
+<li>可查看與更新朋友的public key<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="import-x2F-export"><a href="#import-x2F-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h3><ol>
-<li>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --export -ao public_keys_list.txt</span><br></pre></td></tr></table></figure></li>
-<li>import&#x2F;export自己的金鑰<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># export 公鑰</span><br><span class="line">gpg --armor --output public-key.asc --export [UID]</span><br><span class="line"># export 私鑰</span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"># import</span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+<li>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --export -ao public_keys_list.txt</span><br></pre></td></tr></table></figure></li>
+<li>import&#x2F;export自己的金鑰<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># export 公鑰</span><br><span class="line">gpg --armor --output public-key.asc --export [UID]</span><br><span class="line"># export 私鑰</span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"># import</span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h2><ol>
-<li>假設我們要傳送secret.tgz給朋友，可以先進行加密<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc </span><br></pre></td></tr></table></figure></li>
-<li>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure></li>
-<li>如果要確認發信人身份<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 先對檔案簽名</span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"># 驗證檔案身份</span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+<li>假設我們要傳送secret.tgz給朋友，可以先進行加密<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc </span><br></pre></td></tr></table></figure></li>
+<li>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure></li>
+<li>如果要確認發信人身份<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 先對檔案簽名</span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"># 驗證檔案身份</span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
@@ -438,28 +373,6 @@
     <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      const commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
 </div>
   </main>
 
@@ -475,18 +388,35 @@
   </span>
   <span class="author" itemprop="copyrightHolder">evshary</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
     </div>
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 
   
-<script src="/js/local-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
@@ -498,37 +428,8 @@
 
 
 
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"evshary","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
 
-<script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://evshary.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "http://evshary.com/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/";
-    this.page.identifier = "2018/10/14/GnuPG教學/";
-    this.page.title = "GnuPG教學";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://evshary.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left"},"log":false});</script></body>
+</body>
 </html>

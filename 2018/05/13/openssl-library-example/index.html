@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.1">
-
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -16,22 +14,20 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
-  </script>
-<meta name="description" content="安裝opensslMAC1$ brew install openssl MAC上如果要使用library有點麻煩，需要先找到對應的路徑 12345678$ find &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F; -name &quot;libssl.*&quot;  # 找到library的路徑&#x2F;usr&#x2F;local&#x2F;Cellar&amp;#x2">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="安裝opensslMAC1$ brew install openssl MAC上如果要使用library有點麻煩，需要先找到對應的路徑 12345678$ find &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F; -name &quot;libssl.*&quot;  # 找到library的路徑&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;&#x2F;openssl&#x2F;1.0.2o_1&#x2F;lib&#x2F;pkgconfig&#x2F;libssl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 openssl 工具與函式庫">
 <meta property="og:url" content="http://evshary.com/2018/05/13/openssl-library-example/index.html">
 <meta property="og:site_name" content="凛の魅力に溺死しろ">
-<meta property="og:description" content="安裝opensslMAC1$ brew install openssl MAC上如果要使用library有點麻煩，需要先找到對應的路徑 12345678$ find &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F; -name &quot;libssl.*&quot;  # 找到library的路徑&#x2F;usr&#x2F;local&#x2F;Cellar&amp;#x2">
+<meta property="og:description" content="安裝opensslMAC1$ brew install openssl MAC上如果要使用library有點麻煩，需要先找到對應的路徑 12345678$ find &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F; -name &quot;libssl.*&quot;  # 找到library的路徑&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;&#x2F;openssl&#x2F;1.0.2o_1&#x2F;lib&#x2F;pkgconfig&#x2F;libssl">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-05-13T17:34:33.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:56:16.404Z">
+<meta property="article:modified_time" content="2023-05-27T07:02:18.403Z">
 <meta property="article:author" content="evshary">
 <meta name="twitter:card" content="summary">
 
@@ -39,65 +35,26 @@
 <link rel="canonical" href="http://evshary.com/2018/05/13/openssl-library-example/">
 
 
-<script class="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'en'
-  };
-</script>
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://evshary.com/2018/05/13/openssl-library-example/","path":"2018/05/13/openssl-library-example/","title":"使用 openssl 工具與函式庫"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>使用 openssl 工具與函式庫 | 凛の魅力に溺死しろ</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-    <script>
-      if (CONFIG.hostname === location.hostname) {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-105315332-1');
-      }
-    </script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
 
 
 
 
   <noscript>
-  <style>
-  body { margin-top: 2rem; }
-
-  .use-motion .menu-item,
-  .use-motion .sidebar,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header {
-    visibility: visible;
-  }
-
-  .use-motion .header,
-  .use-motion .site-brand-container .toggle,
-  .use-motion .footer { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle,
-  .use-motion .custom-logo-image {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line {
-    transform: scaleX(1);
-  }
-
-  .search-pop-overlay, .sidebar-nav { display: none; }
-  .sidebar-panel { display: block; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
 </head>
 
@@ -105,8 +62,8 @@
   <div class="headband"></div>
 
   <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="Toggle navigation bar" role="button">
         <span class="toggle-line"></span>
@@ -119,14 +76,14 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">凛の魅力に溺死しろ</h1>
+      <p class="site-title">凛の魅力に溺死しろ</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">どんな時でも余裕を持って優雅たれ</p>
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -135,12 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -173,15 +125,9 @@
     </div>
   </div>
 
-</div>
+</header>
         
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
   <aside class="sidebar">
 
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
@@ -202,63 +148,48 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">evshary</p>
   <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap site-overview-item animated">
+<div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
-  <div class="links-of-author site-overview-item animated">
+  <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
       </span>
   </div>
-
-
 
         </div>
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
 
     
-  <div class="back-to-top" role="button">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  </aside>
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
 
+    </div>
 
     <div class="main-inner post posts-expand">
 
@@ -276,11 +207,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="evshary">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 openssl 工具與函式庫 | 凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -297,13 +233,13 @@
 
       <time title="Created: 2018-05-13 17:34:33" itemprop="dateCreated datePublished" datetime="2018-05-13T17:34:33+00:00">2018-05-13</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:56:16" itemprop="dateModified" datetime="2023-01-08T10:56:16+00:00">2023-01-08</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-05-27 07:02:18" itemprop="dateModified" datetime="2023-05-27T07:02:18+00:00">2023-05-27</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -337,15 +273,14 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install openssl</span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><h1 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install openssl</span><br></pre></td></tr></table></figure>
 <p>MAC上如果要使用library有點麻煩，需要先找到對應的路徑</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ find &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F; -name &quot;libssl.*&quot;  # 找到library的路徑</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;&#x2F;openssl&#x2F;1.0.2o_1&#x2F;lib&#x2F;pkgconfig&#x2F;libssl.pc</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;&#x2F;openssl&#x2F;1.0.2o_1&#x2F;lib&#x2F;libssl.dylib</span><br><span class="line">...</span><br><span class="line">$ find &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F; -name &quot;ssl.h&quot;  # 找到header的路徑</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;&#x2F;node&#x2F;8.4.0&#x2F;include&#x2F;node&#x2F;openssl&#x2F;ssl.h</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;&#x2F;openssl&#x2F;1.0.2o_1&#x2F;include&#x2F;openssl&#x2F;ssl.h</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ find /usr/local/Cellar/ -name &quot;libssl.*&quot;  # 找到library的路徑</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/pkgconfig/libssl.pc</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/libssl.dylib</span><br><span class="line">...</span><br><span class="line">$ find /usr/local/Cellar/ -name &quot;ssl.h&quot;  # 找到header的路徑</span><br><span class="line">/usr/local/Cellar//node/8.4.0/include/node/openssl/ssl.h</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/include/openssl/ssl.h</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>看起來路徑是在<code>/usr/local/Cellar/openssl/1.0.2o_1/</code>我們先記起來，後面編譯時會用到。</p>
 <h1 id="創造憑證"><a href="#創造憑證" class="headerlink" title="創造憑證"></a>創造憑證</h1><p>openssl本身就有提供很多好用的工具，我們最常用到的大概就是用來產生憑證吧！</p>
 <p>這邊介紹產生兩種常見憑證(RSA,ECC)的方法。</p>
-<h2 id="產生RSA憑證"><a href="#產生RSA憑證" class="headerlink" title="產生RSA憑證"></a>產生RSA憑證</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 產生2048長度的key</span><br><span class="line">$ openssl genrsa -out server.key 2048</span><br><span class="line"># 用key產生CSR，指定用sha384簽CSR</span><br><span class="line">$ openssl req -new -sha384 -key server.key -out server.csr</span><br><span class="line"># 產生自簽名證書</span><br><span class="line">$ openssl x509 -req -sha1 -days 3650 -signkey server.key -in server.csr -out server.crt</span><br></pre></td></tr></table></figure>
-<h2 id="產生ECC憑證"><a href="#產生ECC憑證" class="headerlink" title="產生ECC憑證"></a>產生ECC憑證</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 產生ECC key</span><br><span class="line">$ openssl ecparam -genkey -name secp384r1 -out ecc.key</span><br><span class="line"># 用key產生CSR，指定用sha384簽CSR</span><br><span class="line">$ openssl req -new -sha384 -key ecc.key -out ecc.csr</span><br><span class="line"># 產生自簽名證書</span><br><span class="line">$ openssl x509 -req -sha1 -days 3650 -signkey ecc.key -in ecc.csr -out ecc.crt</span><br></pre></td></tr></table></figure>
+<h2 id="產生RSA憑證"><a href="#產生RSA憑證" class="headerlink" title="產生RSA憑證"></a>產生RSA憑證</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 產生2048長度的key</span><br><span class="line">$ openssl genrsa -out server.key 2048</span><br><span class="line"># 用key產生CSR，指定用sha384簽CSR</span><br><span class="line">$ openssl req -new -sha384 -key server.key -out server.csr</span><br><span class="line"># 產生自簽名證書</span><br><span class="line">$ openssl x509 -req -sha1 -days 3650 -signkey server.key -in server.csr -out server.crt</span><br></pre></td></tr></table></figure>
+<h2 id="產生ECC憑證"><a href="#產生ECC憑證" class="headerlink" title="產生ECC憑證"></a>產生ECC憑證</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 產生ECC key</span><br><span class="line">$ openssl ecparam -genkey -name secp384r1 -out ecc.key</span><br><span class="line"># 用key產生CSR，指定用sha384簽CSR</span><br><span class="line">$ openssl req -new -sha384 -key ecc.key -out ecc.csr</span><br><span class="line"># 產生自簽名證書</span><br><span class="line">$ openssl x509 -req -sha1 -days 3650 -signkey ecc.key -in ecc.csr -out ecc.crt</span><br></pre></td></tr></table></figure>
 
 <h1 id="使用openssl內建的連線工具"><a href="#使用openssl內建的連線工具" class="headerlink" title="使用openssl內建的連線工具"></a>使用openssl內建的連線工具</h1><p>有時候我們只是想要測試ssl連線而已，還要自己寫程式有點麻煩，還好我們可以使用openssl提供的連線工具</p>
 <p>client和server都有提供，非常方便的！</p>
@@ -355,25 +290,25 @@
 <li><code>-showcerts</code>：把cert的chain也列出來</li>
 <li><code>-curves</code>：指定要用的橢圓算法，client hello的extension中的elliptic_curves</li>
 <li><code>-sigalgs</code>：指定交換key要用的簽名方式，client hello的extension中的signature_algorithms</li>
-<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 最基本連線</span><br><span class="line">$ openssl s_client -connect [IP]:[port]</span><br><span class="line"># 看連線細節</span><br><span class="line">$ openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"># 指定連線方式</span><br><span class="line">$ openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"># 限制只能用TLS1.2連線</span><br><span class="line">$ openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure></li>
+<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 最基本連線</span><br><span class="line">$ openssl s_client -connect [IP]:[port]</span><br><span class="line"># 看連線細節</span><br><span class="line">$ openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"># 指定連線方式</span><br><span class="line">$ openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"># 限制只能用TLS1.2連線</span><br><span class="line">$ openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># server開啟5678 port並且用server.key當private key，cert用server.pem</span><br><span class="line">$ openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 如果要看有哪些連線方式，可使用如下指令</span><br><span class="line">$ openssl ciphers ALL</span><br></pre></td></tr></table></figure>
+<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># server開啟5678 port並且用server.key當private key，cert用server.pem</span><br><span class="line">$ openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 如果要看有哪些連線方式，可使用如下指令</span><br><span class="line">$ openssl ciphers ALL</span><br></pre></td></tr></table></figure>
 
 <h1 id="函式庫使用"><a href="#函式庫使用" class="headerlink" title="函式庫使用"></a>函式庫使用</h1><p>我們來介紹openssl的函式庫最基本的使用方式。</p>
 <h2 id="基本範例-client-amp-server"><a href="#基本範例-client-amp-server" class="headerlink" title="基本範例 - client &amp; server"></a>基本範例 - client &amp; server</h2><p>這邊寫了兩個client和server的基本範例當作參考，大家可以基於這兩者來拓展自己的程式。</p>
 <h3 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h3><p>ssl_client.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> RECV_SIZE 256</span></span><br><span class="line"></span><br><span class="line"><span class="function">SSL_CTX *<span class="title">create_sslcontext</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_client_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx) </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">create_socket</span><span class="params">(<span class="keyword">char</span> *ip, <span class="keyword">int</span> port)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// New socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// TCP connect to server</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = inet_addr(ip);</span><br><span class="line">    <span class="keyword">if</span> (connect(fd, (struct sockaddr *)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_client.out [IP] [port]</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="keyword">int</span> port;</span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="keyword">char</span> buf[RECV_SIZE];</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Parse parameter</span></span><br><span class="line">    port = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Connect to %s:%d\n&quot;</span>, argv[<span class="number">1</span>], port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = create_socket(argv[<span class="number">1</span>], port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Start to build ssl connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_connect(ssl) &lt;= <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL write/read</span></span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Write data to server (q for quit): &quot;</span>);</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        gets(buf);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">&quot;q&quot;</span>, buf) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf)) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, RECV_SIZE);</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Recv %d bytes: %s\n&quot;</span>, len, buf);</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// SSL close</span></span><br><span class="line">    SSL_shutdown(ssl);</span><br><span class="line">    <span class="comment">// Free resource</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RECV_SIZE 256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_client_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx) </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">char</span> *ip, <span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// New socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// TCP connect to server</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = inet_addr(ip);</span><br><span class="line">    <span class="keyword">if</span> (connect(fd, (<span class="keyword">struct</span> sockaddr *)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_client.out [IP] [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="type">char</span> buf[RECV_SIZE];</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Parse parameter</span></span><br><span class="line">    port = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Connect to %s:%d\n&quot;</span>, argv[<span class="number">1</span>], port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = create_socket(argv[<span class="number">1</span>], port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Start to build ssl connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_connect(ssl) &lt;= <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL write/read</span></span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Write data to server (q for quit): &quot;</span>);</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        gets(buf);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">&quot;q&quot;</span>, buf) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf)) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, RECV_SIZE);</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Recv %d bytes: %s\n&quot;</span>, len, buf);</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// SSL close</span></span><br><span class="line">    SSL_shutdown(ssl);</span><br><span class="line">    <span class="comment">// Free resource</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>ssl_server.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SSL_CERT <span class="meta-string">&quot;server.crt&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SSL_KEY  <span class="meta-string">&quot;server.key&quot;</span>   </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUF_LEN  256</span></span><br><span class="line"></span><br><span class="line"><span class="function">SSL_CTX *<span class="title">create_sslcontext</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_server_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx) </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">configure_sslcertkey_file</span><span class="params">(SSL_CTX *ctx)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SSL_CTX_set_ecdh_auto(ctx, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// Load certificate file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_certificate_file(ctx, SSL_CERT, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Load private key file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_PrivateKey_file(ctx, SSL_KEY, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">create_socket</span><span class="params">(<span class="keyword">int</span> port)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (bind(fd, (struct sockaddr*)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (listen(fd, <span class="number">1</span>) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_server.out [port]</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> server_fd, client_fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line">    uint len = <span class="keyword">sizeof</span>(addr);</span><br><span class="line">    <span class="keyword">int</span> port;</span><br><span class="line">    <span class="keyword">char</span> buf[BUF_LEN];</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    port = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Listen port: %d\n&quot;</span>, port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Configure cert and key</span></span><br><span class="line">    <span class="keyword">if</span> (configure_sslcertkey_file(ctx) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((server_fd = create_socket(port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Accept connection</span></span><br><span class="line">    <span class="keyword">if</span> ((client_fd = accept(server_fd, (struct sockaddr*)&amp;addr, &amp;len)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Build SSL connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, client_fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_accept(ssl) &lt;= <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL read/write</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, BUF_LEN);</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Close client</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(client_fd);</span><br><span class="line">    <span class="comment">// Close server and relase resource</span></span><br><span class="line">    close(server_fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_CERT <span class="string">&quot;server.crt&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_KEY  <span class="string">&quot;server.key&quot;</span>   </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUF_LEN  256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_server_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx) </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">configure_sslcertkey_file</span><span class="params">(SSL_CTX *ctx)</span></span><br><span class="line">&#123;</span><br><span class="line">    SSL_CTX_set_ecdh_auto(ctx, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// Load certificate file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_certificate_file(ctx, SSL_CERT, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Load private key file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_PrivateKey_file(ctx, SSL_KEY, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (bind(fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (listen(fd, <span class="number">1</span>) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_server.out [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> server_fd, client_fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line">    uint len = <span class="keyword">sizeof</span>(addr);</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">char</span> buf[BUF_LEN];</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    port = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Listen port: %d\n&quot;</span>, port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Configure cert and key</span></span><br><span class="line">    <span class="keyword">if</span> (configure_sslcertkey_file(ctx) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((server_fd = create_socket(port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Accept connection</span></span><br><span class="line">    <span class="keyword">if</span> ((client_fd = accept(server_fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, &amp;len)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Build SSL connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, client_fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_accept(ssl) &lt;= <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL read/write</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, BUF_LEN);</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Close client</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(client_fd);</span><br><span class="line">    <span class="comment">// Close server and relase resource</span></span><br><span class="line">    close(server_fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="編譯與執行"><a href="#編譯與執行" class="headerlink" title="編譯與執行"></a>編譯與執行</h3><p>接下來寫個簡單的Makefile，這時候就要用到前面所找到的路徑了。</p>
 <figure class="highlight mak"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SSL_PATH=/usr/local/Cellar/openssl/1.0.2o_1/</span><br><span class="line">CFLAGS=-I<span class="variable">$(SSL_PATH)</span><span class="keyword">include</span> -L<span class="variable">$(SSL_PATH)</span>lib/ -lcrypto -lssl</span><br><span class="line">CC=gcc</span><br><span class="line">BIN=ssl_server ssl_client</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(BIN)</span></span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_server: ssl_server.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_client: ssl_client.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        -rm *.o</span><br><span class="line">        -rm *.out</span><br></pre></td></tr></table></figure>
 <p><strong>這邊要特別記住<code>-lcrypto -lssl</code>要放最後面，不然有些平台會有error</strong></p>
 <p>然後就可以執行看看了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ .&#x2F;ssl_server 2222</span><br><span class="line">Listen port: 2222</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ ./ssl_server 2222</span><br><span class="line">Listen port: 2222</span><br></pre></td></tr></table></figure>
 <p>這時候另一邊再來執行client</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;ssl_client.out 127.0.0.1 2222</span><br><span class="line">Connect to 127.0.0.1:2222</span><br><span class="line">Write data to server (q for quit): abcd</span><br><span class="line">Recv 4 bytes: abcd</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./ssl_client.out 127.0.0.1 2222</span><br><span class="line">Connect to 127.0.0.1:2222</span><br><span class="line">Write data to server (q for quit): abcd</span><br><span class="line">Recv 4 bytes: abcd</span><br></pre></td></tr></table></figure>
 <p>可以順利收送資料了！</p>
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/346864/how-to-link-openssl-library-in-macos-using-gcc">How to link OpenSSL library in macOS using gcc?</a></li>
@@ -416,28 +351,6 @@
     <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      const commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
 </div>
   </main>
 
@@ -453,18 +366,35 @@
   </span>
   <span class="author" itemprop="copyrightHolder">evshary</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
     </div>
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 
   
-<script src="/js/local-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
@@ -476,37 +406,8 @@
 
 
 
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"evshary","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
 
-<script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://evshary.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "http://evshary.com/2018/05/13/openssl-library-example/";
-    this.page.identifier = "2018/05/13/openssl-library-example/";
-    this.page.title = "使用 openssl 工具與函式庫";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://evshary.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left"},"log":false});</script></body>
+</body>
 </html>

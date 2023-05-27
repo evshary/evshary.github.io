@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.1">
-
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -16,14 +14,12 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
-  </script>
-<meta name="description" content="InstallationMAC 安裝以前安裝時需要安裝docker和boot2docker，但現在只要到官網下載DOCKER COMMUNITY EDITION (CE)就可以了。   boot2docker是MAC下輕量的Linux VM，專門用來執行docker daemon  然後以前使用都會用kitematic這個GUI的操作介面，現在docker官方也已經整進去了，我們可以直接透過doc">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="InstallationMAC 安裝以前安裝時需要安裝docker和boot2docker，但現在只要到官網下載DOCKER COMMUNITY EDITION (CE)就可以了。   boot2docker是MAC下輕量的Linux VM，專門用來執行docker daemon  然後以前使用都會用kitematic這個GUI的操作介面，現在docker官方也已經整進去了，我們可以直接透過doc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker 簡易教學">
 <meta property="og:url" content="http://evshary.com/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/index.html">
@@ -32,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://philipzheng.gitbooks.io/docker_practice/content/_images/cmd_logic.png">
 <meta property="article:published_time" content="2018-05-12T10:10:01.000Z">
-<meta property="article:modified_time" content="2023-01-08T10:56:16.404Z">
+<meta property="article:modified_time" content="2023-05-27T07:02:18.403Z">
 <meta property="article:author" content="evshary">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://philipzheng.gitbooks.io/docker_practice/content/_images/cmd_logic.png">
@@ -41,65 +37,26 @@
 <link rel="canonical" href="http://evshary.com/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/">
 
 
-<script class="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'en'
-  };
-</script>
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://evshary.com/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/","path":"2018/05/12/docker-簡易教學/","title":"docker 簡易教學"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>docker 簡易教學 | 凛の魅力に溺死しろ</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-    <script>
-      if (CONFIG.hostname === location.hostname) {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-105315332-1');
-      }
-    </script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
 
 
 
 
   <noscript>
-  <style>
-  body { margin-top: 2rem; }
-
-  .use-motion .menu-item,
-  .use-motion .sidebar,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header {
-    visibility: visible;
-  }
-
-  .use-motion .header,
-  .use-motion .site-brand-container .toggle,
-  .use-motion .footer { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle,
-  .use-motion .custom-logo-image {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line {
-    transform: scaleX(1);
-  }
-
-  .search-pop-overlay, .sidebar-nav { display: none; }
-  .sidebar-panel { display: block; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 <link rel="alternate" href="/atom.xml" title="凛の魅力に溺死しろ" type="application/atom+xml">
 </head>
 
@@ -107,8 +64,8 @@
   <div class="headband"></div>
 
   <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="Toggle navigation bar" role="button">
         <span class="toggle-line"></span>
@@ -121,14 +78,14 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">凛の魅力に溺死しろ</h1>
+      <p class="site-title">凛の魅力に溺死しろ</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">どんな時でも余裕を持って優雅たれ</p>
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -137,12 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -175,15 +127,9 @@
     </div>
   </div>
 
-</div>
+</header>
         
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
   <aside class="sidebar">
 
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
@@ -204,63 +150,48 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">evshary</p>
   <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap site-overview-item animated">
+<div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
-  <div class="links-of-author site-overview-item animated">
+  <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
       </span>
   </div>
-
-
 
         </div>
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
 
     
-  <div class="back-to-top" role="button">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  </aside>
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
 
+    </div>
 
     <div class="main-inner post posts-expand">
 
@@ -278,11 +209,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="evshary">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="docker 簡易教學 | 凛の魅力に溺死しろ">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -299,13 +235,13 @@
 
       <time title="Created: 2018-05-12 10:10:01" itemprop="dateCreated datePublished" datetime="2018-05-12T10:10:01+00:00">2018-05-12</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-01-08 10:56:16" itemprop="dateModified" datetime="2023-01-08T10:56:16+00:00">2023-01-08</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-05-27 07:02:18" itemprop="dateModified" datetime="2023-05-27T07:02:18+00:00">2023-05-27</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -339,8 +275,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><ul>
+    <div class="post-body" itemprop="articleBody"><h1 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><ul>
 <li>安裝<br>以前安裝時需要安裝docker和boot2docker，但現在只要到官網下載DOCKER COMMUNITY EDITION (CE)就可以了。</li>
 </ul>
 <blockquote>
@@ -362,8 +297,8 @@
 <li>看目前有哪些container正在跑<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure></li>
 <li>看包括所有停止的container<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure></li>
 <li>讓某個container開始&#x2F;停止<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start/stop XXX</span><br></pre></td></tr></table></figure></li>
-<li>刪除某container<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm XXX</span><br></pre></td></tr></table></figure></li>
-<li>看某個container資訊<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect XXX</span><br></pre></td></tr></table></figure></li>
+<li>刪除某container<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> XXX</span><br></pre></td></tr></table></figure></li>
+<li>看某個container資訊<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect XXX</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="RUN"><a href="#RUN" class="headerlink" title="RUN"></a>RUN</h2><p>執行部分其實可以加上很多參數：</p>
 <ul>
@@ -384,7 +319,7 @@
 <li><p><code>-e key=value</code>：帶入環境變數</p>
 </li>
 <li><p>跑images</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm -i -t -p 8080:80 nginx</span><br><span class="line">docker run -i -t ubuntu /bin/bash</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --<span class="built_in">rm</span> -i -t -p 8080:80 nginx</span><br><span class="line">docker run -i -t ubuntu /bin/bash</span><br></pre></td></tr></table></figure></li>
 <li><p>背景執行</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8080:80 -v shared_dir:/var/www:rw nginx</span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -395,40 +330,40 @@
 </ul>
 <h1 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h1><p>我們也可以用Dockerfile產生image，可參考<a target="_blank" rel="noopener" href="https://peihsinsu.gitbooks.io/docker-note-book/content/docker-build.html">使用Dockerfile建置</a></p>
 <p>下面是個範例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># base image</span><br><span class="line">FROM ubuntu:14.04</span><br><span class="line"></span><br><span class="line"># 執行的command</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install -y nginx</span><br><span class="line"></span><br><span class="line"># 要開的port，注意在run的時候還是要加上-p才能真正讓外部連接該port</span><br><span class="line">EXPOSE 80</span><br><span class="line"></span><br><span class="line"># 環境變數</span><br><span class="line">ENV PATH $PATH:&#x2F;home&#x2F;bin</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># base image</span><br><span class="line">FROM ubuntu:14.04</span><br><span class="line"></span><br><span class="line"># 執行的command</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install -y nginx</span><br><span class="line"></span><br><span class="line"># 要開的port，注意在run的時候還是要加上-p才能真正讓外部連接該port</span><br><span class="line">EXPOSE 80</span><br><span class="line"></span><br><span class="line"># 環境變數</span><br><span class="line">ENV PATH $PATH:/home/bin</span><br></pre></td></tr></table></figure>
 
 <p>建立image</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t repo_name:tag_name .</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t repo_name:tag_name .</span><br></pre></td></tr></table></figure>
 
 <h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><p>看完command可能還是不清楚怎麼用，這邊用安裝nginx的docker image來說明</p>
 <h2 id="取得image"><a href="#取得image" class="headerlink" title="取得image"></a>取得image</h2><p>首先我們先搜尋nginx</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker search nginx</span><br><span class="line">NAME                                                   DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">nginx                                                  Official build of Nginx.                        8564                [OK]</span><br><span class="line">jwilder&#x2F;nginx-proxy                                    Automated Nginx reverse proxy for docker con…   1331                                    [OK]</span><br><span class="line">richarvey&#x2F;nginx-php-fpm                                Container running Nginx + PHP-FPM capable of…   547</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker search nginx</span><br><span class="line">NAME                                                   DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">nginx                                                  Official build of Nginx.                        8564                [OK]</span><br><span class="line">jwilder/nginx-proxy                                    Automated Nginx reverse proxy for docker con…   1331                                    [OK]</span><br><span class="line">richarvey/nginx-php-fpm                                Container running Nginx + PHP-FPM capable of…   547</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
 <p>我們先抓officical的images</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull nginx</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library&#x2F;nginx</span><br><span class="line">f2aa67a397c4: Pull complete</span><br><span class="line">3c091c23e29d: Pull complete</span><br><span class="line">4a99993b8636: Pull complete</span><br><span class="line">Digest: sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884</span><br><span class="line">Status: Downloaded newer image for nginx:latest</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull nginx</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/nginx</span><br><span class="line">f2aa67a397c4: Pull complete</span><br><span class="line">3c091c23e29d: Pull complete</span><br><span class="line">4a99993b8636: Pull complete</span><br><span class="line">Digest: sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884</span><br><span class="line">Status: Downloaded newer image for nginx:latest</span><br></pre></td></tr></table></figure>
 <p>現在local端就有nginx的image了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">nginx               latest              ae513a47849c        11 days ago         109MB</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">nginx               latest              ae513a47849c        11 days ago         109MB</span><br></pre></td></tr></table></figure>
 
 <h2 id="運行container"><a href="#運行container" class="headerlink" title="運行container"></a>運行container</h2><p>開始運行container，並且讓port 8080對應到nginx container的port 80，工作路徑為&#x2F;home，然後執行bash</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --rm -i -t -p 8080:80 -w &#x2F;home nginx bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --rm -i -t -p 8080:80 -w /home nginx bash</span><br></pre></td></tr></table></figure>
 <p>我們也可以選擇背景執行，並且把shared_dir對應到&#x2F;var&#x2F;www</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -d -p 8080:80 -v shared_dir:&#x2F;var&#x2F;www:rw nginx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -d -p 8080:80 -v shared_dir:/var/www:rw nginx</span><br></pre></td></tr></table></figure>
 <p>一定有人會問這樣的情況下怎麼控制bash呢？我們可以用exec command</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker exec -i -t 78fc bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker exec -i -t 78fc bash</span><br></pre></td></tr></table></figure>
 
 <h2 id="操作運行中的container"><a href="#操作運行中的container" class="headerlink" title="操作運行中的container"></a>操作運行中的container</h2><p>看一下當前有的container</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES</span><br><span class="line">e2cf9ea13bb4        nginx               &quot;nginx -g &#39;daemon of…&quot;   2 minutes ago       Up 2 minutes        0.0.0.0:8080-&gt;80&#x2F;tcp   priceless_murdock</span><br><span class="line">$ docker inspect e2cf9ea13bb4</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;Id&quot;: &quot;e2cf9ea13bb477e49f1c0ff75a683555d1a75ef953529087375c83ee1a88b65f&quot;,</span><br><span class="line">        &quot;Created&quot;: &quot;2018-05-12T06:17:14.979076095Z&quot;,</span><br><span class="line">        &quot;Path&quot;: &quot;nginx&quot;,</span><br><span class="line">        &quot;Args&quot;: [</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES</span><br><span class="line">e2cf9ea13bb4        nginx               &quot;nginx -g &#x27;daemon of…&quot;   2 minutes ago       Up 2 minutes        0.0.0.0:8080-&gt;80/tcp   priceless_murdock</span><br><span class="line">$ docker inspect e2cf9ea13bb4</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;Id&quot;: &quot;e2cf9ea13bb477e49f1c0ff75a683555d1a75ef953529087375c83ee1a88b65f&quot;,</span><br><span class="line">        &quot;Created&quot;: &quot;2018-05-12T06:17:14.979076095Z&quot;,</span><br><span class="line">        &quot;Path&quot;: &quot;nginx&quot;,</span><br><span class="line">        &quot;Args&quot;: [</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>我們可以隨時中斷或啟動該container</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker stop e2cf9ea13bb4</span><br><span class="line">$ docker start e2cf9ea13bb4</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker stop e2cf9ea13bb4</span><br><span class="line">$ docker start e2cf9ea13bb4</span><br></pre></td></tr></table></figure>
 
 <h2 id="提交改變成為新的image"><a href="#提交改變成為新的image" class="headerlink" title="提交改變成為新的image"></a>提交改變成為新的image</h2><p>看看該container有什麼改變</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ docker diff e2cf9ea13bb4</span><br><span class="line">C &#x2F;run</span><br><span class="line">A &#x2F;run&#x2F;nginx.pid</span><br><span class="line">C &#x2F;var</span><br><span class="line">C &#x2F;var&#x2F;cache&#x2F;nginx</span><br><span class="line">A &#x2F;var&#x2F;cache&#x2F;nginx&#x2F;client_temp</span><br><span class="line">A &#x2F;var&#x2F;cache&#x2F;nginx&#x2F;fastcgi_temp</span><br><span class="line">A &#x2F;var&#x2F;cache&#x2F;nginx&#x2F;proxy_temp</span><br><span class="line">A &#x2F;var&#x2F;cache&#x2F;nginx&#x2F;scgi_temp</span><br><span class="line">A &#x2F;var&#x2F;cache&#x2F;nginx&#x2F;uwsgi_temp</span><br><span class="line">A &#x2F;var&#x2F;www</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ docker diff e2cf9ea13bb4</span><br><span class="line">C /run</span><br><span class="line">A /run/nginx.pid</span><br><span class="line">C /var</span><br><span class="line">C /var/cache/nginx</span><br><span class="line">A /var/cache/nginx/client_temp</span><br><span class="line">A /var/cache/nginx/fastcgi_temp</span><br><span class="line">A /var/cache/nginx/proxy_temp</span><br><span class="line">A /var/cache/nginx/scgi_temp</span><br><span class="line">A /var/cache/nginx/uwsgi_temp</span><br><span class="line">A /var/www</span><br></pre></td></tr></table></figure>
 <p>commit我們所做的改變變成新的image</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker commit -m &quot;New nginx&quot; -a &quot;evshary&quot; e2cf new_nginx</span><br><span class="line">sha256:ed66214b3e3a510a7cc47e341f64f6596560164d6f06a22f93dca8d05ecac081</span><br><span class="line">$ docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">new_nginx           latest              ed66214b3e3a        17 seconds ago      109MB</span><br><span class="line">nginx               latest              ae513a47849c        11 days ago         109MB</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker commit -m &quot;New nginx&quot; -a &quot;evshary&quot; e2cf new_nginx</span><br><span class="line">sha256:ed66214b3e3a510a7cc47e341f64f6596560164d6f06a22f93dca8d05ecac081</span><br><span class="line">$ docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">new_nginx           latest              ed66214b3e3a        17 seconds ago      109MB</span><br><span class="line">nginx               latest              ae513a47849c        11 days ago         109MB</span><br></pre></td></tr></table></figure>
 <p>可以從history看我們所做改變歷史</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker history new_nginx</span><br><span class="line">IMAGE               CREATED              CREATED BY                                      SIZE                COMMENT</span><br><span class="line">ed66214b3e3a        About a minute ago   nginx -g daemon off;                            2B                  New nginx</span><br><span class="line">ae513a47849c        11 days ago          &#x2F;bin&#x2F;sh -c #(nop)  CMD [&quot;nginx&quot; &quot;-g&quot; &quot;daemon…   0B</span><br><span class="line">&lt;missing&gt;           11 days ago          &#x2F;bin&#x2F;sh -c #(nop)  STOPSIGNAL [SIGTERM]         0B</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker history new_nginx</span><br><span class="line">IMAGE               CREATED              CREATED BY                                      SIZE                COMMENT</span><br><span class="line">ed66214b3e3a        About a minute ago   nginx -g daemon off;                            2B                  New nginx</span><br><span class="line">ae513a47849c        11 days ago          /bin/sh -c #(nop)  CMD [&quot;nginx&quot; &quot;-g&quot; &quot;daemon…   0B</span><br><span class="line">&lt;missing&gt;           11 days ago          /bin/sh -c #(nop)  STOPSIGNAL [SIGTERM]         0B</span><br></pre></td></tr></table></figure>
 
 <h2 id="刪除container-x2F-images"><a href="#刪除container-x2F-images" class="headerlink" title="刪除container&#x2F;images"></a>刪除container&#x2F;images</h2><p>玩膩了，可以刪除images，記得要先刪掉container才行刪images喔</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker rm e2cf9ea13bb4</span><br><span class="line">$ docker rmi new_nginx</span><br><span class="line">Untagged: new_nginx:latest</span><br><span class="line">Deleted: sha256:ed66214b3e3a510a7cc47e341f64f6596560164d6f06a22f93dca8d05ecac081</span><br><span class="line">$ docker rmi nginx</span><br><span class="line">Deleted: sha256:ae513a47849c895a155ddfb868d6ba247f60240ec8495482eca74c4a2c13a881</span><br><span class="line">Deleted: sha256:160a8bd939a9421818f499ba4fbfaca3dd5c86ad7a6b97b6889149fd39bd91dd</span><br><span class="line">Deleted: sha256:f246685cc80c2faa655ba1ec9f0a35d44e52b6f83863dc16f46c5bca149bfefc</span><br><span class="line">Deleted: sha256:d626a8ad97a1f9c1f2c4db3814751ada64f60aed927764a3f994fcd88363b659</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker rm e2cf9ea13bb4</span><br><span class="line">$ docker rmi new_nginx</span><br><span class="line">Untagged: new_nginx:latest</span><br><span class="line">Deleted: sha256:ed66214b3e3a510a7cc47e341f64f6596560164d6f06a22f93dca8d05ecac081</span><br><span class="line">$ docker rmi nginx</span><br><span class="line">Deleted: sha256:ae513a47849c895a155ddfb868d6ba247f60240ec8495482eca74c4a2c13a881</span><br><span class="line">Deleted: sha256:160a8bd939a9421818f499ba4fbfaca3dd5c86ad7a6b97b6889149fd39bd91dd</span><br><span class="line">Deleted: sha256:f246685cc80c2faa655ba1ec9f0a35d44e52b6f83863dc16f46c5bca149bfefc</span><br><span class="line">Deleted: sha256:d626a8ad97a1f9c1f2c4db3814751ada64f60aed927764a3f994fcd88363b659</span><br></pre></td></tr></table></figure>
 
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
@@ -471,28 +406,6 @@
     <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      const commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
 </div>
   </main>
 
@@ -508,18 +421,35 @@
   </span>
   <span class="author" itemprop="copyrightHolder">evshary</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
     </div>
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 
   
-<script src="/js/local-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
@@ -531,37 +461,8 @@
 
 
 
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"evshary","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
 
-<script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://evshary.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "http://evshary.com/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/";
-    this.page.identifier = "2018/05/12/docker-簡易教學/";
-    this.page.title = "docker 簡易教學";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://evshary.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left"},"log":false});</script></body>
+</body>
 </html>
