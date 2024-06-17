@@ -1770,6 +1770,38 @@
       </tags>
   </entry>
   <entry>
+    <title>port knocking</title>
+    <url>/2017/08/27/port-knocking/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
+<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><p>我這邊server是用Ubuntu, client是MAC環境。</p>
+<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install knockd</span><br></pre></td></tr></table></figure>
+<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
+
+<h1 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h1><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[options]</span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line">[openSSH]</span><br><span class="line">        sequence    = 3389:udp,80:tcp,21:udp,53:tcp,23:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -I INPUT 1 -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br><span class="line"></span><br><span class="line">[closeSSH]</span><br><span class="line">        sequence    = 443:tcp,80:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br></pre></td></tr></table></figure>
+
+<p>功能大概看名字也可以猜出來</p>
+<ul>
+<li>sequence: 敲port的順序</li>
+<li>seq_timeout: 間隔時間</li>
+<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
+<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
+</ul>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h2><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service knockd start</span><br></pre></td></tr></table></figure>
+<p>記得防火牆要先設定不讓外面的人進入</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h2 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h2><p>須先安裝knock</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
+
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+  </entry>
+  <entry>
     <title>使用 openssl 工具與函式庫</title>
     <url>/2018/05/13/openssl-library-example/</url>
     <content><![CDATA[<h1 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ brew install openssl</span><br></pre></td></tr></table></figure>
@@ -1816,38 +1848,6 @@
 ]]></content>
       <categories>
         <category>protocol</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>port knocking</title>
-    <url>/2017/08/27/port-knocking/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
-<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><p>我這邊server是用Ubuntu, client是MAC環境。</p>
-<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install knockd</span><br></pre></td></tr></table></figure>
-<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
-
-<h1 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h1><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[options]</span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line">[openSSH]</span><br><span class="line">        sequence    = 3389:udp,80:tcp,21:udp,53:tcp,23:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -I INPUT 1 -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br><span class="line"></span><br><span class="line">[closeSSH]</span><br><span class="line">        sequence    = 443:tcp,80:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br></pre></td></tr></table></figure>
-
-<p>功能大概看名字也可以猜出來</p>
-<ul>
-<li>sequence: 敲port的順序</li>
-<li>seq_timeout: 間隔時間</li>
-<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
-<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
-</ul>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h2><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service knockd start</span><br></pre></td></tr></table></figure>
-<p>記得防火牆要先設定不讓外面的人進入</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
-
-<h2 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h2><p>須先安裝knock</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
-
-<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
-]]></content>
-      <categories>
-        <category>tools</category>
       </categories>
   </entry>
   <entry>
