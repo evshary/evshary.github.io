@@ -725,6 +725,51 @@
       </categories>
   </entry>
   <entry>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install &quot;ipython[notebook]&quot;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir ipython_notebook &amp;&amp; cd ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span><br></pre></td></tr></table></figure></li>
+<li>如果要在別的port開啟<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+接下來在web上應該可以直接連線Jupyter。</li>
+</ul>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h2 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h2><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h2 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h2><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h2 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h2><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h2 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h2><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux和程式的互動</title>
     <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
     <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
@@ -772,51 +817,6 @@
       <tags>
         <tag>GNU tool</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install &quot;ipython[notebook]&quot;</span><br></pre></td></tr></table></figure>
-
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir ipython_notebook &amp;&amp; cd ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span><br></pre></td></tr></table></figure></li>
-<li>如果要在別的port開啟<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-接下來在web上應該可以直接連線Jupyter。</li>
-</ul>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h2 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h2><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h2 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h2><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h2 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h2><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h2 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h2><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
   </entry>
   <entry>
     <title>clean code</title>
@@ -1819,38 +1819,6 @@
       </categories>
   </entry>
   <entry>
-    <title>port knocking</title>
-    <url>/2017/08/27/port-knocking/</url>
-    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
-<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><p>我這邊server是用Ubuntu, client是MAC環境。</p>
-<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install knockd</span><br></pre></td></tr></table></figure>
-<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
-
-<h1 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h1><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[options]</span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line">[openSSH]</span><br><span class="line">        sequence    = 3389:udp,80:tcp,21:udp,53:tcp,23:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -I INPUT 1 -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br><span class="line"></span><br><span class="line">[closeSSH]</span><br><span class="line">        sequence    = 443:tcp,80:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br></pre></td></tr></table></figure>
-
-<p>功能大概看名字也可以猜出來</p>
-<ul>
-<li>sequence: 敲port的順序</li>
-<li>seq_timeout: 間隔時間</li>
-<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
-<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
-</ul>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h2><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service knockd start</span><br></pre></td></tr></table></figure>
-<p>記得防火牆要先設定不讓外面的人進入</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
-
-<h2 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h2><p>須先安裝knock</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
-
-<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
-  </entry>
-  <entry>
     <title>youtube-dl網路影片下載器</title>
     <url>/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</url>
     <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
@@ -1906,6 +1874,38 @@
 <li><a href="https://blog.gtwang.org/useful-tools/youtube-dl/">youtube-dl：下載 YouTube 影片的指令工具（支援 Windows、Linux 與 Mac OS X）</a></li>
 <li><a href="https://yogapan.github.io/2017/08/16/Youtube-dl%E6%BF%83%E7%B8%AE%E6%95%99%E5%AD%B8%E7%AD%86%E8%A8%98/">Youtube-dl濃縮教學筆記</a></li>
 </ul>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>port knocking</title>
+    <url>/2017/08/27/port-knocking/</url>
+    <content><![CDATA[<h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
+<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><p>我這邊server是用Ubuntu, client是MAC環境。</p>
+<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install knockd</span><br></pre></td></tr></table></figure>
+<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
+
+<h1 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h1><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[options]</span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line">[openSSH]</span><br><span class="line">        sequence    = 3389:udp,80:tcp,21:udp,53:tcp,23:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -I INPUT 1 -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br><span class="line"></span><br><span class="line">[closeSSH]</span><br><span class="line">        sequence    = 443:tcp,80:udp</span><br><span class="line">        seq_timeout = 5</span><br><span class="line">        command     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT</span><br><span class="line">        tcpflags    = syn</span><br></pre></td></tr></table></figure>
+
+<p>功能大概看名字也可以猜出來</p>
+<ul>
+<li>sequence: 敲port的順序</li>
+<li>seq_timeout: 間隔時間</li>
+<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
+<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
+</ul>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h2><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service knockd start</span><br></pre></td></tr></table></figure>
+<p>記得防火牆要先設定不讓外面的人進入</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h2 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h2><p>須先安裝knock</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
+
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
 ]]></content>
       <categories>
         <category>tools</category>
