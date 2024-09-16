@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://community.arm.com/cfs-file/__key/communityserver-blogs-components-weblogfiles/00-00-00-21-42/6470.handler_2D00_thread.PNG">
 <meta property="article:published_time" content="2018-12-02T15:04:44.000Z">
-<meta property="article:modified_time" content="2024-09-16T10:49:00.209Z">
+<meta property="article:modified_time" content="2024-09-16T14:11:06.869Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="ARM">
 <meta name="twitter:card" content="summary">
@@ -146,7 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cortex-M%E6%AC%8A%E9%99%90%E8%A8%AD%E8%A8%88"><span class="nav-number">2.</span> <span class="nav-text">Cortex M權限設計</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%87%E6%8F%9B%E6%AC%8A%E9%99%90%E8%88%87%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">如何切換權限與模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Exception-Entry"><span class="nav-number">3.1.</span> <span class="nav-text">Exception Entry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exception-Return"><span class="nav-number">3.2.</span> <span class="nav-text">Exception Return</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Privileged-to-Unprivileged"><span class="nav-number">3.3.</span> <span class="nav-text">Privileged to Unprivileged</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ARM%E5%9C%A8%E5%88%87%E6%8F%9B%E4%B8%8A%E9%9D%A2%E7%9A%84%E8%A8%AD%E8%A8%88"><span class="nav-number">4.</span> <span class="nav-text">ARM在切換上面的設計</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cortex-M%E6%AC%8A%E9%99%90%E8%A8%AD%E8%A8%88"><span class="nav-number">2.</span> <span class="nav-text">Cortex M權限設計</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%87%E6%8F%9B%E6%AC%8A%E9%99%90%E8%88%87%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">如何切換權限與模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Exception-Entry"><span class="nav-number">3.1.</span> <span class="nav-text">Exception Entry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exception-Return"><span class="nav-number">3.2.</span> <span class="nav-text">Exception Return</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privileged-to-Unprivileged"><span class="nav-number">3.3.</span> <span class="nav-text">Privileged to Unprivileged</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARM%E5%9C%A8%E5%88%87%E6%8F%9B%E4%B8%8A%E9%9D%A2%E7%9A%84%E8%A8%AD%E8%A8%88"><span class="nav-number">4.</span> <span class="nav-text">ARM在切換上面的設計</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -241,7 +241,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-16 10:49:00" itemprop="dateModified" datetime="2024-09-16T10:49:00+00:00">2024-09-16</time>
+      <time title="Modified: 2024-09-16 14:11:06" itemprop="dateModified" datetime="2024-09-16T14:11:06+00:00">2024-09-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -276,9 +276,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的<a target="_blank" rel="noopener" href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a target="_blank" rel="noopener" href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a target="_blank" rel="noopener" href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的<a target="_blank" rel="noopener" href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a target="_blank" rel="noopener" href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a target="_blank" rel="noopener" href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
 <p>這邊首先要探討的是Cortex M3&#x2F;4上面有的權限模式，以及它們是怎麼進行切換等細節。<br>原本我是在qemu上面跑<a target="_blank" rel="noopener" href="http://beckus.github.io/qemu_stm32/">STM32虛擬機</a>，但是後來發現好像跟真實硬體有點不一致，所以後來我都在STM32F429的硬體上面來測試了。</p>
-<h1 id="Cortex-M權限設計"><a href="#Cortex-M權限設計" class="headerlink" title="Cortex M權限設計"></a>Cortex M權限設計</h1><p>首先我們先了解Cortex上面有哪些權限模式，處理器上面有兩種Operation Modes：Thread mode和Handler mode。</p>
+<h2 id="Cortex-M權限設計"><a href="#Cortex-M權限設計" class="headerlink" title="Cortex M權限設計"></a>Cortex M權限設計</h2><p>首先我們先了解Cortex上面有哪些權限模式，處理器上面有兩種Operation Modes：Thread mode和Handler mode。</p>
 <ul>
 <li>Thread Mode：一般程式運行的狀態。</li>
 <li>Handler Mode：處理exception的狀態。</li>
@@ -316,10 +316,10 @@
 <ul>
 <li>上面標註的state 1-3是為了方便我們後面講解而標的。</li>
 </ul>
-<h1 id="如何切換權限與模式"><a href="#如何切換權限與模式" class="headerlink" title="如何切換權限與模式"></a>如何切換權限與模式</h1><p>關於切換的部分可參考下圖，圖片來源<a target="_blank" rel="noopener" href="https://community.arm.com/processors/b/blog/posts/a-tour-of-the-cortex-m3-core">A tour of the Cortex-M3 Core</a></p>
+<h2 id="如何切換權限與模式"><a href="#如何切換權限與模式" class="headerlink" title="如何切換權限與模式"></a>如何切換權限與模式</h2><p>關於切換的部分可參考下圖，圖片來源<a target="_blank" rel="noopener" href="https://community.arm.com/processors/b/blog/posts/a-tour-of-the-cortex-m3-core">A tour of the Cortex-M3 Core</a></p>
 <p><img src="https://community.arm.com/cfs-file/__key/communityserver-blogs-components-weblogfiles/00-00-00-21-42/6470.handler_2D00_thread.PNG" alt="模式切換"></p>
 <p>下面我們先看怎麼樣從state2,state3進入state1，也就是發生exception，然後再從state1回來。</p>
-<h2 id="Exception-Entry"><a href="#Exception-Entry" class="headerlink" title="Exception Entry"></a>Exception Entry</h2><p>進入exception有兩種情況：</p>
+<h3 id="Exception-Entry"><a href="#Exception-Entry" class="headerlink" title="Exception Entry"></a>Exception Entry</h3><p>進入exception有兩種情況：</p>
 <ol>
 <li>目前我們在thread mode</li>
 <li>preempts：發生的exception比目前我們所在的exception權限還高</li>
@@ -370,7 +370,7 @@
 </tr>
 </tbody></table>
 <p>完成後接著會開始執行exception handler，並且把EXC_RETURN寫入LR。</p>
-<h2 id="Exception-Return"><a href="#Exception-Return" class="headerlink" title="Exception Return"></a>Exception Return</h2><p>要從exception跳還必須要符合兩個條件：</p>
+<h3 id="Exception-Return"><a href="#Exception-Return" class="headerlink" title="Exception Return"></a>Exception Return</h3><p>要從exception跳還必須要符合兩個條件：</p>
 <ol>
 <li>目前正在Handler Mode。</li>
 <li>PC的值是合法的EXC_RETURN。</li>
@@ -402,7 +402,7 @@
 <td>Return to Thread mode.<br>Exception return gets state from the process stack.<br>Execution uses PSP after return.</td>
 </tr>
 </tbody></table>
-<h2 id="Privileged-to-Unprivileged"><a href="#Privileged-to-Unprivileged" class="headerlink" title="Privileged to Unprivileged"></a>Privileged to Unprivileged</h2><p>接著我們要來探討怎麼從Privileged進入Unprivileged，也就是state2進入state3的部分。</p>
+<h3 id="Privileged-to-Unprivileged"><a href="#Privileged-to-Unprivileged" class="headerlink" title="Privileged to Unprivileged"></a>Privileged to Unprivileged</h3><p>接著我們要來探討怎麼從Privileged進入Unprivileged，也就是state2進入state3的部分。</p>
 <p>如果要進入Unprivileged，那必須使用到特殊register - control。</p>
 <table>
 <thead>
@@ -422,10 +422,11 @@
 </tbody></table>
 <p>要特別注意操作control register一定要用MRS和MSR register</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># CONTROL值搬到R0</span><br><span class="line">MRS R0, CONTROL</span><br><span class="line"># R0的值放入CONTROL</span><br><span class="line">MSR CONTROL, R0</span><br></pre></td></tr></table></figure>
+
 <p>進入Unprivileged Thread Mode的操作</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV R0, 3</span><br><span class="line">MSR CONTROL, R0</span><br></pre></td></tr></table></figure>
 
-<h1 id="ARM在切換上面的設計"><a href="#ARM在切換上面的設計" class="headerlink" title="ARM在切換上面的設計"></a>ARM在切換上面的設計</h1><p>ARM在處理nested exception上有自己的一套做法來加快速度，確保高優先權的exception能更快被執行到，達到更高的即時性(real-time)。</p>
+<h2 id="ARM在切換上面的設計"><a href="#ARM在切換上面的設計" class="headerlink" title="ARM在切換上面的設計"></a>ARM在切換上面的設計</h2><p>ARM在處理nested exception上有自己的一套做法來加快速度，確保高優先權的exception能更快被執行到，達到更高的即時性(real-time)。</p>
 <p>下面介紹兩種在Cortex M上面的機制：</p>
 <ul>
 <li>tail-chained：<ul>
@@ -441,7 +442,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p>關於Cortex M相關的資料非常推薦下面兩本書籍，都有中文的翻譯。JosephYiu有參與ARM Cortex M的設計，比較有權威性。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p>關於Cortex M相關的資料非常推薦下面兩本書籍，都有中文的翻譯。JosephYiu有參與ARM Cortex M的設計，比較有權威性。</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.books.com.tw/products/CN11146482">ARM Cortex-M3權威指南</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9787302402923">ARM Cortex-M3與Cortex-M4權威指南, 3&#x2F;e ARM Cortex-M3与Cortex-M4权威指南</a></li>
