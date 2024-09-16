@@ -179,8 +179,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>ARM</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>ARM</tag>
+      </tags>
   </entry>
   <entry>
     <title>C語言的行內組譯</title>
@@ -280,10 +283,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>程式語言</category>
-        <category>C</category>
+        <category>技術</category>
       </categories>
       <tags>
+        <tag>程式語言</tag>
+        <tag>C</tag>
         <tag>GNU tool</tag>
       </tags>
   </entry>
@@ -479,10 +483,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>系統程式</category>
+        <category>技術</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -549,10 +554,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -721,8 +727,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>security</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>security</tag>
+      </tags>
   </entry>
   <entry>
     <title>IPython Notebook - Jupyter教學</title>
@@ -766,8 +775,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>Linux和程式的互動</title>
@@ -812,10 +824,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>技術</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1026,8 +1039,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>軟體開發</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>軟體開發</tag>
+      </tags>
   </entry>
   <entry>
     <title>code review</title>
@@ -1146,8 +1162,11 @@
 <h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。<br><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看<br><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述<br><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章<br><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度<br><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</p>
 ]]></content>
       <categories>
-        <category>軟體開發</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>軟體開發</tag>
+      </tags>
   </entry>
   <entry>
     <title>dd - 資料處理的好工具</title>
@@ -1206,8 +1225,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>dependency</title>
@@ -1248,10 +1270,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>系統程式</category>
+        <category>技術</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -1353,8 +1376,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>ffmpeg影音處理工具</title>
@@ -1406,8 +1432,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>gcc常用擴充功能</title>
@@ -1490,10 +1519,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>系統程式</category>
+        <category>技術</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -1543,8 +1573,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>hexo 教學</title>
@@ -1644,8 +1677,11 @@
 <p>不過這邊提一下，<a href="https://github.com/EYHN/hexo-helper-live2d">EYHN&#x2F;hexo-helper-live2d</a> 已經沒有再更新了，如果上到 GitHub，可能會有些套件安全疑慮，以後可能需要找些替代套件了。</p>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>linker script 簡單教學</title>
@@ -1763,10 +1799,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>系統程式</category>
+        <category>技術</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -1815,8 +1852,12 @@
 </ul>
 ]]></content>
       <categories>
-        <category>protocol</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+        <tag>protocol</tag>
+      </tags>
   </entry>
   <entry>
     <title>port knocking</title>
@@ -1847,8 +1888,11 @@
 <h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>youtube-dl網路影片下載器</title>
@@ -1908,8 +1952,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
   </entry>
   <entry>
     <title>「深度學習的技術」讀後感</title>
@@ -2004,8 +2051,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>系統程式</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>系統程式</tag>
+      </tags>
   </entry>
   <entry>
     <title>三年的工作省思</title>
@@ -2056,7 +2106,7 @@
 <p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
 ]]></content>
       <categories>
-        <category>自我反省</category>
+        <category>個人體悟</category>
       </categories>
       <tags>
         <tag>自我成長</tag>
@@ -2248,9 +2298,10 @@
 </ul>
 ]]></content>
       <categories>
-        <category>tools</category>
+        <category>技術</category>
       </categories>
       <tags>
+        <tag>tools</tag>
         <tag>updating</tag>
       </tags>
   </entry>
@@ -2443,10 +2494,11 @@ soname很重要，就如同前面所提，可以讓開發者和應用程式表�
 </ul>
 ]]></content>
       <categories>
-        <category>系統程式</category>
+        <category>技術</category>
       </categories>
       <tags>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
