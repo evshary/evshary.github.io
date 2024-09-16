@@ -2,8 +2,9 @@
 title: 關於ELF的兩三事
 date: 2018-05-06 15:22:27
 categories:
-- 系統程式
+- 技術
 tags:
+- 系統程式
 - GNU tool
 ---
 # 簡介

@@ -2,8 +2,9 @@
 title: hexo 教學
 date: 2017-09-09 15:22:14
 categories:
-- tools
+- 技術
 tags:
+- tools
 ---
 我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩
 另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇

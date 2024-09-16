@@ -2,8 +2,9 @@
 title: clean code
 date: 2017-09-03 17:47:33
 categories:
-- 軟體開發
+- 技術
 tags:
+- 軟體開發
 ---
 這邊記錄一下我看clean code的筆記整理
 不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種

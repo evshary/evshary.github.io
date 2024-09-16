@@ -2,8 +2,9 @@
 title: youtube-dl網路影片下載器
 date: 2018-11-25 11:38:01
 categories:
-- tools
+- 技術
 tags:
+- tools
 ---
 # 簡介
 當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。

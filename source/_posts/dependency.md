@@ -2,8 +2,9 @@
 title: dependency
 date: 2017-08-26 12:31:42
 categories:
-- 系統程式
+- 技術
 tags:
+- 系統程式
 - GNU tool
 ---
 

@@ -2,8 +2,9 @@
 title: port knocking
 date: 2017-08-27 10:21:28
 categories:
-- tools
+- 技術
 tags:
+- tools
 ---
 # 簡介
 port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令

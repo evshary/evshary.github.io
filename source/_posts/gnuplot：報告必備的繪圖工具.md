@@ -2,8 +2,9 @@
 title: gnuplot：報告必備的繪圖工具
 date: 2018-12-02 10:15:18
 categories:
-- tools
+- 技術
 tags:
+- tools
 ---
 # 簡介
 當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。[gnuplot](http://www.gnuplot.info/)非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。

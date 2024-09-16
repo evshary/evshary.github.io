@@ -2,8 +2,9 @@
 title: ARM CortexM3/4權限切換
 date: 2018-12-02 15:04:44
 categories:
-- ARM
+- 技術
 tags:
+- ARM
 ---
 # 簡介
 最近我在研究怎麼在ARM Cortex M3/4上面跑一個自己寫的OS，最主要是參考jserv的[mini-arm-os](https://github.com/jserv/mini-arm-os)和[pikoRT](https://github.com/PikoRT/pikoRT)，相關程式碼放在[arm-os-4fun](https://github.com/evshary/arm-os-4fun)。

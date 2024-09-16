@@ -2,8 +2,9 @@
 title: IPython Notebook - Jupyter教學
 date: 2018-12-02 22:03:13
 categories:
-- tools
+- 技術
 tags:
+- tools
 ---
 # 簡介
 [Jupyter Notebook](https://ipython.org/notebook.html)，過去被稱為ipython notebook，是ipython內的強大工具。

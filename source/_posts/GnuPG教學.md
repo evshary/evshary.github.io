@@ -2,8 +2,9 @@
 title: GnuPG教學
 date: 2018-10-14 11:37:34
 categories:
-- tools
+- 技術
 tags:
+- tools
 - GNU tool
 ---
 # 簡介

@@ -2,8 +2,9 @@
 title: linker script 簡單教學
 date: 2018-06-02 15:56:33
 categories:
-- 系統程式
+- 技術
 tags:
+- 系統程式
 - GNU tool
 ---
 # 簡介

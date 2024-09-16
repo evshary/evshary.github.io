@@ -2,8 +2,9 @@
 title: code review
 date: 2017-08-27 17:32:24
 categories:
-- 軟體開發
+- 技術
 tags:
+- 軟體開發
 ---
 # 前言
 其實我一直對code review有點好奇，到底有什麼樣的好處。

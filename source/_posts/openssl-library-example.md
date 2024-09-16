@@ -2,8 +2,10 @@
 title: 使用 openssl 工具與函式庫
 date: 2018-05-13 17:34:33
 categories:
-- protocol
+- 技術
 tags:
+- protocol
+- tools
 ---
 # 安裝openssl
 ## MAC

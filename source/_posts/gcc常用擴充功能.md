@@ -2,8 +2,9 @@
 title: gcc常用擴充功能
 date: 2018-06-09 16:50:13
 categories:
-- 系統程式
+- 技術
 tags:
+- 系統程式
 - GNU tool
 ---
 # 簡介

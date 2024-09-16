@@ -2,9 +2,10 @@
 title: C語言的行內組譯
 date: 2018-05-20 15:02:39
 categories:
+- 技術
+tags:
 - 程式語言
 - C
-tags:
 - GNU tool
 ---
 # 簡介

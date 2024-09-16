@@ -2,8 +2,9 @@
 title: dd - 資料處理的好工具
 date: 2018-11-25 18:27:45
 categories:
-- tools
+- 技術
 tags:
+- tools
 ---
 # 簡介
 dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。

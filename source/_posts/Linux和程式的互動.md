@@ -2,8 +2,9 @@
 title: Linux和程式的互動
 date: 2018-06-12 19:37:27
 categories:
-- Linux
+- 技術
 tags:
+- Linux
 - GNU tool
 ---
 # 簡介
