@@ -8,7 +8,8 @@ tags:
 - C
 - GNU tool
 ---
-# 簡介
+## 簡介
+
 有時候我們會在C的程式碼內看到`asm{...}`的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。
 
 舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下：
@@ -26,7 +27,7 @@ __asm__("nop\n"
 
 聰明的你可能發覺一件事，剛剛的例子只有指令而已，那如果假設我們要跟自己設定的變數互動那要怎麼辦呢？這時候就要用比較複雜的格式
 
-```
+```asm
 asm ( assembler template               /* 組合語言內容 */
     : output operands                  /* 輸出的參數 */
     : input operands                   /* 輸入的參數 */
@@ -34,11 +35,14 @@ asm ( assembler template               /* 組合語言內容 */
     );
 ```
 
-# 範例
+## 範例
+
 我們還是直接來看看程式比較有感覺
 
-## 範例一
+### 範例一
+
 我們寫一個簡單的test.c，只負責做加法。
+
 ```c
 #include <stdio.h>
 
@@ -52,8 +56,10 @@ int main()
     return 0;
 }
 ```
+
 編譯並且看一下組語的內容
-```
+
+```bash
 $ gcc test.c -s test.s
 $ cat test.s
         .file   "test.c"
@@ -94,9 +100,11 @@ main:
         .ident  "GCC: (GNU) 8.1.0"
         .section        .note.GNU-stack,"",@progbits
 ```
+
 先不管其他細節，可以看到中間有兩行`addl    %edx, %eax`和`movl    %eax, -12(%rbp)`，對應的也就是`sum = num1 + num2;`，那我們來改寫一下吧！
 
 test.c
+
 ```c
 #include <stdio.h>
 
@@ -115,6 +123,7 @@ int main()
     return 0;
 }
 ```
+
 編譯並執行後就會發現結果是一樣的。不過到這邊我想大部分的人心中一定充滿了三個小朋友，所以還是在稍微解釋一下。
 
 如前面所提，我們最主要執行的是`addl    %%edx, %%eax\n`，這邊跟前面不一樣的是%另有用途(後面會提)，所以要表示暫存器%eax時，我們要用%%來取代%字元。
@@ -135,7 +144,8 @@ int main()
 由此可知就是要把%eax的結果填入sum中。同理，第三行的input部分`"a"(num1), "d"(num2)`分別也代表在執行組合語言前為num1和num2選擇register(這邊的例子是num1填入%eax、num2填入%edx)。
 
 回頭看一下如果編成組合語言會是什麼樣子
-```
+
+```asm
 ...
         movl    $1, -4(%rbp)
         movl    $2, -8(%rbp)
@@ -155,9 +165,11 @@ int main()
         call    printf
 ....
 ```
+
 在#APP和#NO_APP間就是我們的組語部分，看起來蠻符合我們的預期。
 
-## 範例二
+### 範例二
+
 可是我們難道都一定要自行決定register嗎？我們想要交由compiler決定。這時候其實可以用比較寬鬆的限制條件。一樣是x86的架構才能用：
 
 | 規範條件 | Register(s) |
@@ -169,6 +181,7 @@ int main()
 那就修改程式吧！
 
 test.c
+
 ```c
 ...
     asm(
@@ -184,7 +197,8 @@ test.c
 
 當然最後執行結果也會和範例一一樣。
 
-# 參考
+## 參考
+
 * [BINARY HACKS：駭客秘傳技巧一百招](http://www.books.com.tw/products/0010587783)
 * [在 C 語言當中內嵌 GNU 的組合語言](http://sp1.wikidot.com/gnuinlineassembly)
 * [關於GNU Inline Assembly](http://wen00072.github.io/blog/2015/12/10/about-inline-asm/)
