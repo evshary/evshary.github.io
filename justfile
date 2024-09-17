@@ -8,7 +8,7 @@ run:
 
 build:
   # Copy the new posts to the folder
-  cp `find source/contents/ -name "*.md"` source/_posts/
+  cp `find contents/ -name "*.md"` source/_posts/
   # Generate the site
   hexo generate
 
