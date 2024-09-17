@@ -16,13 +16,16 @@ jobs:
         with:
           node-version: '19.3.0'
 
+      - name: Setup just
+        uses: extractions/setup-just@v1
+
       - name: Install dependencies
-        run: |
-          npm install -g hexo-cli
-          npm install
+        run: just prepare-deploy
 
       - name: Build
-        run: ./build_site.sh
+        run: |
+          just clean
+          just build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

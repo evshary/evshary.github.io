@@ -11,14 +11,21 @@ The blog uses hexo and hexo-theme-next.
 
 ## Update blogs
 
-* Install pre-commit first. This will avoid wrong format.
+* Install just (You might need to install cargo first)
 
    ```bash
-   pre-commit install --install-hooks
+   cargo install just
    ```
 
-* After update the blogs
+* Install necessary packages
 
    ```bash
-   ./build_site.sh
+   just prepare
    ```
+
+* Build and run
+
+  ```bash
+  just
+  just run
+  ```
