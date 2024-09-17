@@ -14,23 +14,23 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="問題通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別但是有些情況，make可能無法判斷以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h main.c 123456#include &quot;test.h&quot;int main() &amp;#123;    test();    return 0;&amp;#125; test.c">
+    <meta name="description" content="問題通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別但是有些情況，make可能無法判斷以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h main.c 123456#include &quot;test.h&quot;int main() &amp;#123;    test();    return 0;&amp;#125;  test.c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dependency">
 <meta property="og:url" content="http://evshary.com/2017/08/26/dependency/index.html">
 <meta property="og:site_name" content="CY&#39;s Blog">
-<meta property="og:description" content="問題通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別但是有些情況，make可能無法判斷以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h main.c 123456#include &quot;test.h&quot;int main() &amp;#123;    test();    return 0;&amp;#125; test.c">
+<meta property="og:description" content="問題通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別但是有些情況，make可能無法判斷以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h main.c 123456#include &quot;test.h&quot;int main() &amp;#123;    test();    return 0;&amp;#125;  test.c">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2017-08-26T12:31:42.000Z">
-<meta property="article:modified_time" content="2024-09-16T14:11:06.873Z">
+<meta property="article:modified_time" content="2024-09-17T01:11:24.091Z">
 <meta property="article:author" content="evshary">
-<meta property="article:tag" content="GNU tool">
 <meta property="article:tag" content="系統程式">
+<meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
 
 
@@ -44,7 +44,7 @@
 <title>dependency | CY's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C"><span class="nav-number">1.</span> <span class="nav-text">問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">解法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C"><span class="nav-number">1.</span> <span class="nav-text">問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">解法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -240,7 +240,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-16 14:11:06" itemprop="dateModified" datetime="2024-09-16T14:11:06+00:00">2024-09-16</time>
+      <time title="Modified: 2024-09-17 01:11:24" itemprop="dateModified" datetime="2024-09-17T01:11:24+00:00">2024-09-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,37 +275,50 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h1><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
 <p>main.c</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>test.c</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;private.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test=%d\n&quot;</span>, PRIV_VALUE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>test.h</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _TEST_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _TEST_H</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
 <p>private.h</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _PRIVATE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _PRIVATE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIV_VALUE 3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 
 <p>然後假設我們的Makefile是這樣寫</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=$(patsubst %.c,%.o,$(wildcard *.c))</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">    $(CC) -c $^</span><br><span class="line"></span><br><span class="line">all: $(OBJ)</span><br><span class="line">    $(CC) $^ -o $(BIN)</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">    rm *.o $(BIN)</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$^</span></span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span></span><br></pre></td></tr></table></figure>
+
 <p>我們試著修改private.h的MACRO值，就會發現重新make結果還是不變，需要重新make clean</p>
-<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>可以使用gcc的特殊option</p>
+<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><p>可以使用gcc的特殊option</p>
 <ul>
-<li>gcc -M xxx.c: 找出所有相依檔</li>
-<li>gcc -MM xxx.c: 同-M，但不含系統檔<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">main.o: main.c test.h</span><br></pre></td></tr></table></figure></li>
-<li>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test.o: test.c test.h</span><br><span class="line">          </span><br><span class="line">test.h:</span><br></pre></td></tr></table></figure></li>
-<li>-MF file: 輸出的dependency檔案名</li>
-<li>-MD: 同-M -MF</li>
-<li>-MMD: 同-MM -MF</li>
-<li>-MT: 可以更改dependency檔案內的目標，可參考<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转] </a></li>
+<li><p>gcc -M xxx.c: 找出所有相依檔</p>
+</li>
+<li><p>gcc -MM xxx.c: 同-M，但不含系統檔</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">test.o: test.c test.h</span></span><br><span class="line"></span><br><span class="line"><span class="section">test.h:</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-MF file: 輸出的dependency檔案名</p>
+</li>
+<li><p>-MD: 同-M -MF</p>
+</li>
+<li><p>-MMD: 同-MM -MF</p>
+</li>
+<li><p>-MT: 可以更改dependency檔案內的目標，可參考<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转]</a></p>
+</li>
 </ul>
 <p>因此只要把Makefile改成這樣即可</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=$(patsubst %.c,%.o,$(wildcard *.c))</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line">all: $(OBJ)</span><br><span class="line">    $(CC) $^ -o $(BIN)</span><br><span class="line"></span><br><span class="line">-include $(OBJ:.o=.d)</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">    $(CC) -c $&lt;</span><br><span class="line">    $(CC) -MM $&lt; &gt; $*.d</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">    rm *.o $(BIN) *.d</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">-include</span> $(OBJ:.o=.d)</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$&lt;</span></span><br><span class="line">    <span class="variable">$(CC)</span> -MM <span class="variable">$&lt;</span> &gt; <span class="variable">$*</span>.d</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span> *.d</span><br></pre></td></tr></table></figure>
 
 <p><code>-</code>代表如果有錯誤不要停止執行，<code>$(OBJ:.o=.d)</code>代表把.o換成.d，因此會變成類似</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test.o: test.c private.h test.h</span><br><span class="line">main.o: main.c test.h</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">test.o: test.c private.h test.h</span></span><br><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
 
 <p>由於該rule底下沒有statement，所以會直接對應<code>%.o: %.c</code></p>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a target="_blank" rel="noopener" href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
 <li><a target="_blank" rel="noopener" href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
 </ul>
@@ -318,8 +331,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
               <a href="/tags/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/" rel="tag"># 系統程式</a>
+              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
           </div>
 
         
@@ -329,7 +342,7 @@
             </div>
             <div class="post-nav-item">
                 <a href="/2017/08/27/port-knocking/" rel="next" title="port knocking">
-                  port knocking <i class="fa fa-chevron-right"></i>
+                  port knocking <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -353,15 +366,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">evshary</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
@@ -387,10 +399,11 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 

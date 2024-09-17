@@ -14,10 +14,10 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="簡介有時候我們會在C的程式碼內看到asm&amp;#123;...&amp;#125;的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。 舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下： 123456&#x2F;* 一個nop指令 *&#x2F;asm(&quot;nop&quot;);&#x2F;* 多行要用\n隔開 *&#x2F;__asm__(&quot;nop\n&amp;q">
 <meta property="og:type" content="article">
@@ -27,11 +27,11 @@
 <meta property="og:description" content="簡介有時候我們會在C的程式碼內看到asm&amp;#123;...&amp;#125;的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。 舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下： 123456&#x2F;* 一個nop指令 *&#x2F;asm(&quot;nop&quot;);&#x2F;* 多行要用\n隔開 *&#x2F;__asm__(&quot;nop\n&amp;q">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-05-20T15:02:39.000Z">
-<meta property="article:modified_time" content="2024-09-16T14:11:06.869Z">
+<meta property="article:modified_time" content="2024-09-17T01:11:24.091Z">
 <meta property="article:author" content="evshary">
+<meta property="article:tag" content="GNU tool">
 <meta property="article:tag" content="程式語言">
 <meta property="article:tag" content="C">
-<meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
 
 
@@ -45,7 +45,7 @@
 <title>C語言的行內組譯 | CY's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
@@ -241,7 +241,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-16 14:11:06" itemprop="dateModified" datetime="2024-09-16T14:11:06+00:00">2024-09-16</time>
+      <time title="Modified: 2024-09-17 01:11:24" itemprop="dateModified" datetime="2024-09-17T01:11:24+00:00">2024-09-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -382,9 +382,9 @@
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
               <a href="/tags/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/" rel="tag"># 程式語言</a>
               <a href="/tags/C/" rel="tag"># C</a>
-              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
           </div>
 
         
@@ -392,12 +392,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/2018/05/13/openssl-library-example/" rel="prev" title="使用 openssl 工具與函式庫">
-                  <i class="fa fa-chevron-left"></i> 使用 openssl 工具與函式庫
+                  <i class="fa fa-angle-left"></i> 使用 openssl 工具與函式庫
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/" rel="next" title="稀缺其實是一種陷阱">
-                  稀缺其實是一種陷阱 <i class="fa fa-chevron-right"></i>
+                  稀缺其實是一種陷阱 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -421,15 +421,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">evshary</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
@@ -455,10 +454,11 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 

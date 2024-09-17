@@ -14,10 +14,10 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="簡介當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。 youtube-dl功能十分強大，也有很多參數可以調整，能下載的網站不只是youtube，也可以是其他熱門網站，例如Facebook等等，更重要的是這個工具有多個平台可以使用(Windows、Mac、Linux)">
 <meta property="og:type" content="article">
@@ -27,7 +27,7 @@
 <meta property="og:description" content="簡介當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。 youtube-dl功能十分強大，也有很多參數可以調整，能下載的網站不只是youtube，也可以是其他熱門網站，例如Facebook等等，更重要的是這個工具有多個平台可以使用(Windows、Mac、Linux)">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-11-25T11:38:01.000Z">
-<meta property="article:modified_time" content="2024-09-16T14:11:06.873Z">
+<meta property="article:modified_time" content="2024-09-17T01:11:24.091Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="tools">
 <meta name="twitter:card" content="summary">
@@ -43,7 +43,7 @@
 <title>youtube-dl網路影片下載器 | CY's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
@@ -144,7 +144,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D"><span class="nav-number">2.</span> <span class="nav-text">安裝</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MAC"><span class="nav-number">2.1.</span> <span class="nav-text">MAC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ubuntu"><span class="nav-number">2.2.</span> <span class="nav-text">Ubuntu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python"><span class="nav-number">2.3.</span> <span class="nav-text">Python</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8F%B4"><span class="nav-number">3.1.</span> <span class="nav-text">支援</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BC%B8%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.3.</span> <span class="nav-text">輸出格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%B9%95"><span class="nav-number">3.4.</span> <span class="nav-text">字幕</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%89%E7%82%BA%E9%9F%B3%E6%A8%82%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.5.</span> <span class="nav-text">轉為音樂格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BC%89%E6%92%AD%E6%94%BE%E6%B8%85%E5%96%AE"><span class="nav-number">3.6.</span> <span class="nav-text">下載播放清單</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8"><span class="nav-number">3.7.</span> <span class="nav-text">常用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D"><span class="nav-number">2.</span> <span class="nav-text">安裝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MAC"><span class="nav-number">2.1.</span> <span class="nav-text">MAC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu"><span class="nav-number">2.2.</span> <span class="nav-text">Ubuntu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python"><span class="nav-number">2.3.</span> <span class="nav-text">Python</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8F%B4"><span class="nav-number">3.1.</span> <span class="nav-text">支援</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BC%B8%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.3.</span> <span class="nav-text">輸出格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%B9%95"><span class="nav-number">4.</span> <span class="nav-text">字幕</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%89%E7%82%BA%E9%9F%B3%E6%A8%82%E6%A0%BC%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">轉為音樂格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BC%89%E6%92%AD%E6%94%BE%E6%B8%85%E5%96%AE"><span class="nav-number">4.2.</span> <span class="nav-text">下載播放清單</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">常用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -239,7 +239,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-16 14:11:06" itemprop="dateModified" datetime="2024-09-16T14:11:06+00:00">2024-09-16</time>
+      <time title="Modified: 2024-09-17 01:11:24" itemprop="dateModified" datetime="2024-09-17T01:11:24+00:00">2024-09-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -274,56 +274,86 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
 <p>youtube-dl功能十分強大，也有很多參數可以調整，能下載的網站不只是youtube，也可以是其他熱門網站，例如Facebook等等，更重要的是這個工具有多個平台可以使用(Windows、Mac、Linux)。</p>
 <p>除了<a target="_blank" rel="noopener" href="https://rg3.github.io/youtube-dl/index.html">指令youtube-dl</a>以外，我們也可以用GUI的介面的工具<a target="_blank" rel="noopener" href="https://github.com/MrS0m30n3/youtube-dl-gui">youtube-DLG</a>，使用上更為方便，詳請可參考<a target="_blank" rel="noopener" href="https://www.kocpc.com.tw/archives/162438">最強的網路影片下載器　Youtube-dl-gui 只要有網址就能幫你搞定</a>。</p>
-<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install youtube-dl</span><br><span class="line"># 如果有需要後續轉檔的話</span><br><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-<h2 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install youtube-dl</span><br><span class="line"># 如果需要後續轉檔的話</span><br><span class="line">sudo apt-get install ffmpeg</span><br></pre></td></tr></table></figure>
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p>其實更好的方法是使用Python的pip來安裝，因為youtube-dl本身就是使用Python所寫成的，而由於影片的網站更新很快，所以可能要隨時更新到最新版的youtube-dl才行，OS distribution不一定會出的那麼快。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade youtube_dl</span><br><span class="line"># 如果使用python3的話</span><br><span class="line">pip3 install --upgrade youtube_dl</span><br></pre></td></tr></table></figure>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install youtube-dl</span><br><span class="line"><span class="comment"># 如果有需要後續轉檔的話</span></span><br><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
 
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>這邊介紹一些常用的指令</p>
-<h2 id="支援"><a href="#支援" class="headerlink" title="支援"></a>支援</h2><ul>
-<li>確定有支援下載哪些影片網站，相關列表也可以從<a target="_blank" rel="noopener" href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure></li>
+<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install youtube-dl</span><br><span class="line"><span class="comment"># 如果需要後續轉檔的話</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><p>其實更好的方法是使用Python的pip來安裝，因為youtube-dl本身就是使用Python所寫成的，而由於影片的網站更新很快，所以可能要隨時更新到最新版的youtube-dl才行，OS distribution不一定會出的那麼快。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade youtube_dl</span><br><span class="line"><span class="comment"># 如果使用python3的話</span></span><br><span class="line">pip3 install --upgrade youtube_dl</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>這邊介紹一些常用的指令</p>
+<h3 id="支援"><a href="#支援" class="headerlink" title="支援"></a>支援</h3><ul>
+<li>確定有支援下載哪些影片網站，相關列表也可以從<a target="_blank" rel="noopener" href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢</li>
 </ul>
-<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>如果我們沒有指定格式的話，通常youtube-dl會幫我們挑最好的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure>
+
+<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><p>如果我們沒有指定格式的話，通常youtube-dl會幫我們挑最好的</p>
 <ul>
-<li>指定下載的影片格式<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 先查詢有哪些格式可下載</span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"># 指定下載格式</span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"># 或是用format code</span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure></li>
+<li>指定下載的影片格式</li>
 </ul>
-<h2 id="輸出格式"><a href="#輸出格式" class="headerlink" title="輸出格式"></a>輸出格式</h2><p>由於官方的輸出格式預設有帶ID(<code>%(title)s-%(id)s.%(ext)s</code>)，我們可以將其去除</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -o &#x27;%(title)s.%(ext)s&#x27; [URL]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先查詢有哪些格式可下載</span></span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"><span class="comment"># 指定下載格式</span></span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"><span class="comment"># 或是用format code</span></span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="輸出格式"><a href="#輸出格式" class="headerlink" title="輸出格式"></a>輸出格式</h3><p>由於官方的輸出格式預設有帶ID(<code>%(title)s-%(id)s.%(ext)s</code>)，我們可以將其去除</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -o <span class="string">&#x27;%(title)s.%(ext)s&#x27;</span> [URL]</span><br></pre></td></tr></table></figure>
 
 <h2 id="字幕"><a href="#字幕" class="headerlink" title="字幕"></a>字幕</h2><ul>
 <li>選擇嵌入特定字幕<ul>
 <li><code>--write-sub</code>代表下載字幕</li>
 <li><code>--embed-sub</code>代表嵌入字幕</li>
-<li><code>--sub-lang</code>代表要選擇的字幕<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 先列出可下載的字幕列表</span><br><span class="line">youtube-dl --list-subs [URL]</span><br><span class="line"># 嵌入想要的字幕</span><br><span class="line">youtube-dl --write-sub --embed-sub --sub-lang [字幕] [URL]</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>直接嵌入所有字幕<ul>
-<li><code>--all-subs</code>選擇所有字幕<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --write-sub --embed-sub --all-subs [URL]</span><br></pre></td></tr></table></figure></li>
+<li><code>--sub-lang</code>代表要選擇的字幕</li>
 </ul>
 </li>
 </ul>
-<h2 id="轉為音樂格式"><a href="#轉為音樂格式" class="headerlink" title="轉為音樂格式"></a>轉為音樂格式</h2><p>如果我們要下載音樂格式的話，基本上需要有ffmpeg的輔助</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先列出可下載的字幕列表</span></span><br><span class="line">youtube-dl --list-subs [URL]</span><br><span class="line"><span class="comment"># 嵌入想要的字幕</span></span><br><span class="line">youtube-dl --write-sub --embed-sub --sub-lang [字幕] [URL]</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>選擇要下載的音樂格式，例如mp3、m4a、flac等等<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] [URL]</span><br></pre></td></tr></table></figure></li>
-<li>可以用<code>--audio-quality</code>強迫ffmpeg轉換較高品質的音樂，0是最好，9是最差<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --audio-quality [音樂品質] [URL]</span><br></pre></td></tr></table></figure></li>
-<li>下載時附上封面(使用youtube截圖)和音樂資訊(作曲者等等)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure></li>
+<li>直接嵌入所有字幕<ul>
+<li><code>--all-subs</code>選擇所有字幕</li>
 </ul>
-<h2 id="下載播放清單"><a href="#下載播放清單" class="headerlink" title="下載播放清單"></a>下載播放清單</h2><ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --write-sub --embed-sub --all-subs [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="轉為音樂格式"><a href="#轉為音樂格式" class="headerlink" title="轉為音樂格式"></a>轉為音樂格式</h3><p>如果我們要下載音樂格式的話，基本上需要有ffmpeg的輔助</p>
+<ul>
+<li>選擇要下載的音樂格式，例如mp3、m4a、flac等等</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] [URL]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以用<code>--audio-quality</code>強迫ffmpeg轉換較高品質的音樂，0是最好，9是最差</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --audio-quality [音樂品質] [URL]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下載時附上封面(使用youtube截圖)和音樂資訊(作曲者等等)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="下載播放清單"><a href="#下載播放清單" class="headerlink" title="下載播放清單"></a>下載播放清單</h3><ul>
 <li>其實只要把[URL]換成播放清單的網址即可，不過我們也可以指定開始和結束位址<ul>
 <li><code>--playlist-start</code>：開始</li>
-<li><code>--playlist-end</code>：結束，也就是倒數第幾個影片<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --playlist-start [開始位置] --playlist-end [結束位置] [URL]</span><br></pre></td></tr></table></figure></li>
+<li><code>--playlist-end</code>：結束，也就是倒數第幾個影片</li>
 </ul>
 </li>
 </ul>
-<h2 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h2><p>我這邊直接列出常用的指令，如果要使用可以直接copy比較快</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl --playlist-start [開始位置] --playlist-end [結束位置] [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><p>我這邊直接列出常用的指令，如果要使用可以直接copy比較快</p>
 <ul>
-<li>下載mp4影片並加上字幕<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -f mp4 --write-sub --embed-sub --all-subs -o &#x27;%(title)s.%(ext)s&#x27; [URL]</span><br></pre></td></tr></table></figure></li>
-<li>下載mp3音樂，並加上封面<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure></li>
+<li>下載mp4影片並加上字幕</li>
 </ul>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -f mp4 --write-sub --embed-sub --all-subs -o <span class="string">&#x27;%(title)s.%(ext)s&#x27;</span> [URL]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下載mp3音樂，並加上封面</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">youtube-dl -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://blog.gtwang.org/useful-tools/youtube-dl/">youtube-dl：下載 YouTube 影片的指令工具（支援 Windows、Linux 與 Mac OS X）</a></li>
 <li><a target="_blank" rel="noopener" href="https://yogapan.github.io/2017/08/16/Youtube-dl%E6%BF%83%E7%B8%AE%E6%95%99%E5%AD%B8%E7%AD%86%E8%A8%98/">Youtube-dl濃縮教學筆記</a></li>
 </ul>
@@ -344,12 +374,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/2018/10/21/%E3%80%8C%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3%E3%80%8D-%E6%93%81%E6%9C%89%E6%89%BF%E6%93%94%E8%B2%AC%E4%BB%BB%E7%9A%84%E5%8B%87%E6%B0%A3/" rel="prev" title="「被討厭的勇氣」-擁有承擔責任的勇氣">
-                  <i class="fa fa-chevron-left"></i> 「被討厭的勇氣」-擁有承擔責任的勇氣
+                  <i class="fa fa-angle-left"></i> 「被討厭的勇氣」-擁有承擔責任的勇氣
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/" rel="next" title="dd - 資料處理的好工具">
-                  dd - 資料處理的好工具 <i class="fa fa-chevron-right"></i>
+                  dd - 資料處理的好工具 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -373,15 +403,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">evshary</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
@@ -407,10 +436,11 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 

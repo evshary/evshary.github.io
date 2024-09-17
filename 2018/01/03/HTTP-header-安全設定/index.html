@@ -14,10 +14,10 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="總覽根據DEVCORE，相關HTTP header可以如下分類  防禦 XSS： Content-Security-Policy Set-Cookie: HttpOnly X-XSS-Protection X-Download-Options   防禦 Clickjacking： X-Frame-Options   強化 HTTPS 機制： Set-Cookie: Secure Strict-Tr">
 <meta property="og:type" content="article">
@@ -27,7 +27,7 @@
 <meta property="og:description" content="總覽根據DEVCORE，相關HTTP header可以如下分類  防禦 XSS： Content-Security-Policy Set-Cookie: HttpOnly X-XSS-Protection X-Download-Options   防禦 Clickjacking： X-Frame-Options   強化 HTTPS 機制： Set-Cookie: Secure Strict-Tr">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-01-03T22:13:53.000Z">
-<meta property="article:modified_time" content="2024-09-16T14:11:06.869Z">
+<meta property="article:modified_time" content="2024-09-17T01:11:24.091Z">
 <meta property="article:author" content="evshary">
 <meta property="article:tag" content="security">
 <meta name="twitter:card" content="summary">
@@ -43,7 +43,7 @@
 <title>HTTP header 安全設定 | CY's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
@@ -144,7 +144,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E8%A6%BD"><span class="nav-number">1.</span> <span class="nav-text">總覽</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E7%A6%A6-XSS"><span class="nav-number">2.</span> <span class="nav-text">防禦 XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Content-Security-Policy"><span class="nav-number">2.1.</span> <span class="nav-text">Content-Security-Policy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-Cookie-HttpOnly"><span class="nav-number">2.2.</span> <span class="nav-text">Set-Cookie: HttpOnly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#X-XSS-Protection"><span class="nav-number">2.3.</span> <span class="nav-text">X-XSS-Protection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#X-Download-Options"><span class="nav-number">2.4.</span> <span class="nav-text">X-Download-Options</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E7%A6%A6-Clickjacking"><span class="nav-number">3.</span> <span class="nav-text">防禦 Clickjacking</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#X-Frame-Options"><span class="nav-number">3.1.</span> <span class="nav-text">X-Frame-Options</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%B7%E5%8C%96-HTTPS-%E6%A9%9F%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">強化 HTTPS 機制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-Cookie-Secure"><span class="nav-number">4.1.</span> <span class="nav-text">Set-Cookie: Secure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Strict-Transport-Security"><span class="nav-number">4.2.</span> <span class="nav-text">Strict-Transport-Security</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E7%80%8F%E8%A6%BD%E5%99%A8%E8%AA%A4%E5%88%A4%E6%96%87%E4%BB%B6%E5%BD%A2%E6%85%8B"><span class="nav-number">5.</span> <span class="nav-text">避免瀏覽器誤判文件形態</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#X-Content-Type-Options"><span class="nav-number">5.1.</span> <span class="nav-text">X-Content-Type-Options</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E8%AD%B7%E7%B6%B2%E7%AB%99%E8%B3%87%E6%BA%90%E5%88%A5%E8%A2%AB%E4%BB%BB%E6%84%8F%E5%AD%98%E5%8F%96"><span class="nav-number">6.</span> <span class="nav-text">保護網站資源別被任意存取</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Access-Control-Allow-Origin"><span class="nav-number">6.1.</span> <span class="nav-text">Access-Control-Allow-Origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#X-Permitted-Cross-Domain-Policies"><span class="nav-number">6.2.</span> <span class="nav-text">X-Permitted-Cross-Domain-Policies</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E8%A6%BD"><span class="nav-number">1.</span> <span class="nav-text">總覽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E7%A6%A6-XSS"><span class="nav-number">2.</span> <span class="nav-text">防禦 XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Content-Security-Policy"><span class="nav-number">2.1.</span> <span class="nav-text">Content-Security-Policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-Cookie-HttpOnly"><span class="nav-number">2.2.</span> <span class="nav-text">Set-Cookie: HttpOnly</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#X-XSS-Protection"><span class="nav-number">2.3.</span> <span class="nav-text">X-XSS-Protection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#X-Download-Options"><span class="nav-number">2.4.</span> <span class="nav-text">X-Download-Options</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E7%A6%A6-Clickjacking"><span class="nav-number">3.</span> <span class="nav-text">防禦 Clickjacking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#X-Frame-Options"><span class="nav-number">3.1.</span> <span class="nav-text">X-Frame-Options</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B7%E5%8C%96-HTTPS-%E6%A9%9F%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">強化 HTTPS 機制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-Cookie-Secure"><span class="nav-number">4.1.</span> <span class="nav-text">Set-Cookie: Secure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Strict-Transport-Security"><span class="nav-number">4.2.</span> <span class="nav-text">Strict-Transport-Security</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E7%80%8F%E8%A6%BD%E5%99%A8%E8%AA%A4%E5%88%A4%E6%96%87%E4%BB%B6%E5%BD%A2%E6%85%8B"><span class="nav-number">5.</span> <span class="nav-text">避免瀏覽器誤判文件形態</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#X-Content-Type-Options"><span class="nav-number">5.1.</span> <span class="nav-text">X-Content-Type-Options</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E8%AD%B7%E7%B6%B2%E7%AB%99%E8%B3%87%E6%BA%90%E5%88%A5%E8%A2%AB%E4%BB%BB%E6%84%8F%E5%AD%98%E5%8F%96"><span class="nav-number">6.</span> <span class="nav-text">保護網站資源別被任意存取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Access-Control-Allow-Origin"><span class="nav-number">6.1.</span> <span class="nav-text">Access-Control-Allow-Origin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#X-Permitted-Cross-Domain-Policies"><span class="nav-number">6.2.</span> <span class="nav-text">X-Permitted-Cross-Domain-Policies</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -239,7 +239,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-16 14:11:06" itemprop="dateModified" datetime="2024-09-16T14:11:06+00:00">2024-09-16</time>
+      <time title="Modified: 2024-09-17 01:11:24" itemprop="dateModified" datetime="2024-09-17T01:11:24+00:00">2024-09-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -274,7 +274,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h1><p>根據<a target="_blank" rel="noopener" href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h2><p>根據<a target="_blank" rel="noopener" href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
 <ul>
 <li>防禦 XSS：<ul>
 <li>Content-Security-Policy</li>
@@ -302,23 +302,28 @@
 </ul>
 </li>
 </ul>
-<h1 id="防禦-XSS"><a href="#防禦-XSS" class="headerlink" title="防禦 XSS"></a>防禦 XSS</h1><h2 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content-Security-Policy"></a>Content-Security-Policy</h2><ul>
-<li>原理：<ul>
+<h2 id="防禦-XSS"><a href="#防禦-XSS" class="headerlink" title="防禦 XSS"></a>防禦 XSS</h2><h3 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content-Security-Policy"></a>Content-Security-Policy</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>用來控制不要讀取外部不可信賴資源，可以防止XSS或injection</li>
 </ul>
 </li>
-<li>啟動方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: policy # policy代表描述你的CSP的策略</span><br></pre></td></tr></table></figure>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: policy # policy代表描述你的CSP的策略</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>範例<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 所有內容都來自同一個地方</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;</span><br><span class="line"># 比較複雜的設定，不擋image來源，但是設定media和script的來源，注意後方設定會蓋掉default-src的設定</span><br><span class="line">Content-SecContent-Security-Policy: default-src &#x27;self&#x27;; img-src *; media-src media1.com media2.com; script-src userscripts.example.com</span><br><span class="line"># 推薦設定：因為預設會擋html裡有js,style，但是大部分都會用到，所以要加上unsafe-inline</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;</span><br></pre></td></tr></table></figure></li>
+<li>範例</li>
 </ul>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 所有內容都來自同一個地方</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;</span><br><span class="line"># 比較複雜的設定，不擋image來源，但是設定media和script的來源，注意後方設定會蓋掉default-src的設定</span><br><span class="line">Content-SecContent-Security-Policy: default-src &#x27;self&#x27;; img-src *; media-src media1.com media2.com; script-src userscripts.example.com</span><br><span class="line"># 推薦設定：因為預設會擋html裡有js,style，但是大部分都會用到，所以要加上unsafe-inline</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;</span><br></pre></td></tr></table></figure>
 </li>
-<li>可參考<ul>
+<li><p>可參考</p>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP/Using_Content_Security_Policy">内容安全策略( CSP )</a>: 對CSP的基本解說</li>
 <li><a target="_blank" rel="noopener" href="https://devco.re/blog/2014/04/08/security-issues-of-http-headers-2-content-security-policy/">Content-Security-Policy - HTTP Headers 的資安議題 (2)</a>: 對CSP非常詳細的解說，建議一定要看一下。</li>
 </ul>
 </li>
 </ul>
-<h2 id="Set-Cookie-HttpOnly"><a href="#Set-Cookie-HttpOnly" class="headerlink" title="Set-Cookie: HttpOnly"></a>Set-Cookie: HttpOnly</h2><ul>
+<h3 id="Set-Cookie-HttpOnly"><a href="#Set-Cookie-HttpOnly" class="headerlink" title="Set-Cookie: HttpOnly"></a>Set-Cookie: HttpOnly</h3><ul>
 <li>原理：<ul>
 <li>http only確保javascript無法直接存取cookie。</li>
 </ul>
@@ -328,46 +333,56 @@
 </ul>
 </li>
 </ul>
-<h2 id="X-XSS-Protection"><a href="#X-XSS-Protection" class="headerlink" title="X-XSS-Protection"></a>X-XSS-Protection</h2><ul>
-<li>原理：<ul>
+<h3 id="X-XSS-Protection"><a href="#X-XSS-Protection" class="headerlink" title="X-XSS-Protection"></a>X-XSS-Protection</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>這是IE引進的功能，可以檢查XSS攻擊，不過firefox不支援。基本上CSP已經提供足夠防禦，但是可以讓不支援CSP舊版瀏覽器有比較高的安全性。</li>
 </ul>
 </li>
-<li>啟動方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">X-XSS-Protection: 0   # 禁止XSS過濾</span><br><span class="line">X-XSS-Protection: 1   # 允許XSS過濾，遇到XSS會清除頁面</span><br><span class="line">X-XSS-Protection: 1; mode=block  # 允許XSS過濾，遇到XSS會阻擋頁面加載</span><br></pre></td></tr></table></figure></li>
-<li>可參考：<ul>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">X-XSS-Protection: 0   # 禁止XSS過濾</span><br><span class="line">X-XSS-Protection: 1   # 允許XSS過濾，遇到XSS會清除頁面</span><br><span class="line">X-XSS-Protection: 1; mode=block  # 允許XSS過濾，遇到XSS會阻擋頁面加載</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考：</p>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-XSS-Protection">mozilla X-XSS-Protection</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
 <li><a target="_blank" rel="noopener" href="http://likewaylai.blogspot.tw/2012/03/javax-xss-protection.html">資安JAVA(十一)：X-XSS-Protection</a>: 這邊有提到X-XSS-Protection的由來，並且提到IE8之前在這個功能上的問題</li>
 </ul>
 </li>
 </ul>
-<h2 id="X-Download-Options"><a href="#X-Download-Options" class="headerlink" title="X-Download-Options"></a>X-Download-Options</h2><ul>
-<li>原理：<ul>
+<h3 id="X-Download-Options"><a href="#X-Download-Options" class="headerlink" title="X-Download-Options"></a>X-Download-Options</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>在IE8加入了這個選項，防止使用者下載檔案的時候點選直接開啟，避免執行執行了程式而且沒有在下載管理員留下紀錄的問題。</li>
 </ul>
 </li>
-<li>啟動方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Download-Options: noopen</span><br></pre></td></tr></table></figure></li>
-<li>可參考<ul>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Download-Options: noopen</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/zh-tw/library/jj542450(v=vs.85).aspx">Microsoft-自訂下載體驗</a>: 為什麼要有這個選項</li>
 <li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/15299325/x-download-options-noopen-equivalent">X-Download-Options: noopen equivalent</a>: 其他browser沒有想對應功能</li>
 </ul>
 </li>
 </ul>
-<h1 id="防禦-Clickjacking"><a href="#防禦-Clickjacking" class="headerlink" title="防禦 Clickjacking"></a>防禦 Clickjacking</h1><h2 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h2><ul>
-<li>原理：<ul>
+<h2 id="防禦-Clickjacking"><a href="#防禦-Clickjacking" class="headerlink" title="防禦 Clickjacking"></a>防禦 Clickjacking</h2><h3 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>控制frame和iframe顯示頁面的規則，不讓別人可以內嵌頁面。</li>
 </ul>
 </li>
-<li>啟動方式：<ul>
+<li><p>啟動方式：</p>
+<ul>
 <li>在header加上X-Frame-Options: XXX，XXX可以是<ul>
 <li>DENY：禁止frame頁面</li>
 <li>SAMEORIGIN：允許frame顯示同一網站頁面</li>
-<li>ALLOW-FROM url：允許frame顯示某一網站頁面<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Frame-Options: SAMEORIGIN</span><br></pre></td></tr></table></figure></li>
+<li>ALLOW-FROM url：允許frame顯示某一網站頁面</li>
 </ul>
 </li>
 </ul>
-</li>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Frame-Options: SAMEORIGIN</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h1 id="強化-HTTPS-機制"><a href="#強化-HTTPS-機制" class="headerlink" title="強化 HTTPS 機制"></a>強化 HTTPS 機制</h1><h2 id="Set-Cookie-Secure"><a href="#Set-Cookie-Secure" class="headerlink" title="Set-Cookie: Secure"></a>Set-Cookie: Secure</h2><ul>
+<h2 id="強化-HTTPS-機制"><a href="#強化-HTTPS-機制" class="headerlink" title="強化 HTTPS 機制"></a>強化 HTTPS 機制</h2><h3 id="Set-Cookie-Secure"><a href="#Set-Cookie-Secure" class="headerlink" title="Set-Cookie: Secure"></a>Set-Cookie: Secure</h3><ul>
 <li>原理：<ul>
 <li>強制讓cookie必須要在https的情況下才能傳輸</li>
 </ul>
@@ -377,30 +392,39 @@
 </ul>
 </li>
 </ul>
-<h2 id="Strict-Transport-Security"><a href="#Strict-Transport-Security" class="headerlink" title="Strict-Transport-Security"></a>Strict-Transport-Security</h2><ul>
-<li>原理：<ul>
+<h3 id="Strict-Transport-Security"><a href="#Strict-Transport-Security" class="headerlink" title="Strict-Transport-Security"></a>Strict-Transport-Security</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>當使用者用http連線，強制轉成https連線，這個選項只有在https連線的情況下才有用，如果是http會被忽略(因為可能有MITM)</li>
 </ul>
 </li>
-<li>啟動方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=expireTime [; includeSubdomains]</span><br><span class="line"># max-age=expireTime: browser要記住這個網站要用https連線的時間</span><br><span class="line"># includeSubdomains: 哪些subdomain也都要同樣設定</span><br></pre></td></tr></table></figure></li>
-<li>可參考<ul>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=expireTime [; includeSubdomains]</span><br><span class="line"># max-age=expireTime: browser要記住這個網站要用https連線的時間</span><br><span class="line"># includeSubdomains: 哪些subdomain也都要同樣設定</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Security/HTTP_Strict_Transport_Security">Mozilla HTTP Strict Transport Security</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
 </ul>
 </li>
 </ul>
-<h1 id="避免瀏覽器誤判文件形態"><a href="#避免瀏覽器誤判文件形態" class="headerlink" title="避免瀏覽器誤判文件形態"></a>避免瀏覽器誤判文件形態</h1><h2 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h2><ul>
-<li>原理：<ul>
+<h2 id="避免瀏覽器誤判文件形態"><a href="#避免瀏覽器誤判文件形態" class="headerlink" title="避免瀏覽器誤判文件形態"></a>避免瀏覽器誤判文件形態</h2><h3 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>告訴client要遵守Content-Type的MIME設定，不要自行偵測，管理者必須要確保自己的設定是沒有錯誤的。</li>
 </ul>
 </li>
-<li>啟動方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Content-Type-Options：nosniff</span><br></pre></td></tr></table></figure></li>
-<li>可參考<ul>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Content-Type-Options：nosniff</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-Content-Type-Options">Mozilla X-Content-Type-Options</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
 </ul>
 </li>
 </ul>
-<h1 id="保護網站資源別被任意存取"><a href="#保護網站資源別被任意存取" class="headerlink" title="保護網站資源別被任意存取"></a>保護網站資源別被任意存取</h1><h2 id="Access-Control-Allow-Origin"><a href="#Access-Control-Allow-Origin" class="headerlink" title="Access-Control-Allow-Origin"></a>Access-Control-Allow-Origin</h2><ul>
-<li>原理：<ul>
+<h2 id="保護網站資源別被任意存取"><a href="#保護網站資源別被任意存取" class="headerlink" title="保護網站資源別被任意存取"></a>保護網站資源別被任意存取</h2><h3 id="Access-Control-Allow-Origin"><a href="#Access-Control-Allow-Origin" class="headerlink" title="Access-Control-Allow-Origin"></a>Access-Control-Allow-Origin</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>CORS是用來解決腳本的跨域資源請求問題，用來確保資源是否可以被其他網站存取，但是要注意它不能阻擋CSRF</li>
 <li>不能阻擋CSRF的原因：<ul>
 <li>CORS是阻擋js所發出的request，但是CSRF可以透過form, tag等發起請求</li>
@@ -409,8 +433,11 @@
 </li>
 </ul>
 </li>
-<li>啟動方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Origin: &lt;origin&gt;</span><br></pre></td></tr></table></figure></li>
-<li>可參考<ul>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Origin: &lt;origin&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Origin">Mozilla Access-Control-Allow-Origin</a>: 詳細介紹這個header的選項</li>
 <li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-TW/docs/Web/HTTP/CORS">跨來源資源共享（CORS）</a>:詳細解釋CORS(Cross-Origin Resource Sharing)的功能</li>
 <li><a target="_blank" rel="noopener" href="https://blog.toright.com/posts/3205/%E5%AF%A6%E4%BD%9C-cross-origin-resource-sharing-cros-%E8%A7%A3%E6%B1%BA-ajax-%E7%99%BC%E9%80%81%E8%B7%A8%E7%B6%B2%E5%9F%9F%E5%AD%98%E5%8F%96-request.html">實作 Cross-Origin Resource Sharing (CORS) 解決 Ajax 發送跨網域存取 Request</a>: 如何用CORS存取外部資源</li>
@@ -418,21 +445,25 @@
 </ul>
 </li>
 </ul>
-<h2 id="X-Permitted-Cross-Domain-Policies"><a href="#X-Permitted-Cross-Domain-Policies" class="headerlink" title="X-Permitted-Cross-Domain-Policies"></a>X-Permitted-Cross-Domain-Policies</h2><ul>
-<li>原理：<ul>
+<h3 id="X-Permitted-Cross-Domain-Policies"><a href="#X-Permitted-Cross-Domain-Policies" class="headerlink" title="X-Permitted-Cross-Domain-Policies"></a>X-Permitted-Cross-Domain-Policies</h3><ul>
+<li><p>原理：</p>
+<ul>
 <li>當不能把crossdomain.xml放在根目錄時需要設定該選項</li>
 <li>crossdomain.xml: 從別的domain讀取flash時所需要的策略文件</li>
 </ul>
 </li>
-<li>啟動方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Permitted-Cross-Domain-Policies: master-only # master-only代表只允許主策略文件(/crossdomain.xml)</span><br></pre></td></tr></table></figure></li>
-<li>可參考<ul>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Permitted-Cross-Domain-Policies: master-only # master-only代表只允許主策略文件(/crossdomain.xml)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
 <li><a target="_blank" rel="noopener" href="http://blog.xuite.net/fireworkgoldfish/CodeIndex/27179479-Cross+Domain+Policy">Cross Domain Policy</a>: 提到關於crossdomain.xml的設定</li>
 <li><a target="_blank" rel="noopener" href="http://blog.csdn.net/summerhust/article/details/7721627">关于跨域策略文件crossdomain.xml文件</a>: crossdomain.xml的範例</li>
 <li><a target="_blank" rel="noopener" href="https://toutiao.io/posts/218856/app_preview">如何使用 HTTP 响应头字段来提高 Web 安全性？</a>: X-Permitted-Cross-Domain-Policies相關解說</li>
 </ul>
 </li>
 </ul>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a target="_blank" rel="noopener" href="http://www.qa-knowhow.com/?p=1467">11個網站安全防護的 http Header 設定</a>: 其他人提到的header設定</li>
 </ul>
 
@@ -452,12 +483,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/2017/11/11/%E5%B8%B8%E7%94%A8%E8%BB%9F%E9%AB%94%E5%B7%A5%E5%85%B7%E7%B5%B1%E6%95%B4/" rel="prev" title="常用軟體工具統整">
-                  <i class="fa fa-chevron-left"></i> 常用軟體工具統整
+                  <i class="fa fa-angle-left"></i> 常用軟體工具統整
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2018/03/11/%E3%80%8C%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8D%E8%AE%80%E5%BE%8C%E6%84%9F/" rel="next" title="「深度學習的技術」讀後感">
-                  「深度學習的技術」讀後感 <i class="fa fa-chevron-right"></i>
+                  「深度學習的技術」讀後感 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -481,15 +512,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">evshary</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
@@ -515,10 +545,11 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 

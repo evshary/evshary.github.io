@@ -14,10 +14,10 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="比較shared&#x2F;static library程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。     static library shared library    優點 不需要考慮執行環境的相依性問題 使用空間小(檔案和記憶體)、更換library不用重build   缺點 執行檔極大、更換libr">
 <meta property="og:type" content="article">
@@ -27,10 +27,10 @@
 <meta property="og:description" content="比較shared&#x2F;static library程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。     static library shared library    優點 不需要考慮執行環境的相依性問題 使用空間小(檔案和記憶體)、更換library不用重build   缺點 執行檔極大、更換libr">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-05-12T15:28:37.000Z">
-<meta property="article:modified_time" content="2024-09-16T14:11:06.873Z">
+<meta property="article:modified_time" content="2024-09-17T01:11:24.091Z">
 <meta property="article:author" content="evshary">
-<meta property="article:tag" content="GNU tool">
 <meta property="article:tag" content="系統程式">
+<meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
 
 
@@ -44,7 +44,7 @@
 <title>淺談函式庫 | CY's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BC%83shared-x2F-static-library"><span class="nav-number">1.</span> <span class="nav-text">比較shared&#x2F;static library</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB"><span class="nav-number">2.</span> <span class="nav-text">動態函式庫</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E7%B7%A8%E8%AD%AF"><span class="nav-number">2.1.</span> <span class="nav-text">動態函式庫 - 如何編譯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">動態函式庫 - 如何使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8Bshared-library%E7%9A%84%E9%97%9C%E4%BF%82-ldd"><span class="nav-number">2.3.</span> <span class="nav-text">查看shared library的關係 - ldd</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB"><span class="nav-number">3.</span> <span class="nav-text">靜態函式庫</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E7%B7%A8%E8%AD%AF"><span class="nav-number">3.1.</span> <span class="nav-text">靜態函式庫 - 如何編譯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">靜態函式庫 - 如何使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#symbol%E8%A1%9D%E7%AA%81"><span class="nav-number">4.</span> <span class="nav-text">symbol衝突</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shared-library%E9%80%A3%E7%B5%90%E6%99%82%EF%BC%8Cobject-file%E6%9C%89%E8%A1%9D%E7%AA%81"><span class="nav-number">4.1.</span> <span class="nav-text">shared library連結時，object file有衝突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-library%E6%89%93%E5%8C%85%E6%99%82%EF%BC%8Cobject-file%E6%9C%89%E8%A1%9D%E7%AA%81"><span class="nav-number">4.2.</span> <span class="nav-text">static library打包時，object file有衝突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8shared-library%E6%99%82%EF%BC%8C%E4%B8%8D%E5%90%8Clibrary%E6%9C%89%E8%A1%9D%E7%AA%81"><span class="nav-number">4.3.</span> <span class="nav-text">使用shared library時，不同library有衝突</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%B7%E8%A1%8C%E4%B8%AD%E8%BC%89%E5%85%A5library"><span class="nav-number">5.</span> <span class="nav-text">執行中載入library</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#library%E5%85%AC%E9%96%8Bsymbols%E7%AE%A1%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">library公開symbols管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-version-script"><span class="nav-number">6.1.</span> <span class="nav-text">使用 version script</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-attribute-%E8%AA%9E%E6%B3%95"><span class="nav-number">6.2.</span> <span class="nav-text">使用__attribute__語法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8version-script%E6%8E%A7%E5%88%B6%E7%89%88%E6%9C%AC"><span class="nav-number">6.3.</span> <span class="nav-text">用version script控制版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BC%83shared-static-library"><span class="nav-number">1.</span> <span class="nav-text">比較shared&#x2F;static library</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB"><span class="nav-number">2.</span> <span class="nav-text">動態函式庫</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E7%B7%A8%E8%AD%AF"><span class="nav-number">2.1.</span> <span class="nav-text">動態函式庫 - 如何編譯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">動態函式庫 - 如何使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8Bshared-library%E7%9A%84%E9%97%9C%E4%BF%82-ldd"><span class="nav-number">2.3.</span> <span class="nav-text">查看shared library的關係 - ldd</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB"><span class="nav-number">3.</span> <span class="nav-text">靜態函式庫</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E7%B7%A8%E8%AD%AF"><span class="nav-number">3.1.</span> <span class="nav-text">靜態函式庫 - 如何編譯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E5%87%BD%E5%BC%8F%E5%BA%AB-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">靜態函式庫 - 如何使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#symbol%E8%A1%9D%E7%AA%81"><span class="nav-number">4.</span> <span class="nav-text">symbol衝突</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shared-library%E9%80%A3%E7%B5%90%E6%99%82%EF%BC%8Cobject-file%E6%9C%89%E8%A1%9D%E7%AA%81"><span class="nav-number">4.1.</span> <span class="nav-text">shared library連結時，object file有衝突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-library%E6%89%93%E5%8C%85%E6%99%82%EF%BC%8Cobject-file%E6%9C%89%E8%A1%9D%E7%AA%81"><span class="nav-number">4.2.</span> <span class="nav-text">static library打包時，object file有衝突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8shared-library%E6%99%82%EF%BC%8C%E4%B8%8D%E5%90%8Clibrary%E6%9C%89%E8%A1%9D%E7%AA%81"><span class="nav-number">4.3.</span> <span class="nav-text">使用shared library時，不同library有衝突</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%B7%E8%A1%8C%E4%B8%AD%E8%BC%89%E5%85%A5library"><span class="nav-number">5.</span> <span class="nav-text">執行中載入library</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#library%E5%85%AC%E9%96%8Bsymbols%E7%AE%A1%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">library公開symbols管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-version-script"><span class="nav-number">6.1.</span> <span class="nav-text">使用 version script</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-attribute-%E8%AA%9E%E6%B3%95"><span class="nav-number">6.2.</span> <span class="nav-text">使用__attribute__語法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8version-script%E6%8E%A7%E5%88%B6%E7%89%88%E6%9C%AC"><span class="nav-number">6.3.</span> <span class="nav-text">用version script控制版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -240,7 +240,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-16 14:11:06" itemprop="dateModified" datetime="2024-09-16T14:11:06+00:00">2024-09-16</time>
+      <time title="Modified: 2024-09-17 01:11:24" itemprop="dateModified" datetime="2024-09-17T01:11:24+00:00">2024-09-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,7 +275,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="比較shared-x2F-static-library"><a href="#比較shared-x2F-static-library" class="headerlink" title="比較shared&#x2F;static library"></a>比較shared&#x2F;static library</h2><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared&#x2F;static library"></a>比較shared&#x2F;static library</h2><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
 <table>
 <thead>
 <tr>
@@ -496,8 +496,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
               <a href="/tags/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/" rel="tag"># 系統程式</a>
+              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
           </div>
 
         
@@ -505,12 +505,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/" rel="prev" title="docker 簡易教學">
-                  <i class="fa fa-chevron-left"></i> docker 簡易教學
+                  <i class="fa fa-angle-left"></i> docker 簡易教學
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2018/05/13/openssl-library-example/" rel="next" title="使用 openssl 工具與函式庫">
-                  使用 openssl 工具與函式庫 <i class="fa fa-chevron-right"></i>
+                  使用 openssl 工具與函式庫 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -534,15 +534,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">evshary</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
@@ -568,10 +567,11 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 

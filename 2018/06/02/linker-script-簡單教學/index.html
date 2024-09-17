@@ -14,10 +14,10 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="簡介最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。 linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 undefined referen">
 <meta property="og:type" content="article">
@@ -27,10 +27,10 @@
 <meta property="og:description" content="簡介最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。 linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 undefined referen">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-06-02T15:56:33.000Z">
-<meta property="article:modified_time" content="2024-09-16T14:11:06.873Z">
+<meta property="article:modified_time" content="2024-09-17T01:11:24.091Z">
 <meta property="article:author" content="evshary">
-<meta property="article:tag" content="GNU tool">
 <meta property="article:tag" content="系統程式">
+<meta property="article:tag" content="GNU tool">
 <meta name="twitter:card" content="summary">
 
 
@@ -44,7 +44,7 @@
 <title>linker script 簡單教學 | CY's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E5%96%AE%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">簡單範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">3.</span> <span class="nav-text">常用的功能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ENTRY"><span class="nav-number">3.1.</span> <span class="nav-text">ENTRY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MEMORY"><span class="nav-number">3.2.</span> <span class="nav-text">MEMORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KEEP"><span class="nav-number">3.3.</span> <span class="nav-text">KEEP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section-%E7%9A%84%E6%9C%AC%E9%AB%94"><span class="nav-number">3.4.</span> <span class="nav-text">section 的本體</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LMA-x2F-VMA-%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">LMA&#x2F;VMA 的概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E5%BE%97-section-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.5.</span> <span class="nav-text">取得 section 的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack-%E7%9A%84%E4%BD%8D%E5%9D%80"><span class="nav-number">3.6.</span> <span class="nav-text">Stack 的位址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">常見問題</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9Csection%E9%87%8D%E8%A4%87%E8%A2%AB%E4%BD%BF%E7%94%A8%EF%BC%8C%E6%9C%83%E7%99%BC%E7%94%9F%E4%BB%80%E9%BA%BC%E4%BA%8B%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">如果section重複被使用，會發生什麼事？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%8F%AA%E6%83%B3%E8%A6%81%E6%8A%8A%E6%9F%90%E5%80%8Blibrary%E7%9A%84-o%E6%94%BE%E5%85%A5%E7%9A%84%E8%A9%B1"><span class="nav-number">4.2.</span> <span class="nav-text">如果只想要把某個library的.o放入的話</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%88%91%E4%B8%8D%E6%83%B3%E8%A6%81%E6%8A%8A%E7%89%B9%E5%AE%9A%E6%AA%94%E6%A1%88%E7%9A%84section%E6%94%BE%E5%85%A5"><span class="nav-number">4.3.</span> <span class="nav-text">如果我不想要把特定檔案的section放入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B0%A1%E5%96%AE%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">簡單範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">3.</span> <span class="nav-text">常用的功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ENTRY"><span class="nav-number">3.1.</span> <span class="nav-text">ENTRY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MEMORY"><span class="nav-number">3.2.</span> <span class="nav-text">MEMORY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KEEP"><span class="nav-number">3.3.</span> <span class="nav-text">KEEP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#section-%E7%9A%84%E6%9C%AC%E9%AB%94"><span class="nav-number">3.4.</span> <span class="nav-text">section 的本體</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LMA-VMA-%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">LMA&#x2F;VMA 的概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E5%BE%97-section-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.5.</span> <span class="nav-text">取得 section 的位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stack-%E7%9A%84%E4%BD%8D%E5%9D%80"><span class="nav-number">3.6.</span> <span class="nav-text">Stack 的位址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">常見問題</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9Csection%E9%87%8D%E8%A4%87%E8%A2%AB%E4%BD%BF%E7%94%A8%EF%BC%8C%E6%9C%83%E7%99%BC%E7%94%9F%E4%BB%80%E9%BA%BC%E4%BA%8B%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">如果section重複被使用，會發生什麼事？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%8F%AA%E6%83%B3%E8%A6%81%E6%8A%8A%E6%9F%90%E5%80%8Blibrary%E7%9A%84-o%E6%94%BE%E5%85%A5%E7%9A%84%E8%A9%B1"><span class="nav-number">4.2.</span> <span class="nav-text">如果只想要把某個library的.o放入的話</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%88%91%E4%B8%8D%E6%83%B3%E8%A6%81%E6%8A%8A%E7%89%B9%E5%AE%9A%E6%AA%94%E6%A1%88%E7%9A%84section%E6%94%BE%E5%85%A5"><span class="nav-number">4.3.</span> <span class="nav-text">如果我不想要把特定檔案的section放入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -240,7 +240,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-16 14:11:06" itemprop="dateModified" datetime="2024-09-16T14:11:06+00:00">2024-09-16</time>
+      <time title="Modified: 2024-09-17 01:11:24" itemprop="dateModified" datetime="2024-09-17T01:11:24+00:00">2024-09-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,49 +275,51 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h1><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
 <p>linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 <code>undefined reference error</code>。</p>
 <p>而 linker script 就是提供給 linker 參考的文件，它告訴 linker 我想要怎麼擺放這些 section，甚至也可以定義程式的起始點在哪邊。</p>
-<h1 id="簡單範例"><a href="#簡單範例" class="headerlink" title="簡單範例"></a>簡單範例</h1><p>最簡單的 linker script 是用<code>SECTIONS</code>指令去定義 section 的分佈。</p>
+<h2 id="簡單範例"><a href="#簡單範例" class="headerlink" title="簡單範例"></a>簡單範例</h2><p>最簡單的 linker script 是用<code>SECTIONS</code>指令去定義 section 的分佈。</p>
 <p>test.ld</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SECTIONS</span><br><span class="line">&#123;</span><br><span class="line">. = 0x10000;</span><br><span class="line">.text : &#123; *(.text) &#125;</span><br><span class="line">. = 0x8000000;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.bss : &#123; *(.bss) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在上例，<code>.</code>被稱作 location counter，代表的是指向現在的位址，我們可以讀取或是移動它 (我覺得可以想像成我們在打電腦文件時的游標，代表現在要處理這個位置)。</p>
 <p>這段 script 主要做的事是，先把 location counter 移到 0x10000，在這裡寫入所有輸入檔的<code>.text section</code>後，再來移到0x8000000放所有輸入檔的<code>.data section</code>跟<code>.bss section</code>。</p>
 <p>當然，最重要的還是去嘗試，所以讓我們來試試看，結果是不是真的像我們所想的。</p>
 <p>main.c</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void test(void);</span><br><span class="line"></span><br><span class="line">int global_bss;</span><br><span class="line">int global_data = 123;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    global_bss = 0;</span><br><span class="line">    test();</span><br><span class="line">    global_data++;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> global_bss;</span><br><span class="line"><span class="type">int</span> global_data = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    global_bss = <span class="number">0</span>;</span><br><span class="line">    test();</span><br><span class="line">    global_data++;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>test.c</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void test(void)</span><br><span class="line">&#123;</span><br><span class="line">    int i;</span><br><span class="line">    // do nothing.</span><br><span class="line">    for (i = 0; i &lt; 10000; i++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="comment">// do nothing.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>嘗試編譯並看結果</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c main.c test.c</span><br><span class="line">$ ld -T test.ld main.o test.o</span><br><span class="line">$ objdump -h a.out</span><br><span class="line"></span><br><span class="line">a.out:     file format elf64-x86-64</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA               LMA               File off  Algn</span><br><span class="line">  0 .text         00000046  0000000000010000  0000000000010000  00010000  2**0</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .eh_frame     00000058  0000000000010048  0000000000010048  00010048  2**3</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, DATA</span><br><span class="line">  2 .data         00000004  0000000008000000  0000000008000000  00200000  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  3 .bss          00000004  0000000008000004  0000000008000004  00200004  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  4 .comment      00000011  0000000000000000  0000000000000000  00200004  2**0</span><br><span class="line">                  CONTENTS, READONLY</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c main.c test.c</span><br><span class="line">$ ld -T test.ld main.o test.o</span><br><span class="line">$ objdump -h a.out</span><br><span class="line"></span><br><span class="line">a.out:     file format elf64-x86-64</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA               LMA               File off  Algn</span><br><span class="line">  0 .text         00000046  0000000000010000  0000000000010000  00010000  2**0</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .eh_frame     00000058  0000000000010048  0000000000010048  00010048  2**3</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, DATA</span><br><span class="line">  2 .data         00000004  0000000008000000  0000000008000000  00200000  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  3 .bss          00000004  0000000008000004  0000000008000004  00200004  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  4 .comment      00000011  0000000000000000  0000000000000000  00200004  2**0</span><br><span class="line">                  CONTENTS, READONLY</span><br></pre></td></tr></table></figure>
 
 <p>我們可以看到在VMA和LMA的地方，text是從0x10000開始，data和bss則是從0x8000000開始放，跟我們所安排的結果一樣。</p>
 <p>這邊說明一下，一定會有人覺得奇怪，為什麼編譯出來的檔案無法執行，這個是因為我們並沒有符合 Linux 可執行的格式來 link，如果你想要知道一般我們下 gcc 是使用什麼 linker script 的話，可以使用如下方式：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -Wl,-verbose main.c test.c</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -Wl,-verbose main.c test.c</span><br></pre></td></tr></table></figure>
 
 <p>這樣就可以看到所使用的 linker script 了。</p>
-<h1 id="常用的功能"><a href="#常用的功能" class="headerlink" title="常用的功能"></a>常用的功能</h1><p>接著我們來談談在linker script中常見到的功能，這邊我們可以參考 jserv 帶領成大同學開發的 rtenv 中的 <a target="_blank" rel="noopener" href="https://github.com/southernbear/rtenv/blob/master/main.ld">linker script</a></p>
+<h2 id="常用的功能"><a href="#常用的功能" class="headerlink" title="常用的功能"></a>常用的功能</h2><p>接著我們來談談在linker script中常見到的功能，這邊我們可以參考 jserv 帶領成大同學開發的 rtenv 中的 <a target="_blank" rel="noopener" href="https://github.com/southernbear/rtenv/blob/master/main.ld">linker script</a></p>
 <p>那我們就一一了解每個符號的意義吧！</p>
-<h2 id="ENTRY"><a href="#ENTRY" class="headerlink" title="ENTRY"></a>ENTRY</h2><p>用 ENTRY 可以指定程式進入點的符號，不設定的話 linker 會試圖用預設<code>.text</code>的起始點，或者用位址0的地方。</p>
+<h3 id="ENTRY"><a href="#ENTRY" class="headerlink" title="ENTRY"></a>ENTRY</h3><p>用 ENTRY 可以指定程式進入點的符號，不設定的話 linker 會試圖用預設<code>.text</code>的起始點，或者用位址0的地方。</p>
 <p>以 x86 為例，預設進入點是<code>ENTRY(_start)</code>，而 rtenv 則是設定為 <code>ENTRY(main)</code></p>
-<h2 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h2><p>Linker 預設會取用全部的記憶體，我們可以用 MEMORY 指令指定記憶體大小，在 rtenv 的例子中，指定了 FLASH 跟 RAM 兩種的輸出位置與大小</p>
+<h3 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h3><p>Linker 預設會取用全部的記憶體，我們可以用 MEMORY 指令指定記憶體大小，在 rtenv 的例子中，指定了 FLASH 跟 RAM 兩種的輸出位置與大小</p>
 <p>ORIGIN代表起始位置，LENGTH為長度</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MEMORY</span><br><span class="line">&#123;</span><br><span class="line">  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 128K</span><br><span class="line">  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 20K</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>接下來SECTION部分，就能用 &gt; 符號把資料寫到指定的位置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.bss : &#123;</span><br><span class="line">        _sbss = .;</span><br><span class="line">        *(.bss)         /* Zero-filled run time allocate data memory */</span><br><span class="line">        _ebss = .;</span><br><span class="line">    &#125; &gt;RAM</span><br></pre></td></tr></table></figure>
 
-<h2 id="KEEP"><a href="#KEEP" class="headerlink" title="KEEP"></a>KEEP</h2><p>KEEP 指令保留某個符號不要被 garbage collection ，例如我們不希望 ARM 的 ISR vector 會被優化掉。</p>
+<h3 id="KEEP"><a href="#KEEP" class="headerlink" title="KEEP"></a>KEEP</h3><p>KEEP 指令保留某個符號不要被 garbage collection ，例如我們不希望 ARM 的 ISR vector 會被優化掉。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="section-的本體"><a href="#section-的本體" class="headerlink" title="section 的本體"></a>section 的本體</h2><p>section 的指定方式是 linker script 中的重點，其中也有許多設定。</p>
+<h3 id="section-的本體"><a href="#section-的本體" class="headerlink" title="section 的本體"></a>section 的本體</h3><p>section 的指定方式是 linker script 中的重點，其中也有許多設定。</p>
 <p>我們可以參考<a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs/ld/Output-Section-Attributes.html#Output-Section-Attributes">官方文件</a>先對 section 的功能做一個快速了解。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">section [address] [(type)] :</span><br><span class="line">  [AT(lma)]</span><br><span class="line">  [ALIGN(section_align) | ALIGN_WITH_INPUT]</span><br><span class="line">  [SUBALIGN(subsection_align)]</span><br><span class="line">  [constraint]</span><br><span class="line">  &#123;</span><br><span class="line">      output-section-command</span><br><span class="line">      output-section-command</span><br><span class="line">      ...</span><br><span class="line">  &#125; [&gt;region] [AT&gt;lma_region] [:phdr :phdr ...] [=fillexp]</span><br></pre></td></tr></table></figure>
 
 <p>output-section-command 代表的就是我們要怎麼擺放每個 section。</p>
 <p>在這個例子裡可以看到有許多 LMA，除了 LMA 外，其實還有 VMA，它們兩個究竟有什麼不同呢？</p>
-<h3 id="LMA-x2F-VMA-的概念"><a href="#LMA-x2F-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h3><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
+<h4 id="LMA-VMA-的概念"><a href="#LMA-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h4><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
 <p>link script 中設計了兩種位址：VMA 和 LMA</p>
 <table>
 <thead>
@@ -352,24 +354,26 @@
 <p>繼續以 rtenv 為例，當指定了<code>_sidata</code>的 symbol 位置後，AT 就是要求載入到 FLASH 時要在<code>.text</code>的後面，換句話說<code>.data</code>的 LMA 要在<code>.text</code>後</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* Initialized data will initially be loaded in FLASH at the end of the .text section. */</span><br><span class="line">.data : AT (_sidata)</span><br><span class="line">&#123;</span><br><span class="line">  _sdata = .;</span><br><span class="line">  *(.data)        /* Initialized data */</span><br><span class="line">  *(.data*)</span><br><span class="line">  _edata = .;</span><br><span class="line">&#125; &gt;RAM</span><br></pre></td></tr></table></figure>
 
-<h2 id="取得-section-的位置"><a href="#取得-section-的位置" class="headerlink" title="取得 section 的位置"></a>取得 section 的位置</h2><p>在程式中，有時候可能還是會需要取得每個 section 的所在位址，我們可以用如下的方式取得</p>
+<h3 id="取得-section-的位置"><a href="#取得-section-的位置" class="headerlink" title="取得 section 的位置"></a>取得 section 的位置</h3><p>在程式中，有時候可能還是會需要取得每個 section 的所在位址，我們可以用如下的方式取得</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">         *(.text)</span><br><span class="line">         *(.text.*)</span><br><span class="line">        *(.rodata)</span><br><span class="line">        *(.rodata*)</span><br><span class="line">        _smodule = .;</span><br><span class="line">        *(.module)</span><br><span class="line">        _emodule = .;</span><br><span class="line">        _sprogram = .;</span><br><span class="line">        *(.program)</span><br><span class="line">        _eprogram = .;</span><br><span class="line">        _sromdev = .;</span><br><span class="line">        *(.rom.*)</span><br><span class="line">        _eromdev = .;</span><br><span class="line">        _sidata = .;</span><br><span class="line">    &#125; &gt;FLASH</span><br></pre></td></tr></table></figure>
+
 <p>上面的7個 symbol 分別代表開始和結束，例如<code>_smodule</code>代表 module 的開始，而<code>_emodule</code>則代表 module 的結束。</p>
 <p>這樣的好處是 symbol 的部分我們可以在主程式這樣使用</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">extern uint32_t _sidata;</span><br><span class="line">extern uint32_t _sdata;</span><br><span class="line">extern uint32_t _edata;</span><br><span class="line"></span><br><span class="line">uint32_t *idata_begin = &amp;_sidata; </span><br><span class="line">uint32_t *data_begin = &amp;_sdata; </span><br><span class="line">uint32_t *data_end = &amp;_edata; </span><br><span class="line">while (data_begin &lt; data_end) *data_begin++ = *idata_begin++;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sidata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sdata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _edata;</span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> *idata_begin = &amp;_sidata;</span><br><span class="line"><span class="type">uint32_t</span> *data_begin = &amp;_sdata;</span><br><span class="line"><span class="type">uint32_t</span> *data_end = &amp;_edata;</span><br><span class="line"><span class="keyword">while</span> (data_begin &lt; data_end) *data_begin++ = *idata_begin++;</span><br></pre></td></tr></table></figure>
 
 <p>值得注意的是，如果 C 已經有用到該變數<code>_sidata</code>，那就要用<code>PROVIDE(_sdata = .)</code>來避免 linker 出現重複定義的錯誤</p>
-<h2 id="Stack-的位址"><a href="#Stack-的位址" class="headerlink" title="Stack 的位址"></a>Stack 的位址</h2><p>通常 stack 位址我們都會放在 RAM 的最下方讓他往上長，所以我們可以用下面表示方式：</p>
+<h3 id="Stack-的位址"><a href="#Stack-的位址" class="headerlink" title="Stack 的位址"></a>Stack 的位址</h3><p>通常 stack 位址我們都會放在 RAM 的最下方讓他往上長，所以我們可以用下面表示方式：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_estack = ORIGIN(RAM) + LENGTH(RAM);</span><br></pre></td></tr></table></figure>
+
 <p>代表 stack 的放置位址是在 RAM 的最下方。</p>
-<h1 id="常見問題"><a href="#常見問題" class="headerlink" title="常見問題"></a>常見問題</h1><h2 id="如果section重複被使用，會發生什麼事？"><a href="#如果section重複被使用，會發生什麼事？" class="headerlink" title="如果section重複被使用，會發生什麼事？"></a>如果section重複被使用，會發生什麼事？</h2><p>每個輸入檔的 section 只能在出現在 SECTIONS 中出現一次。什麼意思呢？讓我們看個例子</p>
+<h2 id="常見問題"><a href="#常見問題" class="headerlink" title="常見問題"></a>常見問題</h2><h3 id="如果section重複被使用，會發生什麼事？"><a href="#如果section重複被使用，會發生什麼事？" class="headerlink" title="如果section重複被使用，會發生什麼事？"></a>如果section重複被使用，會發生什麼事？</h3><p>每個輸入檔的 section 只能在出現在 SECTIONS 中出現一次。什麼意思呢？讓我們看個例子</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.data1 : &#123; data.o(.data) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>我們可以看到<code>data.o</code>中的<code>.data section</code>應該在第一個 OUTPUT-SECTION-COMMAND (也就是<code>.data : &#123; *(.data) &#125;</code>)被用掉了，所以在<code>.data1 : &#123; data.o(.data) &#125;</code>將不會再次出現，代表的就是<code>.data1 section</code>會是空的。</p>
-<h2 id="如果只想要把某個library的-o放入的話"><a href="#如果只想要把某個library的-o放入的話" class="headerlink" title="如果只想要把某個library的.o放入的話"></a>如果只想要把某個library的.o放入的話</h2><p>可用<code>*xxx.a:*yyy.o (.bss*)</code>的方式，舉例來說：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.bss_RAM2 : ALIGN(4)</span><br><span class="line">    &#123;</span><br><span class="line">    	*libmytest.a:*.o (.bss*)</span><br><span class="line">    	*(.bss.$RAM2*)</span><br><span class="line">    	*(.bss.$RamLoc64*)</span><br><span class="line">       . = ALIGN(4) ;</span><br><span class="line">    &#125; &gt; RamLoc64</span><br></pre></td></tr></table></figure>
+<h3 id="如果只想要把某個library的-o放入的話"><a href="#如果只想要把某個library的-o放入的話" class="headerlink" title="如果只想要把某個library的.o放入的話"></a>如果只想要把某個library的.o放入的話</h3><p>可用<code>*xxx.a:*yyy.o (.bss*)</code>的方式，舉例來說：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.bss_RAM2 : ALIGN(4)</span><br><span class="line">    &#123;</span><br><span class="line">      *libmytest.a:*.o (.bss*)</span><br><span class="line">      *(.bss.$RAM2*)</span><br><span class="line">      *(.bss.$RamLoc64*)</span><br><span class="line">       . = ALIGN(4) ;</span><br><span class="line">    &#125; &gt; RamLoc64</span><br></pre></td></tr></table></figure>
 
-<h2 id="如果我不想要把特定檔案的section放入"><a href="#如果我不想要把特定檔案的section放入" class="headerlink" title="如果我不想要把特定檔案的section放入"></a>如果我不想要把特定檔案的section放入</h2><p>可以使用<code>EXCLUDE_FILE</code>，例如我想放除了 foo.o、bar.o 外，所有的<code>.bss section</code>，可以這麼做：</p>
+<h3 id="如果我不想要把特定檔案的section放入"><a href="#如果我不想要把特定檔案的section放入" class="headerlink" title="如果我不想要把特定檔案的section放入"></a>如果我不想要把特定檔案的section放入</h3><p>可以使用<code>EXCLUDE_FILE</code>，例如我想放除了 foo.o、bar.o 外，所有的<code>.bss section</code>，可以這麼做：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(*(EXCLUDE_FILE (*foo.o *bar.o) .bss))</span><br></pre></td></tr></table></figure>
 
 <p>詳細可參考下方連結</p>
@@ -377,7 +381,7 @@
 <li><a target="_blank" rel="noopener" href="http://forum.andestech.com/viewtopic.php?f=16&t=600">linker script之EXCLUDE_FILE語法</a></li>
 <li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/21418593/linker-script-put-a-particular-file-at-a-later-position">Linker Script: Put a particular file at a later position</a></li>
 </ul>
-<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs/ld/">ld 官方文件</a></li>
 <li><a target="_blank" rel="noopener" href="http://yodalee.blogspot.tw/2015/04/linker-script.html">Linker script 簡介</a></li>
 <li><a target="_blank" rel="noopener" href="http://wiki.csie.ncku.edu.tw/embedded/Lab19/stm32-prog.pdf">嵌入式系統建構：開發運作於STM32的韌體程式</a></li>
@@ -395,8 +399,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
               <a href="/tags/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/" rel="tag"># 系統程式</a>
+              <a href="/tags/GNU-tool/" rel="tag"># GNU tool</a>
           </div>
 
         
@@ -404,12 +408,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/" rel="prev" title="稀缺其實是一種陷阱">
-                  <i class="fa fa-chevron-left"></i> 稀缺其實是一種陷阱
+                  <i class="fa fa-angle-left"></i> 稀缺其實是一種陷阱
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/" rel="next" title="gcc常用擴充功能">
-                  gcc常用擴充功能 <i class="fa fa-chevron-right"></i>
+                  gcc常用擴充功能 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -433,15 +437,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">evshary</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
@@ -467,10 +470,11 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
