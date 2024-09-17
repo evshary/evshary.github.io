@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="簡介dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。 使用教學基本 輸入輸出參數 if&#x3D;FILE：輸入名稱 of&#x3D;FILE：輸出名稱    1dd if&#x3D;[input_file] of&#x3D;[output_file]  轉換 做相對應的轉換conv&#x3D;CONVS lcase：">
+<meta property="og:type" content="website">
+<meta property="og:title" content="dd - 資料處理的好工具">
+<meta property="og:url" content="http://evshary.com/contents/%E6%8A%80%E8%A1%93/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7.html">
+<meta property="og:site_name" content="CY&#39;s Blog">
+<meta property="og:description" content="簡介dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。 使用教學基本 輸入輸出參數 if&#x3D;FILE：輸入名稱 of&#x3D;FILE：輸出名稱    1dd if&#x3D;[input_file] of&#x3D;[output_file]  轉換 做相對應的轉換conv&#x3D;CONVS lcase：">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-11-25T18:27:45.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:03:59.017Z">
+<meta property="article:author" content="evshary">
+<meta property="article:tag" content="tools">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://evshary.com/contents/%E6%8A%80%E8%A1%93/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":true,"permalink":"http://evshary.com/contents/%E6%8A%80%E8%A1%93/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7.html","path":"contents/技術/dd-資料處理的好工具.html","title":"dd - 資料處理的好工具"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>dd - 資料處理的好工具 | CY's Blog
+</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="CY's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CY's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">All work is preparing yourself for the accident waiting to happen.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8"><span class="nav-number">2.</span> <span class="nav-text">使用教學</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC"><span class="nav-number">2.1.</span> <span class="nav-text">基本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%89%E6%8F%9B"><span class="nav-number">2.2.</span> <span class="nav-text">轉換</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%80%E5%A1%8A"><span class="nav-number">2.3.</span> <span class="nav-text">區塊</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">常用指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">參考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">evshary</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="en"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">dd - 資料處理的好工具
+</h1>
+
+<div class="post-meta-container">
+  <ul class="breadcrumb">
+            <li><a href="/contents/">CONTENTS</a></li>
+            <li><a href="/contents/%E6%8A%80%E8%A1%93/">技術</a></li>
+            <li>DD-資料處理的好工具</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
+<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
+<li>輸入輸出參數<ul>
+<li>if&#x3D;FILE：輸入名稱</li>
+<li>of&#x3D;FILE：輸出名稱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
+
+<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
+<li>做相對應的轉換<code>conv=CONVS</code><ul>
+<li>lcase：大寫字母換小寫</li>
+<li>ucase：小寫字母換大寫</li>
+<li>nocreat：不要建立輸出檔案</li>
+<li>notrunc：input小於output時，仍維持output大小</li>
+<li>fdatasync：讓資料同步寫入硬碟</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
+
+<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
+<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
+<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
+<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
+</ul>
+</li>
+<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
+<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
+<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
+</ul>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
+<li><p>大小寫轉換</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>產生一個特定大小的檔案</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>把特定檔案的開頭512 byte清空</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份硬碟</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份光碟，可參考<a target="_blank" rel="noopener" href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
+<ol>
+<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然後應該會出現類似如下內容</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>拆分&amp;合併檔案，可參考<a target="_blank" rel="noopener" href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
+<ul>
+<li>拆分檔案，例如把檔案切成好幾個1G</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>合併檔案，例如好幾個1G合併起來</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
+</ul>
+
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/contents/">CONTENTS</a></li>
+            <li><a href="/contents/%E6%8A%80%E8%A1%93/">技術</a></li>
+            <li>DD-資料處理的好工具</li>
+  </ul>
+
+    
+    
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"evshary","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

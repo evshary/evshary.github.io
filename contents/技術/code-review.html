@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言其實我一直對code review有點好奇，到底有什麼樣的好處。所以統整了些資料，研究看看實行的好處以及如何實行code review。 重要：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容 好處 品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。 更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只">
+<meta property="og:type" content="website">
+<meta property="og:title" content="code review">
+<meta property="og:url" content="http://evshary.com/contents/%E6%8A%80%E8%A1%93/code-review.html">
+<meta property="og:site_name" content="CY&#39;s Blog">
+<meta property="og:description" content="前言其實我一直對code review有點好奇，到底有什麼樣的好處。所以統整了些資料，研究看看實行的好處以及如何實行code review。 重要：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容 好處 品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。 更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-08-27T17:32:24.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:03:59.017Z">
+<meta property="article:author" content="evshary">
+<meta property="article:tag" content="軟體開發">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://evshary.com/contents/%E6%8A%80%E8%A1%93/code-review">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":true,"permalink":"http://evshary.com/contents/%E6%8A%80%E8%A1%93/code-review.html","path":"contents/技術/code-review.html","title":"code review"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>code review | CY's Blog
+</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="CY's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CY's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">All work is preparing yourself for the accident waiting to happen.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E8%99%95"><span class="nav-number">2.</span> <span class="nav-text">好處</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">成本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%83%E6%85%8B"><span class="nav-number">4.</span> <span class="nav-text">心態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E4%BD%9C%E6%A5%AD"><span class="nav-number">5.1.</span> <span class="nav-text">前置作業</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%96%8B%E7%99%BC%E5%8A%9F%E8%83%BD%E5%89%8D"><span class="nav-number">5.2.</span> <span class="nav-text">開發功能前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#review%E5%89%8D"><span class="nav-number">5.3.</span> <span class="nav-text">review前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#review%E4%B8%AD"><span class="nav-number">5.4.</span> <span class="nav-text">review中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#review%E5%BE%8C"><span class="nav-number">5.5.</span> <span class="nav-text">review後</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BC%94%E5%8A%A9%E5%B7%A5%E5%85%B7"><span class="nav-number">6.</span> <span class="nav-text">輔助工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AF%A6%E9%9A%9B%E8%90%BD%E5%AF%A6"><span class="nav-number">7.</span> <span class="nav-text">如何實際落實</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E8%AA%BF%E6%95%B4%E7%9A%84%E9%81%B8%E9%A0%85"><span class="nav-number">7.1.</span> <span class="nav-text">可以調整的選項</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A9%95%E4%BC%B0%E6%95%88%E7%94%A8"><span class="nav-number">8.</span> <span class="nav-text">如何評估效用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">9.</span> <span class="nav-text">參考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">evshary</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="en"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">code review
+</h1>
+
+<div class="post-meta-container">
+  <ul class="breadcrumb">
+            <li><a href="/contents/">CONTENTS</a></li>
+            <li><a href="/contents/%E6%8A%80%E8%A1%93/">技術</a></li>
+            <li>CODE-REVIEW</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
+<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
+<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
+<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
+<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
+<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
+<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
+<li>備份功能：確保至少有兩個人知道code的意思。</li>
+</ol>
+<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
+<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
+<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
+</ul>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
+<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
+<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
+<li>相互尊重：<ul>
+<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
+<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
+</ul>
+</li>
+<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
+<li>說明code review規則，以及建立正確的心態</li>
+<li>事先訂定公司開發的文化，如coding style，命名規則</li>
+<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
+</ul>
+<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
+<li>開發時間需要預估code review的時間</li>
+<li>先規劃如何將大功能切成小部分：<ul>
+<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
+<li>如果功能出了大問題，也可以把風險控制在最小</li>
+</ul>
+</li>
+</ul>
+<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
+<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
+<li>如果有使用分析工具，先使用工具產生報表<ul>
+<li>review時可以針對上面的重點討論</li>
+<li>減少review的effort</li>
+</ul>
+</li>
+</ul>
+<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
+<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
+<li>code review時間不要超過半小時</li>
+<li>利用checklist來檢查<ul>
+<li>功能需求是什麼？設計方式是否有達到目的？</li>
+<li>是否可以做未來擴充？</li>
+<li>是否足夠安全？有沒有邏輯漏洞？</li>
+<li>Error handling和corner case是否都有處理好？</li>
+<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
+<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
+<li>效能是否可以再提升？</li>
+</ul>
+</li>
+<li>review過程不改code，用todo list先記錄</li>
+</ul>
+<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
+<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
+<li>review後要留下紀錄提供學習使用</li>
+<li>定期開會評估code review流程和效用<ul>
+<li>review的方式要不要調整？</li>
+<li>工具是否要調整？</li>
+<li>checklist是否要更新？</li>
+</ul>
+</li>
+</ul>
+<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
+<ul>
+<li>統一Glossary：<ul>
+<li>可以使用wiki等文件建立</li>
+</ul>
+</li>
+<li>找重複程式碼：<ul>
+<li>Simian：商用需付費，可參考<a target="_blank" rel="noopener" href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
+</ul>
+</li>
+<li>判斷複雜度：<ul>
+<li>SourceMonitor：免費，可參考<a target="_blank" rel="noopener" href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
+<li>Complexity：GNU tool，可參考<a target="_blank" rel="noopener" href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
+</ul>
+</li>
+<li>分析綜合品質：<ul>
+<li>FxCop：微軟出的，可參考<a target="_blank" rel="noopener" href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
+<li>Adlint：Open source，但似乎很久沒更新了</li>
+<li>SonarQube：可參考<a target="_blank" rel="noopener" href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
+</ul>
+</li>
+<li>程式法風格：<ul>
+<li>StyleCop：似乎只能用在C#，可參考<a target="_blank" rel="noopener" href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
+<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
+<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
+<ul>
+<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
+<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
+<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
+</ul>
+<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
+<ol>
+<li>執行前後，bug減少的數量(這是品質部分)</li>
+<li>執行前後，團隊多花費的時間(這是成本部分)</li>
+<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
+<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
+<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
+<li><a target="_blank" rel="noopener" href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
+<li><a target="_blank" rel="noopener" href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
+<li><a target="_blank" rel="noopener" href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
+<li><a target="_blank" rel="noopener" href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
+</ul>
+
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/contents/">CONTENTS</a></li>
+            <li><a href="/contents/%E6%8A%80%E8%A1%93/">技術</a></li>
+            <li>CODE-REVIEW</li>
+  </ul>
+
+    
+    
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"evshary","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -187,6 +187,116 @@
       </tags>
   </entry>
   <entry>
+    <title>C語言的行內組譯</title>
+    <url>/2018/05/20/C-Inline-Assembly/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
+<p>舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 一個nop指令 */</span></span><br><span class="line"><span class="keyword">asm</span>(<span class="string">&quot;nop&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 多行要用\n隔開 */</span></span><br><span class="line">__asm__(<span class="string">&quot;nop\n&quot;</span></span><br><span class="line">        <span class="string">&quot;nop\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>不管是<code>asm</code>還是<code>__asm__</code>都是合法的，只要不要跟自己的symbol有衝突即可。</p>
+<p>聰明的你可能發覺一件事，剛剛的例子只有指令而已，那如果假設我們要跟自己設定的變數互動那要怎麼辦呢？這時候就要用比較複雜的格式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">asm ( assembler template               /* 組合語言內容 */</span><br><span class="line">    : output operands                  /* 輸出的參數 */</span><br><span class="line">    : input operands                   /* 輸入的參數 */</span><br><span class="line">    : list of clobbered registers      /* 組合語言執行後會改變的項目 */</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><p>我們還是直接來看看程式比較有感覺</p>
+<h3 id="範例一"><a href="#範例一" class="headerlink" title="範例一"></a>範例一</h3><p>我們寫一個簡單的test.c，只負責做加法。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>編譯並且看一下組語的內容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc test.c -s test.s</span><br><span class="line">$ <span class="built_in">cat</span> test.s</span><br><span class="line">        .file   <span class="string">&quot;test.c&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .section        .rodata</span><br><span class="line">.LC0:</span><br><span class="line">        .string <span class="string">&quot;sum=%d\r\n&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .globl  main</span><br><span class="line">        .<span class="built_in">type</span>   main, @<span class="keyword">function</span></span><br><span class="line">main:</span><br><span class="line">.LFB0:</span><br><span class="line">        .cfi_startproc</span><br><span class="line">        pushq   %rbp</span><br><span class="line">        .cfi_def_cfa_offset 16</span><br><span class="line">        .cfi_offset 6, -16</span><br><span class="line">        movq    %rsp, %rbp</span><br><span class="line">        .cfi_def_cfa_register 6</span><br><span class="line">        subq    <span class="variable">$16</span>, %rsp</span><br><span class="line">        movl    <span class="variable">$1</span>, -4(%rbp)</span><br><span class="line">        movl    <span class="variable">$2</span>, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %edx</span><br><span class="line">        movl    -8(%rbp), %eax</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        call    <span class="built_in">printf</span></span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        leave</span><br><span class="line">        .cfi_def_cfa 7, 8</span><br><span class="line">        ret</span><br><span class="line">        .cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">        .size   main, .-main</span><br><span class="line">        .ident  <span class="string">&quot;GCC: (GNU) 8.1.0&quot;</span></span><br><span class="line">        .section        .note.GNU-stack,<span class="string">&quot;&quot;</span>,@progbits</span><br></pre></td></tr></table></figure>
+
+<p>先不管其他細節，可以看到中間有兩行<code>addl    %edx, %eax</code>和<code>movl    %eax, -12(%rbp)</code>，對應的也就是<code>sum = num1 + num2;</code>，那我們來改寫一下吧！</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %%edx, %%eax\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=a&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;a&quot;</span>(num1), <span class="string">&quot;d&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>編譯並執行後就會發現結果是一樣的。不過到這邊我想大部分的人心中一定充滿了三個小朋友，所以還是在稍微解釋一下。</p>
+<p>如前面所提，我們最主要執行的是<code>addl    %%edx, %%eax\n</code>，這邊跟前面不一樣的是%另有用途(後面會提)，所以要表示暫存器%eax時，我們要用%%來取代%字元。<br>然後第二行的<code>&quot;=a&quot;(sum)</code>中，<code>=</code>代表執行結束後我們要把某個值填到某個變數內(這邊指的就是括號中的sum)，可是某個值又是怎麼決定的呢？這個就是a的概念，也就是「規範條件」，要求編譯器只能對應到符合條件的register。</p>
+<p>如果以x86的架構為例(這邊要注意每個CPU架構的規範條件都不同)：</p>
+<table>
+<thead>
+<tr>
+<th>規範條件</th>
+<th>Register(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>%eax, %ax, %al</td>
+</tr>
+<tr>
+<td>b</td>
+<td>%ebx, %bx, %bl</td>
+</tr>
+<tr>
+<td>c</td>
+<td>%ecx, %cx, %cl</td>
+</tr>
+<tr>
+<td>d</td>
+<td>%edx, %dx, %dl</td>
+</tr>
+<tr>
+<td>S</td>
+<td>%esi, %si</td>
+</tr>
+<tr>
+<td>D</td>
+<td>%edi, %di</td>
+</tr>
+<tr>
+<td>f</td>
+<td>fp</td>
+</tr>
+</tbody></table>
+<p>由此可知就是要把%eax的結果填入sum中。同理，第三行的input部分<code>&quot;a&quot;(num1), &quot;d&quot;(num2)</code>分別也代表在執行組合語言前為num1和num2選擇register(這邊的例子是num1填入%eax、num2填入%edx)。</p>
+<p>回頭看一下如果編成組合語言會是什麼樣子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">        movl    $1, -4(%rbp)</span><br><span class="line">        movl    $2, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %eax</span><br><span class="line">        movl    -8(%rbp), %edx</span><br><span class="line">#APP</span><br><span class="line"># 8 &quot;test.c&quot; 1</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line"></span><br><span class="line"># 0 &quot;&quot; 2</span><br><span class="line">#NO_APP</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    $0, %eax</span><br><span class="line">        call    printf</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>在#APP和#NO_APP間就是我們的組語部分，看起來蠻符合我們的預期。</p>
+<h3 id="範例二"><a href="#範例二" class="headerlink" title="範例二"></a>範例二</h3><p>可是我們難道都一定要自行決定register嗎？我們想要交由compiler決定。這時候其實可以用比較寬鬆的限制條件。一樣是x86的架構才能用：</p>
+<table>
+<thead>
+<tr>
+<th>規範條件</th>
+<th>Register(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>%eax, %ebx, %ecx, %edx, %esi, %edi</td>
+</tr>
+<tr>
+<td>q</td>
+<td>%eax, %ebx, %ecx, %edx</td>
+</tr>
+<tr>
+<td>0,1,2..</td>
+<td>%0, %1, %2…(代表第幾個參數)</td>
+</tr>
+</tbody></table>
+<p>那就修改程式吧！</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
+<p>當然最後執行結果也會和範例一一樣。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="http://sp1.wikidot.com/gnuinlineassembly">在 C 語言當中內嵌 GNU 的組合語言</a></li>
+<li><a href="http://wen00072.github.io/blog/2015/12/10/about-inline-asm/">關於GNU Inline Assembly</a></li>
+<li><a href="http://www.ethernut.de/en/documents/arm-inline-asm.html">ARM GCC Inline Assembler Cookbook</a></li>
+<li><a href="https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>程式語言</tag>
+        <tag>C</tag>
+        <tag>GNU tool</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>關於ELF的兩三事</title>
     <url>/2018/05/06/ELF-format/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。</p>
@@ -381,118 +491,8 @@
         <category>技術</category>
       </categories>
       <tags>
+        <tag>GNU tool</tag>
         <tag>系統程式</tag>
-        <tag>GNU tool</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C語言的行內組譯</title>
-    <url>/2018/05/20/C-Inline-Assembly/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
-<p>舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 一個nop指令 */</span></span><br><span class="line"><span class="keyword">asm</span>(<span class="string">&quot;nop&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 多行要用\n隔開 */</span></span><br><span class="line">__asm__(<span class="string">&quot;nop\n&quot;</span></span><br><span class="line">        <span class="string">&quot;nop\n&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>不管是<code>asm</code>還是<code>__asm__</code>都是合法的，只要不要跟自己的symbol有衝突即可。</p>
-<p>聰明的你可能發覺一件事，剛剛的例子只有指令而已，那如果假設我們要跟自己設定的變數互動那要怎麼辦呢？這時候就要用比較複雜的格式</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">asm ( assembler template               /* 組合語言內容 */</span><br><span class="line">    : output operands                  /* 輸出的參數 */</span><br><span class="line">    : input operands                   /* 輸入的參數 */</span><br><span class="line">    : list of clobbered registers      /* 組合語言執行後會改變的項目 */</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
-
-<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><p>我們還是直接來看看程式比較有感覺</p>
-<h3 id="範例一"><a href="#範例一" class="headerlink" title="範例一"></a>範例一</h3><p>我們寫一個簡單的test.c，只負責做加法。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>編譯並且看一下組語的內容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc test.c -s test.s</span><br><span class="line">$ <span class="built_in">cat</span> test.s</span><br><span class="line">        .file   <span class="string">&quot;test.c&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .section        .rodata</span><br><span class="line">.LC0:</span><br><span class="line">        .string <span class="string">&quot;sum=%d\r\n&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .globl  main</span><br><span class="line">        .<span class="built_in">type</span>   main, @<span class="keyword">function</span></span><br><span class="line">main:</span><br><span class="line">.LFB0:</span><br><span class="line">        .cfi_startproc</span><br><span class="line">        pushq   %rbp</span><br><span class="line">        .cfi_def_cfa_offset 16</span><br><span class="line">        .cfi_offset 6, -16</span><br><span class="line">        movq    %rsp, %rbp</span><br><span class="line">        .cfi_def_cfa_register 6</span><br><span class="line">        subq    <span class="variable">$16</span>, %rsp</span><br><span class="line">        movl    <span class="variable">$1</span>, -4(%rbp)</span><br><span class="line">        movl    <span class="variable">$2</span>, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %edx</span><br><span class="line">        movl    -8(%rbp), %eax</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        call    <span class="built_in">printf</span></span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        leave</span><br><span class="line">        .cfi_def_cfa 7, 8</span><br><span class="line">        ret</span><br><span class="line">        .cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">        .size   main, .-main</span><br><span class="line">        .ident  <span class="string">&quot;GCC: (GNU) 8.1.0&quot;</span></span><br><span class="line">        .section        .note.GNU-stack,<span class="string">&quot;&quot;</span>,@progbits</span><br></pre></td></tr></table></figure>
-
-<p>先不管其他細節，可以看到中間有兩行<code>addl    %edx, %eax</code>和<code>movl    %eax, -12(%rbp)</code>，對應的也就是<code>sum = num1 + num2;</code>，那我們來改寫一下吧！</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %%edx, %%eax\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=a&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;a&quot;</span>(num1), <span class="string">&quot;d&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>編譯並執行後就會發現結果是一樣的。不過到這邊我想大部分的人心中一定充滿了三個小朋友，所以還是在稍微解釋一下。</p>
-<p>如前面所提，我們最主要執行的是<code>addl    %%edx, %%eax\n</code>，這邊跟前面不一樣的是%另有用途(後面會提)，所以要表示暫存器%eax時，我們要用%%來取代%字元。<br>然後第二行的<code>&quot;=a&quot;(sum)</code>中，<code>=</code>代表執行結束後我們要把某個值填到某個變數內(這邊指的就是括號中的sum)，可是某個值又是怎麼決定的呢？這個就是a的概念，也就是「規範條件」，要求編譯器只能對應到符合條件的register。</p>
-<p>如果以x86的架構為例(這邊要注意每個CPU架構的規範條件都不同)：</p>
-<table>
-<thead>
-<tr>
-<th>規範條件</th>
-<th>Register(s)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>a</td>
-<td>%eax, %ax, %al</td>
-</tr>
-<tr>
-<td>b</td>
-<td>%ebx, %bx, %bl</td>
-</tr>
-<tr>
-<td>c</td>
-<td>%ecx, %cx, %cl</td>
-</tr>
-<tr>
-<td>d</td>
-<td>%edx, %dx, %dl</td>
-</tr>
-<tr>
-<td>S</td>
-<td>%esi, %si</td>
-</tr>
-<tr>
-<td>D</td>
-<td>%edi, %di</td>
-</tr>
-<tr>
-<td>f</td>
-<td>fp</td>
-</tr>
-</tbody></table>
-<p>由此可知就是要把%eax的結果填入sum中。同理，第三行的input部分<code>&quot;a&quot;(num1), &quot;d&quot;(num2)</code>分別也代表在執行組合語言前為num1和num2選擇register(這邊的例子是num1填入%eax、num2填入%edx)。</p>
-<p>回頭看一下如果編成組合語言會是什麼樣子</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">        movl    $1, -4(%rbp)</span><br><span class="line">        movl    $2, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %eax</span><br><span class="line">        movl    -8(%rbp), %edx</span><br><span class="line">#APP</span><br><span class="line"># 8 &quot;test.c&quot; 1</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line"></span><br><span class="line"># 0 &quot;&quot; 2</span><br><span class="line">#NO_APP</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    $0, %eax</span><br><span class="line">        call    printf</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<p>在#APP和#NO_APP間就是我們的組語部分，看起來蠻符合我們的預期。</p>
-<h3 id="範例二"><a href="#範例二" class="headerlink" title="範例二"></a>範例二</h3><p>可是我們難道都一定要自行決定register嗎？我們想要交由compiler決定。這時候其實可以用比較寬鬆的限制條件。一樣是x86的架構才能用：</p>
-<table>
-<thead>
-<tr>
-<th>規範條件</th>
-<th>Register(s)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>r</td>
-<td>%eax, %ebx, %ecx, %edx, %esi, %edi</td>
-</tr>
-<tr>
-<td>q</td>
-<td>%eax, %ebx, %ecx, %edx</td>
-</tr>
-<tr>
-<td>0,1,2..</td>
-<td>%0, %1, %2…(代表第幾個參數)</td>
-</tr>
-</tbody></table>
-<p>那就修改程式吧！</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
-<p>當然最後執行結果也會和範例一一樣。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="http://sp1.wikidot.com/gnuinlineassembly">在 C 語言當中內嵌 GNU 的組合語言</a></li>
-<li><a href="http://wen00072.github.io/blog/2015/12/10/about-inline-asm/">關於GNU Inline Assembly</a></li>
-<li><a href="http://www.ethernut.de/en/documents/arm-inline-asm.html">ARM GCC Inline Assembler Cookbook</a></li>
-<li><a href="https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>程式語言</tag>
-        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -916,6 +916,136 @@
       </tags>
   </entry>
   <entry>
+    <title>code review</title>
+    <url>/2017/08/27/code-review/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
+<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
+<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
+<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
+<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
+<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
+<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
+<li>備份功能：確保至少有兩個人知道code的意思。</li>
+</ol>
+<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
+<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
+<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
+</ul>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
+<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
+<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
+<li>相互尊重：<ul>
+<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
+<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
+</ul>
+</li>
+<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
+<li>說明code review規則，以及建立正確的心態</li>
+<li>事先訂定公司開發的文化，如coding style，命名規則</li>
+<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
+</ul>
+<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
+<li>開發時間需要預估code review的時間</li>
+<li>先規劃如何將大功能切成小部分：<ul>
+<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
+<li>如果功能出了大問題，也可以把風險控制在最小</li>
+</ul>
+</li>
+</ul>
+<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
+<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
+<li>如果有使用分析工具，先使用工具產生報表<ul>
+<li>review時可以針對上面的重點討論</li>
+<li>減少review的effort</li>
+</ul>
+</li>
+</ul>
+<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
+<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
+<li>code review時間不要超過半小時</li>
+<li>利用checklist來檢查<ul>
+<li>功能需求是什麼？設計方式是否有達到目的？</li>
+<li>是否可以做未來擴充？</li>
+<li>是否足夠安全？有沒有邏輯漏洞？</li>
+<li>Error handling和corner case是否都有處理好？</li>
+<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
+<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
+<li>效能是否可以再提升？</li>
+</ul>
+</li>
+<li>review過程不改code，用todo list先記錄</li>
+</ul>
+<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
+<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
+<li>review後要留下紀錄提供學習使用</li>
+<li>定期開會評估code review流程和效用<ul>
+<li>review的方式要不要調整？</li>
+<li>工具是否要調整？</li>
+<li>checklist是否要更新？</li>
+</ul>
+</li>
+</ul>
+<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
+<ul>
+<li>統一Glossary：<ul>
+<li>可以使用wiki等文件建立</li>
+</ul>
+</li>
+<li>找重複程式碼：<ul>
+<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
+</ul>
+</li>
+<li>判斷複雜度：<ul>
+<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
+<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
+</ul>
+</li>
+<li>分析綜合品質：<ul>
+<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
+<li>Adlint：Open source，但似乎很久沒更新了</li>
+<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
+</ul>
+</li>
+<li>程式法風格：<ul>
+<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
+<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
+<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
+<ul>
+<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
+<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
+<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
+</ul>
+<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
+<ol>
+<li>執行前後，bug減少的數量(這是品質部分)</li>
+<li>執行前後，團隊多花費的時間(這是成本部分)</li>
+<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
+<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
+<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
+<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
+<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
+<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
+<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
+<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>軟體開發</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>clean code</title>
     <url>/2017/09/03/clean-code/</url>
     <content><![CDATA[<p>這邊記錄一下我看clean code的筆記整理。不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種。在C要這樣實踐很有難度，而且我看很多open source的project也都沒有遵循這樣的規範。但是這本書還是很有參考價值的，至少會讓自己反省寫code時有沒有犯了這些問題。</p>
@@ -1133,136 +1263,6 @@
       </tags>
   </entry>
   <entry>
-    <title>code review</title>
-    <url>/2017/08/27/code-review/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
-<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
-<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
-<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
-<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
-<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
-<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
-<li>備份功能：確保至少有兩個人知道code的意思。</li>
-</ol>
-<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
-<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
-<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
-</ul>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
-<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
-<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
-<li>相互尊重：<ul>
-<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
-<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
-</ul>
-</li>
-<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
-</ul>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
-<li>說明code review規則，以及建立正確的心態</li>
-<li>事先訂定公司開發的文化，如coding style，命名規則</li>
-<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
-</ul>
-<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
-<li>開發時間需要預估code review的時間</li>
-<li>先規劃如何將大功能切成小部分：<ul>
-<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
-<li>如果功能出了大問題，也可以把風險控制在最小</li>
-</ul>
-</li>
-</ul>
-<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
-<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
-<li>如果有使用分析工具，先使用工具產生報表<ul>
-<li>review時可以針對上面的重點討論</li>
-<li>減少review的effort</li>
-</ul>
-</li>
-</ul>
-<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
-<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
-<li>code review時間不要超過半小時</li>
-<li>利用checklist來檢查<ul>
-<li>功能需求是什麼？設計方式是否有達到目的？</li>
-<li>是否可以做未來擴充？</li>
-<li>是否足夠安全？有沒有邏輯漏洞？</li>
-<li>Error handling和corner case是否都有處理好？</li>
-<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
-<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
-<li>效能是否可以再提升？</li>
-</ul>
-</li>
-<li>review過程不改code，用todo list先記錄</li>
-</ul>
-<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
-<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
-<li>review後要留下紀錄提供學習使用</li>
-<li>定期開會評估code review流程和效用<ul>
-<li>review的方式要不要調整？</li>
-<li>工具是否要調整？</li>
-<li>checklist是否要更新？</li>
-</ul>
-</li>
-</ul>
-<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
-<ul>
-<li>統一Glossary：<ul>
-<li>可以使用wiki等文件建立</li>
-</ul>
-</li>
-<li>找重複程式碼：<ul>
-<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
-</ul>
-</li>
-<li>判斷複雜度：<ul>
-<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
-<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
-</ul>
-</li>
-<li>分析綜合品質：<ul>
-<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
-<li>Adlint：Open source，但似乎很久沒更新了</li>
-<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
-</ul>
-</li>
-<li>程式法風格：<ul>
-<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
-<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
-</ul>
-</li>
-</ul>
-<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
-<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
-<ul>
-<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
-<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
-<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
-</ul>
-<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
-<ol>
-<li>執行前後，bug減少的數量(這是品質部分)</li>
-<li>執行前後，團隊多花費的時間(這是成本部分)</li>
-<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
-<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
-<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
-<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
-<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
-<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
-<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
-<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>軟體開發</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>dd - 資料處理的好工具</title>
     <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
@@ -1399,8 +1399,8 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>系統程式</tag>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -1714,8 +1714,8 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>系統程式</tag>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -2060,8 +2060,8 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>系統程式</tag>
         <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -2646,6 +2646,24 @@
       </tags>
   </entry>
   <entry>
+    <title>稀缺其實是一種陷阱</title>
+    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/</url>
+    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「 <a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a> 」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
+<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
+<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
+<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
+<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
+<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
+<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>淺談函式庫</title>
     <url>/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/</url>
     <content><![CDATA[<h2 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared&#x2F;static library"></a>比較shared&#x2F;static library</h2><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
@@ -2865,26 +2883,8 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>系統程式</tag>
         <tag>GNU tool</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>稀缺其實是一種陷阱</title>
-    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%E5%85%B6%E5%AF%A6%E6%98%AF%E4%B8%80%E7%A8%AE%E9%99%B7%E9%98%B1/</url>
-    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「 <a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a> 」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
-<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
-<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
-<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
-<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
-<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
-<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
