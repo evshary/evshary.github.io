@@ -11,9 +11,14 @@ The blog uses hexo and hexo-theme-next.
 
 ## Update blogs
 
-Install pre-commit first.
-This will avoid wrong format.
+* Install pre-commit first. This will avoid wrong format.
 
-```bash
-pre-commit install --install-hooks
-```
+   ```bash
+   pre-commit install --install-hooks
+   ```
+
+* After update the blogs
+
+   ```bash
+   ./build_site.sh
+   ```
