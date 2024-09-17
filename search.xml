@@ -598,60 +598,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果要在別的port開啟</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTTP header 安全設定</title>
     <url>/2018/01/03/HTTP-header-%E5%AE%89%E5%85%A8%E8%A8%AD%E5%AE%9A/</url>
     <content><![CDATA[<h2 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h2><p>根據<a href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
@@ -855,64 +801,57 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux和程式的互動</title>
-    <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
-<h2 id="程式如何執行main"><a href="#程式如何執行main" class="headerlink" title="程式如何執行main"></a>程式如何執行main</h2><p>一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似<code>./a.out</code>的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。</p>
-<p>下面例子我們以Kernel v4.17為例</p>
-<ol>
-<li><p>首先 shell 會 fork 一個 process，然後再呼叫 exec 系列函數把該 process 置換成指定的程式</p>
-</li>
-<li><p>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs&#x2F;exec.c的1856行</a></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">do_execve</span><span class="params">(<span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__argv,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">  <span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接著do_execveat_common會讀取struct linux_binprm，並且根據檔案格式尋找適合的binary header</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">do_execveat_common</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr argv,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr envp,</span></span><br><span class="line"><span class="params">                              <span class="type">int</span> flags)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 重要的structure，保留執行檔的相關訊息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">linux_binprm</span> *<span class="title">bprm</span>;</span></span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 打開要執行的ELF檔</span></span><br><span class="line">    file = do_open_execat(fd, filename, flags);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 生成mm_struct，供執行檔使用</span></span><br><span class="line">    retval = bprm_mm_init(bprm);</span><br><span class="line">    <span class="keyword">if</span> (retval)</span><br><span class="line">        <span class="keyword">goto</span> out_unmark;</span><br><span class="line">    <span class="comment">// 計算帶入的參數</span></span><br><span class="line">    bprm-&gt;argc = count(argv, MAX_ARG_STRINGS);</span><br><span class="line">    <span class="keyword">if</span> ((retval = bprm-&gt;argc) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取 header</span></span><br><span class="line">    retval = prepare_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 裡面會呼叫 search_binary_handler，根據檔案格式呼叫適合的binary_handler</span></span><br><span class="line">    retval = exec_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ELF的binary handler位在<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs&#x2F;binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">load_elf_binary</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">    elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">    current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">    current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">    current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">    current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是&#x2F;lib&#x2F;ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc&#x2F;elf&#x2F;rtld.c</a>的_dl_start，針對環境變數做處理。</p>
-<ul>
-<li>我們常見的LD_PRELOAD也是在這邊進行處理的</li>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
 </ul>
-</li>
-<li><p>當上述工作都做完後，就會進入 ELF binary 的<code>_start</code>，其中會呼叫 glibc 的<a href="https://code.woboq.org/userspace/glibc/csu/libc-start.c.html">__libc_start_main</a>進行初始設定，最後就會呼叫main()</p>
-</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">result = main (argc, argv, __environ MAIN_AUXVEC_PARAM);</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="使用-system-call"><a href="#使用-system-call" class="headerlink" title="使用 system call"></a>使用 system call</h2><p>通常AP在Linux要跟kernel層互動大概只能透過system call，然而system call的使用大多數已經被包裝起來，所以幾乎不會看到，這邊我們來探討一下要怎麼在Linux直接呼叫system call。以下範例皆來自<a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></p>
-<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>最簡單的呼叫system call方法是syscall。</p>
-<p>syscall.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    ret = syscall(__NR_getpid);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果要在別的port開啟</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
 
-<p>執行結果如下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make syscall</span><br><span class="line">$ ./syscall</span><br><span class="line">ret=18 pid=18</span><br></pre></td></tr></table></figure>
-
-<p>看起來是很順利取得PID。我們可以把__NR_getpid換成其他的system call數字，也可以達到同樣效果。</p>
-<h3 id="int-0x80"><a href="#int-0x80" class="headerlink" title="int 0x80"></a>int 0x80</h3><p>當然我們也可以用<code>int 0x80</code>來做到同樣的事情，但是要注意的是這樣的效率不會比較好，可參考<a href="https://stackoverflow.com/questions/12806584/what-is-better-int-0x80-or-syscall">What is better “int 0x80” or “syscall”?</a></p>
-<p>另外這個做法在x64的架構是無法被使用的，可參考<a href="https://stackoverflow.com/questions/46087730/what-happens-if-you-use-the-32-bit-int-0x80-linux-abi-in-64-bit-code">What happens if you use the 32-bit int 0x80 Linux ABI in 64-bit code?</a></p>
-<p>syscall2.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;int $0x80&quot;</span>:<span class="string">&quot;=a&quot;</span>(ret):<span class="string">&quot;0&quot;</span>(__NR_getpid))</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="sysenter"><a href="#sysenter" class="headerlink" title="sysenter"></a>sysenter</h3><p>這部分也是只能在x86的平台上使用，會出現這個機制的理由是int 0x80的效率實在太差了。這邊的使用方式有點複雜，就不列出來了。</p>
-<h3 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h3><p>這三種方式的比較簡單統整一下</p>
-<p>syscall：現在主流，能在x64運行<br>int 0x80：只能在x86，效率差，已被捨棄<br>sysenter：只能在x86，用來替代int 0x80</p>
-<p>詳情可以參考<a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a>，寫得非常詳細。</p>
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="https://blog.csdn.net/eleven_xiy/article/details/77876702">Linux系统ELF程序的执行过程</a></li>
-<li><a href="https://blog.csdn.net/conansonic/article/details/54236335">_dl_start源码分析</a></li>
-<li><a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a></li>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
 </ul>
 ]]></content>
       <categories>
         <category>技術</category>
       </categories>
       <tags>
-        <tag>GNU tool</tag>
-        <tag>Linux</tag>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1130,6 +1069,67 @@
       </categories>
       <tags>
         <tag>軟體開發</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux和程式的互動</title>
+    <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
+<h2 id="程式如何執行main"><a href="#程式如何執行main" class="headerlink" title="程式如何執行main"></a>程式如何執行main</h2><p>一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似<code>./a.out</code>的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。</p>
+<p>下面例子我們以Kernel v4.17為例</p>
+<ol>
+<li><p>首先 shell 會 fork 一個 process，然後再呼叫 exec 系列函數把該 process 置換成指定的程式</p>
+</li>
+<li><p>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs&#x2F;exec.c的1856行</a></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">do_execve</span><span class="params">(<span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__argv,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">  <span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著do_execveat_common會讀取struct linux_binprm，並且根據檔案格式尋找適合的binary header</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">do_execveat_common</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr argv,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr envp,</span></span><br><span class="line"><span class="params">                              <span class="type">int</span> flags)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 重要的structure，保留執行檔的相關訊息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">linux_binprm</span> *<span class="title">bprm</span>;</span></span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 打開要執行的ELF檔</span></span><br><span class="line">    file = do_open_execat(fd, filename, flags);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 生成mm_struct，供執行檔使用</span></span><br><span class="line">    retval = bprm_mm_init(bprm);</span><br><span class="line">    <span class="keyword">if</span> (retval)</span><br><span class="line">        <span class="keyword">goto</span> out_unmark;</span><br><span class="line">    <span class="comment">// 計算帶入的參數</span></span><br><span class="line">    bprm-&gt;argc = count(argv, MAX_ARG_STRINGS);</span><br><span class="line">    <span class="keyword">if</span> ((retval = bprm-&gt;argc) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取 header</span></span><br><span class="line">    retval = prepare_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 裡面會呼叫 search_binary_handler，根據檔案格式呼叫適合的binary_handler</span></span><br><span class="line">    retval = exec_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ELF的binary handler位在<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs&#x2F;binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">load_elf_binary</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">    elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">    current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">    current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">    current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">    current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是&#x2F;lib&#x2F;ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc&#x2F;elf&#x2F;rtld.c</a>的_dl_start，針對環境變數做處理。</p>
+<ul>
+<li>我們常見的LD_PRELOAD也是在這邊進行處理的</li>
+</ul>
+</li>
+<li><p>當上述工作都做完後，就會進入 ELF binary 的<code>_start</code>，其中會呼叫 glibc 的<a href="https://code.woboq.org/userspace/glibc/csu/libc-start.c.html">__libc_start_main</a>進行初始設定，最後就會呼叫main()</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">result = main (argc, argv, __environ MAIN_AUXVEC_PARAM);</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-system-call"><a href="#使用-system-call" class="headerlink" title="使用 system call"></a>使用 system call</h2><p>通常AP在Linux要跟kernel層互動大概只能透過system call，然而system call的使用大多數已經被包裝起來，所以幾乎不會看到，這邊我們來探討一下要怎麼在Linux直接呼叫system call。以下範例皆來自<a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></p>
+<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>最簡單的呼叫system call方法是syscall。</p>
+<p>syscall.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    ret = syscall(__NR_getpid);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>執行結果如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make syscall</span><br><span class="line">$ ./syscall</span><br><span class="line">ret=18 pid=18</span><br></pre></td></tr></table></figure>
+
+<p>看起來是很順利取得PID。我們可以把__NR_getpid換成其他的system call數字，也可以達到同樣效果。</p>
+<h3 id="int-0x80"><a href="#int-0x80" class="headerlink" title="int 0x80"></a>int 0x80</h3><p>當然我們也可以用<code>int 0x80</code>來做到同樣的事情，但是要注意的是這樣的效率不會比較好，可參考<a href="https://stackoverflow.com/questions/12806584/what-is-better-int-0x80-or-syscall">What is better “int 0x80” or “syscall”?</a></p>
+<p>另外這個做法在x64的架構是無法被使用的，可參考<a href="https://stackoverflow.com/questions/46087730/what-happens-if-you-use-the-32-bit-int-0x80-linux-abi-in-64-bit-code">What happens if you use the 32-bit int 0x80 Linux ABI in 64-bit code?</a></p>
+<p>syscall2.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;int $0x80&quot;</span>:<span class="string">&quot;=a&quot;</span>(ret):<span class="string">&quot;0&quot;</span>(__NR_getpid))</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="sysenter"><a href="#sysenter" class="headerlink" title="sysenter"></a>sysenter</h3><p>這部分也是只能在x86的平台上使用，會出現這個機制的理由是int 0x80的效率實在太差了。這邊的使用方式有點複雜，就不列出來了。</p>
+<h3 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h3><p>這三種方式的比較簡單統整一下</p>
+<p>syscall：現在主流，能在x64運行<br>int 0x80：只能在x86，效率差，已被捨棄<br>sysenter：只能在x86，用來替代int 0x80</p>
+<p>詳情可以參考<a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a>，寫得非常詳細。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="https://blog.csdn.net/eleven_xiy/article/details/77876702">Linux系统ELF程序的执行过程</a></li>
+<li><a href="https://blog.csdn.net/conansonic/article/details/54236335">_dl_start源码分析</a></li>
+<li><a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -2259,15 +2259,58 @@
       </tags>
   </entry>
   <entry>
-    <title>「深度學習的技術」讀後感</title>
-    <url>/2018/03/11/%E3%80%8C%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8D%E8%AE%80%E5%BE%8C%E6%84%9F/</url>
-    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">「深度學習的技術」</a>。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
-<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
-<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
-<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
-<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
-<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話<strong>「知識就像是金錢一樣，不花就等於不曾有過」</strong>，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
-<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
+    <title>《認知驅動》：輸出重於努力</title>
+    <url>/2024/09/17/%E3%80%8A%E8%AA%8D%E7%9F%A5%E9%A9%85%E5%8B%95%E3%80%8B%EF%BC%9A%E8%BC%B8%E5%87%BA%E9%87%8D%E6%96%BC%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>本書是周嶺《認知覺醒》的續作。如果要用一句話概括這本書，那就是不要過度關注內在的自我成長，要對外為他人產生創造價值，而外在的回饋將會回到自身。本書雖然零零散散引用很多其他人觀念或道理，但我覺得這些都圍繞在如何行動並對外創造價值上。</p>
+<p>這本書適合那些重視自我成長，但是看了很多書，學了很多道理，卻對未來仍然迷惘的人。在中國有一句話很常見：「懂了很多大道理，卻過不好這一生」。比起不斷吸收別人灌輸的道理，當一個社會的消費者，更好的做法是用實際行動提供價值，成為這個社會的創造者。閱讀後會開始思考，自己究竟可以怎麼創造社會所需的價值，當成為社會所需要的人時，就會很明確未來要走的方向了。</p>
+<h2 id="我畫線的地方"><a href="#我畫線的地方" class="headerlink" title="我畫線的地方"></a>我畫線的地方</h2><p>下面提供一些我畫的重點，幫助你認識這本書。</p>
+<ul>
+<li><p>要重視輸出，而只關注輸入</p>
+<blockquote>
+<ul>
+<li>內向成長，即圍繞⾃⾝展開的成長活動，⽐如早起、跑步、閱讀等。</li>
+<li>外向成長，即圍繞外界展開的成長活動，⽐如寫作、畫畫、寫程式等。<br>為了更好地理解，我們不妨把內向成長看作培養習慣，把外向成長看作打造技能。換成這個說法後，你可能馬上就明⽩問題的癥結所在了：我們過度專注於內向成長⽽忽視了外向成長，即重習慣輕技能，重輸⼊輕輸出。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>只有自己夠有價值，才能被他人強烈需要</p>
+<blockquote>
+<p>改變⾃⼰的關鍵是創造價值。<br>這個結論不難理解：因為只有當⾃⾝創造的價值⾜夠⼤時，我們才能被別⼈強烈需要，才能參與到更⼤的社會交換中去，並得到對⽅對等的回饋</p>
+</blockquote>
+</li>
+<li><p>降低期待，不要急於求成，事情自然就會做好</p>
+<blockquote>
+<p>我的⼀個減壓秘訣就是盡量不要同時設定很多⽬標，主動降低期待，不急於看到成果。這⼀秘訣⾮常奏效。因為不管是外部的還是內部的，只要⽬標或欲望⼀多，我們必然會焦慮叢⽣、急於求成</p>
+</blockquote>
+</li>
+<li><p>讀書只是手段，而非真正的目的</p>
+<blockquote>
+<p>讀書並不是⼈⽣成敗的分⽔嶺，那麽真正的分⽔嶺在哪裡呢？答案也是兩個字：維度。</p>
+</blockquote>
+</li>
+<li><p>能夠創造屬於自己的價值，或許就會解決人生意義這個問題</p>
+<blockquote>
+<p>需要我們的⼈越多，我們的幸福感就越強，就會樂此不疲地踏上⼈⽣旅途，根本沒有時間去想「⼈活著的意義到底是什麽」這樣的問題。只有當⾃⼰毫⽆價值、被⼈忽視的時候，我們才會糾結於此</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="個人想法"><a href="#個人想法" class="headerlink" title="個人想法"></a>個人想法</h2><p>這本書給了我不少收穫，下面用三個角度來分享：</p>
+<h3 id="輸出重於輸入，利他就是利己"><a href="#輸出重於輸入，利他就是利己" class="headerlink" title="輸出重於輸入，利他就是利己"></a>輸出重於輸入，利他就是利己</h3><p>過去幾年我每年平均也都有閱讀 30 本書左右，卻仍然覺得自己好像都沒有太多成長。常常對一件事情有不少的看法，而且也覺得確實比起他人自己對一些事物的認知角度有些不一樣，然而有時候只會覺得這些好像沒什麼意義。學更多東西還不是只是過普通的生活，與其動輒花幾小時讀完一本書，不如花在讓自己生活過得更舒服似乎更有價值。在書中的開頭作者提到的和讀者問答一下子就命中了要害，「那你有什麼產出嗎？」。的確，我好像都沒有用知識生產出什麼有用的事物。</p>
+<p>為什麼自己會停在只接受輸入而已呢？因為接受輸入最容易實現，我只要被動去學習作者的思維就好，而不需要費盡心思思考怎麼創作。就像是用戰術的勤奮來彌補戰略的懶惰。每看完一本書都會感到自我感覺良好，好像等級上升，變成全新的自我。若是仔細想想，看完書的前後我真的有什麼改變嗎？好像也不太多，只能安慰自己這些改變都是潛移默化。</p>
+<p>那為什麼需要輸出呢？書中提到幾個點：首先輸出就是在確保自己真的了解，我們都經歷過自以為理解，卻發現要自己複述卻講不出來的情況，這就代表並非真的學會。再來，輸出的好壞全部由外界評判，就像是練琴一樣，如果自己只是悶著頭不斷練，卻沒有外界給予回饋，那可能最終只能感動自己而已。最後就是要產出價值，這個社會其實也是遵循等價交換的，當一個人所提供的價值足夠大的時候，自然就會有相等價值的機會產生。作者對利他就是利己的解釋也是來自於此。我們被他人所需要，對方也會提供我們同等的回饋。</p>
+<p>作者提到這個社會分為三種層次：消費層、生產層、創造層。消費者不需要有任何目標，他們可以無意識的消費著其他層所創造的事物，例如文字、影片或是各種有形的商品等等。生產層是由外在所逼著生產事物，就像是工作一樣，我們不是創造而是生產他人所要求的產品。至於創造層，雖然也是在生產，但是這些東西會貼上他們專屬的標記，這是屬於他們的東西。一旦社會可以給予正向回饋，巨大的成就感和意義就會隨之而來。透過主動創造，就能跳脫漫無目的消費，更加清楚自己所想要的，並且也提供給這個社會額外的價值。</p>
+<h3 id="人生成敗的分水嶺不是讀書，而是維度"><a href="#人生成敗的分水嶺不是讀書，而是維度" class="headerlink" title="人生成敗的分水嶺不是讀書，而是維度"></a>人生成敗的分水嶺不是讀書，而是維度</h3><p>當初我會想閱讀這本書，正是來自這句話。老實說，這句話乍看之下有點世俗：為什麼要定義人生成敗呢？怎麼比較不同人生的好壞呢？難道我不能過著普通人的生活，而要去追求他人眼裡的成功嗎？不過或許我們可以先不要管成敗，而專注在所謂的人生歷練。有些有智慧的人可能一輩子沒讀多少書，但是可以說出直指人心的話語，正是因為他們已經經歷過這些，看過太多相同的劇情。實際親身經歷過，眼耳鼻等感官多個維度都接觸到，比起單純看他人文字敘述更加刻骨銘心，而這其中的差距就是知識與智慧差別。</p>
+<p>這樣讀書就沒有意義了嗎？假設世界上有個機器，可以快速讓我們經歷無數次人生，體驗各式各樣的可能性，這個機器的效用可能比讀書更加有效益。然而這個機器是不存在的。也許我們有那個機遇可以遇到很多優秀的人事物幫助我們拓展眼界，但是更多時候我們只是個普通平凡人，日復一日過規律的生活。這時最低成本的方式是透過書籍看到其他人不一樣的人生，看見優秀的人不同的思考方式，進而認知到生命也有不一樣的可能性。擁有書本的知識後，遇到新的人生各種挑戰，就更有機會找出適合的應對方法，產生出更高的智慧。</p>
+<p>不過，對我而言這句話的含義反而是在於要認清楚自己讀書的目的。不應該過度追求閱讀本身，不管是閱讀的時間或是數量。最重要的是有沒有透過閱讀這個行為改變自己的思考方式，是不是能夠從更高的維度來思考生命中遇到的各種問題，而不是拘泥在現有的眼界中。閱讀的目的在於用低成本的方式看到生命不一樣的可能性，不要把手段和目的搞錯。</p>
+<h3 id="降低期待，不要急於求成"><a href="#降低期待，不要急於求成" class="headerlink" title="降低期待，不要急於求成"></a>降低期待，不要急於求成</h3><p>書中不斷反覆強調的另一個重點在於不要急於求成。我們常常都會同時設定多個目標，希望趕快達成，因此市面上也就因應產生出大量教導如何速成的書籍。這個也是現在步調快速的社會所造成的結果，大家會焦慮自己趕不上他人，任何事情都期望有捷徑可走，反而造成心裡大量的壓力。這時可以從降低期望下手：降低數量，一次只針對一個目標；降低難度，不要期待短時間可以搞定問題。</p>
+<p>這也是我的親身經歷，我常常會設定多個目標，然後要求自己在每月每週每天要達成某個程度，但發現最終都做不到，又或是無法長期堅持。而在工作上面，也總是在多個任務之間快速切換，想說可以更加有效率，卻發現完成時間沒有比較快，反而品質降低，而且身心疲憊。慢即是快並不是老生常談，而是確實有用的道理。人們總是高估自己短時間可以達成的成就，低估長時間能夠做到的結果。</p>
+<p>作者提到了一個解決焦慮、急於求成的方法，也就是「七年就是一輩子」這個概念。人們的一輩子常常就只專精於一項技能，而如果我們轉換思考，每七年只專注在一個技能上，那麼我們可以活上好幾輩子。這個思考方式可以避免我們對多個目標的同時追求，造成極度焦慮，也增加自己的耐心，不再用短時間刻度來看待自己的人生。若是拉長時間來看，會意外地發現自己已經成就不少事情。</p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>從整體來說，我並不認為這本書的架構十分嚴謹，更像是作者把自己所瞭解的各種理論方法拼湊在一起呈現給讀者。因此有些道理我並不認為真的那麼有說服力。但是，就如同作者在書中所說的，一本書如果有一段話影響了自己，那麼閱讀這本書就十分值得了。從這本書中，我體悟到了行動的重要性。比起學了很多知識，怎麼把這些知識轉換成對他人有意義的事物更為重要，這也是我想要重新經營部落格的原因。在人生當下的階段，專心並有耐心把一件對外部有價值的事情做好，不要急於求成，等幾年過後再回頭來印證這個方法是否正確吧！</p>
+<h2 id="反思與行動"><a href="#反思與行動" class="headerlink" title="反思與行動"></a>反思與行動</h2><p>若是閱讀能為自己帶來任何行動上的改變，那這本書就物超所值了。以下列出幾項我的行動清單：</p>
+<ol>
+<li>反思自己可以為他人創造的獨特價值為何。當學習新事物的時候，可以想想有沒有什麼方式可以輸出價值。</li>
+<li>用較大的時間刻度看看自己過去的成就，可以用時間軸的方式來呈現。然後想想接下來的人生階段要以什麼事情為最大的優先目標。</li>
+</ol>
 ]]></content>
       <categories>
         <category>讀書心得</category>
@@ -2286,6 +2329,24 @@
 <h2 id="建立橫向關係"><a href="#建立橫向關係" class="headerlink" title="建立橫向關係"></a>建立橫向關係</h2><p>人際關係有分為橫向和縱向，阿德勒心理學否定一切的「縱向關係」，提倡所有的人際關係都應該是「橫向關係」。縱向關係帶來的是稱讚、責罵，然而橫向關係帶來的是尊敬、感謝。<br>我會特別把這點拿出來提的原因是書中有舉一個很有趣的例子：假設你遵從上司的指示，結果卻因此面臨工作上的挫敗，這應該是誰的責任？如果是縱向關係的人就會認為是上司的責任，因為是上司的指示，然而這個卻是隱含著自己逃避了責任、閃避複雜的人際關係，因為不用思考太過困難的事、不必為失敗負責，所以仰賴他人的指示過日子。對於橫向關係的人來說，應該要拒絕並提出更好的方案，工作成敗是自己要負責的，沒有任何理由推託。其實在工作上還蠻常遇到為了避免麻煩，把問題交給別人決定的情況，讓別人決定別人負責，但是真正負責任的做法也許是自己也提出想法，然後再與別人共同討論並共識出較好的做法。<br>除了對上關係外，對下也是「縱向關係」的一種，像是對孩童的讚賞或責罵。阿德勒很尖銳地指出，大人說對孩子好而去責罵通常不是真正為了小孩好，而是因為小孩犯錯隱含著大人有教育失敗的責任，而為了自己不要被批評，所以想要控制他照著自己的想法走。然而教育是為了讓孩子能夠自立，我們只能從旁提供協助，就算是失敗也是要由自己去負起責任。有點像是學習騎腳踏車，真正騎車的人是小孩自己，跌倒也必須是自己去承擔，但我們可以提供他建議和方法，如果怕小孩受傷而不放手，那他就永遠學不會騎車，只能不斷依賴我們。這跟教育有關的部分目前我大概只有這樣的了解，也許未來有小孩之後可能會有更多的體悟吧！</p>
 <h2 id="活在當下"><a href="#活在當下" class="headerlink" title="活在當下"></a>活在當下</h2><p>「活在當下」這句話大部分的人都聽膩了，幾乎都變成是一個政治正確的口號，不過這邊我想提提阿德勒對活在當下的看法。本書用旅遊來比喻人生，出去旅遊絕對不是到達目的才叫旅行，如果是這樣我們就用最快的方式飛到目的地，然後再快速返回不就達成目標了？從自己踏出家門的那一刻起，就已經稱作旅行，旅行的概念是在到達目的前的每個瞬間，認真享受每個瞬間才是旅行的目的。<br>同理人生也一樣，人生就像是登山攻頂的活動，有大半時間都在半路上，如果不能認真對待這個過程，只期待登頂的那個瞬間，那不就代表人生有一大半是沒有價值的？對我而言，常常也會期待未來會變得更好，希望「當下」趕快過去，只要我做完什麼事情人生就會不一樣了，像是學生時期要準備大考、工作時要面對大案子等等。可是再回過頭來想，面對困難挑戰永遠只想說熬過去人生會更好，好像完全沒有真正更好過，因為我只有完成挑戰那一瞬間獲得解脫的快樂，但很快又會有下一個挑戰。與其自己只能在這樣的痛苦中不斷輪迴，不如專心面對當下每個瞬間。<br>關於活在當下，其實也是呼應了前面目的論的看法。「人生是一連串的剎那，過去和未來都不存在，別想要藉著回顧過去、預見未來，給自己一個免除責任的藉口。」由於自己真正擁有的是現在，如果用過去當做藉口，就意味著放棄了現在所擁有的選擇權。當自己想把現在的不如意推給過去，或是期盼未來會更好時，都要注意是不是根本沒有活在現在，應該要認真做當下自己所能做改變的事情。</p>
 <h2 id="評價"><a href="#評價" class="headerlink" title="評價"></a>評價</h2><p>以書寫手法來說，兩本書的結尾基本上是年輕人被哲學家說服，受到感動想去嘗試阿德勒心理學，說實在這有點讓人覺得矯情，我覺得其實不用用這種傳教意味濃厚的結尾也不會讓書的價值打折扣，不太清楚為什麼用這種想煽動人心的結尾。<br>另外，很多觀念在對話中並沒辦法越辯越明，個人認為講不夠詳細、邏輯不夠清楚的地方還蠻多的。舉個例子，書中有提到要無條件相信別人，但下集又提到相信不是照單全收，對於對方的思想信念要持懷疑態度，如果我都對人產生懷疑了，還稱得上是信任嗎？這裡作者沒有做更詳細的解釋。當然這可能也是對話方式的書籍所受限之處，畢竟對話類型的書比起理論類型更能讓一般人接受，但對話勢必要省略比較細節的內容了。<br>看完上下兩集後，我認為如果是要把阿德勒心理學當作是自己的人生觀，還有太多需要釐清之處了，而且這也會有洗腦之嫌。然而不可否認，他在百年前提出的這些思想確實有其高明之處，簡而有力地戳破我們不敢面對的一面，這些部分可以再好好理解並且善用在生活中。我們可以利用前人的思想來形塑自己的人生觀，但是不要只是照本宣科去執行，這樣就跟下集一開始的年輕人一樣會陷入苦惱之中了。<br>如果認為完完全全照著某個理論做就可以得到幸福，那其實不也是逃避負責任，缺乏真正去面對自己人生的勇氣呢？</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>「深度學習的技術」讀後感</title>
+    <url>/2018/03/11/%E3%80%8C%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8D%E8%AE%80%E5%BE%8C%E6%84%9F/</url>
+    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">「深度學習的技術」</a>。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
+<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
+<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
+<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
+<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
+<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話<strong>「知識就像是金錢一樣，不花就等於不曾有過」</strong>，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
+<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
