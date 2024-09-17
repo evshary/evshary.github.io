@@ -1,4 +1,4 @@
-all: prepare clean build
+all: clean build
 
 prepare: prepare-dev prepare-deploy
 
