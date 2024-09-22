@@ -19,28 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="簡介port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。詳情可參考port knocking的定義 安裝我這邊server是用Ubuntu, client是MAC環境。 server1sudo apt-get install knockd  client1brew insrall">
+    <meta name="description" content="在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。 這裡分享一些平常我得知新知的管道： Podca">
 <meta property="og:type" content="article">
-<meta property="og:title" content="port knocking">
-<meta property="og:url" content="http://evshary.com/2017/08/27/port-knocking/index.html">
+<meta property="og:title" content="獲取資訊來源的方法">
+<meta property="og:url" content="http://evshary.com/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="CY&#39;s Blog">
-<meta property="og:description" content="簡介port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。詳情可參考port knocking的定義 安裝我這邊server是用Ubuntu, client是MAC環境。 server1sudo apt-get install knockd  client1brew insrall">
+<meta property="og:description" content="在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。 這裡分享一些平常我得知新知的管道： Podca">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2017-08-27T10:21:28.000Z">
+<meta property="article:published_time" content="2024-09-22T15:52:35.000Z">
 <meta property="article:modified_time" content="2024-09-22T08:10:52.307Z">
 <meta property="article:author" content="evshary">
-<meta property="article:tag" content="tools">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://evshary.com/2017/08/27/port-knocking/">
+<link rel="canonical" href="http://evshary.com/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://evshary.com/2017/08/27/port-knocking/","path":"2017/08/27/port-knocking/","title":"port knocking"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://evshary.com/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/","path":"2024/09/22/獲取資訊來源的方法/","title":"獲取資訊來源的方法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>port knocking | CY's Blog</title>
+<title>獲取資訊來源的方法 | CY's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
@@ -144,7 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">簡介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D"><span class="nav-number">2.</span> <span class="nav-text">安裝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#server"><span class="nav-number">2.1.</span> <span class="nav-text">server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client"><span class="nav-number">2.2.</span> <span class="nav-text">client</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E6%AA%94"><span class="nav-number">3.</span> <span class="nav-text">設定檔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#server%E7%AB%AF"><span class="nav-number">4.1.</span> <span class="nav-text">server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client%E7%AB%AF"><span class="nav-number">4.2.</span> <span class="nav-text">client端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">5.</span> <span class="nav-text">注意</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Podcast"><span class="nav-number">1.</span> <span class="nav-text">Podcast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YouTube"><span class="nav-number">2.</span> <span class="nav-text">YouTube</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSS"><span class="nav-number">3.</span> <span class="nav-text">RSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%BB%E5%AD%90%E5%A0%B1"><span class="nav-number">4.</span> <span class="nav-text">電子報</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Telegram"><span class="nav-number">5.</span> <span class="nav-text">Telegram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text">小結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -203,7 +202,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://evshary.com/2017/08/27/port-knocking/">
+    <link itemprop="mainEntityOfPage" href="http://evshary.com/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -216,12 +215,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="port knocking | CY's Blog">
+      <meta itemprop="name" content="獲取資訊來源的方法 | CY's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          port knocking
+          獲取資訊來源的方法
         </h1>
 
         <div class="post-meta-container">
@@ -231,15 +230,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2017-08-27 10:21:28" itemprop="dateCreated datePublished" datetime="2017-08-27T10:21:28+00:00">2017-08-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-09-22 08:10:52" itemprop="dateModified" datetime="2024-09-22T08:10:52+00:00">2024-09-22</time>
+      <time title="Created: 2024-09-22 15:52:35 / Modified: 08:10:52" itemprop="dateCreated datePublished" datetime="2024-09-22T15:52:35+00:00">2024-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -247,7 +240,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E8%A1%93/" itemprop="url" rel="index"><span itemprop="name">技術</span></a>
+          <a href="/categories/%E5%80%8B%E4%BA%BA%E9%AB%94%E6%82%9F/" itemprop="url" rel="index"><span itemprop="name">個人體悟</span></a>
         </span>
     </span>
 
@@ -260,8 +253,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2017/08/27/port-knocking/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/27/port-knocking/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/09/22/獲取資訊來源的方法/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -274,32 +267,53 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a target="_blank" rel="noopener" href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>我這邊server是用Ubuntu, client是MAC環境。</p>
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install knockd</span><br></pre></td></tr></table></figure>
-
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
-
-<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a target="_blank" rel="noopener" href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[options]</span></span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line"><span class="section">[openSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">3389</span>:udp,<span class="number">80</span>:tcp,<span class="number">21</span>:udp,<span class="number">53</span>:tcp,<span class="number">23</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -I INPUT <span class="number">1</span> -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br><span class="line"></span><br><span class="line"><span class="section">[closeSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">443</span>:tcp,<span class="number">80</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br></pre></td></tr></table></figure>
-
-<p>功能大概看名字也可以猜出來</p>
+    <div class="post-body" itemprop="articleBody"><p>在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。</p>
+<p>這裡分享一些平常我得知新知的管道：</p>
+<h2 id="Podcast"><a href="#Podcast" class="headerlink" title="Podcast"></a>Podcast</h2><p>我最常使用的資訊來源獲取管道，主要是可以邊聽邊做其他事情</p>
 <ul>
-<li>sequence: 敲port的順序</li>
-<li>seq_timeout: 間隔時間</li>
-<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
-<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
+<li>曼報：兩位主持人會針對某一個產業或公司進行深入介紹，可以讓人有個概括的認知</li>
+<li>財報狗：裡面有個達人聊產業單元我很喜歡，來賓會分享該產業的一些概況，以及自己是怎麼經營事業的</li>
+<li>解鎖地球：受訪者會講自己在世界各地經歷的不一樣風土民情</li>
+<li>斐姨所思：鎖定台灣熱門議題的節目，有時候會邀請到不錯的來賓，主要看邀請到誰來決定要不要聽</li>
+<li>忽左忽右：社會人文的優質節目，從歷史、文學、能源到政治無所不包</li>
+<li>硅谷 101：在科技產業工作的話必聽，主要談談各個新興產業發展狀況，自動駕駛、AI、星艦、核能等等。由於受訪者常常是在矽谷工作的中國人，很常比較中國和美國兩國的產業發展狀況</li>
+<li>聲東擊西：也是社會人文類的節目，但是內容有時比較從心理哲學層面出發，而在美國大選時還有一系列介紹候選人的內容</li>
+<li>商業就是這樣：主要對一些時事延伸出有趣的商業主題，像是法國奧運時就會有奧委會怎麼挑選比賽項目</li>
+<li>Foreign Policy：關於外交政策的訪問，嘉賓不侷限於美國人，有時會訪問國外的前元首、外交部長、國防部長等等</li>
+<li>Lex Fridman Podcast：很多知名人物都有被訪問過，如川普、馬斯克、祖克柏，不過老實說他的訪問實在太長了，動輒就是幾小時，所以我只會挑有興趣的來聽</li>
+<li>All-In Podcast：主要是了解這四位知名投資人對美國和世界局勢的看法，比較偏向美國國內的視角，但是他們有些觀點有時會讓人耳目一新</li>
 </ul>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service knockd start</span><br></pre></td></tr></table></figure>
-
-<p>記得防火牆要先設定不讓外面的人進入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
-
-<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><p>須先安裝knock</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
-
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
+<h2 id="YouTube"><a href="#YouTube" class="headerlink" title="YouTube"></a>YouTube</h2><p>其實大部分情況下我都是把 YouTube 當成 Podcast 來聽</p>
+<ul>
+<li>小 Lin 說：淺顯易懂的經濟商業科普節目，小 Lin 的團隊很強，可以把複雜的事情轉換成簡單的架構</li>
+<li>MoneyXYZ：主要是分享他的人生觀，然後會介紹一些好書。他的特點是可以把書中的論點講得很有說服力</li>
+<li>RealLifeLore：介紹世界各國地緣政治的節目，很常會從地理出發，給人耳目一新的論點</li>
+<li>PolyMatter：介紹各個國家狀況的節目</li>
+<li>Norges Bank Investment：挪威主權基金的節目，會訪問一些優秀的企業家</li>
+<li>Johnny Harris：一個獨立記者的頻道，主要鎖定國際政治</li>
+</ul>
+<h2 id="RSS"><a href="#RSS" class="headerlink" title="RSS"></a>RSS</h2><p>我大部分都是用 RSS 來訂閱一些部落格的更新以及部分快訊</p>
+<ul>
+<li>地球圖輯隊：世界各地的有趣事情</li>
+<li>報導者：對很多社會議題做深入的報導</li>
+<li>Paul Graham：有名的風險投資人，雖然發文頻率很少，但每篇都能引起廣大迴響</li>
+<li>阮一峰的网络日志：每週會有一篇週報，整理一些有趣的科技新知</li>
+</ul>
+<h2 id="電子報"><a href="#電子報" class="headerlink" title="電子報"></a>電子報</h2><p>有些不錯的文章會透過電子報的形式發表出來，我會有限度的訂閱，畢竟也不想要塞爆自己的信箱</p>
+<ul>
+<li>曼報：同 Podcast，是介紹各產業的文字版本，但是有時候和 Podcast 並不會完全一致</li>
+<li>M 觀點：作者是研究科技巨頭的專家，會追蹤科技企業的狀況並且分析，科技領域工作的人值得追蹤</li>
+<li>瓦基：專門分享各種書籍的讀後心得，我主要是透過他的介紹來找到不錯值得一讀的書</li>
+</ul>
+<h2 id="Telegram"><a href="#Telegram" class="headerlink" title="Telegram"></a>Telegram</h2><p>主要是追蹤一些有趣的資訊，由於我不使用社群媒體，所以就從 Telegram 這邊來獲取</p>
+<ul>
+<li>敏迪選讀：淺白口吻介紹一些國際局勢相關的新聞，一些平常我們沒注意到的地方，如孟加拉、非洲、南美也都會提及</li>
+<li>IEObserve：有時會分享一些有趣事物，和科技經濟相關</li>
+<li>股癌：一樣會分享科技經濟的有趣事物</li>
+</ul>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>簡單分享一下自己對資訊來源的看法和原則</p>
+<p>• 不需要怕自己資訊來源不夠豐富，重要的是有可以信任的優質來源，並且可以不斷隨時間更新自己的獲取管道，不合時宜的也要敢於移除。<br>• 不需要急於獲得短時間內的消息，我自己對新聞類的資訊不是很在意。因為如果真的有重要的事情發生，它自然會浮現在自己的認知圈中。<br>• 獲取的資訊盡量以長期對我們有幫助為主，例如看見不一樣的人生觀或世界觀，認識新的國家或產業等等。<br>• 我會盡量不要透過社交媒體得到資訊來源，因為很容易被其他事物所分心。<br>• 就算是挑選過的資訊來源也不一定所有的內容都要看，掃過標題，真的有興趣再看即可</p>
+<p>這個列表會持續更新，也歡迎大家分享自己的資訊來源。</p>
 
     </div>
 
@@ -308,22 +322,16 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/tools/" rel="tag"># tools</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2017/08/26/dependency/" rel="prev" title="dependency">
-                  <i class="fa fa-angle-left"></i> dependency
+                <a href="/2024/09/17/%E3%80%8A%E8%AA%8D%E7%9F%A5%E9%A9%85%E5%8B%95%E3%80%8B%EF%BC%9A%E8%BC%B8%E5%87%BA%E9%87%8D%E6%96%BC%E5%8A%AA%E5%8A%9B/" rel="prev" title="《認知驅動》：輸出重於努力">
+                  <i class="fa fa-angle-left"></i> 《認知驅動》：輸出重於努力
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2017/08/27/code-review/" rel="next" title="code review">
-                  code review <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
