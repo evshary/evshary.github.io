@@ -1,116 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C語言的行內組譯</title>
-    <url>/2018/05/20/C-Inline-Assembly/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
-<p>舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 一個nop指令 */</span></span><br><span class="line"><span class="keyword">asm</span>(<span class="string">&quot;nop&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 多行要用\n隔開 */</span></span><br><span class="line">__asm__(<span class="string">&quot;nop\n&quot;</span></span><br><span class="line">        <span class="string">&quot;nop\n&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>不管是<code>asm</code>還是<code>__asm__</code>都是合法的，只要不要跟自己的symbol有衝突即可。</p>
-<p>聰明的你可能發覺一件事，剛剛的例子只有指令而已，那如果假設我們要跟自己設定的變數互動那要怎麼辦呢？這時候就要用比較複雜的格式</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">asm ( assembler template               /* 組合語言內容 */</span><br><span class="line">    : output operands                  /* 輸出的參數 */</span><br><span class="line">    : input operands                   /* 輸入的參數 */</span><br><span class="line">    : list of clobbered registers      /* 組合語言執行後會改變的項目 */</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
-
-<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><p>我們還是直接來看看程式比較有感覺</p>
-<h3 id="範例一"><a href="#範例一" class="headerlink" title="範例一"></a>範例一</h3><p>我們寫一個簡單的test.c，只負責做加法。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>編譯並且看一下組語的內容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc test.c -s test.s</span><br><span class="line">$ <span class="built_in">cat</span> test.s</span><br><span class="line">        .file   <span class="string">&quot;test.c&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .section        .rodata</span><br><span class="line">.LC0:</span><br><span class="line">        .string <span class="string">&quot;sum=%d\r\n&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .globl  main</span><br><span class="line">        .<span class="built_in">type</span>   main, @<span class="keyword">function</span></span><br><span class="line">main:</span><br><span class="line">.LFB0:</span><br><span class="line">        .cfi_startproc</span><br><span class="line">        pushq   %rbp</span><br><span class="line">        .cfi_def_cfa_offset 16</span><br><span class="line">        .cfi_offset 6, -16</span><br><span class="line">        movq    %rsp, %rbp</span><br><span class="line">        .cfi_def_cfa_register 6</span><br><span class="line">        subq    <span class="variable">$16</span>, %rsp</span><br><span class="line">        movl    <span class="variable">$1</span>, -4(%rbp)</span><br><span class="line">        movl    <span class="variable">$2</span>, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %edx</span><br><span class="line">        movl    -8(%rbp), %eax</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        call    <span class="built_in">printf</span></span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        leave</span><br><span class="line">        .cfi_def_cfa 7, 8</span><br><span class="line">        ret</span><br><span class="line">        .cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">        .size   main, .-main</span><br><span class="line">        .ident  <span class="string">&quot;GCC: (GNU) 8.1.0&quot;</span></span><br><span class="line">        .section        .note.GNU-stack,<span class="string">&quot;&quot;</span>,@progbits</span><br></pre></td></tr></table></figure>
-
-<p>先不管其他細節，可以看到中間有兩行<code>addl    %edx, %eax</code>和<code>movl    %eax, -12(%rbp)</code>，對應的也就是<code>sum = num1 + num2;</code>，那我們來改寫一下吧！</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %%edx, %%eax\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=a&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;a&quot;</span>(num1), <span class="string">&quot;d&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>編譯並執行後就會發現結果是一樣的。不過到這邊我想大部分的人心中一定充滿了三個小朋友，所以還是在稍微解釋一下。</p>
-<p>如前面所提，我們最主要執行的是<code>addl    %%edx, %%eax\n</code>，這邊跟前面不一樣的是%另有用途(後面會提)，所以要表示暫存器%eax時，我們要用%%來取代%字元。<br>然後第二行的<code>&quot;=a&quot;(sum)</code>中，<code>=</code>代表執行結束後我們要把某個值填到某個變數內(這邊指的就是括號中的sum)，可是某個值又是怎麼決定的呢？這個就是a的概念，也就是「規範條件」，要求編譯器只能對應到符合條件的register。</p>
-<p>如果以x86的架構為例(這邊要注意每個CPU架構的規範條件都不同)：</p>
-<table>
-<thead>
-<tr>
-<th>規範條件</th>
-<th>Register(s)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>a</td>
-<td>%eax, %ax, %al</td>
-</tr>
-<tr>
-<td>b</td>
-<td>%ebx, %bx, %bl</td>
-</tr>
-<tr>
-<td>c</td>
-<td>%ecx, %cx, %cl</td>
-</tr>
-<tr>
-<td>d</td>
-<td>%edx, %dx, %dl</td>
-</tr>
-<tr>
-<td>S</td>
-<td>%esi, %si</td>
-</tr>
-<tr>
-<td>D</td>
-<td>%edi, %di</td>
-</tr>
-<tr>
-<td>f</td>
-<td>fp</td>
-</tr>
-</tbody></table>
-<p>由此可知就是要把%eax的結果填入sum中。同理，第三行的input部分<code>&quot;a&quot;(num1), &quot;d&quot;(num2)</code>分別也代表在執行組合語言前為num1和num2選擇register(這邊的例子是num1填入%eax、num2填入%edx)。</p>
-<p>回頭看一下如果編成組合語言會是什麼樣子</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">        movl    $1, -4(%rbp)</span><br><span class="line">        movl    $2, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %eax</span><br><span class="line">        movl    -8(%rbp), %edx</span><br><span class="line">#APP</span><br><span class="line"># 8 &quot;test.c&quot; 1</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line"></span><br><span class="line"># 0 &quot;&quot; 2</span><br><span class="line">#NO_APP</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    $0, %eax</span><br><span class="line">        call    printf</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<p>在#APP和#NO_APP間就是我們的組語部分，看起來蠻符合我們的預期。</p>
-<h3 id="範例二"><a href="#範例二" class="headerlink" title="範例二"></a>範例二</h3><p>可是我們難道都一定要自行決定register嗎？我們想要交由compiler決定。這時候其實可以用比較寬鬆的限制條件。一樣是x86的架構才能用：</p>
-<table>
-<thead>
-<tr>
-<th>規範條件</th>
-<th>Register(s)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>r</td>
-<td>%eax, %ebx, %ecx, %edx, %esi, %edi</td>
-</tr>
-<tr>
-<td>q</td>
-<td>%eax, %ebx, %ecx, %edx</td>
-</tr>
-<tr>
-<td>0,1,2..</td>
-<td>%0, %1, %2…(代表第幾個參數)</td>
-</tr>
-</tbody></table>
-<p>那就修改程式吧！</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
-<p>當然最後執行結果也會和範例一一樣。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="http://sp1.wikidot.com/gnuinlineassembly">在 C 語言當中內嵌 GNU 的組合語言</a></li>
-<li><a href="http://wen00072.github.io/blog/2015/12/10/about-inline-asm/">關於GNU Inline Assembly</a></li>
-<li><a href="http://www.ethernut.de/en/documents/arm-inline-asm.html">ARM GCC Inline Assembler Cookbook</a></li>
-<li><a href="https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>程式語言</tag>
-        <tag>C</tag>
-        <tag>GNU tool</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ARM CortexM3/4權限切換</title>
     <url>/2018/12/02/ARM-CortexM3-4%E6%AC%8A%E9%99%90%E5%88%87%E6%8F%9B/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近我在研究怎麼在ARM Cortex M3&#x2F;4上面跑一個自己寫的OS，最主要是參考jserv的<a href="https://github.com/jserv/mini-arm-os">mini-arm-os</a>和<a href="https://github.com/PikoRT/pikoRT">pikoRT</a>，相關程式碼放在<a href="https://github.com/evshary/arm-os-4fun">arm-os-4fun</a>。<br>最近發現自己遇到了些問題，想說再研究怎麼解決的過程中順便把細節紀錄下，供自己未來可以參考。</p>
@@ -294,6 +184,116 @@
       </categories>
       <tags>
         <tag>ARM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C語言的行內組譯</title>
+    <url>/2018/05/20/C-Inline-Assembly/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
+<p>舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 一個nop指令 */</span></span><br><span class="line"><span class="keyword">asm</span>(<span class="string">&quot;nop&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 多行要用\n隔開 */</span></span><br><span class="line">__asm__(<span class="string">&quot;nop\n&quot;</span></span><br><span class="line">        <span class="string">&quot;nop\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>不管是<code>asm</code>還是<code>__asm__</code>都是合法的，只要不要跟自己的symbol有衝突即可。</p>
+<p>聰明的你可能發覺一件事，剛剛的例子只有指令而已，那如果假設我們要跟自己設定的變數互動那要怎麼辦呢？這時候就要用比較複雜的格式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">asm ( assembler template               /* 組合語言內容 */</span><br><span class="line">    : output operands                  /* 輸出的參數 */</span><br><span class="line">    : input operands                   /* 輸入的參數 */</span><br><span class="line">    : list of clobbered registers      /* 組合語言執行後會改變的項目 */</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><p>我們還是直接來看看程式比較有感覺</p>
+<h3 id="範例一"><a href="#範例一" class="headerlink" title="範例一"></a>範例一</h3><p>我們寫一個簡單的test.c，只負責做加法。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>編譯並且看一下組語的內容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc test.c -s test.s</span><br><span class="line">$ <span class="built_in">cat</span> test.s</span><br><span class="line">        .file   <span class="string">&quot;test.c&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .section        .rodata</span><br><span class="line">.LC0:</span><br><span class="line">        .string <span class="string">&quot;sum=%d\r\n&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .globl  main</span><br><span class="line">        .<span class="built_in">type</span>   main, @<span class="keyword">function</span></span><br><span class="line">main:</span><br><span class="line">.LFB0:</span><br><span class="line">        .cfi_startproc</span><br><span class="line">        pushq   %rbp</span><br><span class="line">        .cfi_def_cfa_offset 16</span><br><span class="line">        .cfi_offset 6, -16</span><br><span class="line">        movq    %rsp, %rbp</span><br><span class="line">        .cfi_def_cfa_register 6</span><br><span class="line">        subq    <span class="variable">$16</span>, %rsp</span><br><span class="line">        movl    <span class="variable">$1</span>, -4(%rbp)</span><br><span class="line">        movl    <span class="variable">$2</span>, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %edx</span><br><span class="line">        movl    -8(%rbp), %eax</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        call    <span class="built_in">printf</span></span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        leave</span><br><span class="line">        .cfi_def_cfa 7, 8</span><br><span class="line">        ret</span><br><span class="line">        .cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">        .size   main, .-main</span><br><span class="line">        .ident  <span class="string">&quot;GCC: (GNU) 8.1.0&quot;</span></span><br><span class="line">        .section        .note.GNU-stack,<span class="string">&quot;&quot;</span>,@progbits</span><br></pre></td></tr></table></figure>
+
+<p>先不管其他細節，可以看到中間有兩行<code>addl    %edx, %eax</code>和<code>movl    %eax, -12(%rbp)</code>，對應的也就是<code>sum = num1 + num2;</code>，那我們來改寫一下吧！</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %%edx, %%eax\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=a&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;a&quot;</span>(num1), <span class="string">&quot;d&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>編譯並執行後就會發現結果是一樣的。不過到這邊我想大部分的人心中一定充滿了三個小朋友，所以還是在稍微解釋一下。</p>
+<p>如前面所提，我們最主要執行的是<code>addl    %%edx, %%eax\n</code>，這邊跟前面不一樣的是%另有用途(後面會提)，所以要表示暫存器%eax時，我們要用%%來取代%字元。<br>然後第二行的<code>&quot;=a&quot;(sum)</code>中，<code>=</code>代表執行結束後我們要把某個值填到某個變數內(這邊指的就是括號中的sum)，可是某個值又是怎麼決定的呢？這個就是a的概念，也就是「規範條件」，要求編譯器只能對應到符合條件的register。</p>
+<p>如果以x86的架構為例(這邊要注意每個CPU架構的規範條件都不同)：</p>
+<table>
+<thead>
+<tr>
+<th>規範條件</th>
+<th>Register(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>%eax, %ax, %al</td>
+</tr>
+<tr>
+<td>b</td>
+<td>%ebx, %bx, %bl</td>
+</tr>
+<tr>
+<td>c</td>
+<td>%ecx, %cx, %cl</td>
+</tr>
+<tr>
+<td>d</td>
+<td>%edx, %dx, %dl</td>
+</tr>
+<tr>
+<td>S</td>
+<td>%esi, %si</td>
+</tr>
+<tr>
+<td>D</td>
+<td>%edi, %di</td>
+</tr>
+<tr>
+<td>f</td>
+<td>fp</td>
+</tr>
+</tbody></table>
+<p>由此可知就是要把%eax的結果填入sum中。同理，第三行的input部分<code>&quot;a&quot;(num1), &quot;d&quot;(num2)</code>分別也代表在執行組合語言前為num1和num2選擇register(這邊的例子是num1填入%eax、num2填入%edx)。</p>
+<p>回頭看一下如果編成組合語言會是什麼樣子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">        movl    $1, -4(%rbp)</span><br><span class="line">        movl    $2, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %eax</span><br><span class="line">        movl    -8(%rbp), %edx</span><br><span class="line">#APP</span><br><span class="line"># 8 &quot;test.c&quot; 1</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line"></span><br><span class="line"># 0 &quot;&quot; 2</span><br><span class="line">#NO_APP</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    $0, %eax</span><br><span class="line">        call    printf</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>在#APP和#NO_APP間就是我們的組語部分，看起來蠻符合我們的預期。</p>
+<h3 id="範例二"><a href="#範例二" class="headerlink" title="範例二"></a>範例二</h3><p>可是我們難道都一定要自行決定register嗎？我們想要交由compiler決定。這時候其實可以用比較寬鬆的限制條件。一樣是x86的架構才能用：</p>
+<table>
+<thead>
+<tr>
+<th>規範條件</th>
+<th>Register(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>%eax, %ebx, %ecx, %edx, %esi, %edi</td>
+</tr>
+<tr>
+<td>q</td>
+<td>%eax, %ebx, %ecx, %edx</td>
+</tr>
+<tr>
+<td>0,1,2..</td>
+<td>%0, %1, %2…(代表第幾個參數)</td>
+</tr>
+</tbody></table>
+<p>那就修改程式吧！</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
+<p>當然最後執行結果也會和範例一一樣。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="http://sp1.wikidot.com/gnuinlineassembly">在 C 語言當中內嵌 GNU 的組合語言</a></li>
+<li><a href="http://wen00072.github.io/blog/2015/12/10/about-inline-asm/">關於GNU Inline Assembly</a></li>
+<li><a href="http://www.ethernut.de/en/documents/arm-inline-asm.html">ARM GCC Inline Assembler Cookbook</a></li>
+<li><a href="https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>程式語言</tag>
+        <tag>C</tag>
+        <tag>GNU tool</tag>
       </tags>
   </entry>
   <entry>
@@ -3020,5 +3020,37 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>閱讀是一種朋友間的對話</title>
+    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
+    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
+<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
+<ol>
+<li>為什麼我想要看這本書？我想從中得到什麼？</li>
+<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
+</ol>
+<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
+<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
+<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
+<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
+<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
+<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
+<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
+<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
+<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
+<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
+<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
+<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
+<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
+<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
+<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
+]]></content>
+      <categories>
+        <category>個人體悟</category>
+      </categories>
   </entry>
 </search>
