@@ -11,7 +11,7 @@ The blog uses hexo and hexo-theme-next.
 
 ## Update blogs
 
-* Install just (You might need to install cargo first)
+* Install just (Need to install cargo first)
 
    ```bash
    cargo install just
@@ -23,9 +23,10 @@ The blog uses hexo and hexo-theme-next.
    just prepare
    ```
 
+* Put the article inside contents folder
+
 * Build and run
 
   ```bash
-  just
-  just run
+  just && just run
   ```
