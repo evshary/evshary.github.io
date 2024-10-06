@@ -9,6 +9,7 @@ run:
 build:
   # Copy the new posts to the folder
   cp `find contents/ -name "*.md"` source/_posts/
+  cp `find contents/ -name "*.png"` source/images/
   # Generate the site
   hexo generate
 
@@ -20,7 +21,7 @@ clean:
 
 prepare-dev:
   # Install pre-commit
-  python3 -m pip install pre-commit
+  pipx install pre-commit
   pre-commit install --install-hooks
 
 prepare-deploy:
