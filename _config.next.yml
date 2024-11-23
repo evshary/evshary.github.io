@@ -84,7 +84,7 @@ menu:
   about: /aboutme/ || fa fa-user
   book: /categories/讀書心得/ || fa fa-book
   technique: /categories/技術/ || fa fa-laptop
-  growth: /categories/個人體悟/ || fa fa-level-up
+  others: /categories/雜七雜八/ || fa fa-navicon
   #tags: /tags/ || fa fa-tags
   #categories: /categories/ || fa fa-th
   #archives: /archives/ || fa fa-archive
