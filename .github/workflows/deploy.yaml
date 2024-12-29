@@ -6,6 +6,15 @@ on:
       - source
 
 jobs:
+  markdown_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v18
+        with:
+          config: '.markdownlint.yaml'
+          globs: '**/*.md'
+
   build:
     runs-on: ubuntu-20.04
     steps:
