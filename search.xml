@@ -1404,88 +1404,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>docker 簡易教學</title>
     <url>/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><ul>
@@ -1610,6 +1528,88 @@
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
 <li><a href="https://peihsinsu.gitbooks.io/docker-note-book/content/">Docker學習筆記</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
+
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放音樂</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -3081,7 +3081,7 @@
     <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
 <h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
 <p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
-<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得治鐵後，我們才能製造更堅固的武器、農具。</p>
+<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
 <p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
 <p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
 <h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
