@@ -8,8 +8,8 @@ run:
 
 build:
   # Copy the new posts to the folder
-  cp `find contents/ -name "*.md"` source/_posts/
-  cp `find contents/ -name "*.png"` source/images/
+  find contents/ -type f -name "*.md" -exec cp {} source/_posts/ \;
+  find contents/ -type f -name "*.png" -exec cp {} source/images/ \;
   # Generate the site
   hexo generate
 
