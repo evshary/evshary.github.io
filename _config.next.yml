@@ -50,10 +50,10 @@ darkmode: false
 # ---------------------------------------------------------------
 
 favicon:
-  small: /images/favicon-16x16-next.png
-  medium: /images/favicon-32x32-next.png
-  apple_touch_icon: /images/apple-touch-icon-next.png
-  safari_pinned_tab: /images/logo.svg
+  small: /images/favicon16.ico
+  medium: /images/favicon32.ico
+  apple_touch_icon: /images/favicon180.ico
+  safari_pinned_tab: /images/favicon180.ico
   #android_manifest: /manifest.json
 
 # Custom Logo (Warning: Do not support scheme Mist)
@@ -81,7 +81,7 @@ creative_commons:
 # External url should start with http:// or https://
 menu:
   home: / || fa fa-home
-  about: /aboutme/ || fa fa-user
+  about: https://evshary.com/aboutme/ || fa fa-user
   book: /categories/讀書心得/ || fa fa-book
   technique: /categories/技術/ || fa fa-laptop
   others: /categories/雜七雜八/ || fa fa-navicon
