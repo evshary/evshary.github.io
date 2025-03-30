@@ -297,6 +297,108 @@
       </tags>
   </entry>
   <entry>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
+<li>指令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+</ul>
+</li>
+</ul>
+<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
+<li><p>先產生key</p>
+<ul>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
+<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
+<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
+<li><p>查看目前的鑰匙</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>編輯key(對key簽名也是用同樣的方法)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
+<li><p>首先先搜尋對象的public key</p>
+<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看與更新朋友的public key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
+<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>import&#x2F;export自己的金鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
+<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果要確認發信人身份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>關於ELF的兩三事</title>
     <url>/2018/05/06/ELF-format/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。</p>
@@ -496,104 +598,56 @@
       </tags>
   </entry>
   <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
-<li>指令</li>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+<li>如果要在別的port開啟</li>
 </ul>
-</li>
-</ul>
-<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
-<li><p>先產生key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
 <ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)</li>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
-<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
-<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
-<li><p>查看目前的鑰匙</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>編輯key(對key簽名也是用同樣的方法)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
-<li><p>首先先搜尋對象的public key</p>
-<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看與更新朋友的public key</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
-<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>import&#x2F;export自己的金鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
-<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果要確認發信人身份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
 </ul>
 ]]></content>
       <categories>
         <category>技術</category>
       </categories>
       <tags>
-        <tag>GNU tool</tag>
         <tag>tools</tag>
       </tags>
   </entry>
@@ -801,60 +855,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果要在別的port開啟</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux和程式的互動</title>
     <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
@@ -913,136 +913,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>code review</title>
-    <url>/2017/08/27/code-review/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
-<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
-<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
-<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
-<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
-<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
-<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
-<li>備份功能：確保至少有兩個人知道code的意思。</li>
-</ol>
-<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
-<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
-<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
-</ul>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
-<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
-<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
-<li>相互尊重：<ul>
-<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
-<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
-</ul>
-</li>
-<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
-</ul>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
-<li>說明code review規則，以及建立正確的心態</li>
-<li>事先訂定公司開發的文化，如coding style，命名規則</li>
-<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
-</ul>
-<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
-<li>開發時間需要預估code review的時間</li>
-<li>先規劃如何將大功能切成小部分：<ul>
-<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
-<li>如果功能出了大問題，也可以把風險控制在最小</li>
-</ul>
-</li>
-</ul>
-<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
-<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
-<li>如果有使用分析工具，先使用工具產生報表<ul>
-<li>review時可以針對上面的重點討論</li>
-<li>減少review的effort</li>
-</ul>
-</li>
-</ul>
-<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
-<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
-<li>code review時間不要超過半小時</li>
-<li>利用checklist來檢查<ul>
-<li>功能需求是什麼？設計方式是否有達到目的？</li>
-<li>是否可以做未來擴充？</li>
-<li>是否足夠安全？有沒有邏輯漏洞？</li>
-<li>Error handling和corner case是否都有處理好？</li>
-<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
-<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
-<li>效能是否可以再提升？</li>
-</ul>
-</li>
-<li>review過程不改code，用todo list先記錄</li>
-</ul>
-<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
-<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
-<li>review後要留下紀錄提供學習使用</li>
-<li>定期開會評估code review流程和效用<ul>
-<li>review的方式要不要調整？</li>
-<li>工具是否要調整？</li>
-<li>checklist是否要更新？</li>
-</ul>
-</li>
-</ul>
-<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
-<ul>
-<li>統一Glossary：<ul>
-<li>可以使用wiki等文件建立</li>
-</ul>
-</li>
-<li>找重複程式碼：<ul>
-<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
-</ul>
-</li>
-<li>判斷複雜度：<ul>
-<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
-<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
-</ul>
-</li>
-<li>分析綜合品質：<ul>
-<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
-<li>Adlint：Open source，但似乎很久沒更新了</li>
-<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
-</ul>
-</li>
-<li>程式法風格：<ul>
-<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
-<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
-</ul>
-</li>
-</ul>
-<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
-<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
-<ul>
-<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
-<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
-<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
-</ul>
-<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
-<ol>
-<li>執行前後，bug減少的數量(這是品質部分)</li>
-<li>執行前後，團隊多花費的時間(這是成本部分)</li>
-<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
-<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
-<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
-<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
-<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
-<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
-<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
-<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>軟體開發</tag>
       </tags>
   </entry>
   <entry>
@@ -1345,6 +1215,136 @@
       </tags>
   </entry>
   <entry>
+    <title>code review</title>
+    <url>/2017/08/27/code-review/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
+<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
+<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
+<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
+<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
+<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
+<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
+<li>備份功能：確保至少有兩個人知道code的意思。</li>
+</ol>
+<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
+<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
+<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
+</ul>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
+<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
+<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
+<li>相互尊重：<ul>
+<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
+<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
+</ul>
+</li>
+<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
+<li>說明code review規則，以及建立正確的心態</li>
+<li>事先訂定公司開發的文化，如coding style，命名規則</li>
+<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
+</ul>
+<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
+<li>開發時間需要預估code review的時間</li>
+<li>先規劃如何將大功能切成小部分：<ul>
+<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
+<li>如果功能出了大問題，也可以把風險控制在最小</li>
+</ul>
+</li>
+</ul>
+<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
+<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
+<li>如果有使用分析工具，先使用工具產生報表<ul>
+<li>review時可以針對上面的重點討論</li>
+<li>減少review的effort</li>
+</ul>
+</li>
+</ul>
+<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
+<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
+<li>code review時間不要超過半小時</li>
+<li>利用checklist來檢查<ul>
+<li>功能需求是什麼？設計方式是否有達到目的？</li>
+<li>是否可以做未來擴充？</li>
+<li>是否足夠安全？有沒有邏輯漏洞？</li>
+<li>Error handling和corner case是否都有處理好？</li>
+<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
+<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
+<li>效能是否可以再提升？</li>
+</ul>
+</li>
+<li>review過程不改code，用todo list先記錄</li>
+</ul>
+<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
+<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
+<li>review後要留下紀錄提供學習使用</li>
+<li>定期開會評估code review流程和效用<ul>
+<li>review的方式要不要調整？</li>
+<li>工具是否要調整？</li>
+<li>checklist是否要更新？</li>
+</ul>
+</li>
+</ul>
+<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
+<ul>
+<li>統一Glossary：<ul>
+<li>可以使用wiki等文件建立</li>
+</ul>
+</li>
+<li>找重複程式碼：<ul>
+<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
+</ul>
+</li>
+<li>判斷複雜度：<ul>
+<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
+<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
+</ul>
+</li>
+<li>分析綜合品質：<ul>
+<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
+<li>Adlint：Open source，但似乎很久沒更新了</li>
+<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
+</ul>
+</li>
+<li>程式法風格：<ul>
+<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
+<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
+<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
+<ul>
+<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
+<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
+<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
+</ul>
+<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
+<ol>
+<li>執行前後，bug減少的數量(這是品質部分)</li>
+<li>執行前後，團隊多花費的時間(這是成本部分)</li>
+<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
+<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
+<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
+<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
+<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
+<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
+<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
+<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>軟體開發</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>dependency</title>
     <url>/2017/08/26/dependency/</url>
     <content><![CDATA[<h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
@@ -1401,6 +1401,88 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
+
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放音樂</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1528,88 +1610,6 @@
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
 <li><a href="https://peihsinsu.gitbooks.io/docker-note-book/content/">Docker學習筆記</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -3046,6 +3046,60 @@
       </tags>
   </entry>
   <entry>
+    <title>為什麼動機比努力重要</title>
+    <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
+    <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
+<p>這是某次面試我被問到的問題。原本以為我對網路架構已經足夠熟悉，然而卻發現自己沒辦法很流暢地回答這個看似基本的問題。不僅面試官不滿意，我也不滿意自己的答案。</p>
+<p>這是因為工作不認真，沒有學好技術嗎？不，以客觀標準來說，我絕對屬於認真的那群。那難道是經驗不夠嗎？也不是，自從畢業以來，我從事的工作都和網路相關。這並不能當作藉口。</p>
+<p>那麼問題出在哪裡呢？又或者我們可以進一步問，明明花同樣的時間，為何人與人之間的能力差距會這麼大呢？這個疑惑不斷在心中徘徊，困擾了很久，最終找到了真正的答案：</p>
+<p>那就是「動機」。</p>
+<h2 id="你的努力搞錯了方向"><a href="#你的努力搞錯了方向" class="headerlink" title="你的努力搞錯了方向"></a>你的努力搞錯了方向</h2><p>或許你對這樣的答案不以為然：動機只是做一件事情的理由罷了，哪會影響做這件事的結果。</p>
+<p>我原本也是這樣想，但是回想自己過去學習與工作的經歷，那些表現好的領域，無不是因為我對那些知識感到好奇，想要徹底搞懂；而表現不突出的，往往都不是為了學習本身而行動，而是為了得到好成績或是完成某個任務，學會那些領域知識只是副產品罷了。</p>
+<p>明明都花一樣時間、一樣努力，只是動機不同，可是最後成果卻天差地別。</p>
+<p>為什麼會這樣呢？讓我們用更加實際的情境來說明：</p>
+<p>想像有兩個能力伯仲之間的員工，一個想要得到老闆賞識，認為完成越多任務越好，而另一個人則是對事情充滿好奇心，接收到的任務會想盡辦法了解各種細節。</p>
+<p>前者只要任務完成了就會馬上著手下一個任務，所以完成的數量遠遠高於後者。然而有好奇心的員工卻會在完成任務之餘嘗試理解其中的各種知識，而這些知識又可以用在未來其他任務上。拉長時間來看，他才是真正累積了這個領域的專業能力，能解決未來更加困難的問題。</p>
+<p>兩個人都付出了同等的努力，但是由於各自的動機不同，最終所能達成的成就也不同。</p>
+<p>如果努力是汽車的油門，那麼動機就是方向盤。一旦動機有稍微的偏差，差之毫釐失之千里，我們將會駛向錯誤的目的地。</p>
+<h2 id="經驗並不重要"><a href="#經驗並不重要" class="headerlink" title="經驗並不重要"></a>經驗並不重要</h2><p>但是不管動機如何，如果一個事情做了十年，總會變成這個領域的佼佼者吧？也許你會想這樣反駁。</p>
+<p>我有個朋友當了產品經理十多年，然而其他人私底下評價他都認為能力差不多就是剛畢業的學生。對於他所管理的產品，從來不會想進一步了解，完全是別人怎麼說就怎麼做，一個指令一個動作。對他而言，能完成主管交辦的工作就好，並沒有任何動機學習產品的技術原理、市場趨勢和發展前景。</p>
+<p>就如同我們天天開車不會哪天變成 F1 賽車手一樣，我們也不會因為用同樣的技能做重複性的工作，就能獲得突破性成果。所謂的經驗累積並非單純的時間累積。究竟我們是用一年的工作能力重複做十年，還是十年內有意識不斷學習新的知識呢？</p>
+<p>這也正是「刻意練習」這本書所強調的觀念：一個技能要有所成長，需要持續突破舒適圈，克服自己的弱點。單純重複同個行為一萬小時並不會讓自己成為專家。</p>
+<p>時間從來都不是重點，重要的是在這段時間內我們的內在動機為何，以及採取了什麼行動。只有不斷經歷各式各樣的事物，時間的積累才會有價值。</p>
+<h2 id="好奇心才是最佳的動機"><a href="#好奇心才是最佳的動機" class="headerlink" title="好奇心才是最佳的動機"></a>好奇心才是最佳的動機</h2><p>知名物理學家費曼曾說：「對任何事物都充滿了好奇，是我學習和理解世界的方式」。發明蘋果手機的賈伯斯也說過：「Stay Hungry, Stay Foolish」。</p>
+<p>過去我都很無法理解為什麼這些有所成就的人總是強調好奇心的重要性，明明看起來跟他們所獲得的成功沒有太大關聯。我的想像中他們應該要更強調天賦、努力等等更直接的因素才對。</p>
+<p>然而，好奇心正是他們行動背後的真正動機，這些人不追求成功本身，而是想要瞭解世界運作背後的本質和原理，只是在探索的過程中不經意得到成功這個副產品罷了。如果一開始就以功成名就為目標，反而會離它越來越遠。</p>
+<p>越單純的心念，越能夠接觸事物的本質，而越能掌握本質的人，越能在這世界中發揮影響力。一旦混入了對名利的追求，就無法全心投入其中。</p>
+<p>對世界的好奇，是人類與生俱來的天賦，每個孩子一誕生就有的才能，只是我們在長大的過程中被蒙蔽了而已。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回到最一開始的問題，為什麼我沒辦法回答看似基本的問題。原因也很簡單，過去的工作中我很認真，或者說太過認真，全心全力解決被交辦的任務。我所累積的並不是技術能力，而是怎麼把工作做好的能力。</p>
+<p>當有取巧的做法可以繞過問題時，我不會回過頭思考問題根因在哪裡。當遇到一個樹木的問題時，我只看見樹木，而不是從整個樹林的角度來思考。錯誤的動機侷限了我行動的方向。</p>
+<p>我很努力，但只是在努力成為好員工，而不是努力理解技術原理、滿足好奇心。</p>
+<p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
+<p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
+<p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>為什麼社會有分歧</title>
+    <url>/2024/10/27/%E7%82%BA%E4%BB%80%E9%BA%BC%E7%A4%BE%E6%9C%83%E6%9C%89%E5%88%86%E6%AD%A7/</url>
+    <content><![CDATA[<p>在現代社會中，人們常常都在說社會分裂越來越嚴重。由於網路的發展，各種意見容易匯聚，然後又因為社群媒體的演算法不斷擴大同溫層，讓某些意見持續放大，最終產生出衝突。常見的例子像是國家定位、同性婚姻、核電使用，而在國外更有持槍議題、移民、人種平權等等。</p>
+<p>在社會中，某些議題上有立場衝突必定是會存在的。社會是由人組成的，人人也都有不同意見。當大家對某個方向都贊同，那社會肯定是會朝這個方向前進，這時就沒有太多討論價值。會吸引人們目光的總是那些有不同意見的議題，透過激烈討論，直到達成某種程度的共識後才會逐漸潛伏，被其他更引人注目的議題所取代。這就如同大海上有很多波浪，當最大的波浪消失了，大家的注意力就會集中在次高的波浪上一樣。</p>
+<p>隨著時代的推進，人們的價值觀也不斷更新，過去認為正確的概念在現代可能也會被推翻。其中最著名的就是種族不平等。以美國為例，奴隸制度直到內戰才被廢除，但是一直要到二戰後才真正落實廢除種族隔離。而現在很多社會運動者更加追求在各個領域，各種人種都要能一定程度的參與，例如大學入學或是公司聘用。</p>
+<p>然而這類社會進步價值的推進，也一定會帶來反作用力。追求進步價值的人 (SJW)，常常會被其他相對比較保守的人嘲笑為「覺青」、「左膠」。這個非常正常，任何對社會現狀的改動都會有阻力。一開始可能因為某些事件爆發(如 Black Lives Matter、Me too)，改革的動力非常強大，不斷在某個議題上面往前推進，社會也願意支持。但隨著時間推移，改革者的要求越來越多，社會大眾也會逐漸對議題失去興趣，其中的保守派也會開始抗拒，最終反而形成另一股強烈的反對力量把改革派反推回去。這就像是鐘擺一樣，在議題中的兩個立場不斷擺盪，直到形成社會可以接受的新共識。</p>
+<p>這樣的現象其實我們可以在很多例子上看見。以前陣子台灣的同婚議題來看，同志對同性婚姻的訴求得到年輕人的認可，產生出改革力量，推動公投。然而社會雖然對同性戀愛的接受度越來越大，卻還是無法忍受改變傳統上對婚姻的定義，最終在公投上否決了這項改變。不過從結果上來說，儘管同性婚姻沒成功，但是社會也接受了新的同性伴侶相關法律。就像是改革派往前兩步，保守派往後推一步，最終還是前進一步，社會達成了新的共識。</p>
+<p>同樣的狀況也發生在全球化上面，過去幾十年由於全球化，人們可以享受發展中國家製造的便宜商品，但卻也造成了先進國家的製造業外流。美國的藍領階層在 2016 年的大選反撲中選出了川普，透過拉高關稅而造成逆全球化。現在再加上地緣政治和疫情的原因，逆全球化的趨勢短時間內應該是不會緩解，但可預期的是也不會回到大家完全閉關鎖國的格局。整體態勢應該最終還是在一個新的共識點達成平衡，直到下一股外在力量再次引發改變。</p>
+<p>回到我們個人，我們所參與的團體，例如公司、社團等等，其實也是一種小社會。當遇到外在壓力下，通常也會產生出改革和保守兩股力量。舉例來說，公司營收不好需要進行轉型、社團老化需要吸引新血加入。改革派會認為不變動就是等死，保守派則是擔心太大的變動會失去了團體本身的價值，導致團體的崩解。兩種力量在內部不斷拉扯，直到找出新的平衡出來。</p>
+<p>雖然我們這裡使用改革和保守兩種詞，但這並沒有任何的褒義和貶義。改革並不代表有完美結局，看看多少國家在革命後陷入貧窮崩壞。保守而轉型太慢也常常是公司被新的挑戰者所取代的原因。改革沒有保守的制約往往會衝太快，讓系統不穩定而崩潰，反過來說，保守也需要有改革派的驅動來應對新的挑戰。有智慧的領導人必須要在這兩種勢力中小心翼翼維持平衡，走出緩慢並有力的改變力量。</p>
+<p>我們人類總是喜歡有共識沒分歧，但是分歧在一個正常的社會中是一定存在的，因為人與人彼此間就是不一樣。分歧從來不是壞事，這是社會多樣性的一種展現。當我們可以用比較自然態度看待他人意見不同時，社會也越不會二極化、彼此相互對立。因為我們知道不同立場都有存在的必要，唯一需要的是一套穩定合理產生出彼此都能接受共識的方法。這個方法可能是公投、可能是選舉，只要人們可以接受即可。當分歧可以用這套系統來彌合，社會就不會因此而產生分裂，進而朝有共識的方向往前邁進。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>為何我選擇定期定額投入市值型 ETF</title>
     <url>/2025/02/09/%E7%82%BA%E4%BD%95%E6%88%91%E9%81%B8%E6%93%87%E5%AE%9A%E6%9C%9F%E5%AE%9A%E9%A1%8D%E6%8A%95%E5%85%A5%E5%B8%82%E5%80%BC%E5%9E%8B%20ETF/</url>
     <content><![CDATA[<p>從小因為家庭的教育，我對股票市場一直有種莫名的恐懼，聽過好多例子因為投資股票而傾家蕩產。直到出了社會接觸了更多資訊後才發現，股票其實也有很穩健的投資方式。目前，大多數推薦的作法是定期定額投入市值型的 ETF。</p>
@@ -3173,23 +3227,6 @@
       </categories>
   </entry>
   <entry>
-    <title>為什麼社會有分歧</title>
-    <url>/2024/10/27/%E7%82%BA%E4%BB%80%E9%BA%BC%E7%A4%BE%E6%9C%83%E6%9C%89%E5%88%86%E6%AD%A7/</url>
-    <content><![CDATA[<p>在現代社會中，人們常常都在說社會分裂越來越嚴重。由於網路的發展，各種意見容易匯聚，然後又因為社群媒體的演算法不斷擴大同溫層，讓某些意見持續放大，最終產生出衝突。常見的例子像是國家定位、同性婚姻、核電使用，而在國外更有持槍議題、移民、人種平權等等。</p>
-<p>在社會中，某些議題上有立場衝突必定是會存在的。社會是由人組成的，人人也都有不同意見。當大家對某個方向都贊同，那社會肯定是會朝這個方向前進，這時就沒有太多討論價值。會吸引人們目光的總是那些有不同意見的議題，透過激烈討論，直到達成某種程度的共識後才會逐漸潛伏，被其他更引人注目的議題所取代。這就如同大海上有很多波浪，當最大的波浪消失了，大家的注意力就會集中在次高的波浪上一樣。</p>
-<p>隨著時代的推進，人們的價值觀也不斷更新，過去認為正確的概念在現代可能也會被推翻。其中最著名的就是種族不平等。以美國為例，奴隸制度直到內戰才被廢除，但是一直要到二戰後才真正落實廢除種族隔離。而現在很多社會運動者更加追求在各個領域，各種人種都要能一定程度的參與，例如大學入學或是公司聘用。</p>
-<p>然而這類社會進步價值的推進，也一定會帶來反作用力。追求進步價值的人 (SJW)，常常會被其他相對比較保守的人嘲笑為「覺青」、「左膠」。這個非常正常，任何對社會現狀的改動都會有阻力。一開始可能因為某些事件爆發(如 Black Lives Matter、Me too)，改革的動力非常強大，不斷在某個議題上面往前推進，社會也願意支持。但隨著時間推移，改革者的要求越來越多，社會大眾也會逐漸對議題失去興趣，其中的保守派也會開始抗拒，最終反而形成另一股強烈的反對力量把改革派反推回去。這就像是鐘擺一樣，在議題中的兩個立場不斷擺盪，直到形成社會可以接受的新共識。</p>
-<p>這樣的現象其實我們可以在很多例子上看見。以前陣子台灣的同婚議題來看，同志對同性婚姻的訴求得到年輕人的認可，產生出改革力量，推動公投。然而社會雖然對同性戀愛的接受度越來越大，卻還是無法忍受改變傳統上對婚姻的定義，最終在公投上否決了這項改變。不過從結果上來說，儘管同性婚姻沒成功，但是社會也接受了新的同性伴侶相關法律。就像是改革派往前兩步，保守派往後推一步，最終還是前進一步，社會達成了新的共識。</p>
-<p>同樣的狀況也發生在全球化上面，過去幾十年由於全球化，人們可以享受發展中國家製造的便宜商品，但卻也造成了先進國家的製造業外流。美國的藍領階層在 2016 年的大選反撲中選出了川普，透過拉高關稅而造成逆全球化。現在再加上地緣政治和疫情的原因，逆全球化的趨勢短時間內應該是不會緩解，但可預期的是也不會回到大家完全閉關鎖國的格局。整體態勢應該最終還是在一個新的共識點達成平衡，直到下一股外在力量再次引發改變。</p>
-<p>回到我們個人，我們所參與的團體，例如公司、社團等等，其實也是一種小社會。當遇到外在壓力下，通常也會產生出改革和保守兩股力量。舉例來說，公司營收不好需要進行轉型、社團老化需要吸引新血加入。改革派會認為不變動就是等死，保守派則是擔心太大的變動會失去了團體本身的價值，導致團體的崩解。兩種力量在內部不斷拉扯，直到找出新的平衡出來。</p>
-<p>雖然我們這裡使用改革和保守兩種詞，但這並沒有任何的褒義和貶義。改革並不代表有完美結局，看看多少國家在革命後陷入貧窮崩壞。保守而轉型太慢也常常是公司被新的挑戰者所取代的原因。改革沒有保守的制約往往會衝太快，讓系統不穩定而崩潰，反過來說，保守也需要有改革派的驅動來應對新的挑戰。有智慧的領導人必須要在這兩種勢力中小心翼翼維持平衡，走出緩慢並有力的改變力量。</p>
-<p>我們人類總是喜歡有共識沒分歧，但是分歧在一個正常的社會中是一定存在的，因為人與人彼此間就是不一樣。分歧從來不是壞事，這是社會多樣性的一種展現。當我們可以用比較自然態度看待他人意見不同時，社會也越不會二極化、彼此相互對立。因為我們知道不同立場都有存在的必要，唯一需要的是一套穩定合理產生出彼此都能接受共識的方法。這個方法可能是公投、可能是選舉，只要人們可以接受即可。當分歧可以用這套系統來彌合，社會就不會因此而產生分裂，進而朝有共識的方向往前邁進。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>獲取資訊來源的方法</title>
     <url>/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。</p>
@@ -3245,24 +3282,6 @@
       </categories>
   </entry>
   <entry>
-    <title>《稀缺》：稀缺其實是一種陷阱</title>
-    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%EF%BC%9A%E6%88%91%E5%80%91%E6%98%AF%E5%A6%82%E4%BD%95%E9%99%B7%E5%85%A5%E8%B2%A7%E7%AA%AE%E8%88%87%E5%BF%99%E7%A2%8C%E7%9A%84/</url>
-    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「<a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a>」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
-<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
-<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
-<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
-<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
-<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
-<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>理論與經驗：知識如何落地</title>
     <url>/2024/12/15/%E7%90%86%E8%AB%96%E8%88%87%E7%B6%93%E9%A9%97%EF%BC%9A%E7%9F%A5%E8%AD%98%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/</url>
     <content><![CDATA[<p>傳聞中，德國皇帝威廉二世在第一次世界大戰兵敗退位二十年後，讀到了德文版的孫子兵法，感慨自己若是能早點讀到這本書，也不至於落到如此境地。聽到這個故事不禁讓我思考，如果我們能提前讀遍經典、知曉無數道理，是否真的能避免失敗，直達成功的彼岸呢？</p>
@@ -3279,6 +3298,24 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>《稀缺》：稀缺其實是一種陷阱</title>
+    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%EF%BC%9A%E6%88%91%E5%80%91%E6%98%AF%E5%A6%82%E4%BD%95%E9%99%B7%E5%85%A5%E8%B2%A7%E7%AA%AE%E8%88%87%E5%BF%99%E7%A2%8C%E7%9A%84/</url>
+    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「<a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a>」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
+<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
+<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
+<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
+<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
+<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
+<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
   </entry>
   <entry>
     <title>筆記：自己的外部大腦</title>
