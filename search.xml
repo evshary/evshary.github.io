@@ -297,108 +297,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
-<li>指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
-</ul>
-</li>
-</ul>
-<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
-<li><p>先產生key</p>
-<ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
-<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
-<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
-<li><p>查看目前的鑰匙</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>編輯key(對key簽名也是用同樣的方法)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
-<li><p>首先先搜尋對象的public key</p>
-<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看與更新朋友的public key</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
-<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>import&#x2F;export自己的金鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
-<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果要確認發信人身份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>關於ELF的兩三事</title>
     <url>/2018/05/06/ELF-format/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。</p>
@@ -598,56 +496,104 @@
       </tags>
   </entry>
   <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
+<li>指令</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>如果要在別的port開啟</li>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
+</li>
+</ul>
+<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
+<li><p>先產生key</p>
 <ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)</li>
 </ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
+<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
+<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
+<li><p>查看目前的鑰匙</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>編輯key(對key簽名也是用同樣的方法)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
+<li><p>首先先搜尋對象的public key</p>
+<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看與更新朋友的public key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
+<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>import&#x2F;export自己的金鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
+<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果要確認發信人身份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
 </ul>
 ]]></content>
       <categories>
         <category>技術</category>
       </categories>
       <tags>
+        <tag>GNU tool</tag>
         <tag>tools</tag>
       </tags>
   </entry>
@@ -852,6 +798,60 @@
       </categories>
       <tags>
         <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果要在別的port開啟</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1133,88 +1133,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dd - 資料處理的好工具</title>
-    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
-<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
-<li>輸入輸出參數<ul>
-<li>if&#x3D;FILE：輸入名稱</li>
-<li>of&#x3D;FILE：輸出名稱</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
-
-<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
-<li>做相對應的轉換<code>conv=CONVS</code><ul>
-<li>lcase：大寫字母換小寫</li>
-<li>ucase：小寫字母換大寫</li>
-<li>nocreat：不要建立輸出檔案</li>
-<li>notrunc：input小於output時，仍維持output大小</li>
-<li>fdatasync：讓資料同步寫入硬碟</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
-
-<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
-<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
-<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
-<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
-</ul>
-</li>
-<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
-<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
-<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
-</ul>
-<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
-<li><p>大小寫轉換</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>產生一個特定大小的檔案</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>把特定檔案的開頭512 byte清空</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份硬碟</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
-<ol>
-<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然後應該會出現類似如下內容</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
-<ul>
-<li>拆分檔案，例如把檔案切成好幾個1G</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>合併檔案，例如好幾個1G合併起來</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>code review</title>
     <url>/2017/08/27/code-review/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
@@ -1345,6 +1263,88 @@
       </tags>
   </entry>
   <entry>
+    <title>dd - 資料處理的好工具</title>
+    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
+<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
+<li>輸入輸出參數<ul>
+<li>if&#x3D;FILE：輸入名稱</li>
+<li>of&#x3D;FILE：輸出名稱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
+
+<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
+<li>做相對應的轉換<code>conv=CONVS</code><ul>
+<li>lcase：大寫字母換小寫</li>
+<li>ucase：小寫字母換大寫</li>
+<li>nocreat：不要建立輸出檔案</li>
+<li>notrunc：input小於output時，仍維持output大小</li>
+<li>fdatasync：讓資料同步寫入硬碟</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
+
+<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
+<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
+<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
+<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
+</ul>
+</li>
+<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
+<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
+<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
+</ul>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
+<li><p>大小寫轉換</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>產生一個特定大小的檔案</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>把特定檔案的開頭512 byte清空</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份硬碟</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
+<ol>
+<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然後應該會出現類似如下內容</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
+<ul>
+<li>拆分檔案，例如把檔案切成好幾個1G</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>合併檔案，例如好幾個1G合併起來</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>dependency</title>
     <url>/2017/08/26/dependency/</url>
     <content><![CDATA[<h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
@@ -1401,88 +1401,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1610,6 +1528,88 @@
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
 <li><a href="https://peihsinsu.gitbooks.io/docker-note-book/content/">Docker學習筆記</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
+
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放音樂</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2323,6 +2323,26 @@
       </tags>
   </entry>
   <entry>
+    <title>在非標準的道路上</title>
+    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
+    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
+<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
+<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
+<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
+<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
+<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
+<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：<strong>目前在做的事情是不是我想做的？</strong>畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
+<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
+<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
+<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
+<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
+<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>三年的工作省思</title>
     <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
@@ -2376,26 +2396,6 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>在非標準的道路上</title>
-    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
-    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
-<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
-<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
-<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
-<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
-<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
-<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：<strong>目前在做的事情是不是我想做的？</strong>畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
-<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
-<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
-<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
-<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
-<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
   </entry>
   <entry>
     <title>天性與熱情</title>
@@ -3227,6 +3227,59 @@
       </categories>
   </entry>
   <entry>
+    <title>為何比特幣是加密貨幣中的定海神針</title>
+    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
+    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
+<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
+<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
+<center>比特幣市值佔比圖，資料來源：coingecko</center>
+
+<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
+<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
+<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
+<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
+<ul>
+<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
+<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
+<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
+</ul>
+<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
+<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
+<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
+<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
+<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
+<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
+<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
+<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
+<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>區塊鏈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>理論與經驗：知識如何落地</title>
+    <url>/2024/12/15/%E7%90%86%E8%AB%96%E8%88%87%E7%B6%93%E9%A9%97%EF%BC%9A%E7%9F%A5%E8%AD%98%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/</url>
+    <content><![CDATA[<p>傳聞中，德國皇帝威廉二世在第一次世界大戰兵敗退位二十年後，讀到了德文版的孫子兵法，感慨自己若是能早點讀到這本書，也不至於落到如此境地。聽到這個故事不禁讓我思考，如果我們能提前讀遍經典、知曉無數道理，是否真的能避免失敗，直達成功的彼岸呢？</p>
+<p>然而，理論並非萬能。三國時期的就是個典型的例子。他飽讀兵書，深受諸葛亮的信任，在南征孟獲時還曾經提出「攻心為上」的方針。但是在街亭之戰中，卻因為過度拘泥於居高臨下的理論，不顧有豐富實戰經驗的副將王平勸阻，在山上佈陣，最終被張郃切斷水源所敗。他的失敗印證了劉備對其「言過其實」的評價，也給後人一種紙上談兵的印象。這樣看來，單純懂很多理論知識，似乎也沒辦法確保能在現實中取得好成果。</p>
+<p>其實在怎麼好的道理理論都有其適用的情境範圍。以馬謖前面的例子來說，居高臨下可能在大多數的情境都是好的決策，因此兵書也會這樣記載。然而，這樣的軍事指導也是有自己的水源不能被敵人所切斷的前提。他的副將可能書沒有馬謖讀得多，但是因為有豐富的經驗，所以知道這樣做會有問題。這時候經驗的價值就遠遠超過理論的指引了。</p>
+<p>然而我們也不能說理論就沒有任何價值了，它是一盞明燈，可以幫助我們明確前進方向，最大程度避開前人所踩的坑。只是路上遇到的問題並不能全靠理論來解決，因為理論本來就不可能把所有可能發生的問題都窮舉出來，唯有自己親身經歷過才會真正了解。用比較科學的方式來說，<strong>理論所能蘊含的資訊量也不過就文字而已，經驗則是來自我們的五官，提供給我們的訊息遠遠多過於理論</strong>。</p>
+<p>這個也是為什麼當人上了年紀，看事情的境界就不再相同。年輕時常常被告誡身體健康很重要，我們也都清楚並同意這件事，沒有人會說健康不重要，但是不到自己有了年紀、健康實際出了狀況，就不會下定決心要好好運動、保養身體。因此回到德國皇帝的故事，他會覺得感慨，並不只是孫子兵法是好兵書的關係，更多可能是因為它觸動了德國皇帝失敗的經驗，理論和經驗相互印證。假設同樣的兵書給年輕的威廉二世看，我相信他的感觸肯定不會那麼多，而且很大的機率仍然會重蹈覆轍。</p>
+<p>我想，聽很多名言、讀很多道理可能用途並沒有我們想像中的大，甚至可能有害。很多時候我們會誤以為自己已經理解某個理論，因為聽過好多次。然而聽過和實際上真正理解根本是兩回事，這也就是心理學中的「知識錯覺」。我們都知道拉鍊和腳踏車，因此自以為很清楚其運作原理，但當有人要我們嘗試說明時卻發現根本不懂細節。學會很多理論也同樣的意思，認為自己很了解了，反而忽視了從來沒有真正搞懂並落實在生活中。</p>
+<p>任何同樣的文字會受限於每個人的生活經驗、背景知識、人生閱歷而有不一樣的差別。就像是同樣是 <code>E=mc^2</code> 這個公式，對愛因斯坦、對物理系學生、又或者是對普通人來說，意義完全不相同。為了解決這個問題，很多書籍都是為了闡述某個用一句話就說完的理論，而撰寫了一大堆論述和範例。儘管如此，我們也無法說看完一本書後就得到作者對這個議題的完整知識。</p>
+<p>或許最好的方式是正視我們不可能完全理解名言和理論真正意思的現實。既然如此，應該要保持著開放謙虛的心態看待知識和理論，明白自己在不同年紀、更多經歷後可能會有不同的體會。</p>
+<p>對我而言，理論只有在真正改變實際行為才有用處。人類的天性是重視經驗、感性的，唯有實際嘗試才能真正理解。我們不可能只聽老師指導、觀看教學影片就能學會游泳，最終還是得下水嘗試體驗才行，因為身體每個動作細節很多是無法透過言語傳達的。<strong>我們透過理論得到一個大略的方向，然後親身體會後就能回過頭來修正對理論的理解</strong>。透過這樣方式才能基於前人的智慧幫助我們更加理解這個世界並創造出理想的成果。</p>
+<p>理論是燈塔，經驗是船，燈塔能指引方向，但船仍需要經歷風浪才能到達目的。我們需要的是不斷嘗試反思的學習過程，而不是沉溺於理論的海市蜃樓之中。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>獲取資訊來源的方法</title>
     <url>/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。</p>
@@ -3276,24 +3329,6 @@
 <h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>簡單分享一下自己對資訊來源的看法和原則</p>
 <p>• 不需要怕自己資訊來源不夠豐富，重要的是有可以信任的優質來源，並且可以不斷隨時間更新自己的獲取管道，不合時宜的也要敢於移除。<br>• 不需要急於獲得短時間內的消息，我自己對新聞類的資訊不是很在意。因為如果真的有重要的事情發生，它自然會浮現在自己的認知圈中。<br>• 獲取的資訊盡量以長期對我們有幫助為主，例如看見不一樣的人生觀或世界觀，認識新的國家或產業等等。<br>• 我會盡量不要透過社交媒體得到資訊來源，因為很容易被其他事物所分心。<br>• 就算是挑選過的資訊來源也不一定所有的內容都要看，掃過標題，真的有興趣再看即可</p>
 <p>這個列表會持續更新，也歡迎大家分享自己的資訊來源。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>理論與經驗：知識如何落地</title>
-    <url>/2024/12/15/%E7%90%86%E8%AB%96%E8%88%87%E7%B6%93%E9%A9%97%EF%BC%9A%E7%9F%A5%E8%AD%98%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/</url>
-    <content><![CDATA[<p>傳聞中，德國皇帝威廉二世在第一次世界大戰兵敗退位二十年後，讀到了德文版的孫子兵法，感慨自己若是能早點讀到這本書，也不至於落到如此境地。聽到這個故事不禁讓我思考，如果我們能提前讀遍經典、知曉無數道理，是否真的能避免失敗，直達成功的彼岸呢？</p>
-<p>然而，理論並非萬能。三國時期的就是個典型的例子。他飽讀兵書，深受諸葛亮的信任，在南征孟獲時還曾經提出「攻心為上」的方針。但是在街亭之戰中，卻因為過度拘泥於居高臨下的理論，不顧有豐富實戰經驗的副將王平勸阻，在山上佈陣，最終被張郃切斷水源所敗。他的失敗印證了劉備對其「言過其實」的評價，也給後人一種紙上談兵的印象。這樣看來，單純懂很多理論知識，似乎也沒辦法確保能在現實中取得好成果。</p>
-<p>其實在怎麼好的道理理論都有其適用的情境範圍。以馬謖前面的例子來說，居高臨下可能在大多數的情境都是好的決策，因此兵書也會這樣記載。然而，這樣的軍事指導也是有自己的水源不能被敵人所切斷的前提。他的副將可能書沒有馬謖讀得多，但是因為有豐富的經驗，所以知道這樣做會有問題。這時候經驗的價值就遠遠超過理論的指引了。</p>
-<p>然而我們也不能說理論就沒有任何價值了，它是一盞明燈，可以幫助我們明確前進方向，最大程度避開前人所踩的坑。只是路上遇到的問題並不能全靠理論來解決，因為理論本來就不可能把所有可能發生的問題都窮舉出來，唯有自己親身經歷過才會真正了解。用比較科學的方式來說，<strong>理論所能蘊含的資訊量也不過就文字而已，經驗則是來自我們的五官，提供給我們的訊息遠遠多過於理論</strong>。</p>
-<p>這個也是為什麼當人上了年紀，看事情的境界就不再相同。年輕時常常被告誡身體健康很重要，我們也都清楚並同意這件事，沒有人會說健康不重要，但是不到自己有了年紀、健康實際出了狀況，就不會下定決心要好好運動、保養身體。因此回到德國皇帝的故事，他會覺得感慨，並不只是孫子兵法是好兵書的關係，更多可能是因為它觸動了德國皇帝失敗的經驗，理論和經驗相互印證。假設同樣的兵書給年輕的威廉二世看，我相信他的感觸肯定不會那麼多，而且很大的機率仍然會重蹈覆轍。</p>
-<p>我想，聽很多名言、讀很多道理可能用途並沒有我們想像中的大，甚至可能有害。很多時候我們會誤以為自己已經理解某個理論，因為聽過好多次。然而聽過和實際上真正理解根本是兩回事，這也就是心理學中的「知識錯覺」。我們都知道拉鍊和腳踏車，因此自以為很清楚其運作原理，但當有人要我們嘗試說明時卻發現根本不懂細節。學會很多理論也同樣的意思，認為自己很了解了，反而忽視了從來沒有真正搞懂並落實在生活中。</p>
-<p>任何同樣的文字會受限於每個人的生活經驗、背景知識、人生閱歷而有不一樣的差別。就像是同樣是 <code>E=mc^2</code> 這個公式，對愛因斯坦、對物理系學生、又或者是對普通人來說，意義完全不相同。為了解決這個問題，很多書籍都是為了闡述某個用一句話就說完的理論，而撰寫了一大堆論述和範例。儘管如此，我們也無法說看完一本書後就得到作者對這個議題的完整知識。</p>
-<p>或許最好的方式是正視我們不可能完全理解名言和理論真正意思的現實。既然如此，應該要保持著開放謙虛的心態看待知識和理論，明白自己在不同年紀、更多經歷後可能會有不同的體會。</p>
-<p>對我而言，理論只有在真正改變實際行為才有用處。人類的天性是重視經驗、感性的，唯有實際嘗試才能真正理解。我們不可能只聽老師指導、觀看教學影片就能學會游泳，最終還是得下水嘗試體驗才行，因為身體每個動作細節很多是無法透過言語傳達的。<strong>我們透過理論得到一個大略的方向，然後親身體會後就能回過頭來修正對理論的理解</strong>。透過這樣方式才能基於前人的智慧幫助我們更加理解這個世界並創造出理想的成果。</p>
-<p>理論是燈塔，經驗是船，燈塔能指引方向，但船仍需要經歷風浪才能到達目的。我們需要的是不斷嘗試反思的學習過程，而不是沉溺於理論的海市蜃樓之中。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
