@@ -827,60 +827,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果要在別的port開啟</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux和程式的互動</title>
     <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
@@ -1159,6 +1105,60 @@
       </tags>
   </entry>
   <entry>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果要在別的port開啟</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>code review</title>
     <url>/2017/08/27/code-review/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
@@ -1430,88 +1430,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>docker 簡易教學</title>
     <url>/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><ul>
@@ -1636,6 +1554,88 @@
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
 <li><a href="https://peihsinsu.gitbooks.io/docker-note-book/content/">Docker學習筆記</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
+
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放音樂</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2191,70 +2191,6 @@
       </tags>
   </entry>
   <entry>
-    <title>一些減少code size的方法</title>
-    <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
-<h2 id="Compile-Optimization"><a href="#Compile-Optimization" class="headerlink" title="Compile Optimization"></a>Compile Optimization</h2><p>首先我們可以看一下compiler是不是已經做過優化了，大家都知道gcc在編譯的時候可以選擇optimization的level，從0-3。0代表的是default，而隨著數字越高，對code size和execution time的優化就越高。</p>
-<p>大部分的人都會建議使用-O2，在code size和execution time取平衡，但是如果真的對code size十分在意的話，其實也可以使用-Os，代表的是-O2但是不包含部分會影響code size的優化。</p>
-<p>到底每個optimization的level是做了那些優化，可參考<a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC的官方文件</a></p>
-<h2 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h2><p>strip算是最基本的降低code size工具，他會移除debug資訊(可供gdb使用的資訊)以及symbol table，因此size會降低許多。</p>
-<p>這邊簡單做個實驗：</p>
-<ul>
-<li>我們先寫個簡單程式：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">func</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;func\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    func();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接著來編譯，為了凸顯strip的效果，我們加上-g來加上gdb debug訊息</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -g test.c -o <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接著我們可以用<code>nm -a test</code>來看到他的symbol table</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0000000000000000 a</span><br><span class="line">0000000000201030 b .bss</span><br><span class="line">0000000000201030 B __bss_start</span><br><span class="line">0000000000000000 n .comment</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>以及用<code>objdump -h test</code>來看到有哪些section header，可以發現有許多debug資訊</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"> 27 .debug_aranges 00000030  0000000000000000  0000000000000000  0000105d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 28 .debug_info   0000033a  0000000000000000  0000000000000000  0000108d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 29 .debug_abbrev 000000f6  0000000000000000  0000000000000000  000013c7  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 30 .debug_line   000000d4  0000000000000000  0000000000000000  000014bd  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 31 .debug_str    0000028a  0000000000000000  0000000000000000  00001591  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接著執行<code>strip test</code>後，會發現symbol table已經消失了(無法使用nm)，以及沒有debug的section header。兩者size有極大差異。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 11152 Aug  4 11:34 <span class="built_in">test</span></span><br><span class="line">&gt; strip <span class="built_in">test</span></span><br><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h2><p>strip可以減少極大部分的code size，但是如果這樣還不夠的話，我們可以用objcopy把一些沒用到的section header移除掉，但是要提醒一下，這個移除幾乎不會影響太大，大概就幾百byte而已。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version <span class="built_in">test</span> small_test</span><br><span class="line">-&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
-
-<p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
-<h2 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h2><p>我們知道程式裡面常常會有些程式碼(function&#x2F;data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
-<p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
-<p>細節可以參考<a href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C&#x2F;C++ symbols with GCC and ld?</a>。</p>
-<h2 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h2><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
-<p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
-<h2 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h2><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
-<p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
-<p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
-<h2 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h2><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1&#x2F;3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
-<p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
-<h2 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h2><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
-<p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
-<p>web壓縮的方式網路上有很多，有些甚至提供online的服務，例如<a href="https://htmlcompressor.com/compressor/">HTMLCompressor</a>或是<a href="https://www.textfixer.com/html/compress-html-compression.php">textfixer</a>等等，可以自己尋找適合的工具。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>上面分享了許多方法，但最後我要先澄清一下，自己需要搞清楚到底不夠的是flash還是memory，上面的方法並不是做了兩個都一定會減少。舉個例子來說，移除沒有必要用到的大變數通常只會影響memory的使用率，因為compile出來firmware的size並沒有包括大變數(因為是bss section，未初始化區段)，而file system的壓縮通常也只會影響flash的使用率，除非firmware有把檔案預先從flash讀出來放在memory中。我想強調的是使用這些方法時，還是要有必備的系統觀以及對你的系統有一定熟悉程度。</p>
-<p>老實說軟體開發者最討厭的大概就是被各種硬體條件所限制，然而這些在embedded的世界中還是有很大的機會會遇到，特別是考量到成本的時候。雖然很討厭這類的問題，但是解決後其實還是蠻有成就感的。以上分享希望能夠幫助大家解決code size issue。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://linux.vbird.org/somepaper/20050117-jianfei.pdf">程式減肥三步走</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>youtube-dl網路影片下載器</title>
     <url>/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
@@ -2349,24 +2285,68 @@
       </tags>
   </entry>
   <entry>
-    <title>在非標準的道路上</title>
-    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
-    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
-<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
-<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
-<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
-<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
-<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
-<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：<strong>目前在做的事情是不是我想做的？</strong>畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
-<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
-<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
-<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
-<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
-<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
+    <title>一些減少code size的方法</title>
+    <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
+<h2 id="Compile-Optimization"><a href="#Compile-Optimization" class="headerlink" title="Compile Optimization"></a>Compile Optimization</h2><p>首先我們可以看一下compiler是不是已經做過優化了，大家都知道gcc在編譯的時候可以選擇optimization的level，從0-3。0代表的是default，而隨著數字越高，對code size和execution time的優化就越高。</p>
+<p>大部分的人都會建議使用-O2，在code size和execution time取平衡，但是如果真的對code size十分在意的話，其實也可以使用-Os，代表的是-O2但是不包含部分會影響code size的優化。</p>
+<p>到底每個optimization的level是做了那些優化，可參考<a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC的官方文件</a></p>
+<h2 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h2><p>strip算是最基本的降低code size工具，他會移除debug資訊(可供gdb使用的資訊)以及symbol table，因此size會降低許多。</p>
+<p>這邊簡單做個實驗：</p>
+<ul>
+<li>我們先寫個簡單程式：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">func</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;func\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    func();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接著來編譯，為了凸顯strip的效果，我們加上-g來加上gdb debug訊息</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -g test.c -o <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接著我們可以用<code>nm -a test</code>來看到他的symbol table</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0000000000000000 a</span><br><span class="line">0000000000201030 b .bss</span><br><span class="line">0000000000201030 B __bss_start</span><br><span class="line">0000000000000000 n .comment</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>以及用<code>objdump -h test</code>來看到有哪些section header，可以發現有許多debug資訊</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"> 27 .debug_aranges 00000030  0000000000000000  0000000000000000  0000105d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 28 .debug_info   0000033a  0000000000000000  0000000000000000  0000108d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 29 .debug_abbrev 000000f6  0000000000000000  0000000000000000  000013c7  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 30 .debug_line   000000d4  0000000000000000  0000000000000000  000014bd  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 31 .debug_str    0000028a  0000000000000000  0000000000000000  00001591  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接著執行<code>strip test</code>後，會發現symbol table已經消失了(無法使用nm)，以及沒有debug的section header。兩者size有極大差異。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 11152 Aug  4 11:34 <span class="built_in">test</span></span><br><span class="line">&gt; strip <span class="built_in">test</span></span><br><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h2><p>strip可以減少極大部分的code size，但是如果這樣還不夠的話，我們可以用objcopy把一些沒用到的section header移除掉，但是要提醒一下，這個移除幾乎不會影響太大，大概就幾百byte而已。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version <span class="built_in">test</span> small_test</span><br><span class="line">-&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
+
+<p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
+<h2 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h2><p>我們知道程式裡面常常會有些程式碼(function&#x2F;data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
+<p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
+<p>細節可以參考<a href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C&#x2F;C++ symbols with GCC and ld?</a>。</p>
+<h2 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h2><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
+<p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
+<h2 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h2><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
+<p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
+<p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
+<h2 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h2><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1&#x2F;3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
+<p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
+<h2 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h2><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
+<p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
+<p>web壓縮的方式網路上有很多，有些甚至提供online的服務，例如<a href="https://htmlcompressor.com/compressor/">HTMLCompressor</a>或是<a href="https://www.textfixer.com/html/compress-html-compression.php">textfixer</a>等等，可以自己尋找適合的工具。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>上面分享了許多方法，但最後我要先澄清一下，自己需要搞清楚到底不夠的是flash還是memory，上面的方法並不是做了兩個都一定會減少。舉個例子來說，移除沒有必要用到的大變數通常只會影響memory的使用率，因為compile出來firmware的size並沒有包括大變數(因為是bss section，未初始化區段)，而file system的壓縮通常也只會影響flash的使用率，除非firmware有把檔案預先從flash讀出來放在memory中。我想強調的是使用這些方法時，還是要有必備的系統觀以及對你的系統有一定熟悉程度。</p>
+<p>老實說軟體開發者最討厭的大概就是被各種硬體條件所限制，然而這些在embedded的世界中還是有很大的機會會遇到，特別是考量到成本的時候。雖然很討厭這類的問題，但是解決後其實還是蠻有成就感的。以上分享希望能夠幫助大家解決code size issue。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://linux.vbird.org/somepaper/20050117-jianfei.pdf">程式減肥三步走</a></li>
+</ul>
 ]]></content>
       <categories>
-        <category>雜七雜八</category>
+        <category>技術</category>
       </categories>
+      <tags>
+        <tag>系統程式</tag>
+      </tags>
   </entry>
   <entry>
     <title>三年的工作省思</title>
@@ -2422,6 +2402,55 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>人形機器人與自動化的趨勢</title>
+    <url>/2025/06/08/%E4%BA%BA%E5%BD%A2%E6%A9%9F%E5%99%A8%E4%BA%BA%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E7%9A%84%E8%B6%A8%E5%8B%A2/</url>
+    <content><![CDATA[<p>最近，人形機器人的概念越來越熱門，從在 NVIDIA GTC 2025 跟黃仁勳一起登場的可愛機器人 BLUE，到 Elon Musk 的人形機器人 Optimus 能夠輕易跳舞，就連中國各家的機器人公司也紛紛提出相應的競品。這顯示人們對於機器人的關注不斷提升，也預示著人工智慧將會從虛擬的網路世界推展到實體的現實生活中。</p>
+<p>然而也不是所有人都看好人形機器人，例如廣達的林百里就認為人形機器人效益低，機器人不一定需要像人。</p>
+<p>人們為何追求人形機器人呢？這其實源於一種直覺假設：現實世界工作的基本單位是人，如果人類能做的事情機器人都能做，那麼就能大幅節省人力。特別是目前的工作環境都是為了人類所設計的，舉例來說工廠、餐廳、超商，如果能夠複製一比一的類人形，便能輕易將這些工作自動化。</p>
+<p>除此之外，目前機器的運作都大量依賴人工智慧，因此需要大量訓練資料，而人類的日常動作就是最好的資料來源。理論上只要有足夠多的訓練資料，機器人的人工智慧就能變得越聰明、越強大。</p>
+<p>反對者則反駁道，直覺不一定正確，飛機並不像鳥一樣揮動翅膀，車子也不像馬一樣用四條腿奔跑，大量複製文字也不需要設計機器人來寫字，而是透過印表機輸出。生物經過演化所產生的特徵，並非總是最高效率的解決方案，或許我們可以找到更有效率的形態來自動化。</p>
+<p>至於環境問題，我們確實可以改變工作環境。當環境配合機器人的成本，遠低於機器人配合環境的成本時，那麼就應該改造環境。例如在工廠中，當機器人無法順利爬樓梯時，為何不將其改造成斜坡，使其更容易移動？改造斜坡的成本，理應比開發會爬樓梯的機器人還要低。</p>
+<p>我個人的看法是，未來的機器人會類似於人形，但並非完全與人類一模一樣。也許機器人會有手，但不一定是兩隻手且有手指。想想如果我們要讓機器人鎖螺絲，是讓它提高手指靈敏度比較簡單，還是設計成手可以直接轉動比較簡單？此外，機器人也不一定需要有腳，也許是輪子，又或者是像溜冰鞋一樣腳底有輪子。走路的動作需要多種肌肉的協調，如果只是為了移動，用機械去模擬這個行為似乎沒有太大意義。</p>
+<p>此外，雙足人形機器人還有一個很大的缺點，那就是耗電。兩隻腳並非最穩定的姿勢，也正是因為這個原因，人類很容易跌倒。為了維持平衡，身體的肌肉需要進行各式各樣的協調，換到機器人身上，則意味著需要大量馬達不斷運作。我認為這個技術難點，並非短時間內可以克服。</p>
+<p>接下來，我想從更宏觀的角度來看待機器人這項技術。</p>
+<p>從本質上來看，機器人是自動化不斷走向通用化的一種嘗試。傳統機器通常設計成只做一件事，例如飲料店的自動封膜機。然而，如果每種自動化都需要獨立一台機器，那麼成本將會非常高昂，因此機器手臂以及無人搬運車便應運而生。</p>
+<p>工廠內的勞力工作大致可區分成兩種行為：組裝與搬運。前者需要精細的技巧，將多個零件組合在一起，這正是機械手臂的強項。而後者，則是能將原材料或產品自動搬運到不同地點，無人搬運車則能減少人類搬運的勞力。</p>
+<p>最重要的是，無論是機械手臂還是無人搬運車，它們都不會限定只能用於某種場景。機械手臂可以鎖螺絲、也能用於挑選不良品，更別說無人搬運車能夠搬運任何種類的產品了。當它們的應用不受限制，我們就能快速將同樣的工具運用到不同的環境，只需稍微調整即可。</p>
+<p>然而，人類仍不滿足。既然這世上的一切勞動，都能由人類這個形體完成，何不製作一個<strong>人形</strong>機器人，代替人類完成這些工作呢？如此一來便最為通用，任何場景都能克服。</p>
+<p>越是通用，越能節省成本，並能用同一套方式自動化生產流程，以更彈性的方式進行調整。</p>
+<p>這裡可以類比到電腦的誕生。人類最早使用電路進行邏輯運算，但每個不同應用都需要修改硬體，成本實在太高昂。因此，通用的電腦架構應運而生，即 CPU 搭配軟體指令的方式。後來，軟體開發者發現如果每次都要重新開發與硬體搭配的軟體實在太麻煩，於是通用的作業系統，如 Unix、Linux，也便應運而生了。</p>
+<p>我們可以發現，正是因為技術發展能夠站在前人肩膀上，通用型電腦的發展才會如此迅速，複雜的功能基本上都是疊加在過去所開發的通用架構之上。</p>
+<p>然而，對於自動化領域而言，目前並不像電腦一樣能有通用的架構，畢竟現實世界實在是太複雜了。以我們前面提到的組裝與搬運為例，光是貨物就有不同的大小，更別說場地環境的差異性可能十分巨大。</p>
+<p>人形機器人可說是人類對自動化的一種通用化嘗試。雖然我並不對此抱持如此樂觀的態度，但若是成功，將會如軟體一樣產生出各種複雜的應用。在工廠內只需要給予指令便能快速打造生產各種產品的生產線、在建築工地上用更快更安全的方式建造建築、在火災等災難現場進行搜救任務。人們將從勞動力解放出來，並且獲得更強大改變世界樣貌的能力。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>機器人</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在非標準的道路上</title>
+    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
+    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
+<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
+<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
+<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
+<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
+<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
+<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：<strong>目前在做的事情是不是我想做的？</strong>畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
+<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
+<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
+<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
+<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
+<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>天性與熱情</title>
@@ -2674,26 +2703,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《心流》：最佳體驗的專注</title>
-    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
-    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
-<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
-<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
-<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
-<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
-<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
-<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
-<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
-<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>我對 AI 的應用與反思</title>
     <url>/2025/02/23/%E6%88%91%E5%B0%8D%20AI%20%E7%9A%84%E6%87%89%E7%94%A8%E8%88%87%E5%8F%8D%E6%80%9D/</url>
     <content><![CDATA[<p>隨著 AI 的普及，我在日常生活中使用 AI 的機會也越來越多。AI 的能力不斷提升，每年都有質的飛躍，使得許多事務都可以依賴這個新工具。因此，了解 AI 能為我提供哪些幫助，以及它的極限在哪裡，就變得至關重要。</p>
@@ -2736,6 +2745,26 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>《心流》：最佳體驗的專注</title>
+    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
+    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
+<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
+<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
+<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
+<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
+<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
+<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
+<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
+<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
   </entry>
   <entry>
     <title>探討區塊鏈的價值</title>
