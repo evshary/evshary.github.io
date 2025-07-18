@@ -1289,6 +1289,65 @@
       </tags>
   </entry>
   <entry>
+    <title>dependency</title>
+    <url>/2017/08/26/dependency/</url>
+    <content><![CDATA[<h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;private.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test=%d\n&quot;</span>, PRIV_VALUE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>test.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _TEST_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _TEST_H</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>private.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _PRIVATE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _PRIVATE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIV_VALUE 3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>然後假設我們的Makefile是這樣寫</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$^</span></span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span></span><br></pre></td></tr></table></figure>
+
+<p>我們試著修改private.h的MACRO值，就會發現重新make結果還是不變，需要重新make clean</p>
+<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><p>可以使用gcc的特殊option</p>
+<ul>
+<li><p>gcc -M xxx.c: 找出所有相依檔</p>
+</li>
+<li><p>gcc -MM xxx.c: 同-M，但不含系統檔</p>
+ <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error</p>
+ <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c test.h</span></span><br><span class="line"></span><br><span class="line"><span class="section">test.h:</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-MF file: 輸出的dependency檔案名</p>
+</li>
+<li><p>-MD: 同-M -MF</p>
+</li>
+<li><p>-MMD: 同-MM -MF</p>
+</li>
+<li><p>-MT: 可以更改dependency檔案內的目標，可參考<a href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转]</a></p>
+</li>
+</ul>
+<p>因此只要把Makefile改成這樣即可</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">-include</span> $(OBJ:.o=.d)</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$&lt;</span></span><br><span class="line">    <span class="variable">$(CC)</span> -MM <span class="variable">$&lt;</span> &gt; <span class="variable">$*</span>.d</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span> *.d</span><br></pre></td></tr></table></figure>
+
+<p><code>-</code>代表如果有錯誤不要停止執行，<code>$(OBJ:.o=.d)</code>代表把.o換成.d，因此會變成類似</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c private.h test.h</span></span><br><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
+
+<p>由於該rule底下沒有statement，所以會直接對應<code>%.o: %.c</code></p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
+<li><a href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>dd - 資料處理的好工具</title>
     <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
@@ -1368,65 +1427,6 @@
       </categories>
       <tags>
         <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>dependency</title>
-    <url>/2017/08/26/dependency/</url>
-    <content><![CDATA[<h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;private.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test=%d\n&quot;</span>, PRIV_VALUE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>test.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _TEST_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _TEST_H</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>private.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _PRIVATE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _PRIVATE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIV_VALUE 3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>然後假設我們的Makefile是這樣寫</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$^</span></span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span></span><br></pre></td></tr></table></figure>
-
-<p>我們試著修改private.h的MACRO值，就會發現重新make結果還是不變，需要重新make clean</p>
-<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><p>可以使用gcc的特殊option</p>
-<ul>
-<li><p>gcc -M xxx.c: 找出所有相依檔</p>
-</li>
-<li><p>gcc -MM xxx.c: 同-M，但不含系統檔</p>
- <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error</p>
- <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c test.h</span></span><br><span class="line"></span><br><span class="line"><span class="section">test.h:</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>-MF file: 輸出的dependency檔案名</p>
-</li>
-<li><p>-MD: 同-M -MF</p>
-</li>
-<li><p>-MMD: 同-MM -MF</p>
-</li>
-<li><p>-MT: 可以更改dependency檔案內的目標，可參考<a href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转]</a></p>
-</li>
-</ul>
-<p>因此只要把Makefile改成這樣即可</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">-include</span> $(OBJ:.o=.d)</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$&lt;</span></span><br><span class="line">    <span class="variable">$(CC)</span> -MM <span class="variable">$&lt;</span> &gt; <span class="variable">$*</span>.d</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span> *.d</span><br></pre></td></tr></table></figure>
-
-<p><code>-</code>代表如果有錯誤不要停止執行，<code>$(OBJ:.o=.d)</code>代表把.o換成.d，因此會變成類似</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c private.h test.h</span></span><br><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
-
-<p>由於該rule底下沒有statement，所以會直接對應<code>%.o: %.c</code></p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
-<li><a href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -1814,6 +1814,133 @@
       </tags>
   </entry>
   <entry>
+    <title>linker script 簡單教學</title>
+    <url>/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
+<p>linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 <code>undefined reference error</code>。</p>
+<p>而 linker script 就是提供給 linker 參考的文件，它告訴 linker 我想要怎麼擺放這些 section，甚至也可以定義程式的起始點在哪邊。</p>
+<h2 id="簡單範例"><a href="#簡單範例" class="headerlink" title="簡單範例"></a>簡單範例</h2><p>最簡單的 linker script 是用<code>SECTIONS</code>指令去定義 section 的分佈。</p>
+<p>test.ld</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS</span><br><span class="line">&#123;</span><br><span class="line">. = 0x10000;</span><br><span class="line">.text : &#123; *(.text) &#125;</span><br><span class="line">. = 0x8000000;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.bss : &#123; *(.bss) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上例，<code>.</code>被稱作 location counter，代表的是指向現在的位址，我們可以讀取或是移動它 (我覺得可以想像成我們在打電腦文件時的游標，代表現在要處理這個位置)。</p>
+<p>這段 script 主要做的事是，先把 location counter 移到 0x10000，在這裡寫入所有輸入檔的<code>.text section</code>後，再來移到0x8000000放所有輸入檔的<code>.data section</code>跟<code>.bss section</code>。</p>
+<p>當然，最重要的還是去嘗試，所以讓我們來試試看，結果是不是真的像我們所想的。</p>
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> global_bss;</span><br><span class="line"><span class="type">int</span> global_data = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    global_bss = <span class="number">0</span>;</span><br><span class="line">    test();</span><br><span class="line">    global_data++;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="comment">// do nothing.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>嘗試編譯並看結果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc -c main.c test.c</span><br><span class="line">$ ld -T test.ld main.o test.o</span><br><span class="line">$ objdump -h a.out</span><br><span class="line"></span><br><span class="line">a.out:     file format elf64-x86-64</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA               LMA               File off  Algn</span><br><span class="line">  0 .text         00000046  0000000000010000  0000000000010000  00010000  2**0</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .eh_frame     00000058  0000000000010048  0000000000010048  00010048  2**3</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, DATA</span><br><span class="line">  2 .data         00000004  0000000008000000  0000000008000000  00200000  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  3 .bss          00000004  0000000008000004  0000000008000004  00200004  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  4 .comment      00000011  0000000000000000  0000000000000000  00200004  2**0</span><br><span class="line">                  CONTENTS, READONLY</span><br></pre></td></tr></table></figure>
+
+<p>我們可以看到在VMA和LMA的地方，text是從0x10000開始，data和bss則是從0x8000000開始放，跟我們所安排的結果一樣。</p>
+<p>這邊說明一下，一定會有人覺得奇怪，為什麼編譯出來的檔案無法執行，這個是因為我們並沒有符合 Linux 可執行的格式來 link，如果你想要知道一般我們下 gcc 是使用什麼 linker script 的話，可以使用如下方式：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -Wl,-verbose main.c test.c</span><br></pre></td></tr></table></figure>
+
+<p>這樣就可以看到所使用的 linker script 了。</p>
+<h2 id="常用的功能"><a href="#常用的功能" class="headerlink" title="常用的功能"></a>常用的功能</h2><p>接著我們來談談在linker script中常見到的功能，這邊我們可以參考 jserv 帶領成大同學開發的 rtenv 中的 <a href="https://github.com/southernbear/rtenv/blob/master/main.ld">linker script</a></p>
+<p>那我們就一一了解每個符號的意義吧！</p>
+<h3 id="ENTRY"><a href="#ENTRY" class="headerlink" title="ENTRY"></a>ENTRY</h3><p>用 ENTRY 可以指定程式進入點的符號，不設定的話 linker 會試圖用預設<code>.text</code>的起始點，或者用位址0的地方。</p>
+<p>以 x86 為例，預設進入點是<code>ENTRY(_start)</code>，而 rtenv 則是設定為 <code>ENTRY(main)</code></p>
+<h3 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h3><p>Linker 預設會取用全部的記憶體，我們可以用 MEMORY 指令指定記憶體大小，在 rtenv 的例子中，指定了 FLASH 跟 RAM 兩種的輸出位置與大小</p>
+<p>ORIGIN代表起始位置，LENGTH為長度</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY</span><br><span class="line">&#123;</span><br><span class="line">  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 128K</span><br><span class="line">  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 20K</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下來SECTION部分，就能用 &gt; 符號把資料寫到指定的位置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss : &#123;</span><br><span class="line">        _sbss = .;</span><br><span class="line">        *(.bss)         /* Zero-filled run time allocate data memory */</span><br><span class="line">        _ebss = .;</span><br><span class="line">    &#125; &gt;RAM</span><br></pre></td></tr></table></figure>
+
+<h3 id="KEEP"><a href="#KEEP" class="headerlink" title="KEEP"></a>KEEP</h3><p>KEEP 指令保留某個符號不要被 garbage collection ，例如我們不希望 ARM 的 ISR vector 會被優化掉。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="section-的本體"><a href="#section-的本體" class="headerlink" title="section 的本體"></a>section 的本體</h3><p>section 的指定方式是 linker script 中的重點，其中也有許多設定。</p>
+<p>我們可以參考<a href="https://sourceware.org/binutils/docs/ld/Output-Section-Attributes.html#Output-Section-Attributes">官方文件</a>先對 section 的功能做一個快速了解。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">section [address] [(type)] :</span><br><span class="line">  [AT(lma)]</span><br><span class="line">  [ALIGN(section_align) | ALIGN_WITH_INPUT]</span><br><span class="line">  [SUBALIGN(subsection_align)]</span><br><span class="line">  [constraint]</span><br><span class="line">  &#123;</span><br><span class="line">      output-section-command</span><br><span class="line">      output-section-command</span><br><span class="line">      ...</span><br><span class="line">  &#125; [&gt;region] [AT&gt;lma_region] [:phdr :phdr ...] [=fillexp]</span><br></pre></td></tr></table></figure>
+
+<p>output-section-command 代表的就是我們要怎麼擺放每個 section。</p>
+<p>在這個例子裡可以看到有許多 LMA，除了 LMA 外，其實還有 VMA，它們兩個究竟有什麼不同呢？</p>
+<h4 id="LMA-VMA-的概念"><a href="#LMA-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h4><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
+<p>link script 中設計了兩種位址：VMA 和 LMA</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LMA (Load Memory Address)</th>
+<th>VMA (Virtual Memory Address)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>位置</td>
+<td>ROM&#x2F;Flash</td>
+<td>RAM</td>
+</tr>
+<tr>
+<td>意義</td>
+<td>程式碼保存的位置</td>
+<td>程式碼執行的位址</td>
+</tr>
+</tbody></table>
+<p>也就是 LMA 是 output file 的位置，VMA 是載入 section 到 RAM 時的位置，但是在大多數情況下兩者會是一樣的。</p>
+<p>我們再看看上例是怎如何指定 LMA 和 VMA 的</p>
+<ul>
+<li>LMA 是用<code>AT</code>或<code>AT&gt;</code>來決定位址，為可選，沒指定就用VMA當LMA<ul>
+<li><code>AT(LMA)</code>：告訴 linker 這個 section 應該要去哪個 LMA 載入資料到 VMA，要填 address</li>
+<li><code>AT&gt;lma_region</code>：為 LMA 所在區域，需事先定義</li>
+</ul>
+</li>
+<li><code>&gt;region</code>：為 VMA 所在區域，region需事先定義</li>
+<li>在 linker script 的寫法基本上是這個架構<code>[VMA] : [AT(LMA)]</code></li>
+</ul>
+<p>繼續以 rtenv 為例，當指定了<code>_sidata</code>的 symbol 位置後，AT 就是要求載入到 FLASH 時要在<code>.text</code>的後面，換句話說<code>.data</code>的 LMA 要在<code>.text</code>後</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* Initialized data will initially be loaded in FLASH at the end of the .text section. */</span><br><span class="line">.data : AT (_sidata)</span><br><span class="line">&#123;</span><br><span class="line">  _sdata = .;</span><br><span class="line">  *(.data)        /* Initialized data */</span><br><span class="line">  *(.data*)</span><br><span class="line">  _edata = .;</span><br><span class="line">&#125; &gt;RAM</span><br></pre></td></tr></table></figure>
+
+<h3 id="取得-section-的位置"><a href="#取得-section-的位置" class="headerlink" title="取得 section 的位置"></a>取得 section 的位置</h3><p>在程式中，有時候可能還是會需要取得每個 section 的所在位址，我們可以用如下的方式取得</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">         *(.text)</span><br><span class="line">         *(.text.*)</span><br><span class="line">        *(.rodata)</span><br><span class="line">        *(.rodata*)</span><br><span class="line">        _smodule = .;</span><br><span class="line">        *(.module)</span><br><span class="line">        _emodule = .;</span><br><span class="line">        _sprogram = .;</span><br><span class="line">        *(.program)</span><br><span class="line">        _eprogram = .;</span><br><span class="line">        _sromdev = .;</span><br><span class="line">        *(.rom.*)</span><br><span class="line">        _eromdev = .;</span><br><span class="line">        _sidata = .;</span><br><span class="line">    &#125; &gt;FLASH</span><br></pre></td></tr></table></figure>
+
+<p>上面的7個 symbol 分別代表開始和結束，例如<code>_smodule</code>代表 module 的開始，而<code>_emodule</code>則代表 module 的結束。</p>
+<p>這樣的好處是 symbol 的部分我們可以在主程式這樣使用</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sidata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sdata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _edata;</span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> *idata_begin = &amp;_sidata;</span><br><span class="line"><span class="type">uint32_t</span> *data_begin = &amp;_sdata;</span><br><span class="line"><span class="type">uint32_t</span> *data_end = &amp;_edata;</span><br><span class="line"><span class="keyword">while</span> (data_begin &lt; data_end) *data_begin++ = *idata_begin++;</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，如果 C 已經有用到該變數<code>_sidata</code>，那就要用<code>PROVIDE(_sdata = .)</code>來避免 linker 出現重複定義的錯誤</p>
+<h3 id="Stack-的位址"><a href="#Stack-的位址" class="headerlink" title="Stack 的位址"></a>Stack 的位址</h3><p>通常 stack 位址我們都會放在 RAM 的最下方讓他往上長，所以我們可以用下面表示方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">_estack = ORIGIN(RAM) + LENGTH(RAM);</span><br></pre></td></tr></table></figure>
+
+<p>代表 stack 的放置位址是在 RAM 的最下方。</p>
+<h2 id="常見問題"><a href="#常見問題" class="headerlink" title="常見問題"></a>常見問題</h2><h3 id="如果section重複被使用，會發生什麼事？"><a href="#如果section重複被使用，會發生什麼事？" class="headerlink" title="如果section重複被使用，會發生什麼事？"></a>如果section重複被使用，會發生什麼事？</h3><p>每個輸入檔的 section 只能在出現在 SECTIONS 中出現一次。什麼意思呢？讓我們看個例子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.data1 : &#123; data.o(.data) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我們可以看到<code>data.o</code>中的<code>.data section</code>應該在第一個 OUTPUT-SECTION-COMMAND (也就是<code>.data : &#123; *(.data) &#125;</code>)被用掉了，所以在<code>.data1 : &#123; data.o(.data) &#125;</code>將不會再次出現，代表的就是<code>.data1 section</code>會是空的。</p>
+<h3 id="如果只想要把某個library的-o放入的話"><a href="#如果只想要把某個library的-o放入的話" class="headerlink" title="如果只想要把某個library的.o放入的話"></a>如果只想要把某個library的.o放入的話</h3><p>可用<code>*xxx.a:*yyy.o (.bss*)</code>的方式，舉例來說：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss_RAM2 : ALIGN(4)</span><br><span class="line">    &#123;</span><br><span class="line">      *libmytest.a:*.o (.bss*)</span><br><span class="line">      *(.bss.$RAM2*)</span><br><span class="line">      *(.bss.$RamLoc64*)</span><br><span class="line">       . = ALIGN(4) ;</span><br><span class="line">    &#125; &gt; RamLoc64</span><br></pre></td></tr></table></figure>
+
+<h3 id="如果我不想要把特定檔案的section放入"><a href="#如果我不想要把特定檔案的section放入" class="headerlink" title="如果我不想要把特定檔案的section放入"></a>如果我不想要把特定檔案的section放入</h3><p>可以使用<code>EXCLUDE_FILE</code>，例如我想放除了 foo.o、bar.o 外，所有的<code>.bss section</code>，可以這麼做：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(*(EXCLUDE_FILE (*foo.o *bar.o) .bss))</span><br></pre></td></tr></table></figure>
+
+<p>詳細可參考下方連結</p>
+<ul>
+<li><a href="http://forum.andestech.com/viewtopic.php?f=16&t=600">linker script之EXCLUDE_FILE語法</a></li>
+<li><a href="https://stackoverflow.com/questions/21418593/linker-script-put-a-particular-file-at-a-later-position">Linker Script: Put a particular file at a later position</a></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://sourceware.org/binutils/docs/ld/">ld 官方文件</a></li>
+<li><a href="http://yodalee.blogspot.tw/2015/04/linker-script.html">Linker script 簡介</a></li>
+<li><a href="http://wiki.csie.ncku.edu.tw/embedded/Lab19/stm32-prog.pdf">嵌入式系統建構：開發運作於STM32的韌體程式</a></li>
+<li><a href="http://wen00072.github.io/blog/2014/03/14/study-on-the-linker-script/">Linker Script初探 - GNU Linker Ld手冊略讀</a></li>
+<li><a href="https://www.slideshare.net/zzz00072/gnu-ldlinker-script">GNU ld的linker script簡介</a></li>
+<li><a href="http://wen00072.github.io/blog/2014/12/22/rtenv-linker-script-explained/">Rtenv的linker Script解釋</a></li>
+<li><a href="http://opass.logdown.com/posts/255812-introduction-to-stm32f429-linker-script">stm32f429 Linker Script簡介</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo 教學</title>
     <url>/2017/09/09/hexo%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<p>我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩。另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇。Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介面，而且還可以用 markdown 來寫 blog。</p>
@@ -1961,133 +2088,6 @@
       </categories>
       <tags>
         <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linker script 簡單教學</title>
-    <url>/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
-<p>linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 <code>undefined reference error</code>。</p>
-<p>而 linker script 就是提供給 linker 參考的文件，它告訴 linker 我想要怎麼擺放這些 section，甚至也可以定義程式的起始點在哪邊。</p>
-<h2 id="簡單範例"><a href="#簡單範例" class="headerlink" title="簡單範例"></a>簡單範例</h2><p>最簡單的 linker script 是用<code>SECTIONS</code>指令去定義 section 的分佈。</p>
-<p>test.ld</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS</span><br><span class="line">&#123;</span><br><span class="line">. = 0x10000;</span><br><span class="line">.text : &#123; *(.text) &#125;</span><br><span class="line">. = 0x8000000;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.bss : &#123; *(.bss) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上例，<code>.</code>被稱作 location counter，代表的是指向現在的位址，我們可以讀取或是移動它 (我覺得可以想像成我們在打電腦文件時的游標，代表現在要處理這個位置)。</p>
-<p>這段 script 主要做的事是，先把 location counter 移到 0x10000，在這裡寫入所有輸入檔的<code>.text section</code>後，再來移到0x8000000放所有輸入檔的<code>.data section</code>跟<code>.bss section</code>。</p>
-<p>當然，最重要的還是去嘗試，所以讓我們來試試看，結果是不是真的像我們所想的。</p>
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> global_bss;</span><br><span class="line"><span class="type">int</span> global_data = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    global_bss = <span class="number">0</span>;</span><br><span class="line">    test();</span><br><span class="line">    global_data++;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="comment">// do nothing.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>嘗試編譯並看結果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc -c main.c test.c</span><br><span class="line">$ ld -T test.ld main.o test.o</span><br><span class="line">$ objdump -h a.out</span><br><span class="line"></span><br><span class="line">a.out:     file format elf64-x86-64</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA               LMA               File off  Algn</span><br><span class="line">  0 .text         00000046  0000000000010000  0000000000010000  00010000  2**0</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .eh_frame     00000058  0000000000010048  0000000000010048  00010048  2**3</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, DATA</span><br><span class="line">  2 .data         00000004  0000000008000000  0000000008000000  00200000  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  3 .bss          00000004  0000000008000004  0000000008000004  00200004  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  4 .comment      00000011  0000000000000000  0000000000000000  00200004  2**0</span><br><span class="line">                  CONTENTS, READONLY</span><br></pre></td></tr></table></figure>
-
-<p>我們可以看到在VMA和LMA的地方，text是從0x10000開始，data和bss則是從0x8000000開始放，跟我們所安排的結果一樣。</p>
-<p>這邊說明一下，一定會有人覺得奇怪，為什麼編譯出來的檔案無法執行，這個是因為我們並沒有符合 Linux 可執行的格式來 link，如果你想要知道一般我們下 gcc 是使用什麼 linker script 的話，可以使用如下方式：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -Wl,-verbose main.c test.c</span><br></pre></td></tr></table></figure>
-
-<p>這樣就可以看到所使用的 linker script 了。</p>
-<h2 id="常用的功能"><a href="#常用的功能" class="headerlink" title="常用的功能"></a>常用的功能</h2><p>接著我們來談談在linker script中常見到的功能，這邊我們可以參考 jserv 帶領成大同學開發的 rtenv 中的 <a href="https://github.com/southernbear/rtenv/blob/master/main.ld">linker script</a></p>
-<p>那我們就一一了解每個符號的意義吧！</p>
-<h3 id="ENTRY"><a href="#ENTRY" class="headerlink" title="ENTRY"></a>ENTRY</h3><p>用 ENTRY 可以指定程式進入點的符號，不設定的話 linker 會試圖用預設<code>.text</code>的起始點，或者用位址0的地方。</p>
-<p>以 x86 為例，預設進入點是<code>ENTRY(_start)</code>，而 rtenv 則是設定為 <code>ENTRY(main)</code></p>
-<h3 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h3><p>Linker 預設會取用全部的記憶體，我們可以用 MEMORY 指令指定記憶體大小，在 rtenv 的例子中，指定了 FLASH 跟 RAM 兩種的輸出位置與大小</p>
-<p>ORIGIN代表起始位置，LENGTH為長度</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY</span><br><span class="line">&#123;</span><br><span class="line">  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 128K</span><br><span class="line">  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 20K</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接下來SECTION部分，就能用 &gt; 符號把資料寫到指定的位置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss : &#123;</span><br><span class="line">        _sbss = .;</span><br><span class="line">        *(.bss)         /* Zero-filled run time allocate data memory */</span><br><span class="line">        _ebss = .;</span><br><span class="line">    &#125; &gt;RAM</span><br></pre></td></tr></table></figure>
-
-<h3 id="KEEP"><a href="#KEEP" class="headerlink" title="KEEP"></a>KEEP</h3><p>KEEP 指令保留某個符號不要被 garbage collection ，例如我們不希望 ARM 的 ISR vector 會被優化掉。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="section-的本體"><a href="#section-的本體" class="headerlink" title="section 的本體"></a>section 的本體</h3><p>section 的指定方式是 linker script 中的重點，其中也有許多設定。</p>
-<p>我們可以參考<a href="https://sourceware.org/binutils/docs/ld/Output-Section-Attributes.html#Output-Section-Attributes">官方文件</a>先對 section 的功能做一個快速了解。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">section [address] [(type)] :</span><br><span class="line">  [AT(lma)]</span><br><span class="line">  [ALIGN(section_align) | ALIGN_WITH_INPUT]</span><br><span class="line">  [SUBALIGN(subsection_align)]</span><br><span class="line">  [constraint]</span><br><span class="line">  &#123;</span><br><span class="line">      output-section-command</span><br><span class="line">      output-section-command</span><br><span class="line">      ...</span><br><span class="line">  &#125; [&gt;region] [AT&gt;lma_region] [:phdr :phdr ...] [=fillexp]</span><br></pre></td></tr></table></figure>
-
-<p>output-section-command 代表的就是我們要怎麼擺放每個 section。</p>
-<p>在這個例子裡可以看到有許多 LMA，除了 LMA 外，其實還有 VMA，它們兩個究竟有什麼不同呢？</p>
-<h4 id="LMA-VMA-的概念"><a href="#LMA-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h4><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
-<p>link script 中設計了兩種位址：VMA 和 LMA</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>LMA (Load Memory Address)</th>
-<th>VMA (Virtual Memory Address)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>位置</td>
-<td>ROM&#x2F;Flash</td>
-<td>RAM</td>
-</tr>
-<tr>
-<td>意義</td>
-<td>程式碼保存的位置</td>
-<td>程式碼執行的位址</td>
-</tr>
-</tbody></table>
-<p>也就是 LMA 是 output file 的位置，VMA 是載入 section 到 RAM 時的位置，但是在大多數情況下兩者會是一樣的。</p>
-<p>我們再看看上例是怎如何指定 LMA 和 VMA 的</p>
-<ul>
-<li>LMA 是用<code>AT</code>或<code>AT&gt;</code>來決定位址，為可選，沒指定就用VMA當LMA<ul>
-<li><code>AT(LMA)</code>：告訴 linker 這個 section 應該要去哪個 LMA 載入資料到 VMA，要填 address</li>
-<li><code>AT&gt;lma_region</code>：為 LMA 所在區域，需事先定義</li>
-</ul>
-</li>
-<li><code>&gt;region</code>：為 VMA 所在區域，region需事先定義</li>
-<li>在 linker script 的寫法基本上是這個架構<code>[VMA] : [AT(LMA)]</code></li>
-</ul>
-<p>繼續以 rtenv 為例，當指定了<code>_sidata</code>的 symbol 位置後，AT 就是要求載入到 FLASH 時要在<code>.text</code>的後面，換句話說<code>.data</code>的 LMA 要在<code>.text</code>後</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* Initialized data will initially be loaded in FLASH at the end of the .text section. */</span><br><span class="line">.data : AT (_sidata)</span><br><span class="line">&#123;</span><br><span class="line">  _sdata = .;</span><br><span class="line">  *(.data)        /* Initialized data */</span><br><span class="line">  *(.data*)</span><br><span class="line">  _edata = .;</span><br><span class="line">&#125; &gt;RAM</span><br></pre></td></tr></table></figure>
-
-<h3 id="取得-section-的位置"><a href="#取得-section-的位置" class="headerlink" title="取得 section 的位置"></a>取得 section 的位置</h3><p>在程式中，有時候可能還是會需要取得每個 section 的所在位址，我們可以用如下的方式取得</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">         *(.text)</span><br><span class="line">         *(.text.*)</span><br><span class="line">        *(.rodata)</span><br><span class="line">        *(.rodata*)</span><br><span class="line">        _smodule = .;</span><br><span class="line">        *(.module)</span><br><span class="line">        _emodule = .;</span><br><span class="line">        _sprogram = .;</span><br><span class="line">        *(.program)</span><br><span class="line">        _eprogram = .;</span><br><span class="line">        _sromdev = .;</span><br><span class="line">        *(.rom.*)</span><br><span class="line">        _eromdev = .;</span><br><span class="line">        _sidata = .;</span><br><span class="line">    &#125; &gt;FLASH</span><br></pre></td></tr></table></figure>
-
-<p>上面的7個 symbol 分別代表開始和結束，例如<code>_smodule</code>代表 module 的開始，而<code>_emodule</code>則代表 module 的結束。</p>
-<p>這樣的好處是 symbol 的部分我們可以在主程式這樣使用</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sidata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sdata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _edata;</span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> *idata_begin = &amp;_sidata;</span><br><span class="line"><span class="type">uint32_t</span> *data_begin = &amp;_sdata;</span><br><span class="line"><span class="type">uint32_t</span> *data_end = &amp;_edata;</span><br><span class="line"><span class="keyword">while</span> (data_begin &lt; data_end) *data_begin++ = *idata_begin++;</span><br></pre></td></tr></table></figure>
-
-<p>值得注意的是，如果 C 已經有用到該變數<code>_sidata</code>，那就要用<code>PROVIDE(_sdata = .)</code>來避免 linker 出現重複定義的錯誤</p>
-<h3 id="Stack-的位址"><a href="#Stack-的位址" class="headerlink" title="Stack 的位址"></a>Stack 的位址</h3><p>通常 stack 位址我們都會放在 RAM 的最下方讓他往上長，所以我們可以用下面表示方式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">_estack = ORIGIN(RAM) + LENGTH(RAM);</span><br></pre></td></tr></table></figure>
-
-<p>代表 stack 的放置位址是在 RAM 的最下方。</p>
-<h2 id="常見問題"><a href="#常見問題" class="headerlink" title="常見問題"></a>常見問題</h2><h3 id="如果section重複被使用，會發生什麼事？"><a href="#如果section重複被使用，會發生什麼事？" class="headerlink" title="如果section重複被使用，會發生什麼事？"></a>如果section重複被使用，會發生什麼事？</h3><p>每個輸入檔的 section 只能在出現在 SECTIONS 中出現一次。什麼意思呢？讓我們看個例子</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.data1 : &#123; data.o(.data) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我們可以看到<code>data.o</code>中的<code>.data section</code>應該在第一個 OUTPUT-SECTION-COMMAND (也就是<code>.data : &#123; *(.data) &#125;</code>)被用掉了，所以在<code>.data1 : &#123; data.o(.data) &#125;</code>將不會再次出現，代表的就是<code>.data1 section</code>會是空的。</p>
-<h3 id="如果只想要把某個library的-o放入的話"><a href="#如果只想要把某個library的-o放入的話" class="headerlink" title="如果只想要把某個library的.o放入的話"></a>如果只想要把某個library的.o放入的話</h3><p>可用<code>*xxx.a:*yyy.o (.bss*)</code>的方式，舉例來說：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss_RAM2 : ALIGN(4)</span><br><span class="line">    &#123;</span><br><span class="line">      *libmytest.a:*.o (.bss*)</span><br><span class="line">      *(.bss.$RAM2*)</span><br><span class="line">      *(.bss.$RamLoc64*)</span><br><span class="line">       . = ALIGN(4) ;</span><br><span class="line">    &#125; &gt; RamLoc64</span><br></pre></td></tr></table></figure>
-
-<h3 id="如果我不想要把特定檔案的section放入"><a href="#如果我不想要把特定檔案的section放入" class="headerlink" title="如果我不想要把特定檔案的section放入"></a>如果我不想要把特定檔案的section放入</h3><p>可以使用<code>EXCLUDE_FILE</code>，例如我想放除了 foo.o、bar.o 外，所有的<code>.bss section</code>，可以這麼做：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(*(EXCLUDE_FILE (*foo.o *bar.o) .bss))</span><br></pre></td></tr></table></figure>
-
-<p>詳細可參考下方連結</p>
-<ul>
-<li><a href="http://forum.andestech.com/viewtopic.php?f=16&t=600">linker script之EXCLUDE_FILE語法</a></li>
-<li><a href="https://stackoverflow.com/questions/21418593/linker-script-put-a-particular-file-at-a-later-position">Linker Script: Put a particular file at a later position</a></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://sourceware.org/binutils/docs/ld/">ld 官方文件</a></li>
-<li><a href="http://yodalee.blogspot.tw/2015/04/linker-script.html">Linker script 簡介</a></li>
-<li><a href="http://wiki.csie.ncku.edu.tw/embedded/Lab19/stm32-prog.pdf">嵌入式系統建構：開發運作於STM32的韌體程式</a></li>
-<li><a href="http://wen00072.github.io/blog/2014/03/14/study-on-the-linker-script/">Linker Script初探 - GNU Linker Ld手冊略讀</a></li>
-<li><a href="https://www.slideshare.net/zzz00072/gnu-ldlinker-script">GNU ld的linker script簡介</a></li>
-<li><a href="http://wen00072.github.io/blog/2014/12/22/rtenv-linker-script-explained/">Rtenv的linker Script解釋</a></li>
-<li><a href="http://opass.logdown.com/posts/255812-introduction-to-stm32f429-linker-script">stm32f429 Linker Script簡介</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -2433,6 +2433,26 @@
       </tags>
   </entry>
   <entry>
+    <title>在非標準的道路上</title>
+    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
+    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
+<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
+<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
+<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
+<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
+<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
+<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：<strong>目前在做的事情是不是我想做的？</strong>畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
+<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
+<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
+<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
+<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
+<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>天性與熱情</title>
     <url>/2024/12/01/%E5%A4%A9%E6%80%A7%E8%88%87%E7%86%B1%E6%83%85/</url>
     <content><![CDATA[<p>長久以來，專長與興趣一直是人們爭論的焦點。往往我們所擅長的事情和感興趣的事情不會完全一致，所以這也被大家一直拿出來討論，到底要順著自己能力走，還是應該要順著自己喜愛的方向去。長輩或老師們很常給出的建議是，用自己擅長的能力來為生，然後多餘的時間再來發展自己的興趣。這個可以說是最穩健的做法了。</p>
@@ -2466,26 +2486,6 @@
 <p>另外一種動機可能是好奇心，其實某種程度上也是要解決問題，只是這個問題是來自我們心中的疑惑。解決心中的疑惑並不必要把某門知識從頭學起。也許我們對物理的相對論感興趣，但是比起從大學的普通物理開始讀起，更好的方式是去看點科普讀物，當有更多疑惑時再一個個去理解就好。</p>
 <p>總而言之，學習的動機應該要具體而微，而非大又廣泛。</p>
 <h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>市面上教導如何學習的書千百種，各式各樣的方法都有，例如刻意練習、沉浸式學習、間隔學習等等，而上面所分享的是個人經驗中對我特別有用的方法。不過，比起討論什麼學習方法才正確，更重要的是找出適合自己的方法。現代社會中最需要學習的不是某門特定的學問和知識，而是學會「元學習」，也就是學習如何學習這回事！</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>在非標準的道路上</title>
-    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
-    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
-<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
-<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
-<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
-<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
-<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
-<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：<strong>目前在做的事情是不是我想做的？</strong>畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
-<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
-<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
-<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
-<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
-<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -2703,6 +2703,26 @@
       </tags>
   </entry>
   <entry>
+    <title>《心流》：最佳體驗的專注</title>
+    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
+    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
+<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
+<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
+<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
+<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
+<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
+<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
+<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
+<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>我對 AI 的應用與反思</title>
     <url>/2025/02/23/%E6%88%91%E5%B0%8D%20AI%20%E7%9A%84%E6%87%89%E7%94%A8%E8%88%87%E5%8F%8D%E6%80%9D/</url>
     <content><![CDATA[<p>隨著 AI 的普及，我在日常生活中使用 AI 的機會也越來越多。AI 的能力不斷提升，每年都有質的飛躍，使得許多事務都可以依賴這個新工具。因此，了解 AI 能為我提供哪些幫助，以及它的極限在哪裡，就變得至關重要。</p>
@@ -2747,44 +2767,6 @@
       </categories>
   </entry>
   <entry>
-    <title>《深度學習的技術》：一種學習的框架</title>
-    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
-    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
-<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
-<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
-<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
-<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
-<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話<strong>「知識就像是金錢一樣，不花就等於不曾有過」</strong>，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
-<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《心流》：最佳體驗的專注</title>
-    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
-    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
-<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
-<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
-<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
-<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
-<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
-<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
-<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
-<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>探討區塊鏈的價值</title>
     <url>/2025/03/09/%E6%8E%A2%E8%A8%8E%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E5%83%B9%E5%80%BC/</url>
     <content><![CDATA[<p>加密貨幣這個詞越來越常出現在人們生活中，不論是新聞媒體還是朋友圈中。可惜的是，大家探討的通常是「比特幣又突破新高」、「某國總統發行了迷因幣」、「某個名人投資虛擬貨幣被詐騙」，很少真正觸及加密貨幣背後——也就是區塊鏈——的本質。</p>
@@ -2815,6 +2797,24 @@
       </categories>
       <tags>
         <tag>區塊鏈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《深度學習的技術》：一種學習的框架</title>
+    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
+    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
+<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
+<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
+<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
+<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
+<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話<strong>「知識就像是金錢一樣，不花就等於不曾有過」</strong>，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
+<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
       </tags>
   </entry>
   <entry>
