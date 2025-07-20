@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon180.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.ico">
+  <link rel="mask-icon" href="/images/favicon180.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"evshary.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言開源軟體，或者說開放原始碼，最早是由 Richard Stallman 的 Free Software Foundation 所提出。這個概念最初源於他想自己修復辦公室印表機的 bug，卻苦於無法取得程式碼。他因此主張，所謂的自由軟體應允許使用者不限任何目的，皆可自由修改及分發。 這似乎非常的理想主義，讓人覺得這可能不過是一群生活在烏托邦的人的夢想。然而實際上現在軟體世界的基石有一大半都是由開">
+<meta property="og:type" content="article">
+<meta property="og:title" content="開源軟體的商業策略">
+<meta property="og:url" content="http://evshary.com/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/index.html">
+<meta property="og:site_name" content="CY&#39;s Blog">
+<meta property="og:description" content="前言開源軟體，或者說開放原始碼，最早是由 Richard Stallman 的 Free Software Foundation 所提出。這個概念最初源於他想自己修復辦公室印表機的 bug，卻苦於無法取得程式碼。他因此主張，所謂的自由軟體應允許使用者不限任何目的，皆可自由修改及分發。 這似乎非常的理想主義，讓人覺得這可能不過是一群生活在烏托邦的人的夢想。然而實際上現在軟體世界的基石有一大半都是由開">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://evshary.com/images/%E5%A6%82%E4%BD%95%E5%A2%9E%E5%8A%A0%E4%BB%98%E8%B2%BB%E7%94%A8%E6%88%B6.drawio.svg">
+<meta property="article:published_time" content="2025-07-20T14:35:49.000Z">
+<meta property="article:modified_time" content="2025-07-20T07:36:14.124Z">
+<meta property="article:author" content="evshary">
+<meta property="article:tag" content="開源">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://evshary.com/images/%E5%A6%82%E4%BD%95%E5%A2%9E%E5%8A%A0%E4%BB%98%E8%B2%BB%E7%94%A8%E6%88%B6.drawio.svg">
+
+
+<link rel="canonical" href="http://evshary.com/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://evshary.com/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/","path":"2025/07/20/開源軟體的商業策略/","title":"開源軟體的商業策略"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>開源軟體的商業策略 | CY's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105315332-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-105315332-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="CY's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CY's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">All work is preparing yourself for the accident waiting to happen.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="https://evshary.com/aboutme/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-book"><a href="/categories/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97/" rel="section"><i class="fa fa-book fa-fw"></i>book</a></li><li class="menu-item menu-item-technique"><a href="/categories/%E6%8A%80%E8%A1%93/" rel="section"><i class="fa fa-laptop fa-fw"></i>technique</a></li><li class="menu-item menu-item-others"><a href="/categories/%E9%9B%9C%E4%B8%83%E9%9B%9C%E5%85%AB/" rel="section"><i class="fa fa-navicon fa-fw"></i>others</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8D%E5%85%AC%E5%8F%B8%E4%BE%86%E8%AA%AA%E7%82%BA%E4%BD%95%E8%A6%81%E9%96%8B%E6%BA%90"><span class="nav-number">2.</span> <span class="nav-text">對公司來說為何要開源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%A3%E5%91%8A"><span class="nav-number">2.1.</span> <span class="nav-text">廣告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%B8%E5%BC%95%E9%96%8B%E7%99%BC%E8%80%85%EF%BC%8C%E5%BB%BA%E7%AB%8B%E7%94%9F%E6%85%8B%E7%B3%BB"><span class="nav-number">2.2.</span> <span class="nav-text">吸引開發者，建立生態系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A5%AD%E7%95%8C%E6%A8%99%E6%BA%96"><span class="nav-number">2.3.</span> <span class="nav-text">業界標準</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8D%B2%E5%BE%97%E4%BF%A1%E4%BB%BB"><span class="nav-number">2.4.</span> <span class="nav-text">獲得信任</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%B8%E5%BC%95%E4%BA%BA%E6%89%8D"><span class="nav-number">2.5.</span> <span class="nav-text">吸引人才</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%96%8B%E6%BA%90%E7%9A%84%E8%B3%BA%E9%8C%A2%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">開源的賺錢方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%96%8B%E6%BA%90%E7%9A%84%E5%95%86%E6%A5%AD%E5%8C%96%E6%8C%91%E6%88%B0"><span class="nav-number">4.</span> <span class="nav-text">開源的商業化挑戰</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A0%E9%96%8B%E6%BA%90%E6%88%90%E5%8A%9F%E7%9A%84%E6%A1%88%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">靠開源成功的案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">6.</span> <span class="nav-text">結語</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">evshary</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/evshary" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;evshary" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://evshary.com/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="evshary">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CY's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="開源軟體的商業策略 | CY's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          開源軟體的商業策略
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-20 14:35:49 / Modified: 07:36:14" itemprop="dateCreated datePublished" datetime="2025-07-20T14:35:49+00:00">2025-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E8%A1%93/" itemprop="url" rel="index"><span itemprop="name">技術</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2025/07/20/開源軟體的商業策略/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>開源軟體，或者說開放原始碼，最早是由 Richard Stallman 的 Free Software Foundation 所提出。這個概念最初源於他想自己修復辦公室印表機的 bug，卻苦於無法取得程式碼。他因此主張，所謂的自由軟體應允許使用者不限任何目的，皆可自由修改及分發。</p>
+<p>這似乎非常的理想主義，讓人覺得這可能不過是一群生活在烏托邦的人的夢想。然而實際上現在軟體世界的基石有一大半都是由開源軟體所建構而成，就算是再封閉的公司也不可避免地使用到開源軟體。因此，基於開源軟體的商業公司也因此應運而生，這讓人不禁好奇開放為什麼有時候是好的策略。</p>
+<p>目前服務的公司主要是圍繞著開源軟體，發展一系列的商業模式，因此我開始對商業公司怎麼利用開源來打造商業模式很有興趣。接下來我會分別介紹開放原始碼的好處是什麼，公司可以怎麼賺錢，以及會遇到一些挑戰，最後列出一些成功案例。</p>
+<h2 id="對公司來說為何要開源"><a href="#對公司來說為何要開源" class="headerlink" title="對公司來說為何要開源"></a>對公司來說為何要開源</h2><p>開源跟我們的直覺不符，為什麼能賺錢的東西要免費提供呢？其實比起開源精神，大家看中的還是開源能帶來的各種附加價值。以下列出幾點：</p>
+<h3 id="廣告"><a href="#廣告" class="headerlink" title="廣告"></a>廣告</h3><p>開源本身就有一種吸引力，因為免費，就會吸引人們使用，進而達到匯聚目光的效果。這就跟賣場裡會有些食品提供試吃一樣的道理，人們會覺得既然免費就先試試看，如果好用的話再考慮購買。</p>
+<p>盡管看上去好像是虧錢，但對企業來說，使用者的使用習慣非常重要。一旦人們習慣使用某項東西，在沒有重大因素的情況下是不會輕易更換的，企業可以藉此在這個市場取得先行優勢。這與許多企業早期燒錢搶佔市場的策略如出一轍，無論是 Uber 或 Airbnb，都是先賠本將市場做大，之後再考量營利。</p>
+<p>還有另一個因素是攪亂市場，如果現在的市場已經被幾個巨頭瓜分了，新進者要抗衡的辦法就是用更有價格優勢的產品來吸引人們的目光，這才可能翻轉現有的市場。像是 Visual Studio Code 能席捲整個 IDE 市場的其中一個優勢就是他免費且開源，不管是 Sublime、Source Insight、還是 SlickEdit 等傳統做 IDE 的廠商都很難與之抗衡。</p>
+<h3 id="吸引開發者，建立生態系"><a href="#吸引開發者，建立生態系" class="headerlink" title="吸引開發者，建立生態系"></a>吸引開發者，建立生態系</h3><p>開源的另一個好處就是會吸引開發者加入。因為程式碼都公開，所以開發者可能會自己動手，不管是修復 bug 或者是開發新功能，這對專案維護者來說也是樂見其成的事情。雖然依照我過去參與過的開源專案經驗，大部分的人都是使用者為主，不過他們所詢問的問題也是很好的回饋，可以釐清專案的改進方向。</p>
+<p>對於一個專案來說最好的與社群合作方式是形塑生態系。大多數開發者使用他人專案的目的都是為了打造自己想要的東西，而如果專案本身的性質是鼓勵讓人重複利用他人成果的框架，那將會是一股龐大的力量。</p>
+<p>讓我們以世界最大的機器人開源框架 ROS 為例：由於機器人是一個非常複雜的系統，最初這個框架設計的目的就是希望人們能重複使用他人打造的輪子。透過使用同樣的 API、同樣的通訊方式，讓彼此的輪子可以組合起來。隨著開發者的增加，這個生態系也日益繁榮，任何可以想像的輪子都找得到，這就形成網路效應，更加能吸引新的開發者。</p>
+<p>嚴格來說，ROS 的框架在效能上並非是最佳，但因為有最龐大的生態系，人們為了最快打造自己的機器人，還是會選擇使用 ROS。就算其他公司想打造類似的框架，也不得不連接到  ROS 來重複利用這些豐富的套件，例如 NVIDIA 的機器人框架 issac 就有提供 ROS 橋接的功能。</p>
+<p>總而言之，生態系能夠為產品打造很深的護城河，而開源往往就是建立生態系的必要條件。</p>
+<h3 id="業界標準"><a href="#業界標準" class="headerlink" title="業界標準"></a>業界標準</h3><p>有一句流傳業界的話說：二流的企業做產品，一流的企業定標準。對於商業來說，掌握標準的話語也就意味著有許多獲利的潛在機會，因此在制定標準的組織上，都可以看到各家企業彼此的攻防。</p>
+<p>然而，很多新出現的技術一開始並沒有一個專門的組織訂定標準。很多時候是當一個專案所有人都使用，它就會變成事實上的標準。</p>
+<p>就以容器技術來說，一開始並不是有任何組織先出來定義標準，然後才開始有人開發實作。最早是 Docker 先開源這項技術，技術社群熱烈反應後，才開始成立 OCI (Open Container Initiative) 來定義相關規範，可以說 Docker 就等同於容器技術的代名詞。</p>
+<p>當然也有些人則是反向操作，直接買下受歡迎的技術或是其開發者，然後再把自己的生意和該技術相結合。例如 Vercel 為了確保最新的 React 技術能被用在自己的開源軟體 Next.js 上，挖了幾個 React 的核心成員，某種程度上也引導了 React 的發展方向。</p>
+<p>其實開源就是要創造先行者優勢。因為開放，人們願意使用，而一旦使用者基數有一定程度，其標準就有意義。</p>
+<h3 id="獲得信任"><a href="#獲得信任" class="headerlink" title="獲得信任"></a>獲得信任</h3><p>信任在商業上其實是非常有價值的，唯有對一個產品有信任，使用者才可能去使用。一般來說，信任也都需要長時間經營，但對軟體世界則不一樣，最快讓人獲得信任的方式就是公開自己的程式碼，讓所有人直接檢視。</p>
+<p>利用開源來取得信任在很多領域上都很有效果，特別是區塊鏈方面。對於區塊鏈技術來說，要吸引使用者參與成為共識層的一員，必須先讓參與者確保共識的邏輯並沒有任何後門或風險漏洞，否則沒有人願意加入這個生態系。不論是比特幣、以太坊等等公鏈來說，開源是最基本的操作，甚至連上面的演算法邏輯要修改也都必須通過社群的一致共識才行。</p>
+<p>另外一種情境則是跟地緣政治有關，對於中國來說，其軟體相較其他國家更不受信任，因此如果要增加使用量，就需要透過開源來取信於他人。就以其在 AI 領域最成功的 DeepSeek 來說，他正是使用開源的策略才能在全球範圍吸引更多使用者採用、擴增市占率，為之後商業策略進行布局。</p>
+<h3 id="吸引人才"><a href="#吸引人才" class="headerlink" title="吸引人才"></a>吸引人才</h3><p>對於剛畢業充滿著熱血的學生來說，和理想掛鉤的開源軟體充滿著吸引力。想想自己開發的程式可以公開讓人看見和被使用，以及和全世界一流的開發者交流合作，這對想做一番大事業的人來說非常誘人。</p>
+<p>對於想吸收這類熱情人才的公司來說，開源就成了最佳的利器，能夠驅動開發者們的內在動力。比起追求高薪高福利，他們可能更重視的是自己的 GitHub 帳號上可以有更多貢獻記錄和有更高的星數，就像是開源界的網紅一樣。</p>
+<p>建立好適合的平台，優秀的人才自然就會匯聚而來，打造出對世界具有影響力的軟體。</p>
+<h2 id="開源的賺錢方法"><a href="#開源的賺錢方法" class="headerlink" title="開源的賺錢方法"></a>開源的賺錢方法</h2><p>看到這邊，你可能會有個疑問：我知道開源很好沒錯，但是他們不是免費提供嗎？這樣要怎麼賺錢養活團隊呢？</p>
+<p>其實在真正的商業世界，賺錢並不一定要靠軟體本身，更多的是其附加價值。下面是一些可能的開源商業模式：</p>
+<ol>
+<li><p>提供服務或諮詢：</p>
+<p> 有很多軟體儘管開源，對於企業來說穩定比起便宜更加重要，最重要的是出事了有人可以負責。如果單純使用開源的產品，一旦遇上了奇怪的問題，就得靠自己處理，就算回報上游也不一定會馬上回應。如果有購買付費服務的話，上游就有義務要優先解決客戶遇到的問題，這樣的確定性在商業環境中是非常有價值的。</p>
+</li>
+<li><p>客製化</p>
+<p> 開源的軟體有時候功能並不符合需求，往往都需要做些修改才行。為了兼顧品質和效率，企業寧可請原作者直接修改而不是讓自己的工程師花時間去摸索。更有趣的是，有時客戶甚至會要求將客製化功能也一併開源，因為這樣未來軟體若有新版本，便無需再次付費升級客製化版本。</p>
+</li>
+<li><p>雲端託管</p>
+<p> 這也是蠻多開源軟體的商業模式，特別是跟通訊協定、資料庫有關的開源軟體，通常都是架設在雲端上面。對用戶來說，既然都要付錢買雲服務，使用原創團隊所架設雲服務更加方便且可信任。不過我們後續也會討論到一些大型雲服務商和開源公司之間的利益衝突。</p>
+</li>
+<li><p>付費功能</p>
+<p> 有些開源軟體並不是所有功能都開源，一些進階功能或是協助開發的工具往往是要付費才能取得。以 DDS 或是 Zenoh 這類用在車內通訊的協定來說，客戶很重視通訊協定有沒有通過車用的安全認證，像是 ASIL-D，所以軟體公司會另外修改開源軟體，釋出通過安規的版本來販賣。可以想成開源版本只是方便讓人評估試用，以吸引使用者，真正的商業機會在於產業的進階需求上面。</p>
+</li>
+<li><p>雙重授權</p>
+<p> 對於某些軟體廠商來說，他們希望自己的軟體符合開源精神，但又不希望商業用戶不付費搭便車，往往會採取雙重授權的模式。作法通常是對於軟體採取強硬的授權，例如 GPL 或是 AGPL，透過感染性讓用戶必需要開源全部的軟體，而這正是商業用戶無法接受的。這時他們就不得不去購買商業授權，以避免任何可能的法律風險。</p>
+<p> MySQL 就是這樣的案例，如果把 MySQL 這個受歡迎的資料庫包入自己的程式就有被 GPL 感染的風險，所以付費取得商業授權可能是更加穩妥的做法。</p>
+</li>
+<li><p>軟體只是附加</p>
+<p> 有些軟體開源並非是要靠軟體來賺錢，更多是為了增加使用者，透過影響力在其他部分獲利。常見的方式是搭配硬體來販售，畢竟無論是什麼樣的軟體都需要硬體來支援，當然這裡提到的硬體必須具備一定特殊性，否則便會被一般通用型電腦所取代。以最著名的例子 Raspberry Pi 來說，他的特色就是輕薄短小，又可以搭載一般的 Linux 系統，很適合讓學生拿來做各種專題。</p>
+<p> 除了硬體外，有些則是為了信任和公開性而必須開源，就像是區塊鏈這個領域。一般來說區塊鏈的相關計畫都不是靠軟體本身來獲利，而是利用發幣、NFT 等等形式來獲得資金。區塊鏈的本質就是要獲得共識，以確保其不可竄改性；而共識的前提，便是必須絕對開放。因此，大部分公鏈都必須公開相關程式碼。</p>
+</li>
+<li><p>成立第三方機構</p>
+<p> 最後一種則是比較特別。大部分的公司都需要依賴已經成為基礎設施的軟體，像是 Linux 這類底層軟體，這時候大家一起共同開發會是比較合理的選擇。所以很多著名的專案都會成立獨立的基金會，讓商業公司們可以投資人力和金錢，而成果則是開源讓大家共享。對商業公司來說，越是被大家使用的軟體，越有投資的價值，因為它們才有機會可以主導軟體規格的發展。除了最著名的 Linux Foundation 以外，日本的自駕車公司 TierIV 也將自己的自駕軟體 Autoware 貢獻給 Autoware Foundation，成為目前全世界最大的開源自駕車框架。</p>
+</li>
+</ol>
+<p>從商業角度來說，前兩種方法基本上不太能夠放量，完全依賴工程師的人力，但是後幾種方法就比較有規模化的機會了。隨著使用者的增加，同樣數量的工程師可以服務更多人，因此更加有利可圖。</p>
+<h2 id="開源的商業化挑戰"><a href="#開源的商業化挑戰" class="headerlink" title="開源的商業化挑戰"></a>開源的商業化挑戰</h2><p>前面我們都在探討開源的好處以及方法，然而這並不代表只要開源就萬事大吉，相反地，開源對商業經營上的難度可能比起閉源還要高。可以看看現在大多數的軟體公司都不是以開源為生就知道了。</p>
+<p>主要的挑戰來自於如下兩點：</p>
+<ol>
+<li><p>如何讓公司穩定營利</p>
+<p> 這也是開源商業化最主要的挑戰。使用開源的策略增加曝光並沒有問題，但是如何把吸引到使用者轉化成潛在的付費用戶，就必須要有巧妙的設計。其中最重要的就是要給使用者付費的理由，換句話說，你多提供了什麼價值。這個價值可以是額外的保固、特別的服務、又或是客製的功能等等。若是價值越高，免費客戶就越可能轉換成付費客戶。</p>
+<p> 然而，對於大多數公司來說，不只是要營利，公司的成長性更加重要。開源軟體公司的營收成長需要考慮兩個方面：增加使用者基數以及轉換成付費用戶的轉換率。就如同金字塔一樣，使用者的基數大也就是金字塔的底部增加，上層的付費用戶就增加。又或者我們也可以提升金字塔的斜率，代表著轉換成付費用戶比率增加，營收也會相應成長。</p>
+ <center>
+
+<p> <img src="/images/%E5%A6%82%E4%BD%95%E5%A2%9E%E5%8A%A0%E4%BB%98%E8%B2%BB%E7%94%A8%E6%88%B6.drawio.svg" alt="如何增加付費用戶"></p>
+ </center>
+
+<p> 當然這兩者的取捨也是門學問，如果過度講求轉換率(例如很多功能放在商業版)，也會影響到使用者的基數，特別是開源世界通常對這種過度的商業策略十分反感，有可能社群會乾脆直接分岔 (fork)，自己打造另一個專案來打對臺。</p>
+<p> 舉個例子，雲端基礎設施公司 Joyent 透過聘用 Node.js 的創始人 Ryan Dahl 接管了 Node.js 的控制權。後來因為 Joyent 對於控制 Node.js 的一些爭議，例如發佈速度慢、對社群反應不積極，部分開發者另起爐灶建立了 io.js。這最終促成了 Node.js Foundation 的成立，Joyent 把控制權出讓給基金會。</p>
+<p> 由此可知，開源並非治百病，如何平衡商業策略和社群觀感是非常重要的議題。</p>
+</li>
+<li><p>避免搭便車或是競爭者</p>
+<p> 另外的問題就是一旦程式碼都公開，要如何確保不會有競爭者直接利用這些開源成果與自己做商業的競爭。</p>
+<p> 大多數情況下，人們仍會優先使用原創者的專案，鮮少有分叉出去的專案能勝過原創。這主要歸因於先發優勢難以取代：一旦匯聚了一群使用者和開發者，便越容易吸引更多人加入，進而確保原創者對專案規格的主導控制權。</p>
+<p> 然而到了雲端時代，情況就有所不同了。很多跟雲有關的專案最終還是得運行在雲端環境上，而雲端的 PaaS 服務基本上被三大家壟斷 (AWS、Azure、GCP)，意味著如果這些雲服務商直接將這些專案整合進去他們的服務，原創者的利益就會受到威脅。對使用者而言，儘管他們願意相信原創者的技術品質，但雲服務商提供的功能實在太過方便，加之無論如何都仍需在雲端環境運行，因此不如直接購買一站式服務。</p>
+<p> 原創者，例如 Redis 或是 MongoDB，為了應對這個問題，使出了雙重授權的方式來避免雲服務商與自己的商業競爭，卻也被認為這樣不符合開源精神。而且雲服務商還會打著開源大旗的名號分岔專案，讓社群開發者的資源流失。目前為止這利益衝突還沒有什麼比較好的解決方法，只能看看未來這些原創者能不能找出另外的營利之道了。</p>
+</li>
+</ol>
+<h2 id="靠開源成功的案例"><a href="#靠開源成功的案例" class="headerlink" title="靠開源成功的案例"></a>靠開源成功的案例</h2><p>想要評斷一種模式能不能成功，我們可以看觀察市場上採取這種模式的玩家的狀況，這樣就能知道最佳情況下，開源公司可以成長到什麼程度。</p>
+<p>以下整理各家開源軟體公司的營業額，他們最大的規模為何：</p>
+<table>
+<thead>
+<tr>
+<th>公司名稱</th>
+<th>財年</th>
+<th>營收(美元)</th>
+<th>開源項目</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Databricks</td>
+<td>2025</td>
+<td>38 億</td>
+<td>Apache Sparks</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>2025</td>
+<td>20.25 億</td>
+<td>MongoDB</td>
+</tr>
+<tr>
+<td>Elastic</td>
+<td>2025</td>
+<td>13 億</td>
+<td>Elasticsearch</td>
+</tr>
+<tr>
+<td>Confluent</td>
+<td>2024</td>
+<td>9.64 億</td>
+<td>Apache Kafka</td>
+</tr>
+<tr>
+<td>GitLab</td>
+<td>2025</td>
+<td>7.59 億</td>
+<td>GitLab</td>
+</tr>
+<tr>
+<td>HashiCorp</td>
+<td>2025</td>
+<td>6.8 億</td>
+<td>Terraform 等等</td>
+</tr>
+</tbody></table>
+<p>由上可知，純靠開源最多只能成為中等企業規模，更多時候是巨型公司跳下來做開源，不論是 Meta 的 React、Microsoft 的 VScode、Google 的 Android、Kubernetes 等等。大公司不缺現金，要養活做開源的團隊並不困難，他們只在乎是否能在產業中佔到好的地位，就像是 Google 的 Chrome 控制了人們上網的入口，增加更多廣告機會一樣。因此，另外一種開源公司的出路則是讓大公司買下，就像是 IBM 希望佈局雲端業務以及商業 Linux 需求進而收購了 Redhat。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>開源最一開始是種共享精神，相信群眾的智慧可以讓軟體不斷進步，事實上一些人們依賴的高品質軟體確實是來自於這種開源精神下的成果，最著名的大概就是應用廣泛的各個 GNU 專案以及 Linux 作業系統。</p>
+<p>然而，並非所有專案都可以完全依賴貢獻者無償的熱情，還是有些領域需要商業公司在不違背開源精神下來補足。商業總有種驅動力，希望可以利潤最大化，確保公司的存續，但如果做過頭又有可能傷害到共享的精神。這時候，如何協調兩種不一樣的價值觀就是需要克服的問題。</p>
+<p>我們前面提到的例子，大多數都是在核心軟體開放的情況下，提供商業上有價值的服務，例如諮詢、認證或是雲端服務等等。如此一來，既可以確保開源這種人類共同協作的開放作法，又可以透過人們願意付費的商業模式來維持公司營運。</p>
+<p>當然，這種平衡並非不能被打破。以前面提到的雲端服務商和雲端軟體的利益相衝為例，就是這種平衡模式的侷限性。直到如今為止，還沒有什麼真正好的解法。</p>
+<p>對於個人開發者來說，開源是種理想、是種熱情，能夠與世界一流的人交流協作，打造有影響力的產品。然而對於公司來說，<strong>開源本質上只是一種商業手段</strong>，透過這個手段創造營收維持存續，可以對股東負責。</p>
+<p>因此，只有在精心設計的開源框架和商業模式下，才能讓個人開發者得到滿足、公司獲得營收、整體開源社群也能獲益，創造多贏的局面。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%96%8B%E6%BA%90/" rel="tag"># 開源</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/24/%E9%9B%99%E9%87%8D%E6%8E%88%E6%AC%8A%EF%BC%9A%E5%85%BC%E9%A1%A7%E9%96%8B%E6%BA%90%E5%92%8C%E5%95%86%E6%A5%AD%E7%9A%84%E6%A8%A1%E5%BC%8F/" rel="prev" title="雙重授權：兼顧開源和商業的模式">
+                  <i class="fa fa-angle-left"></i> 雙重授權：兼顧開源和商業的模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">evshary</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"evshary","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

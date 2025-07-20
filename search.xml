@@ -1289,65 +1289,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dependency</title>
-    <url>/2017/08/26/dependency/</url>
-    <content><![CDATA[<h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;private.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test=%d\n&quot;</span>, PRIV_VALUE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>test.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _TEST_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _TEST_H</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>private.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _PRIVATE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _PRIVATE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIV_VALUE 3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>然後假設我們的Makefile是這樣寫</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$^</span></span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span></span><br></pre></td></tr></table></figure>
-
-<p>我們試著修改private.h的MACRO值，就會發現重新make結果還是不變，需要重新make clean</p>
-<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><p>可以使用gcc的特殊option</p>
-<ul>
-<li><p>gcc -M xxx.c: 找出所有相依檔</p>
-</li>
-<li><p>gcc -MM xxx.c: 同-M，但不含系統檔</p>
- <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error</p>
- <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c test.h</span></span><br><span class="line"></span><br><span class="line"><span class="section">test.h:</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>-MF file: 輸出的dependency檔案名</p>
-</li>
-<li><p>-MD: 同-M -MF</p>
-</li>
-<li><p>-MMD: 同-MM -MF</p>
-</li>
-<li><p>-MT: 可以更改dependency檔案內的目標，可參考<a href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转]</a></p>
-</li>
-</ul>
-<p>因此只要把Makefile改成這樣即可</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">-include</span> $(OBJ:.o=.d)</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$&lt;</span></span><br><span class="line">    <span class="variable">$(CC)</span> -MM <span class="variable">$&lt;</span> &gt; <span class="variable">$*</span>.d</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span> *.d</span><br></pre></td></tr></table></figure>
-
-<p><code>-</code>代表如果有錯誤不要停止執行，<code>$(OBJ:.o=.d)</code>代表把.o換成.d，因此會變成類似</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c private.h test.h</span></span><br><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
-
-<p>由於該rule底下沒有statement，所以會直接對應<code>%.o: %.c</code></p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
-<li><a href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>dd - 資料處理的好工具</title>
     <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
@@ -1561,6 +1502,65 @@
       </categories>
       <tags>
         <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dependency</title>
+    <url>/2017/08/26/dependency/</url>
+    <content><![CDATA[<h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;private.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test=%d\n&quot;</span>, PRIV_VALUE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>test.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _TEST_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _TEST_H</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>private.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _PRIVATE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _PRIVATE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIV_VALUE 3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>然後假設我們的Makefile是這樣寫</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$^</span></span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span></span><br></pre></td></tr></table></figure>
+
+<p>我們試著修改private.h的MACRO值，就會發現重新make結果還是不變，需要重新make clean</p>
+<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><p>可以使用gcc的特殊option</p>
+<ul>
+<li><p>gcc -M xxx.c: 找出所有相依檔</p>
+</li>
+<li><p>gcc -MM xxx.c: 同-M，但不含系統檔</p>
+ <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gcc -MP -MM xxx.c: 會加上其他header，避免某些compiler error</p>
+ <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c test.h</span></span><br><span class="line"></span><br><span class="line"><span class="section">test.h:</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-MF file: 輸出的dependency檔案名</p>
+</li>
+<li><p>-MD: 同-M -MF</p>
+</li>
+<li><p>-MMD: 同-MM -MF</p>
+</li>
+<li><p>-MT: 可以更改dependency檔案內的目標，可參考<a href="http://blog.sina.com.cn/s/blog_717794b70101gjca.html">关于 gcc MT MF[转]</a></p>
+</li>
+</ul>
+<p>因此只要把Makefile改成這樣即可</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">OBJ=<span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,$(<span class="built_in">wildcard</span> *.c)</span>)</span><br><span class="line">BIN=main.out</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$(BIN)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">-include</span> $(OBJ:.o=.d)</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$&lt;</span></span><br><span class="line">    <span class="variable">$(CC)</span> -MM <span class="variable">$&lt;</span> &gt; <span class="variable">$*</span>.d</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o <span class="variable">$(BIN)</span> *.d</span><br></pre></td></tr></table></figure>
+
+<p><code>-</code>代表如果有錯誤不要停止執行，<code>$(OBJ:.o=.d)</code>代表把.o換成.d，因此會變成類似</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">test.o: test.c private.h test.h</span></span><br><span class="line"><span class="section">main.o: main.c test.h</span></span><br></pre></td></tr></table></figure>
+
+<p>由於該rule底下沒有statement，所以會直接對應<code>%.o: %.c</code></p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
+<li><a href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -1814,133 +1814,6 @@
       </tags>
   </entry>
   <entry>
-    <title>linker script 簡單教學</title>
-    <url>/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
-<p>linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 <code>undefined reference error</code>。</p>
-<p>而 linker script 就是提供給 linker 參考的文件，它告訴 linker 我想要怎麼擺放這些 section，甚至也可以定義程式的起始點在哪邊。</p>
-<h2 id="簡單範例"><a href="#簡單範例" class="headerlink" title="簡單範例"></a>簡單範例</h2><p>最簡單的 linker script 是用<code>SECTIONS</code>指令去定義 section 的分佈。</p>
-<p>test.ld</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS</span><br><span class="line">&#123;</span><br><span class="line">. = 0x10000;</span><br><span class="line">.text : &#123; *(.text) &#125;</span><br><span class="line">. = 0x8000000;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.bss : &#123; *(.bss) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上例，<code>.</code>被稱作 location counter，代表的是指向現在的位址，我們可以讀取或是移動它 (我覺得可以想像成我們在打電腦文件時的游標，代表現在要處理這個位置)。</p>
-<p>這段 script 主要做的事是，先把 location counter 移到 0x10000，在這裡寫入所有輸入檔的<code>.text section</code>後，再來移到0x8000000放所有輸入檔的<code>.data section</code>跟<code>.bss section</code>。</p>
-<p>當然，最重要的還是去嘗試，所以讓我們來試試看，結果是不是真的像我們所想的。</p>
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> global_bss;</span><br><span class="line"><span class="type">int</span> global_data = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    global_bss = <span class="number">0</span>;</span><br><span class="line">    test();</span><br><span class="line">    global_data++;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="comment">// do nothing.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>嘗試編譯並看結果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc -c main.c test.c</span><br><span class="line">$ ld -T test.ld main.o test.o</span><br><span class="line">$ objdump -h a.out</span><br><span class="line"></span><br><span class="line">a.out:     file format elf64-x86-64</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA               LMA               File off  Algn</span><br><span class="line">  0 .text         00000046  0000000000010000  0000000000010000  00010000  2**0</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .eh_frame     00000058  0000000000010048  0000000000010048  00010048  2**3</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, DATA</span><br><span class="line">  2 .data         00000004  0000000008000000  0000000008000000  00200000  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  3 .bss          00000004  0000000008000004  0000000008000004  00200004  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  4 .comment      00000011  0000000000000000  0000000000000000  00200004  2**0</span><br><span class="line">                  CONTENTS, READONLY</span><br></pre></td></tr></table></figure>
-
-<p>我們可以看到在VMA和LMA的地方，text是從0x10000開始，data和bss則是從0x8000000開始放，跟我們所安排的結果一樣。</p>
-<p>這邊說明一下，一定會有人覺得奇怪，為什麼編譯出來的檔案無法執行，這個是因為我們並沒有符合 Linux 可執行的格式來 link，如果你想要知道一般我們下 gcc 是使用什麼 linker script 的話，可以使用如下方式：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -Wl,-verbose main.c test.c</span><br></pre></td></tr></table></figure>
-
-<p>這樣就可以看到所使用的 linker script 了。</p>
-<h2 id="常用的功能"><a href="#常用的功能" class="headerlink" title="常用的功能"></a>常用的功能</h2><p>接著我們來談談在linker script中常見到的功能，這邊我們可以參考 jserv 帶領成大同學開發的 rtenv 中的 <a href="https://github.com/southernbear/rtenv/blob/master/main.ld">linker script</a></p>
-<p>那我們就一一了解每個符號的意義吧！</p>
-<h3 id="ENTRY"><a href="#ENTRY" class="headerlink" title="ENTRY"></a>ENTRY</h3><p>用 ENTRY 可以指定程式進入點的符號，不設定的話 linker 會試圖用預設<code>.text</code>的起始點，或者用位址0的地方。</p>
-<p>以 x86 為例，預設進入點是<code>ENTRY(_start)</code>，而 rtenv 則是設定為 <code>ENTRY(main)</code></p>
-<h3 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h3><p>Linker 預設會取用全部的記憶體，我們可以用 MEMORY 指令指定記憶體大小，在 rtenv 的例子中，指定了 FLASH 跟 RAM 兩種的輸出位置與大小</p>
-<p>ORIGIN代表起始位置，LENGTH為長度</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY</span><br><span class="line">&#123;</span><br><span class="line">  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 128K</span><br><span class="line">  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 20K</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接下來SECTION部分，就能用 &gt; 符號把資料寫到指定的位置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss : &#123;</span><br><span class="line">        _sbss = .;</span><br><span class="line">        *(.bss)         /* Zero-filled run time allocate data memory */</span><br><span class="line">        _ebss = .;</span><br><span class="line">    &#125; &gt;RAM</span><br></pre></td></tr></table></figure>
-
-<h3 id="KEEP"><a href="#KEEP" class="headerlink" title="KEEP"></a>KEEP</h3><p>KEEP 指令保留某個符號不要被 garbage collection ，例如我們不希望 ARM 的 ISR vector 會被優化掉。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="section-的本體"><a href="#section-的本體" class="headerlink" title="section 的本體"></a>section 的本體</h3><p>section 的指定方式是 linker script 中的重點，其中也有許多設定。</p>
-<p>我們可以參考<a href="https://sourceware.org/binutils/docs/ld/Output-Section-Attributes.html#Output-Section-Attributes">官方文件</a>先對 section 的功能做一個快速了解。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">section [address] [(type)] :</span><br><span class="line">  [AT(lma)]</span><br><span class="line">  [ALIGN(section_align) | ALIGN_WITH_INPUT]</span><br><span class="line">  [SUBALIGN(subsection_align)]</span><br><span class="line">  [constraint]</span><br><span class="line">  &#123;</span><br><span class="line">      output-section-command</span><br><span class="line">      output-section-command</span><br><span class="line">      ...</span><br><span class="line">  &#125; [&gt;region] [AT&gt;lma_region] [:phdr :phdr ...] [=fillexp]</span><br></pre></td></tr></table></figure>
-
-<p>output-section-command 代表的就是我們要怎麼擺放每個 section。</p>
-<p>在這個例子裡可以看到有許多 LMA，除了 LMA 外，其實還有 VMA，它們兩個究竟有什麼不同呢？</p>
-<h4 id="LMA-VMA-的概念"><a href="#LMA-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h4><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
-<p>link script 中設計了兩種位址：VMA 和 LMA</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>LMA (Load Memory Address)</th>
-<th>VMA (Virtual Memory Address)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>位置</td>
-<td>ROM&#x2F;Flash</td>
-<td>RAM</td>
-</tr>
-<tr>
-<td>意義</td>
-<td>程式碼保存的位置</td>
-<td>程式碼執行的位址</td>
-</tr>
-</tbody></table>
-<p>也就是 LMA 是 output file 的位置，VMA 是載入 section 到 RAM 時的位置，但是在大多數情況下兩者會是一樣的。</p>
-<p>我們再看看上例是怎如何指定 LMA 和 VMA 的</p>
-<ul>
-<li>LMA 是用<code>AT</code>或<code>AT&gt;</code>來決定位址，為可選，沒指定就用VMA當LMA<ul>
-<li><code>AT(LMA)</code>：告訴 linker 這個 section 應該要去哪個 LMA 載入資料到 VMA，要填 address</li>
-<li><code>AT&gt;lma_region</code>：為 LMA 所在區域，需事先定義</li>
-</ul>
-</li>
-<li><code>&gt;region</code>：為 VMA 所在區域，region需事先定義</li>
-<li>在 linker script 的寫法基本上是這個架構<code>[VMA] : [AT(LMA)]</code></li>
-</ul>
-<p>繼續以 rtenv 為例，當指定了<code>_sidata</code>的 symbol 位置後，AT 就是要求載入到 FLASH 時要在<code>.text</code>的後面，換句話說<code>.data</code>的 LMA 要在<code>.text</code>後</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* Initialized data will initially be loaded in FLASH at the end of the .text section. */</span><br><span class="line">.data : AT (_sidata)</span><br><span class="line">&#123;</span><br><span class="line">  _sdata = .;</span><br><span class="line">  *(.data)        /* Initialized data */</span><br><span class="line">  *(.data*)</span><br><span class="line">  _edata = .;</span><br><span class="line">&#125; &gt;RAM</span><br></pre></td></tr></table></figure>
-
-<h3 id="取得-section-的位置"><a href="#取得-section-的位置" class="headerlink" title="取得 section 的位置"></a>取得 section 的位置</h3><p>在程式中，有時候可能還是會需要取得每個 section 的所在位址，我們可以用如下的方式取得</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">         *(.text)</span><br><span class="line">         *(.text.*)</span><br><span class="line">        *(.rodata)</span><br><span class="line">        *(.rodata*)</span><br><span class="line">        _smodule = .;</span><br><span class="line">        *(.module)</span><br><span class="line">        _emodule = .;</span><br><span class="line">        _sprogram = .;</span><br><span class="line">        *(.program)</span><br><span class="line">        _eprogram = .;</span><br><span class="line">        _sromdev = .;</span><br><span class="line">        *(.rom.*)</span><br><span class="line">        _eromdev = .;</span><br><span class="line">        _sidata = .;</span><br><span class="line">    &#125; &gt;FLASH</span><br></pre></td></tr></table></figure>
-
-<p>上面的7個 symbol 分別代表開始和結束，例如<code>_smodule</code>代表 module 的開始，而<code>_emodule</code>則代表 module 的結束。</p>
-<p>這樣的好處是 symbol 的部分我們可以在主程式這樣使用</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sidata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sdata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _edata;</span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> *idata_begin = &amp;_sidata;</span><br><span class="line"><span class="type">uint32_t</span> *data_begin = &amp;_sdata;</span><br><span class="line"><span class="type">uint32_t</span> *data_end = &amp;_edata;</span><br><span class="line"><span class="keyword">while</span> (data_begin &lt; data_end) *data_begin++ = *idata_begin++;</span><br></pre></td></tr></table></figure>
-
-<p>值得注意的是，如果 C 已經有用到該變數<code>_sidata</code>，那就要用<code>PROVIDE(_sdata = .)</code>來避免 linker 出現重複定義的錯誤</p>
-<h3 id="Stack-的位址"><a href="#Stack-的位址" class="headerlink" title="Stack 的位址"></a>Stack 的位址</h3><p>通常 stack 位址我們都會放在 RAM 的最下方讓他往上長，所以我們可以用下面表示方式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">_estack = ORIGIN(RAM) + LENGTH(RAM);</span><br></pre></td></tr></table></figure>
-
-<p>代表 stack 的放置位址是在 RAM 的最下方。</p>
-<h2 id="常見問題"><a href="#常見問題" class="headerlink" title="常見問題"></a>常見問題</h2><h3 id="如果section重複被使用，會發生什麼事？"><a href="#如果section重複被使用，會發生什麼事？" class="headerlink" title="如果section重複被使用，會發生什麼事？"></a>如果section重複被使用，會發生什麼事？</h3><p>每個輸入檔的 section 只能在出現在 SECTIONS 中出現一次。什麼意思呢？讓我們看個例子</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.data1 : &#123; data.o(.data) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我們可以看到<code>data.o</code>中的<code>.data section</code>應該在第一個 OUTPUT-SECTION-COMMAND (也就是<code>.data : &#123; *(.data) &#125;</code>)被用掉了，所以在<code>.data1 : &#123; data.o(.data) &#125;</code>將不會再次出現，代表的就是<code>.data1 section</code>會是空的。</p>
-<h3 id="如果只想要把某個library的-o放入的話"><a href="#如果只想要把某個library的-o放入的話" class="headerlink" title="如果只想要把某個library的.o放入的話"></a>如果只想要把某個library的.o放入的話</h3><p>可用<code>*xxx.a:*yyy.o (.bss*)</code>的方式，舉例來說：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss_RAM2 : ALIGN(4)</span><br><span class="line">    &#123;</span><br><span class="line">      *libmytest.a:*.o (.bss*)</span><br><span class="line">      *(.bss.$RAM2*)</span><br><span class="line">      *(.bss.$RamLoc64*)</span><br><span class="line">       . = ALIGN(4) ;</span><br><span class="line">    &#125; &gt; RamLoc64</span><br></pre></td></tr></table></figure>
-
-<h3 id="如果我不想要把特定檔案的section放入"><a href="#如果我不想要把特定檔案的section放入" class="headerlink" title="如果我不想要把特定檔案的section放入"></a>如果我不想要把特定檔案的section放入</h3><p>可以使用<code>EXCLUDE_FILE</code>，例如我想放除了 foo.o、bar.o 外，所有的<code>.bss section</code>，可以這麼做：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(*(EXCLUDE_FILE (*foo.o *bar.o) .bss))</span><br></pre></td></tr></table></figure>
-
-<p>詳細可參考下方連結</p>
-<ul>
-<li><a href="http://forum.andestech.com/viewtopic.php?f=16&t=600">linker script之EXCLUDE_FILE語法</a></li>
-<li><a href="https://stackoverflow.com/questions/21418593/linker-script-put-a-particular-file-at-a-later-position">Linker Script: Put a particular file at a later position</a></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://sourceware.org/binutils/docs/ld/">ld 官方文件</a></li>
-<li><a href="http://yodalee.blogspot.tw/2015/04/linker-script.html">Linker script 簡介</a></li>
-<li><a href="http://wiki.csie.ncku.edu.tw/embedded/Lab19/stm32-prog.pdf">嵌入式系統建構：開發運作於STM32的韌體程式</a></li>
-<li><a href="http://wen00072.github.io/blog/2014/03/14/study-on-the-linker-script/">Linker Script初探 - GNU Linker Ld手冊略讀</a></li>
-<li><a href="https://www.slideshare.net/zzz00072/gnu-ldlinker-script">GNU ld的linker script簡介</a></li>
-<li><a href="http://wen00072.github.io/blog/2014/12/22/rtenv-linker-script-explained/">Rtenv的linker Script解釋</a></li>
-<li><a href="http://opass.logdown.com/posts/255812-introduction-to-stm32f429-linker-script">stm32f429 Linker Script簡介</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo 教學</title>
     <url>/2017/09/09/hexo%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<p>我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩。另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇。Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介面，而且還可以用 markdown 來寫 blog。</p>
@@ -2088,6 +1961,133 @@
       </categories>
       <tags>
         <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linker script 簡單教學</title>
+    <url>/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
+<p>linker的作用就是把輸入檔(object file)的 section 整理到輸出檔的 section。除此之外也會定下每個object file 中尚未確定的符號位址，所以如果有 object file 用到不存在的symbol，就會出現常看到的 <code>undefined reference error</code>。</p>
+<p>而 linker script 就是提供給 linker 參考的文件，它告訴 linker 我想要怎麼擺放這些 section，甚至也可以定義程式的起始點在哪邊。</p>
+<h2 id="簡單範例"><a href="#簡單範例" class="headerlink" title="簡單範例"></a>簡單範例</h2><p>最簡單的 linker script 是用<code>SECTIONS</code>指令去定義 section 的分佈。</p>
+<p>test.ld</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS</span><br><span class="line">&#123;</span><br><span class="line">. = 0x10000;</span><br><span class="line">.text : &#123; *(.text) &#125;</span><br><span class="line">. = 0x8000000;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.bss : &#123; *(.bss) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上例，<code>.</code>被稱作 location counter，代表的是指向現在的位址，我們可以讀取或是移動它 (我覺得可以想像成我們在打電腦文件時的游標，代表現在要處理這個位置)。</p>
+<p>這段 script 主要做的事是，先把 location counter 移到 0x10000，在這裡寫入所有輸入檔的<code>.text section</code>後，再來移到0x8000000放所有輸入檔的<code>.data section</code>跟<code>.bss section</code>。</p>
+<p>當然，最重要的還是去嘗試，所以讓我們來試試看，結果是不是真的像我們所想的。</p>
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> global_bss;</span><br><span class="line"><span class="type">int</span> global_data = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    global_bss = <span class="number">0</span>;</span><br><span class="line">    test();</span><br><span class="line">    global_data++;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="comment">// do nothing.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>嘗試編譯並看結果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc -c main.c test.c</span><br><span class="line">$ ld -T test.ld main.o test.o</span><br><span class="line">$ objdump -h a.out</span><br><span class="line"></span><br><span class="line">a.out:     file format elf64-x86-64</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA               LMA               File off  Algn</span><br><span class="line">  0 .text         00000046  0000000000010000  0000000000010000  00010000  2**0</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .eh_frame     00000058  0000000000010048  0000000000010048  00010048  2**3</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, READONLY, DATA</span><br><span class="line">  2 .data         00000004  0000000008000000  0000000008000000  00200000  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  3 .bss          00000004  0000000008000004  0000000008000004  00200004  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  4 .comment      00000011  0000000000000000  0000000000000000  00200004  2**0</span><br><span class="line">                  CONTENTS, READONLY</span><br></pre></td></tr></table></figure>
+
+<p>我們可以看到在VMA和LMA的地方，text是從0x10000開始，data和bss則是從0x8000000開始放，跟我們所安排的結果一樣。</p>
+<p>這邊說明一下，一定會有人覺得奇怪，為什麼編譯出來的檔案無法執行，這個是因為我們並沒有符合 Linux 可執行的格式來 link，如果你想要知道一般我們下 gcc 是使用什麼 linker script 的話，可以使用如下方式：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -Wl,-verbose main.c test.c</span><br></pre></td></tr></table></figure>
+
+<p>這樣就可以看到所使用的 linker script 了。</p>
+<h2 id="常用的功能"><a href="#常用的功能" class="headerlink" title="常用的功能"></a>常用的功能</h2><p>接著我們來談談在linker script中常見到的功能，這邊我們可以參考 jserv 帶領成大同學開發的 rtenv 中的 <a href="https://github.com/southernbear/rtenv/blob/master/main.ld">linker script</a></p>
+<p>那我們就一一了解每個符號的意義吧！</p>
+<h3 id="ENTRY"><a href="#ENTRY" class="headerlink" title="ENTRY"></a>ENTRY</h3><p>用 ENTRY 可以指定程式進入點的符號，不設定的話 linker 會試圖用預設<code>.text</code>的起始點，或者用位址0的地方。</p>
+<p>以 x86 為例，預設進入點是<code>ENTRY(_start)</code>，而 rtenv 則是設定為 <code>ENTRY(main)</code></p>
+<h3 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h3><p>Linker 預設會取用全部的記憶體，我們可以用 MEMORY 指令指定記憶體大小，在 rtenv 的例子中，指定了 FLASH 跟 RAM 兩種的輸出位置與大小</p>
+<p>ORIGIN代表起始位置，LENGTH為長度</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY</span><br><span class="line">&#123;</span><br><span class="line">  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 128K</span><br><span class="line">  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 20K</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下來SECTION部分，就能用 &gt; 符號把資料寫到指定的位置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss : &#123;</span><br><span class="line">        _sbss = .;</span><br><span class="line">        *(.bss)         /* Zero-filled run time allocate data memory */</span><br><span class="line">        _ebss = .;</span><br><span class="line">    &#125; &gt;RAM</span><br></pre></td></tr></table></figure>
+
+<h3 id="KEEP"><a href="#KEEP" class="headerlink" title="KEEP"></a>KEEP</h3><p>KEEP 指令保留某個符號不要被 garbage collection ，例如我們不希望 ARM 的 ISR vector 會被優化掉。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="section-的本體"><a href="#section-的本體" class="headerlink" title="section 的本體"></a>section 的本體</h3><p>section 的指定方式是 linker script 中的重點，其中也有許多設定。</p>
+<p>我們可以參考<a href="https://sourceware.org/binutils/docs/ld/Output-Section-Attributes.html#Output-Section-Attributes">官方文件</a>先對 section 的功能做一個快速了解。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">section [address] [(type)] :</span><br><span class="line">  [AT(lma)]</span><br><span class="line">  [ALIGN(section_align) | ALIGN_WITH_INPUT]</span><br><span class="line">  [SUBALIGN(subsection_align)]</span><br><span class="line">  [constraint]</span><br><span class="line">  &#123;</span><br><span class="line">      output-section-command</span><br><span class="line">      output-section-command</span><br><span class="line">      ...</span><br><span class="line">  &#125; [&gt;region] [AT&gt;lma_region] [:phdr :phdr ...] [=fillexp]</span><br></pre></td></tr></table></figure>
+
+<p>output-section-command 代表的就是我們要怎麼擺放每個 section。</p>
+<p>在這個例子裡可以看到有許多 LMA，除了 LMA 外，其實還有 VMA，它們兩個究竟有什麼不同呢？</p>
+<h4 id="LMA-VMA-的概念"><a href="#LMA-VMA-的概念" class="headerlink" title="LMA&#x2F;VMA 的概念"></a>LMA&#x2F;VMA 的概念</h4><p>這裡大概是最重要的部分，也是之前我一直搞不清楚的地方。</p>
+<p>link script 中設計了兩種位址：VMA 和 LMA</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LMA (Load Memory Address)</th>
+<th>VMA (Virtual Memory Address)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>位置</td>
+<td>ROM&#x2F;Flash</td>
+<td>RAM</td>
+</tr>
+<tr>
+<td>意義</td>
+<td>程式碼保存的位置</td>
+<td>程式碼執行的位址</td>
+</tr>
+</tbody></table>
+<p>也就是 LMA 是 output file 的位置，VMA 是載入 section 到 RAM 時的位置，但是在大多數情況下兩者會是一樣的。</p>
+<p>我們再看看上例是怎如何指定 LMA 和 VMA 的</p>
+<ul>
+<li>LMA 是用<code>AT</code>或<code>AT&gt;</code>來決定位址，為可選，沒指定就用VMA當LMA<ul>
+<li><code>AT(LMA)</code>：告訴 linker 這個 section 應該要去哪個 LMA 載入資料到 VMA，要填 address</li>
+<li><code>AT&gt;lma_region</code>：為 LMA 所在區域，需事先定義</li>
+</ul>
+</li>
+<li><code>&gt;region</code>：為 VMA 所在區域，region需事先定義</li>
+<li>在 linker script 的寫法基本上是這個架構<code>[VMA] : [AT(LMA)]</code></li>
+</ul>
+<p>繼續以 rtenv 為例，當指定了<code>_sidata</code>的 symbol 位置後，AT 就是要求載入到 FLASH 時要在<code>.text</code>的後面，換句話說<code>.data</code>的 LMA 要在<code>.text</code>後</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* Initialized data will initially be loaded in FLASH at the end of the .text section. */</span><br><span class="line">.data : AT (_sidata)</span><br><span class="line">&#123;</span><br><span class="line">  _sdata = .;</span><br><span class="line">  *(.data)        /* Initialized data */</span><br><span class="line">  *(.data*)</span><br><span class="line">  _edata = .;</span><br><span class="line">&#125; &gt;RAM</span><br></pre></td></tr></table></figure>
+
+<h3 id="取得-section-的位置"><a href="#取得-section-的位置" class="headerlink" title="取得 section 的位置"></a>取得 section 的位置</h3><p>在程式中，有時候可能還是會需要取得每個 section 的所在位址，我們可以用如下的方式取得</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.text :</span><br><span class="line">    &#123;</span><br><span class="line">        KEEP(*(.isr_vector))</span><br><span class="line">         *(.text)</span><br><span class="line">         *(.text.*)</span><br><span class="line">        *(.rodata)</span><br><span class="line">        *(.rodata*)</span><br><span class="line">        _smodule = .;</span><br><span class="line">        *(.module)</span><br><span class="line">        _emodule = .;</span><br><span class="line">        _sprogram = .;</span><br><span class="line">        *(.program)</span><br><span class="line">        _eprogram = .;</span><br><span class="line">        _sromdev = .;</span><br><span class="line">        *(.rom.*)</span><br><span class="line">        _eromdev = .;</span><br><span class="line">        _sidata = .;</span><br><span class="line">    &#125; &gt;FLASH</span><br></pre></td></tr></table></figure>
+
+<p>上面的7個 symbol 分別代表開始和結束，例如<code>_smodule</code>代表 module 的開始，而<code>_emodule</code>則代表 module 的結束。</p>
+<p>這樣的好處是 symbol 的部分我們可以在主程式這樣使用</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sidata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _sdata;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">uint32_t</span> _edata;</span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> *idata_begin = &amp;_sidata;</span><br><span class="line"><span class="type">uint32_t</span> *data_begin = &amp;_sdata;</span><br><span class="line"><span class="type">uint32_t</span> *data_end = &amp;_edata;</span><br><span class="line"><span class="keyword">while</span> (data_begin &lt; data_end) *data_begin++ = *idata_begin++;</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，如果 C 已經有用到該變數<code>_sidata</code>，那就要用<code>PROVIDE(_sdata = .)</code>來避免 linker 出現重複定義的錯誤</p>
+<h3 id="Stack-的位址"><a href="#Stack-的位址" class="headerlink" title="Stack 的位址"></a>Stack 的位址</h3><p>通常 stack 位址我們都會放在 RAM 的最下方讓他往上長，所以我們可以用下面表示方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">_estack = ORIGIN(RAM) + LENGTH(RAM);</span><br></pre></td></tr></table></figure>
+
+<p>代表 stack 的放置位址是在 RAM 的最下方。</p>
+<h2 id="常見問題"><a href="#常見問題" class="headerlink" title="常見問題"></a>常見問題</h2><h3 id="如果section重複被使用，會發生什麼事？"><a href="#如果section重複被使用，會發生什麼事？" class="headerlink" title="如果section重複被使用，會發生什麼事？"></a>如果section重複被使用，會發生什麼事？</h3><p>每個輸入檔的 section 只能在出現在 SECTIONS 中出現一次。什麼意思呢？讓我們看個例子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">.data : &#123; *(.data) &#125;</span><br><span class="line">.data1 : &#123; data.o(.data) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我們可以看到<code>data.o</code>中的<code>.data section</code>應該在第一個 OUTPUT-SECTION-COMMAND (也就是<code>.data : &#123; *(.data) &#125;</code>)被用掉了，所以在<code>.data1 : &#123; data.o(.data) &#125;</code>將不會再次出現，代表的就是<code>.data1 section</code>會是空的。</p>
+<h3 id="如果只想要把某個library的-o放入的話"><a href="#如果只想要把某個library的-o放入的話" class="headerlink" title="如果只想要把某個library的.o放入的話"></a>如果只想要把某個library的.o放入的話</h3><p>可用<code>*xxx.a:*yyy.o (.bss*)</code>的方式，舉例來說：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.bss_RAM2 : ALIGN(4)</span><br><span class="line">    &#123;</span><br><span class="line">      *libmytest.a:*.o (.bss*)</span><br><span class="line">      *(.bss.$RAM2*)</span><br><span class="line">      *(.bss.$RamLoc64*)</span><br><span class="line">       . = ALIGN(4) ;</span><br><span class="line">    &#125; &gt; RamLoc64</span><br></pre></td></tr></table></figure>
+
+<h3 id="如果我不想要把特定檔案的section放入"><a href="#如果我不想要把特定檔案的section放入" class="headerlink" title="如果我不想要把特定檔案的section放入"></a>如果我不想要把特定檔案的section放入</h3><p>可以使用<code>EXCLUDE_FILE</code>，例如我想放除了 foo.o、bar.o 外，所有的<code>.bss section</code>，可以這麼做：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(*(EXCLUDE_FILE (*foo.o *bar.o) .bss))</span><br></pre></td></tr></table></figure>
+
+<p>詳細可參考下方連結</p>
+<ul>
+<li><a href="http://forum.andestech.com/viewtopic.php?f=16&t=600">linker script之EXCLUDE_FILE語法</a></li>
+<li><a href="https://stackoverflow.com/questions/21418593/linker-script-put-a-particular-file-at-a-later-position">Linker Script: Put a particular file at a later position</a></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://sourceware.org/binutils/docs/ld/">ld 官方文件</a></li>
+<li><a href="http://yodalee.blogspot.tw/2015/04/linker-script.html">Linker script 簡介</a></li>
+<li><a href="http://wiki.csie.ncku.edu.tw/embedded/Lab19/stm32-prog.pdf">嵌入式系統建構：開發運作於STM32的韌體程式</a></li>
+<li><a href="http://wen00072.github.io/blog/2014/03/14/study-on-the-linker-script/">Linker Script初探 - GNU Linker Ld手冊略讀</a></li>
+<li><a href="https://www.slideshare.net/zzz00072/gnu-ldlinker-script">GNU ld的linker script簡介</a></li>
+<li><a href="http://wen00072.github.io/blog/2014/12/22/rtenv-linker-script-explained/">Rtenv的linker Script解釋</a></li>
+<li><a href="http://opass.logdown.com/posts/255812-introduction-to-stm32f429-linker-script">stm32f429 Linker Script簡介</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -2723,6 +2723,39 @@
       </tags>
   </entry>
   <entry>
+    <title>探討區塊鏈的價值</title>
+    <url>/2025/03/09/%E6%8E%A2%E8%A8%8E%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E5%83%B9%E5%80%BC/</url>
+    <content><![CDATA[<p>加密貨幣這個詞越來越常出現在人們生活中，不論是新聞媒體還是朋友圈中。可惜的是，大家探討的通常是「比特幣又突破新高」、「某國總統發行了迷因幣」、「某個名人投資虛擬貨幣被詐騙」，很少真正觸及加密貨幣背後——也就是區塊鏈——的本質。</p>
+<p>區塊鏈是什麼？究竟解決什麼問題？如果無法理解它的價值就去投資加密貨幣，那內心就會隨著幣圈中各種消息而起伏，心裡不踏實。</p>
+<p>這篇文章會先探討區塊鏈想解決什麼問題，然後再簡單描述其運作原理。</p>
+<h2 id="公開帳本的價值"><a href="#公開帳本的價值" class="headerlink" title="公開帳本的價值"></a>公開帳本的價值</h2><p>讓我們先把區塊鏈放一邊。想像一個跟我們一樣的世界，但唯一的差別是<strong>這個世界有一個公開的公佈欄，任何人都能在上面記錄資訊，而且這些記錄無法抹除或竄改</strong>。請問我們可以怎麼使用這個公佈欄呢？</p>
+<p>我想你一定可以想到很多應用，其中最重要的應用跟錢脫離不了關係——也就是「帳本」。過去人們交易要怎麼證明自己有付錢呢？我們可能是一手交錢一手交貨，也可能是透過銀行轉帳，對方確認帳戶有收到錢。一般來說這樣並沒有什麼問題，然而這是在人們可以直接接觸，又或者是都在同一個銀行體系的情況下。如果我們想把錢轉給地球上另一個人，這個過程會經過層層不效率的銀行體系，最後才到對方的手裡。</p>
+<p>若是使用這個公佈欄，那會有什麼改變呢？我們只需要在公佈欄上記錄 A 轉 100 元給 B，這樣就行了。這之間完全不需要涉及第三方（如銀行），而且價值轉移是立即完成，對方也可以馬上從公佈欄上確認。最重要的是，我們不需要使用實體的錢，完全依靠公佈欄上的記錄就可以。舉例來說，A 收到了 500 元，轉了 100 元出去，計算後知道 A 剩下 400 元。只要對方能相信公佈欄上的記錄，A 就可以用剩餘的 400 元來進行其他交易。<strong>本質上，對公佈欄的信任就是這個流程最重要的基礎</strong>。</p>
+<p><img src="/images/%E5%85%AC%E9%96%8B%E5%85%AC%E4%BD%88%E6%AC%84.drawio.svg" alt="公開公佈欄"></p>
+<h2 id="區塊鏈的原理"><a href="#區塊鏈的原理" class="headerlink" title="區塊鏈的原理"></a>區塊鏈的原理</h2><p>然而，我們現實世界並沒有這樣的公開公佈欄。因此，中本聰發明了「區塊鏈」來確保公佈欄公開並且可以隨時存取的特性。</p>
+<p>區塊鏈這個系統讓多個人<strong>分散持有</strong>這個公佈欄，並且有<strong>經濟誘因</strong>一起記錄各種交易。由於多人持有，所以不會因為任何人離開而無法存取這個公佈欄。而為了讓人願意參與這個系統，則需要提供足夠的經濟動機。</p>
+<p>下面我們針對這兩點來分別說明：</p>
+<h3 id="分散持有"><a href="#分散持有" class="headerlink" title="分散持有"></a>分散持有</h3><p>分散持有聽起來很美好，但分散也就意味著彼此同步的困難。以區塊鏈來說，需要透過所有人的共識來確保公開紀錄的一致性。</p>
+<p>在區塊鏈上，我們會把交易紀錄記在一個個區塊上面，而每個區塊都可以產生出某個特殊的特徵值。這個特徵值會被包含在下一個區塊上，並依此產生出新的特徵值。因此，區塊和區塊之間就有了關係，形成了一條鍊，也就是「區塊鏈」的名稱由來。</p>
+<p><img src="/images/%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E6%A6%82%E5%BF%B5.drawio.svg" alt="區塊鏈的概念"></p>
+<p>透過一些加密演算法，這些特徵的產生很困難，需要大量的計算。越多人參與計算，又或者說算力越強，就越有可能找出特徵，形成鏈上的新區塊。</p>
+<p>然而，由於分散持有，我的計算結果和你的計算結果可能會有差異，這條鏈就分叉了。這時就要引入共識機制：所有人只會接受最長的鏈，較短的鏈會被捨去。越長的鏈代表著越多的參與者，所以某種程度上也算是多數決，由多數的那方決定哪個分岔要留下來。</p>
+<p><img src="/images/%E4%BF%9D%E7%95%99%E6%9C%80%E9%95%B7%E7%9A%84%E9%8F%88.drawio.svg" alt="保留最長的鏈"></p>
+<p>透過這樣的方式，我們就能在分散的情況下，確保紀錄的公開一致性了。</p>
+<h3 id="經濟誘因"><a href="#經濟誘因" class="headerlink" title="經濟誘因"></a>經濟誘因</h3><p>解決了公開一致的問題後，我們還需要確保有足夠多的參與者，畢竟沒有人會想白白提供自己的計算能力給別人。因此，還必須提供一些經濟動機給參與者。</p>
+<p>前面提到區塊的產生需要找出獨特的特徵值，區塊鏈會透過獎勵找到特徵值的人一些收益，來增加人們參與系統的意願。當你的計算力越強，產生出的區塊越多，就能有越多收益。這樣從無到有產生出價值的行為，類似於礦工從礦石中挖出黃金的形象，所以人們又稱之為「挖礦」。</p>
+<p>區塊鏈設計巧妙之處在於，<strong>明明參與者只是為了自己的利益而行動，但是他行動的副產品，卻又協助紀錄各種交易，維持公開帳本的存在</strong>。隨著人們越來越信任公開帳本，參與者收益的價值會不斷向上提昇，進而吸引更多人參與其中。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>除了最基本的公開帳本功能，後來的區塊鏈技術衍生出更多的應用，例如自動執行程式的智能合約、確認所有權的 NFT 等等。雖然這些複雜的應用擁有更多潛在的經濟價值，但也提昇了一般人進入的門檻。我們需要回歸區塊鏈最基礎的本質來思考。</p>
+<p>此外，人們對區塊鏈的認知過度強調加密貨幣的價格波動，而非它能解決什麼問題上，這並非是好事。<strong>一項技術的成功必須基於其本身的價值，唯有了解其價值，才能真正客觀看待未來的發展性</strong>。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>區塊鏈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>我對 AI 的應用與反思</title>
     <url>/2025/02/23/%E6%88%91%E5%B0%8D%20AI%20%E7%9A%84%E6%87%89%E7%94%A8%E8%88%87%E5%8F%8D%E6%80%9D/</url>
     <content><![CDATA[<p>隨著 AI 的普及，我在日常生活中使用 AI 的機會也越來越多。AI 的能力不斷提升，每年都有質的飛躍，使得許多事務都可以依賴這個新工具。因此，了解 AI 能為我提供哪些幫助，以及它的極限在哪裡，就變得至關重要。</p>
@@ -2765,39 +2798,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>探討區塊鏈的價值</title>
-    <url>/2025/03/09/%E6%8E%A2%E8%A8%8E%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E5%83%B9%E5%80%BC/</url>
-    <content><![CDATA[<p>加密貨幣這個詞越來越常出現在人們生活中，不論是新聞媒體還是朋友圈中。可惜的是，大家探討的通常是「比特幣又突破新高」、「某國總統發行了迷因幣」、「某個名人投資虛擬貨幣被詐騙」，很少真正觸及加密貨幣背後——也就是區塊鏈——的本質。</p>
-<p>區塊鏈是什麼？究竟解決什麼問題？如果無法理解它的價值就去投資加密貨幣，那內心就會隨著幣圈中各種消息而起伏，心裡不踏實。</p>
-<p>這篇文章會先探討區塊鏈想解決什麼問題，然後再簡單描述其運作原理。</p>
-<h2 id="公開帳本的價值"><a href="#公開帳本的價值" class="headerlink" title="公開帳本的價值"></a>公開帳本的價值</h2><p>讓我們先把區塊鏈放一邊。想像一個跟我們一樣的世界，但唯一的差別是<strong>這個世界有一個公開的公佈欄，任何人都能在上面記錄資訊，而且這些記錄無法抹除或竄改</strong>。請問我們可以怎麼使用這個公佈欄呢？</p>
-<p>我想你一定可以想到很多應用，其中最重要的應用跟錢脫離不了關係——也就是「帳本」。過去人們交易要怎麼證明自己有付錢呢？我們可能是一手交錢一手交貨，也可能是透過銀行轉帳，對方確認帳戶有收到錢。一般來說這樣並沒有什麼問題，然而這是在人們可以直接接觸，又或者是都在同一個銀行體系的情況下。如果我們想把錢轉給地球上另一個人，這個過程會經過層層不效率的銀行體系，最後才到對方的手裡。</p>
-<p>若是使用這個公佈欄，那會有什麼改變呢？我們只需要在公佈欄上記錄 A 轉 100 元給 B，這樣就行了。這之間完全不需要涉及第三方（如銀行），而且價值轉移是立即完成，對方也可以馬上從公佈欄上確認。最重要的是，我們不需要使用實體的錢，完全依靠公佈欄上的記錄就可以。舉例來說，A 收到了 500 元，轉了 100 元出去，計算後知道 A 剩下 400 元。只要對方能相信公佈欄上的記錄，A 就可以用剩餘的 400 元來進行其他交易。<strong>本質上，對公佈欄的信任就是這個流程最重要的基礎</strong>。</p>
-<p><img src="/images/%E5%85%AC%E9%96%8B%E5%85%AC%E4%BD%88%E6%AC%84.drawio.svg" alt="公開公佈欄"></p>
-<h2 id="區塊鏈的原理"><a href="#區塊鏈的原理" class="headerlink" title="區塊鏈的原理"></a>區塊鏈的原理</h2><p>然而，我們現實世界並沒有這樣的公開公佈欄。因此，中本聰發明了「區塊鏈」來確保公佈欄公開並且可以隨時存取的特性。</p>
-<p>區塊鏈這個系統讓多個人<strong>分散持有</strong>這個公佈欄，並且有<strong>經濟誘因</strong>一起記錄各種交易。由於多人持有，所以不會因為任何人離開而無法存取這個公佈欄。而為了讓人願意參與這個系統，則需要提供足夠的經濟動機。</p>
-<p>下面我們針對這兩點來分別說明：</p>
-<h3 id="分散持有"><a href="#分散持有" class="headerlink" title="分散持有"></a>分散持有</h3><p>分散持有聽起來很美好，但分散也就意味著彼此同步的困難。以區塊鏈來說，需要透過所有人的共識來確保公開紀錄的一致性。</p>
-<p>在區塊鏈上，我們會把交易紀錄記在一個個區塊上面，而每個區塊都可以產生出某個特殊的特徵值。這個特徵值會被包含在下一個區塊上，並依此產生出新的特徵值。因此，區塊和區塊之間就有了關係，形成了一條鍊，也就是「區塊鏈」的名稱由來。</p>
-<p><img src="/images/%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E6%A6%82%E5%BF%B5.drawio.svg" alt="區塊鏈的概念"></p>
-<p>透過一些加密演算法，這些特徵的產生很困難，需要大量的計算。越多人參與計算，又或者說算力越強，就越有可能找出特徵，形成鏈上的新區塊。</p>
-<p>然而，由於分散持有，我的計算結果和你的計算結果可能會有差異，這條鏈就分叉了。這時就要引入共識機制：所有人只會接受最長的鏈，較短的鏈會被捨去。越長的鏈代表著越多的參與者，所以某種程度上也算是多數決，由多數的那方決定哪個分岔要留下來。</p>
-<p><img src="/images/%E4%BF%9D%E7%95%99%E6%9C%80%E9%95%B7%E7%9A%84%E9%8F%88.drawio.svg" alt="保留最長的鏈"></p>
-<p>透過這樣的方式，我們就能在分散的情況下，確保紀錄的公開一致性了。</p>
-<h3 id="經濟誘因"><a href="#經濟誘因" class="headerlink" title="經濟誘因"></a>經濟誘因</h3><p>解決了公開一致的問題後，我們還需要確保有足夠多的參與者，畢竟沒有人會想白白提供自己的計算能力給別人。因此，還必須提供一些經濟動機給參與者。</p>
-<p>前面提到區塊的產生需要找出獨特的特徵值，區塊鏈會透過獎勵找到特徵值的人一些收益，來增加人們參與系統的意願。當你的計算力越強，產生出的區塊越多，就能有越多收益。這樣從無到有產生出價值的行為，類似於礦工從礦石中挖出黃金的形象，所以人們又稱之為「挖礦」。</p>
-<p>區塊鏈設計巧妙之處在於，<strong>明明參與者只是為了自己的利益而行動，但是他行動的副產品，卻又協助紀錄各種交易，維持公開帳本的存在</strong>。隨著人們越來越信任公開帳本，參與者收益的價值會不斷向上提昇，進而吸引更多人參與其中。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>除了最基本的公開帳本功能，後來的區塊鏈技術衍生出更多的應用，例如自動執行程式的智能合約、確認所有權的 NFT 等等。雖然這些複雜的應用擁有更多潛在的經濟價值，但也提昇了一般人進入的門檻。我們需要回歸區塊鏈最基礎的本質來思考。</p>
-<p>此外，人們對區塊鏈的認知過度強調加密貨幣的價格波動，而非它能解決什麼問題上，這並非是好事。<strong>一項技術的成功必須基於其本身的價值，唯有了解其價值，才能真正客觀看待未來的發展性</strong>。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>區塊鏈</tag>
-      </tags>
   </entry>
   <entry>
     <title>《深度學習的技術》：一種學習的框架</title>
@@ -3450,26 +3450,6 @@
       </categories>
   </entry>
   <entry>
-    <title>系統演化：穩定中間態的關鍵角色</title>
-    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
-    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
-<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
-<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
-<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
-<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
-<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
-<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
-<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
-<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
-<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
-<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
-<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>《納瓦爾寶典》：如何有智慧地獲得財富與快樂</title>
     <url>/2024/10/20/%E7%B4%8D%E7%93%A6%E7%88%BE%E5%AF%B6%E5%85%B8/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/0010977461">納瓦爾寶典</a>」是 Eric 整理 Naval Ravikant 過去 X 上的推文、部落格和 podcast 上的想法所集結而成，前一版的名字叫做「快樂實現自主富有」。Naval 是一位知名的矽谷天使投資人，創辦了 AngelList。這本書的內容主要是 Naval 對於人生的各種看法，包括金錢、創業、努力、快樂等等。</p>
@@ -3531,6 +3511,26 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>系統演化：穩定中間態的關鍵角色</title>
+    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
+    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
+<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
+<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
+<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
+<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
+<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
+<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
+<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
+<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
+<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
+<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
+<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>《被討厭的勇氣》：擁有承擔責任的勇氣</title>
@@ -3644,6 +3644,145 @@
       </categories>
       <tags>
         <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>開源軟體的商業策略</title>
+    <url>/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>開源軟體，或者說開放原始碼，最早是由 Richard Stallman 的 Free Software Foundation 所提出。這個概念最初源於他想自己修復辦公室印表機的 bug，卻苦於無法取得程式碼。他因此主張，所謂的自由軟體應允許使用者不限任何目的，皆可自由修改及分發。</p>
+<p>這似乎非常的理想主義，讓人覺得這可能不過是一群生活在烏托邦的人的夢想。然而實際上現在軟體世界的基石有一大半都是由開源軟體所建構而成，就算是再封閉的公司也不可避免地使用到開源軟體。因此，基於開源軟體的商業公司也因此應運而生，這讓人不禁好奇開放為什麼有時候是好的策略。</p>
+<p>目前服務的公司主要是圍繞著開源軟體，發展一系列的商業模式，因此我開始對商業公司怎麼利用開源來打造商業模式很有興趣。接下來我會分別介紹開放原始碼的好處是什麼，公司可以怎麼賺錢，以及會遇到一些挑戰，最後列出一些成功案例。</p>
+<h2 id="對公司來說為何要開源"><a href="#對公司來說為何要開源" class="headerlink" title="對公司來說為何要開源"></a>對公司來說為何要開源</h2><p>開源跟我們的直覺不符，為什麼能賺錢的東西要免費提供呢？其實比起開源精神，大家看中的還是開源能帶來的各種附加價值。以下列出幾點：</p>
+<h3 id="廣告"><a href="#廣告" class="headerlink" title="廣告"></a>廣告</h3><p>開源本身就有一種吸引力，因為免費，就會吸引人們使用，進而達到匯聚目光的效果。這就跟賣場裡會有些食品提供試吃一樣的道理，人們會覺得既然免費就先試試看，如果好用的話再考慮購買。</p>
+<p>盡管看上去好像是虧錢，但對企業來說，使用者的使用習慣非常重要。一旦人們習慣使用某項東西，在沒有重大因素的情況下是不會輕易更換的，企業可以藉此在這個市場取得先行優勢。這與許多企業早期燒錢搶佔市場的策略如出一轍，無論是 Uber 或 Airbnb，都是先賠本將市場做大，之後再考量營利。</p>
+<p>還有另一個因素是攪亂市場，如果現在的市場已經被幾個巨頭瓜分了，新進者要抗衡的辦法就是用更有價格優勢的產品來吸引人們的目光，這才可能翻轉現有的市場。像是 Visual Studio Code 能席捲整個 IDE 市場的其中一個優勢就是他免費且開源，不管是 Sublime、Source Insight、還是 SlickEdit 等傳統做 IDE 的廠商都很難與之抗衡。</p>
+<h3 id="吸引開發者，建立生態系"><a href="#吸引開發者，建立生態系" class="headerlink" title="吸引開發者，建立生態系"></a>吸引開發者，建立生態系</h3><p>開源的另一個好處就是會吸引開發者加入。因為程式碼都公開，所以開發者可能會自己動手，不管是修復 bug 或者是開發新功能，這對專案維護者來說也是樂見其成的事情。雖然依照我過去參與過的開源專案經驗，大部分的人都是使用者為主，不過他們所詢問的問題也是很好的回饋，可以釐清專案的改進方向。</p>
+<p>對於一個專案來說最好的與社群合作方式是形塑生態系。大多數開發者使用他人專案的目的都是為了打造自己想要的東西，而如果專案本身的性質是鼓勵讓人重複利用他人成果的框架，那將會是一股龐大的力量。</p>
+<p>讓我們以世界最大的機器人開源框架 ROS 為例：由於機器人是一個非常複雜的系統，最初這個框架設計的目的就是希望人們能重複使用他人打造的輪子。透過使用同樣的 API、同樣的通訊方式，讓彼此的輪子可以組合起來。隨著開發者的增加，這個生態系也日益繁榮，任何可以想像的輪子都找得到，這就形成網路效應，更加能吸引新的開發者。</p>
+<p>嚴格來說，ROS 的框架在效能上並非是最佳，但因為有最龐大的生態系，人們為了最快打造自己的機器人，還是會選擇使用 ROS。就算其他公司想打造類似的框架，也不得不連接到  ROS 來重複利用這些豐富的套件，例如 NVIDIA 的機器人框架 issac 就有提供 ROS 橋接的功能。</p>
+<p>總而言之，生態系能夠為產品打造很深的護城河，而開源往往就是建立生態系的必要條件。</p>
+<h3 id="業界標準"><a href="#業界標準" class="headerlink" title="業界標準"></a>業界標準</h3><p>有一句流傳業界的話說：二流的企業做產品，一流的企業定標準。對於商業來說，掌握標準的話語也就意味著有許多獲利的潛在機會，因此在制定標準的組織上，都可以看到各家企業彼此的攻防。</p>
+<p>然而，很多新出現的技術一開始並沒有一個專門的組織訂定標準。很多時候是當一個專案所有人都使用，它就會變成事實上的標準。</p>
+<p>就以容器技術來說，一開始並不是有任何組織先出來定義標準，然後才開始有人開發實作。最早是 Docker 先開源這項技術，技術社群熱烈反應後，才開始成立 OCI (Open Container Initiative) 來定義相關規範，可以說 Docker 就等同於容器技術的代名詞。</p>
+<p>當然也有些人則是反向操作，直接買下受歡迎的技術或是其開發者，然後再把自己的生意和該技術相結合。例如 Vercel 為了確保最新的 React 技術能被用在自己的開源軟體 Next.js 上，挖了幾個 React 的核心成員，某種程度上也引導了 React 的發展方向。</p>
+<p>其實開源就是要創造先行者優勢。因為開放，人們願意使用，而一旦使用者基數有一定程度，其標準就有意義。</p>
+<h3 id="獲得信任"><a href="#獲得信任" class="headerlink" title="獲得信任"></a>獲得信任</h3><p>信任在商業上其實是非常有價值的，唯有對一個產品有信任，使用者才可能去使用。一般來說，信任也都需要長時間經營，但對軟體世界則不一樣，最快讓人獲得信任的方式就是公開自己的程式碼，讓所有人直接檢視。</p>
+<p>利用開源來取得信任在很多領域上都很有效果，特別是區塊鏈方面。對於區塊鏈技術來說，要吸引使用者參與成為共識層的一員，必須先讓參與者確保共識的邏輯並沒有任何後門或風險漏洞，否則沒有人願意加入這個生態系。不論是比特幣、以太坊等等公鏈來說，開源是最基本的操作，甚至連上面的演算法邏輯要修改也都必須通過社群的一致共識才行。</p>
+<p>另外一種情境則是跟地緣政治有關，對於中國來說，其軟體相較其他國家更不受信任，因此如果要增加使用量，就需要透過開源來取信於他人。就以其在 AI 領域最成功的 DeepSeek 來說，他正是使用開源的策略才能在全球範圍吸引更多使用者採用、擴增市占率，為之後商業策略進行布局。</p>
+<h3 id="吸引人才"><a href="#吸引人才" class="headerlink" title="吸引人才"></a>吸引人才</h3><p>對於剛畢業充滿著熱血的學生來說，和理想掛鉤的開源軟體充滿著吸引力。想想自己開發的程式可以公開讓人看見和被使用，以及和全世界一流的開發者交流合作，這對想做一番大事業的人來說非常誘人。</p>
+<p>對於想吸收這類熱情人才的公司來說，開源就成了最佳的利器，能夠驅動開發者們的內在動力。比起追求高薪高福利，他們可能更重視的是自己的 GitHub 帳號上可以有更多貢獻記錄和有更高的星數，就像是開源界的網紅一樣。</p>
+<p>建立好適合的平台，優秀的人才自然就會匯聚而來，打造出對世界具有影響力的軟體。</p>
+<h2 id="開源的賺錢方法"><a href="#開源的賺錢方法" class="headerlink" title="開源的賺錢方法"></a>開源的賺錢方法</h2><p>看到這邊，你可能會有個疑問：我知道開源很好沒錯，但是他們不是免費提供嗎？這樣要怎麼賺錢養活團隊呢？</p>
+<p>其實在真正的商業世界，賺錢並不一定要靠軟體本身，更多的是其附加價值。下面是一些可能的開源商業模式：</p>
+<ol>
+<li><p>提供服務或諮詢：</p>
+<p> 有很多軟體儘管開源，對於企業來說穩定比起便宜更加重要，最重要的是出事了有人可以負責。如果單純使用開源的產品，一旦遇上了奇怪的問題，就得靠自己處理，就算回報上游也不一定會馬上回應。如果有購買付費服務的話，上游就有義務要優先解決客戶遇到的問題，這樣的確定性在商業環境中是非常有價值的。</p>
+</li>
+<li><p>客製化</p>
+<p> 開源的軟體有時候功能並不符合需求，往往都需要做些修改才行。為了兼顧品質和效率，企業寧可請原作者直接修改而不是讓自己的工程師花時間去摸索。更有趣的是，有時客戶甚至會要求將客製化功能也一併開源，因為這樣未來軟體若有新版本，便無需再次付費升級客製化版本。</p>
+</li>
+<li><p>雲端託管</p>
+<p> 這也是蠻多開源軟體的商業模式，特別是跟通訊協定、資料庫有關的開源軟體，通常都是架設在雲端上面。對用戶來說，既然都要付錢買雲服務，使用原創團隊所架設雲服務更加方便且可信任。不過我們後續也會討論到一些大型雲服務商和開源公司之間的利益衝突。</p>
+</li>
+<li><p>付費功能</p>
+<p> 有些開源軟體並不是所有功能都開源，一些進階功能或是協助開發的工具往往是要付費才能取得。以 DDS 或是 Zenoh 這類用在車內通訊的協定來說，客戶很重視通訊協定有沒有通過車用的安全認證，像是 ASIL-D，所以軟體公司會另外修改開源軟體，釋出通過安規的版本來販賣。可以想成開源版本只是方便讓人評估試用，以吸引使用者，真正的商業機會在於產業的進階需求上面。</p>
+</li>
+<li><p>雙重授權</p>
+<p> 對於某些軟體廠商來說，他們希望自己的軟體符合開源精神，但又不希望商業用戶不付費搭便車，往往會採取雙重授權的模式。作法通常是對於軟體採取強硬的授權，例如 GPL 或是 AGPL，透過感染性讓用戶必需要開源全部的軟體，而這正是商業用戶無法接受的。這時他們就不得不去購買商業授權，以避免任何可能的法律風險。</p>
+<p> MySQL 就是這樣的案例，如果把 MySQL 這個受歡迎的資料庫包入自己的程式就有被 GPL 感染的風險，所以付費取得商業授權可能是更加穩妥的做法。</p>
+</li>
+<li><p>軟體只是附加</p>
+<p> 有些軟體開源並非是要靠軟體來賺錢，更多是為了增加使用者，透過影響力在其他部分獲利。常見的方式是搭配硬體來販售，畢竟無論是什麼樣的軟體都需要硬體來支援，當然這裡提到的硬體必須具備一定特殊性，否則便會被一般通用型電腦所取代。以最著名的例子 Raspberry Pi 來說，他的特色就是輕薄短小，又可以搭載一般的 Linux 系統，很適合讓學生拿來做各種專題。</p>
+<p> 除了硬體外，有些則是為了信任和公開性而必須開源，就像是區塊鏈這個領域。一般來說區塊鏈的相關計畫都不是靠軟體本身來獲利，而是利用發幣、NFT 等等形式來獲得資金。區塊鏈的本質就是要獲得共識，以確保其不可竄改性；而共識的前提，便是必須絕對開放。因此，大部分公鏈都必須公開相關程式碼。</p>
+</li>
+<li><p>成立第三方機構</p>
+<p> 最後一種則是比較特別。大部分的公司都需要依賴已經成為基礎設施的軟體，像是 Linux 這類底層軟體，這時候大家一起共同開發會是比較合理的選擇。所以很多著名的專案都會成立獨立的基金會，讓商業公司們可以投資人力和金錢，而成果則是開源讓大家共享。對商業公司來說，越是被大家使用的軟體，越有投資的價值，因為它們才有機會可以主導軟體規格的發展。除了最著名的 Linux Foundation 以外，日本的自駕車公司 TierIV 也將自己的自駕軟體 Autoware 貢獻給 Autoware Foundation，成為目前全世界最大的開源自駕車框架。</p>
+</li>
+</ol>
+<p>從商業角度來說，前兩種方法基本上不太能夠放量，完全依賴工程師的人力，但是後幾種方法就比較有規模化的機會了。隨著使用者的增加，同樣數量的工程師可以服務更多人，因此更加有利可圖。</p>
+<h2 id="開源的商業化挑戰"><a href="#開源的商業化挑戰" class="headerlink" title="開源的商業化挑戰"></a>開源的商業化挑戰</h2><p>前面我們都在探討開源的好處以及方法，然而這並不代表只要開源就萬事大吉，相反地，開源對商業經營上的難度可能比起閉源還要高。可以看看現在大多數的軟體公司都不是以開源為生就知道了。</p>
+<p>主要的挑戰來自於如下兩點：</p>
+<ol>
+<li><p>如何讓公司穩定營利</p>
+<p> 這也是開源商業化最主要的挑戰。使用開源的策略增加曝光並沒有問題，但是如何把吸引到使用者轉化成潛在的付費用戶，就必須要有巧妙的設計。其中最重要的就是要給使用者付費的理由，換句話說，你多提供了什麼價值。這個價值可以是額外的保固、特別的服務、又或是客製的功能等等。若是價值越高，免費客戶就越可能轉換成付費客戶。</p>
+<p> 然而，對於大多數公司來說，不只是要營利，公司的成長性更加重要。開源軟體公司的營收成長需要考慮兩個方面：增加使用者基數以及轉換成付費用戶的轉換率。就如同金字塔一樣，使用者的基數大也就是金字塔的底部增加，上層的付費用戶就增加。又或者我們也可以提升金字塔的斜率，代表著轉換成付費用戶比率增加，營收也會相應成長。</p>
+ <center>
+
+<p> <img src="/images/%E5%A6%82%E4%BD%95%E5%A2%9E%E5%8A%A0%E4%BB%98%E8%B2%BB%E7%94%A8%E6%88%B6.drawio.svg" alt="如何增加付費用戶"></p>
+ </center>
+
+<p> 當然這兩者的取捨也是門學問，如果過度講求轉換率(例如很多功能放在商業版)，也會影響到使用者的基數，特別是開源世界通常對這種過度的商業策略十分反感，有可能社群會乾脆直接分岔 (fork)，自己打造另一個專案來打對臺。</p>
+<p> 舉個例子，雲端基礎設施公司 Joyent 透過聘用 Node.js 的創始人 Ryan Dahl 接管了 Node.js 的控制權。後來因為 Joyent 對於控制 Node.js 的一些爭議，例如發佈速度慢、對社群反應不積極，部分開發者另起爐灶建立了 io.js。這最終促成了 Node.js Foundation 的成立，Joyent 把控制權出讓給基金會。</p>
+<p> 由此可知，開源並非治百病，如何平衡商業策略和社群觀感是非常重要的議題。</p>
+</li>
+<li><p>避免搭便車或是競爭者</p>
+<p> 另外的問題就是一旦程式碼都公開，要如何確保不會有競爭者直接利用這些開源成果與自己做商業的競爭。</p>
+<p> 大多數情況下，人們仍會優先使用原創者的專案，鮮少有分叉出去的專案能勝過原創。這主要歸因於先發優勢難以取代：一旦匯聚了一群使用者和開發者，便越容易吸引更多人加入，進而確保原創者對專案規格的主導控制權。</p>
+<p> 然而到了雲端時代，情況就有所不同了。很多跟雲有關的專案最終還是得運行在雲端環境上，而雲端的 PaaS 服務基本上被三大家壟斷 (AWS、Azure、GCP)，意味著如果這些雲服務商直接將這些專案整合進去他們的服務，原創者的利益就會受到威脅。對使用者而言，儘管他們願意相信原創者的技術品質，但雲服務商提供的功能實在太過方便，加之無論如何都仍需在雲端環境運行，因此不如直接購買一站式服務。</p>
+<p> 原創者，例如 Redis 或是 MongoDB，為了應對這個問題，使出了雙重授權的方式來避免雲服務商與自己的商業競爭，卻也被認為這樣不符合開源精神。而且雲服務商還會打著開源大旗的名號分岔專案，讓社群開發者的資源流失。目前為止這利益衝突還沒有什麼比較好的解決方法，只能看看未來這些原創者能不能找出另外的營利之道了。</p>
+</li>
+</ol>
+<h2 id="靠開源成功的案例"><a href="#靠開源成功的案例" class="headerlink" title="靠開源成功的案例"></a>靠開源成功的案例</h2><p>想要評斷一種模式能不能成功，我們可以看觀察市場上採取這種模式的玩家的狀況，這樣就能知道最佳情況下，開源公司可以成長到什麼程度。</p>
+<p>以下整理各家開源軟體公司的營業額，他們最大的規模為何：</p>
+<table>
+<thead>
+<tr>
+<th>公司名稱</th>
+<th>財年</th>
+<th>營收(美元)</th>
+<th>開源項目</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Databricks</td>
+<td>2025</td>
+<td>38 億</td>
+<td>Apache Sparks</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>2025</td>
+<td>20.25 億</td>
+<td>MongoDB</td>
+</tr>
+<tr>
+<td>Elastic</td>
+<td>2025</td>
+<td>13 億</td>
+<td>Elasticsearch</td>
+</tr>
+<tr>
+<td>Confluent</td>
+<td>2024</td>
+<td>9.64 億</td>
+<td>Apache Kafka</td>
+</tr>
+<tr>
+<td>GitLab</td>
+<td>2025</td>
+<td>7.59 億</td>
+<td>GitLab</td>
+</tr>
+<tr>
+<td>HashiCorp</td>
+<td>2025</td>
+<td>6.8 億</td>
+<td>Terraform 等等</td>
+</tr>
+</tbody></table>
+<p>由上可知，純靠開源最多只能成為中等企業規模，更多時候是巨型公司跳下來做開源，不論是 Meta 的 React、Microsoft 的 VScode、Google 的 Android、Kubernetes 等等。大公司不缺現金，要養活做開源的團隊並不困難，他們只在乎是否能在產業中佔到好的地位，就像是 Google 的 Chrome 控制了人們上網的入口，增加更多廣告機會一樣。因此，另外一種開源公司的出路則是讓大公司買下，就像是 IBM 希望佈局雲端業務以及商業 Linux 需求進而收購了 Redhat。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>開源最一開始是種共享精神，相信群眾的智慧可以讓軟體不斷進步，事實上一些人們依賴的高品質軟體確實是來自於這種開源精神下的成果，最著名的大概就是應用廣泛的各個 GNU 專案以及 Linux 作業系統。</p>
+<p>然而，並非所有專案都可以完全依賴貢獻者無償的熱情，還是有些領域需要商業公司在不違背開源精神下來補足。商業總有種驅動力，希望可以利潤最大化，確保公司的存續，但如果做過頭又有可能傷害到共享的精神。這時候，如何協調兩種不一樣的價值觀就是需要克服的問題。</p>
+<p>我們前面提到的例子，大多數都是在核心軟體開放的情況下，提供商業上有價值的服務，例如諮詢、認證或是雲端服務等等。如此一來，既可以確保開源這種人類共同協作的開放作法，又可以透過人們願意付費的商業模式來維持公司營運。</p>
+<p>當然，這種平衡並非不能被打破。以前面提到的雲端服務商和雲端軟體的利益相衝為例，就是這種平衡模式的侷限性。直到如今為止，還沒有什麼真正好的解法。</p>
+<p>對於個人開發者來說，開源是種理想、是種熱情，能夠與世界一流的人交流協作，打造有影響力的產品。然而對於公司來說，<strong>開源本質上只是一種商業手段</strong>，透過這個手段創造營收維持存續，可以對股東負責。</p>
+<p>因此，只有在精心設計的開源框架和商業模式下，才能讓個人開發者得到滿足、公司獲得營收、整體開源社群也能獲益，創造多贏的局面。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>開源</tag>
       </tags>
   </entry>
   <entry>
