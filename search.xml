@@ -522,209 +522,6 @@
       </tags>
   </entry>
   <entry>
-    <title>HTTP header 安全設定</title>
-    <url>/2018/01/03/HTTP-header-%E5%AE%89%E5%85%A8%E8%A8%AD%E5%AE%9A/</url>
-    <content><![CDATA[<h2 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h2><p>根據<a href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
-<ul>
-<li>防禦 XSS：<ul>
-<li>Content-Security-Policy</li>
-<li>Set-Cookie: HttpOnly</li>
-<li>X-XSS-Protection</li>
-<li>X-Download-Options</li>
-</ul>
-</li>
-<li>防禦 Clickjacking：<ul>
-<li>X-Frame-Options</li>
-</ul>
-</li>
-<li>強化 HTTPS 機制：<ul>
-<li>Set-Cookie: Secure</li>
-<li>Strict-Transport-Security</li>
-</ul>
-</li>
-<li>避免瀏覽器誤判文件形態：<ul>
-<li>X-Content-Type-Options</li>
-</ul>
-</li>
-<li>保護網站資源別被任意存取：<ul>
-<li>Access-Control-Allow-Origin</li>
-<li>X-Permitted-Cross-Domain-Policies</li>
-</ul>
-</li>
-</ul>
-<h2 id="防禦-XSS"><a href="#防禦-XSS" class="headerlink" title="防禦 XSS"></a>防禦 XSS</h2><h3 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content-Security-Policy"></a>Content-Security-Policy</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>用來控制不要讀取外部不可信賴資源，可以防止XSS或injection</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Content-Security-Policy: policy # policy代表描述你的CSP的策略</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>範例</li>
-</ul>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 所有內容都來自同一個地方</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;</span><br><span class="line"># 比較複雜的設定，不擋image來源，但是設定media和script的來源，注意後方設定會蓋掉default-src的設定</span><br><span class="line">Content-SecContent-Security-Policy: default-src &#x27;self&#x27;; img-src *; media-src media1.com media2.com; script-src userscripts.example.com</span><br><span class="line"># 推薦設定：因為預設會擋html裡有js,style，但是大部分都會用到，所以要加上unsafe-inline</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可參考</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP/Using_Content_Security_Policy">内容安全策略( CSP )</a>: 對CSP的基本解說</li>
-<li><a href="https://devco.re/blog/2014/04/08/security-issues-of-http-headers-2-content-security-policy/">Content-Security-Policy - HTTP Headers 的資安議題 (2)</a>: 對CSP非常詳細的解說，建議一定要看一下。</li>
-</ul>
-</li>
-</ul>
-<h3 id="Set-Cookie-HttpOnly"><a href="#Set-Cookie-HttpOnly" class="headerlink" title="Set-Cookie: HttpOnly"></a>Set-Cookie: HttpOnly</h3><ul>
-<li>原理：<ul>
-<li>http only確保javascript無法直接存取cookie。</li>
-</ul>
-</li>
-<li>啟動方式：<ul>
-<li>只要在Set-Cookie的header加上HttpOnly就可以生效了。</li>
-</ul>
-</li>
-</ul>
-<h3 id="X-XSS-Protection"><a href="#X-XSS-Protection" class="headerlink" title="X-XSS-Protection"></a>X-XSS-Protection</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>這是IE引進的功能，可以檢查XSS攻擊，不過firefox不支援。基本上CSP已經提供足夠防禦，但是可以讓不支援CSP舊版瀏覽器有比較高的安全性。</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-XSS-Protection: 0   # 禁止XSS過濾</span><br><span class="line">X-XSS-Protection: 1   # 允許XSS過濾，遇到XSS會清除頁面</span><br><span class="line">X-XSS-Protection: 1; mode=block  # 允許XSS過濾，遇到XSS會阻擋頁面加載</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可參考：</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-XSS-Protection">mozilla X-XSS-Protection</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
-<li><a href="http://likewaylai.blogspot.tw/2012/03/javax-xss-protection.html">資安JAVA(十一)：X-XSS-Protection</a>: 這邊有提到X-XSS-Protection的由來，並且提到IE8之前在這個功能上的問題</li>
-</ul>
-</li>
-</ul>
-<h3 id="X-Download-Options"><a href="#X-Download-Options" class="headerlink" title="X-Download-Options"></a>X-Download-Options</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>在IE8加入了這個選項，防止使用者下載檔案的時候點選直接開啟，避免執行執行了程式而且沒有在下載管理員留下紀錄的問題。</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Download-Options: noopen</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可參考</p>
-<ul>
-<li><a href="https://msdn.microsoft.com/zh-tw/library/jj542450(v=vs.85).aspx">Microsoft-自訂下載體驗</a>: 為什麼要有這個選項</li>
-<li><a href="https://stackoverflow.com/questions/15299325/x-download-options-noopen-equivalent">X-Download-Options: noopen equivalent</a>: 其他browser沒有想對應功能</li>
-</ul>
-</li>
-</ul>
-<h2 id="防禦-Clickjacking"><a href="#防禦-Clickjacking" class="headerlink" title="防禦 Clickjacking"></a>防禦 Clickjacking</h2><h3 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>控制frame和iframe顯示頁面的規則，不讓別人可以內嵌頁面。</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
-<ul>
-<li>在header加上X-Frame-Options: XXX，XXX可以是<ul>
-<li>DENY：禁止frame頁面</li>
-<li>SAMEORIGIN：允許frame顯示同一網站頁面</li>
-<li>ALLOW-FROM url：允許frame顯示某一網站頁面</li>
-</ul>
-</li>
-</ul>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Frame-Options: SAMEORIGIN</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="強化-HTTPS-機制"><a href="#強化-HTTPS-機制" class="headerlink" title="強化 HTTPS 機制"></a>強化 HTTPS 機制</h2><h3 id="Set-Cookie-Secure"><a href="#Set-Cookie-Secure" class="headerlink" title="Set-Cookie: Secure"></a>Set-Cookie: Secure</h3><ul>
-<li>原理：<ul>
-<li>強制讓cookie必須要在https的情況下才能傳輸</li>
-</ul>
-</li>
-<li>啟動方式：<ul>
-<li>只要在Set-Cookie的header加上Secure就可以生效了。</li>
-</ul>
-</li>
-</ul>
-<h3 id="Strict-Transport-Security"><a href="#Strict-Transport-Security" class="headerlink" title="Strict-Transport-Security"></a>Strict-Transport-Security</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>當使用者用http連線，強制轉成https連線，這個選項只有在https連線的情況下才有用，如果是http會被忽略(因為可能有MITM)</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=expireTime [; includeSubdomains]</span><br><span class="line"># max-age=expireTime: browser要記住這個網站要用https連線的時間</span><br><span class="line"># includeSubdomains: 哪些subdomain也都要同樣設定</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可參考</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Security/HTTP_Strict_Transport_Security">Mozilla HTTP Strict Transport Security</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
-</ul>
-</li>
-</ul>
-<h2 id="避免瀏覽器誤判文件形態"><a href="#避免瀏覽器誤判文件形態" class="headerlink" title="避免瀏覽器誤判文件形態"></a>避免瀏覽器誤判文件形態</h2><h3 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>告訴client要遵守Content-Type的MIME設定，不要自行偵測，管理者必須要確保自己的設定是沒有錯誤的。</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Content-Type-Options：nosniff</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可參考</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-Content-Type-Options">Mozilla X-Content-Type-Options</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
-</ul>
-</li>
-</ul>
-<h2 id="保護網站資源別被任意存取"><a href="#保護網站資源別被任意存取" class="headerlink" title="保護網站資源別被任意存取"></a>保護網站資源別被任意存取</h2><h3 id="Access-Control-Allow-Origin"><a href="#Access-Control-Allow-Origin" class="headerlink" title="Access-Control-Allow-Origin"></a>Access-Control-Allow-Origin</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>CORS是用來解決腳本的跨域資源請求問題，用來確保資源是否可以被其他網站存取，但是要注意它不能阻擋CSRF</li>
-<li>不能阻擋CSRF的原因：<ul>
-<li>CORS是阻擋js所發出的request，但是CSRF可以透過form, tag等發起請求</li>
-<li>Acess-Control-Allow-Origin是由browser解析的，所以其實request已經發出了，只是response被browser阻擋</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Origin: &lt;origin&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可參考</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Origin">Mozilla Access-Control-Allow-Origin</a>: 詳細介紹這個header的選項</li>
-<li><a href="https://developer.mozilla.org/zh-TW/docs/Web/HTTP/CORS">跨來源資源共享（CORS）</a>:詳細解釋CORS(Cross-Origin Resource Sharing)的功能</li>
-<li><a href="https://blog.toright.com/posts/3205/%E5%AF%A6%E4%BD%9C-cross-origin-resource-sharing-cros-%E8%A7%A3%E6%B1%BA-ajax-%E7%99%BC%E9%80%81%E8%B7%A8%E7%B6%B2%E5%9F%9F%E5%AD%98%E5%8F%96-request.html">實作 Cross-Origin Resource Sharing (CORS) 解決 Ajax 發送跨網域存取 Request</a>: 如何用CORS存取外部資源</li>
-<li><a href="https://b1ngz.github.io/csrf-and-cors/">简单聊一聊 CSRF 与 CORS 的关系:</a> CORS並不能防禦CSRF，這篇有很詳細的介紹</li>
-</ul>
-</li>
-</ul>
-<h3 id="X-Permitted-Cross-Domain-Policies"><a href="#X-Permitted-Cross-Domain-Policies" class="headerlink" title="X-Permitted-Cross-Domain-Policies"></a>X-Permitted-Cross-Domain-Policies</h3><ul>
-<li><p>原理：</p>
-<ul>
-<li>當不能把crossdomain.xml放在根目錄時需要設定該選項</li>
-<li>crossdomain.xml: 從別的domain讀取flash時所需要的策略文件</li>
-</ul>
-</li>
-<li><p>啟動方式：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Permitted-Cross-Domain-Policies: master-only # master-only代表只允許主策略文件(/crossdomain.xml)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可參考</p>
-<ul>
-<li><a href="http://blog.xuite.net/fireworkgoldfish/CodeIndex/27179479-Cross+Domain+Policy">Cross Domain Policy</a>: 提到關於crossdomain.xml的設定</li>
-<li><a href="http://blog.csdn.net/summerhust/article/details/7721627">关于跨域策略文件crossdomain.xml文件</a>: crossdomain.xml的範例</li>
-<li><a href="https://toutiao.io/posts/218856/app_preview">如何使用 HTTP 响应头字段来提高 Web 安全性？</a>: X-Permitted-Cross-Domain-Policies相關解說</li>
-</ul>
-</li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.qa-knowhow.com/?p=1467">11個網站安全防護的 http Header 設定</a>: 其他人提到的header設定</li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>security</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>GnuPG教學</title>
     <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
@@ -939,6 +736,209 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HTTP header 安全設定</title>
+    <url>/2018/01/03/HTTP-header-%E5%AE%89%E5%85%A8%E8%A8%AD%E5%AE%9A/</url>
+    <content><![CDATA[<h2 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h2><p>根據<a href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
+<ul>
+<li>防禦 XSS：<ul>
+<li>Content-Security-Policy</li>
+<li>Set-Cookie: HttpOnly</li>
+<li>X-XSS-Protection</li>
+<li>X-Download-Options</li>
+</ul>
+</li>
+<li>防禦 Clickjacking：<ul>
+<li>X-Frame-Options</li>
+</ul>
+</li>
+<li>強化 HTTPS 機制：<ul>
+<li>Set-Cookie: Secure</li>
+<li>Strict-Transport-Security</li>
+</ul>
+</li>
+<li>避免瀏覽器誤判文件形態：<ul>
+<li>X-Content-Type-Options</li>
+</ul>
+</li>
+<li>保護網站資源別被任意存取：<ul>
+<li>Access-Control-Allow-Origin</li>
+<li>X-Permitted-Cross-Domain-Policies</li>
+</ul>
+</li>
+</ul>
+<h2 id="防禦-XSS"><a href="#防禦-XSS" class="headerlink" title="防禦 XSS"></a>防禦 XSS</h2><h3 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content-Security-Policy"></a>Content-Security-Policy</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>用來控制不要讀取外部不可信賴資源，可以防止XSS或injection</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Content-Security-Policy: policy # policy代表描述你的CSP的策略</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>範例</li>
+</ul>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 所有內容都來自同一個地方</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;</span><br><span class="line"># 比較複雜的設定，不擋image來源，但是設定media和script的來源，注意後方設定會蓋掉default-src的設定</span><br><span class="line">Content-SecContent-Security-Policy: default-src &#x27;self&#x27;; img-src *; media-src media1.com media2.com; script-src userscripts.example.com</span><br><span class="line"># 推薦設定：因為預設會擋html裡有js,style，但是大部分都會用到，所以要加上unsafe-inline</span><br><span class="line">Content-Security-Policy: default-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP/Using_Content_Security_Policy">内容安全策略( CSP )</a>: 對CSP的基本解說</li>
+<li><a href="https://devco.re/blog/2014/04/08/security-issues-of-http-headers-2-content-security-policy/">Content-Security-Policy - HTTP Headers 的資安議題 (2)</a>: 對CSP非常詳細的解說，建議一定要看一下。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Set-Cookie-HttpOnly"><a href="#Set-Cookie-HttpOnly" class="headerlink" title="Set-Cookie: HttpOnly"></a>Set-Cookie: HttpOnly</h3><ul>
+<li>原理：<ul>
+<li>http only確保javascript無法直接存取cookie。</li>
+</ul>
+</li>
+<li>啟動方式：<ul>
+<li>只要在Set-Cookie的header加上HttpOnly就可以生效了。</li>
+</ul>
+</li>
+</ul>
+<h3 id="X-XSS-Protection"><a href="#X-XSS-Protection" class="headerlink" title="X-XSS-Protection"></a>X-XSS-Protection</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>這是IE引進的功能，可以檢查XSS攻擊，不過firefox不支援。基本上CSP已經提供足夠防禦，但是可以讓不支援CSP舊版瀏覽器有比較高的安全性。</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-XSS-Protection: 0   # 禁止XSS過濾</span><br><span class="line">X-XSS-Protection: 1   # 允許XSS過濾，遇到XSS會清除頁面</span><br><span class="line">X-XSS-Protection: 1; mode=block  # 允許XSS過濾，遇到XSS會阻擋頁面加載</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考：</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-XSS-Protection">mozilla X-XSS-Protection</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
+<li><a href="http://likewaylai.blogspot.tw/2012/03/javax-xss-protection.html">資安JAVA(十一)：X-XSS-Protection</a>: 這邊有提到X-XSS-Protection的由來，並且提到IE8之前在這個功能上的問題</li>
+</ul>
+</li>
+</ul>
+<h3 id="X-Download-Options"><a href="#X-Download-Options" class="headerlink" title="X-Download-Options"></a>X-Download-Options</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>在IE8加入了這個選項，防止使用者下載檔案的時候點選直接開啟，避免執行執行了程式而且沒有在下載管理員留下紀錄的問題。</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Download-Options: noopen</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
+<li><a href="https://msdn.microsoft.com/zh-tw/library/jj542450(v=vs.85).aspx">Microsoft-自訂下載體驗</a>: 為什麼要有這個選項</li>
+<li><a href="https://stackoverflow.com/questions/15299325/x-download-options-noopen-equivalent">X-Download-Options: noopen equivalent</a>: 其他browser沒有想對應功能</li>
+</ul>
+</li>
+</ul>
+<h2 id="防禦-Clickjacking"><a href="#防禦-Clickjacking" class="headerlink" title="防禦 Clickjacking"></a>防禦 Clickjacking</h2><h3 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>控制frame和iframe顯示頁面的規則，不讓別人可以內嵌頁面。</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+<ul>
+<li>在header加上X-Frame-Options: XXX，XXX可以是<ul>
+<li>DENY：禁止frame頁面</li>
+<li>SAMEORIGIN：允許frame顯示同一網站頁面</li>
+<li>ALLOW-FROM url：允許frame顯示某一網站頁面</li>
+</ul>
+</li>
+</ul>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Frame-Options: SAMEORIGIN</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="強化-HTTPS-機制"><a href="#強化-HTTPS-機制" class="headerlink" title="強化 HTTPS 機制"></a>強化 HTTPS 機制</h2><h3 id="Set-Cookie-Secure"><a href="#Set-Cookie-Secure" class="headerlink" title="Set-Cookie: Secure"></a>Set-Cookie: Secure</h3><ul>
+<li>原理：<ul>
+<li>強制讓cookie必須要在https的情況下才能傳輸</li>
+</ul>
+</li>
+<li>啟動方式：<ul>
+<li>只要在Set-Cookie的header加上Secure就可以生效了。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Strict-Transport-Security"><a href="#Strict-Transport-Security" class="headerlink" title="Strict-Transport-Security"></a>Strict-Transport-Security</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>當使用者用http連線，強制轉成https連線，這個選項只有在https連線的情況下才有用，如果是http會被忽略(因為可能有MITM)</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=expireTime [; includeSubdomains]</span><br><span class="line"># max-age=expireTime: browser要記住這個網站要用https連線的時間</span><br><span class="line"># includeSubdomains: 哪些subdomain也都要同樣設定</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Security/HTTP_Strict_Transport_Security">Mozilla HTTP Strict Transport Security</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
+</ul>
+</li>
+</ul>
+<h2 id="避免瀏覽器誤判文件形態"><a href="#避免瀏覽器誤判文件形態" class="headerlink" title="避免瀏覽器誤判文件形態"></a>避免瀏覽器誤判文件形態</h2><h3 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>告訴client要遵守Content-Type的MIME設定，不要自行偵測，管理者必須要確保自己的設定是沒有錯誤的。</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Content-Type-Options：nosniff</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-Content-Type-Options">Mozilla X-Content-Type-Options</a>: 詳細介紹這個header在哪些browser支援和有什麼選項</li>
+</ul>
+</li>
+</ul>
+<h2 id="保護網站資源別被任意存取"><a href="#保護網站資源別被任意存取" class="headerlink" title="保護網站資源別被任意存取"></a>保護網站資源別被任意存取</h2><h3 id="Access-Control-Allow-Origin"><a href="#Access-Control-Allow-Origin" class="headerlink" title="Access-Control-Allow-Origin"></a>Access-Control-Allow-Origin</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>CORS是用來解決腳本的跨域資源請求問題，用來確保資源是否可以被其他網站存取，但是要注意它不能阻擋CSRF</li>
+<li>不能阻擋CSRF的原因：<ul>
+<li>CORS是阻擋js所發出的request，但是CSRF可以透過form, tag等發起請求</li>
+<li>Acess-Control-Allow-Origin是由browser解析的，所以其實request已經發出了，只是response被browser阻擋</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Origin: &lt;origin&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Origin">Mozilla Access-Control-Allow-Origin</a>: 詳細介紹這個header的選項</li>
+<li><a href="https://developer.mozilla.org/zh-TW/docs/Web/HTTP/CORS">跨來源資源共享（CORS）</a>:詳細解釋CORS(Cross-Origin Resource Sharing)的功能</li>
+<li><a href="https://blog.toright.com/posts/3205/%E5%AF%A6%E4%BD%9C-cross-origin-resource-sharing-cros-%E8%A7%A3%E6%B1%BA-ajax-%E7%99%BC%E9%80%81%E8%B7%A8%E7%B6%B2%E5%9F%9F%E5%AD%98%E5%8F%96-request.html">實作 Cross-Origin Resource Sharing (CORS) 解決 Ajax 發送跨網域存取 Request</a>: 如何用CORS存取外部資源</li>
+<li><a href="https://b1ngz.github.io/csrf-and-cors/">简单聊一聊 CSRF 与 CORS 的关系:</a> CORS並不能防禦CSRF，這篇有很詳細的介紹</li>
+</ul>
+</li>
+</ul>
+<h3 id="X-Permitted-Cross-Domain-Policies"><a href="#X-Permitted-Cross-Domain-Policies" class="headerlink" title="X-Permitted-Cross-Domain-Policies"></a>X-Permitted-Cross-Domain-Policies</h3><ul>
+<li><p>原理：</p>
+<ul>
+<li>當不能把crossdomain.xml放在根目錄時需要設定該選項</li>
+<li>crossdomain.xml: 從別的domain讀取flash時所需要的策略文件</li>
+</ul>
+</li>
+<li><p>啟動方式：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Permitted-Cross-Domain-Policies: master-only # master-only代表只允許主策略文件(/crossdomain.xml)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可參考</p>
+<ul>
+<li><a href="http://blog.xuite.net/fireworkgoldfish/CodeIndex/27179479-Cross+Domain+Policy">Cross Domain Policy</a>: 提到關於crossdomain.xml的設定</li>
+<li><a href="http://blog.csdn.net/summerhust/article/details/7721627">关于跨域策略文件crossdomain.xml文件</a>: crossdomain.xml的範例</li>
+<li><a href="https://toutiao.io/posts/218856/app_preview">如何使用 HTTP 响应头字段来提高 Web 安全性？</a>: X-Permitted-Cross-Domain-Policies相關解說</li>
+</ul>
+</li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.qa-knowhow.com/?p=1467">11個網站安全防護的 http Header 設定</a>: 其他人提到的header設定</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>security</tag>
       </tags>
   </entry>
   <entry>
@@ -2154,100 +2154,6 @@
       </tags>
   </entry>
   <entry>
-    <title>youtube-dl網路影片下載器</title>
-    <url>/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
-<p>youtube-dl功能十分強大，也有很多參數可以調整，能下載的網站不只是youtube，也可以是其他熱門網站，例如Facebook等等，更重要的是這個工具有多個平台可以使用(Windows、Mac、Linux)。</p>
-<p>除了<a href="https://rg3.github.io/youtube-dl/index.html">指令youtube-dl</a>以外，我們也可以用GUI的介面的工具<a href="https://github.com/MrS0m30n3/youtube-dl-gui">youtube-DLG</a>，使用上更為方便，詳請可參考<a href="https://www.kocpc.com.tw/archives/162438">最強的網路影片下載器　Youtube-dl-gui 只要有網址就能幫你搞定</a>。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install youtube-dl</span><br><span class="line"><span class="comment"># 如果有需要後續轉檔的話</span></span><br><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install youtube-dl</span><br><span class="line"><span class="comment"># 如果需要後續轉檔的話</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><p>其實更好的方法是使用Python的pip來安裝，因為youtube-dl本身就是使用Python所寫成的，而由於影片的網站更新很快，所以可能要隨時更新到最新版的youtube-dl才行，OS distribution不一定會出的那麼快。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install --upgrade youtube_dl</span><br><span class="line"><span class="comment"># 如果使用python3的話</span></span><br><span class="line">pip3 install --upgrade youtube_dl</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>這邊介紹一些常用的指令</p>
-<h3 id="支援"><a href="#支援" class="headerlink" title="支援"></a>支援</h3><ul>
-<li>確定有支援下載哪些影片網站，相關列表也可以從<a href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure>
-
-<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><p>如果我們沒有指定格式的話，通常youtube-dl會幫我們挑最好的</p>
-<ul>
-<li>指定下載的影片格式</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先查詢有哪些格式可下載</span></span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"><span class="comment"># 指定下載格式</span></span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"><span class="comment"># 或是用format code</span></span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure>
-
-<h3 id="輸出格式"><a href="#輸出格式" class="headerlink" title="輸出格式"></a>輸出格式</h3><p>由於官方的輸出格式預設有帶ID(<code>%(title)s-%(id)s.%(ext)s</code>)，我們可以將其去除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -o <span class="string">&#x27;%(title)s.%(ext)s&#x27;</span> [URL]</span><br></pre></td></tr></table></figure>
-
-<h2 id="字幕"><a href="#字幕" class="headerlink" title="字幕"></a>字幕</h2><ul>
-<li>選擇嵌入特定字幕<ul>
-<li><code>--write-sub</code>代表下載字幕</li>
-<li><code>--embed-sub</code>代表嵌入字幕</li>
-<li><code>--sub-lang</code>代表要選擇的字幕</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先列出可下載的字幕列表</span></span><br><span class="line">youtube-dl --list-subs [URL]</span><br><span class="line"><span class="comment"># 嵌入想要的字幕</span></span><br><span class="line">youtube-dl --write-sub --embed-sub --sub-lang [字幕] [URL]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>直接嵌入所有字幕<ul>
-<li><code>--all-subs</code>選擇所有字幕</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl --write-sub --embed-sub --all-subs [URL]</span><br></pre></td></tr></table></figure>
-
-<h3 id="轉為音樂格式"><a href="#轉為音樂格式" class="headerlink" title="轉為音樂格式"></a>轉為音樂格式</h3><p>如果我們要下載音樂格式的話，基本上需要有ffmpeg的輔助</p>
-<ul>
-<li>選擇要下載的音樂格式，例如mp3、m4a、flac等等</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] [URL]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>可以用<code>--audio-quality</code>強迫ffmpeg轉換較高品質的音樂，0是最好，9是最差</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --audio-quality [音樂品質] [URL]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>下載時附上封面(使用youtube截圖)和音樂資訊(作曲者等等)</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure>
-
-<h3 id="下載播放清單"><a href="#下載播放清單" class="headerlink" title="下載播放清單"></a>下載播放清單</h3><ul>
-<li>其實只要把[URL]換成播放清單的網址即可，不過我們也可以指定開始和結束位址<ul>
-<li><code>--playlist-start</code>：開始</li>
-<li><code>--playlist-end</code>：結束，也就是倒數第幾個影片</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl --playlist-start [開始位置] --playlist-end [結束位置] [URL]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><p>我這邊直接列出常用的指令，如果要使用可以直接copy比較快</p>
-<ul>
-<li>下載mp4影片並加上字幕</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -f mp4 --write-sub --embed-sub --all-subs -o <span class="string">&#x27;%(title)s.%(ext)s&#x27;</span> [URL]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>下載mp3音樂，並加上封面</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure>
-
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://blog.gtwang.org/useful-tools/youtube-dl/">youtube-dl：下載 YouTube 影片的指令工具（支援 Windows、Linux 與 Mac OS X）</a></li>
-<li><a href="https://yogapan.github.io/2017/08/16/Youtube-dl%E6%BF%83%E7%B8%AE%E6%95%99%E5%AD%B8%E7%AD%86%E8%A8%98/">Youtube-dl濃縮教學筆記</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>port knocking</title>
     <url>/2017/08/27/port-knocking/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
@@ -2346,6 +2252,100 @@
       </categories>
       <tags>
         <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>youtube-dl網路影片下載器</title>
+    <url>/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
+<p>youtube-dl功能十分強大，也有很多參數可以調整，能下載的網站不只是youtube，也可以是其他熱門網站，例如Facebook等等，更重要的是這個工具有多個平台可以使用(Windows、Mac、Linux)。</p>
+<p>除了<a href="https://rg3.github.io/youtube-dl/index.html">指令youtube-dl</a>以外，我們也可以用GUI的介面的工具<a href="https://github.com/MrS0m30n3/youtube-dl-gui">youtube-DLG</a>，使用上更為方便，詳請可參考<a href="https://www.kocpc.com.tw/archives/162438">最強的網路影片下載器　Youtube-dl-gui 只要有網址就能幫你搞定</a>。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install youtube-dl</span><br><span class="line"><span class="comment"># 如果有需要後續轉檔的話</span></span><br><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install youtube-dl</span><br><span class="line"><span class="comment"># 如果需要後續轉檔的話</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><p>其實更好的方法是使用Python的pip來安裝，因為youtube-dl本身就是使用Python所寫成的，而由於影片的網站更新很快，所以可能要隨時更新到最新版的youtube-dl才行，OS distribution不一定會出的那麼快。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install --upgrade youtube_dl</span><br><span class="line"><span class="comment"># 如果使用python3的話</span></span><br><span class="line">pip3 install --upgrade youtube_dl</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>這邊介紹一些常用的指令</p>
+<h3 id="支援"><a href="#支援" class="headerlink" title="支援"></a>支援</h3><ul>
+<li>確定有支援下載哪些影片網站，相關列表也可以從<a href="https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md">官網</a>查詢</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl --extractor-descriptions</span><br></pre></td></tr></table></figure>
+
+<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><p>如果我們沒有指定格式的話，通常youtube-dl會幫我們挑最好的</p>
+<ul>
+<li>指定下載的影片格式</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先查詢有哪些格式可下載</span></span><br><span class="line">youtube-dl -F [URL]</span><br><span class="line"><span class="comment"># 指定下載格式</span></span><br><span class="line">youtube-dl -f mp4 [URL]</span><br><span class="line"><span class="comment"># 或是用format code</span></span><br><span class="line">youtube-dl -f [列表中的format code] [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="輸出格式"><a href="#輸出格式" class="headerlink" title="輸出格式"></a>輸出格式</h3><p>由於官方的輸出格式預設有帶ID(<code>%(title)s-%(id)s.%(ext)s</code>)，我們可以將其去除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -o <span class="string">&#x27;%(title)s.%(ext)s&#x27;</span> [URL]</span><br></pre></td></tr></table></figure>
+
+<h2 id="字幕"><a href="#字幕" class="headerlink" title="字幕"></a>字幕</h2><ul>
+<li>選擇嵌入特定字幕<ul>
+<li><code>--write-sub</code>代表下載字幕</li>
+<li><code>--embed-sub</code>代表嵌入字幕</li>
+<li><code>--sub-lang</code>代表要選擇的字幕</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先列出可下載的字幕列表</span></span><br><span class="line">youtube-dl --list-subs [URL]</span><br><span class="line"><span class="comment"># 嵌入想要的字幕</span></span><br><span class="line">youtube-dl --write-sub --embed-sub --sub-lang [字幕] [URL]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直接嵌入所有字幕<ul>
+<li><code>--all-subs</code>選擇所有字幕</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl --write-sub --embed-sub --all-subs [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="轉為音樂格式"><a href="#轉為音樂格式" class="headerlink" title="轉為音樂格式"></a>轉為音樂格式</h3><p>如果我們要下載音樂格式的話，基本上需要有ffmpeg的輔助</p>
+<ul>
+<li>選擇要下載的音樂格式，例如mp3、m4a、flac等等</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] [URL]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以用<code>--audio-quality</code>強迫ffmpeg轉換較高品質的音樂，0是最好，9是最差</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --audio-quality [音樂品質] [URL]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下載時附上封面(使用youtube截圖)和音樂資訊(作曲者等等)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format [音樂格式] --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="下載播放清單"><a href="#下載播放清單" class="headerlink" title="下載播放清單"></a>下載播放清單</h3><ul>
+<li>其實只要把[URL]換成播放清單的網址即可，不過我們也可以指定開始和結束位址<ul>
+<li><code>--playlist-start</code>：開始</li>
+<li><code>--playlist-end</code>：結束，也就是倒數第幾個影片</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl --playlist-start [開始位置] --playlist-end [結束位置] [URL]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><p>我這邊直接列出常用的指令，如果要使用可以直接copy比較快</p>
+<ul>
+<li>下載mp4影片並加上字幕</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -f mp4 --write-sub --embed-sub --all-subs -o <span class="string">&#x27;%(title)s.%(ext)s&#x27;</span> [URL]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下載mp3音樂，並加上封面</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">youtube-dl -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata [URL]</span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://blog.gtwang.org/useful-tools/youtube-dl/">youtube-dl：下載 YouTube 影片的指令工具（支援 Windows、Linux 與 Mac OS X）</a></li>
+<li><a href="https://yogapan.github.io/2017/08/16/Youtube-dl%E6%BF%83%E7%B8%AE%E6%95%99%E5%AD%B8%E7%AD%86%E8%A8%98/">Youtube-dl濃縮教學筆記</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -2506,26 +2506,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>《心流》：最佳體驗的專注</title>
-    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
-    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
-<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
-<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
-<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
-<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
-<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
-<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
-<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
-<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
   </entry>
   <entry>
     <title>常用軟體工具統整</title>
@@ -2723,6 +2703,26 @@
       </tags>
   </entry>
   <entry>
+    <title>《心流》：最佳體驗的專注</title>
+    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
+    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
+<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
+<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
+<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
+<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
+<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
+<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
+<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
+<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>我對 AI 的應用與反思</title>
     <url>/2025/02/23/%E6%88%91%E5%B0%8D%20AI%20%E7%9A%84%E6%87%89%E7%94%A8%E8%88%87%E5%8F%8D%E6%80%9D/</url>
     <content><![CDATA[<p>隨著 AI 的普及，我在日常生活中使用 AI 的機會也越來越多。AI 的能力不斷提升，每年都有質的飛躍，使得許多事務都可以依賴這個新工具。因此，了解 AI 能為我提供哪些幫助，以及它的極限在哪裡，就變得至關重要。</p>
@@ -2809,65 +2809,6 @@
 <p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
 <p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話<strong>「知識就像是金錢一樣，不花就等於不曾有過」</strong>，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
 <p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
-    <url>/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/</url>
-    <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/CN11869057">為什麼偉大不能被計劃</a>」是由兩位作者 Kenneth Stanley 和 Joel Lehman 所著。他們是機器學習和人工智慧研究學者，其團隊做了一個圖片孵化網站，意外發現要從亂數中產生出好的圖片並不能透過事先的計劃，而是只能透過不斷嘗試，發掘夠新奇有趣的圖片，然後以此為踏腳石繼續往下探索。這樣的發現也可以套用到其他人類偉大的發現和發明之中。這些偉大的成就，大多都不是透過設定目標和安排計畫來達成，反而都是因為在興趣探索時意外發現。</p>
-<p>在現代社會中，人生也都有既定的目標，讀書升學、找個好工作、結婚買房、賺到可以退休的錢。有時候也會不禁想到按照這樣目標走，好像缺乏了什麼，無法創造不一樣的可能性。若是對這樣的人生有所疑惑的話，卻又沒有個方向的話，這本書可以很好地釐清並啟發自己不同的想法。</p>
-<h2 id="我畫線的地方"><a href="#我畫線的地方" class="headerlink" title="我畫線的地方"></a>我畫線的地方</h2><p>書中有些讓我特別有感觸的地方：</p>
-<ul>
-<li><p>越是遠大的目標，越是不可能透過計畫來達成。能夠透過努力和計畫達成的目標根本稱不上偉大，因為每個人都可以透過同樣的方式達成。</p>
-<blockquote>
-<p>若⽬標設置⾜夠適度，它就會起到積極作⽤；反之，⽬標越「⾼⼤上」，情況就越複雜…關鍵在於，通向「⾼⼤上」⽬標的踏腳⽯，往往⾮常奇怪。也就是說，若你只是悶頭盯著⾃⼰的⽬標，那它們可能就是你根本意想不到的東西。</p>
-</blockquote>
-</li>
-<li><p>新奇比起固定方向的目標更為可靠，因為沒有人踩過，更有可能有別人所沒注意到的發現，雖然我們並不知道是什麼。</p>
-<blockquote>
-<p>設定⽬標意味著遵循⼀條未知的路徑，朝著遙遠的⽬的地前⾏，⽽新奇性只要求我們遠離已經到過的地⽅。離開⼀個已經到過的地⽅，不僅更簡單輕鬆，還蘊含了更豐富的信息…相信新奇性是推動進步的⼀台有意義的引擎。</p>
-</blockquote>
-</li>
-<li><p>我們的教育讓大家少了目標就沒有方向了，這時或許順應興趣、本心直覺去走，會是一個更靠譜的方式。</p>
-<blockquote>
-<p>如果你想知道如何擺脫對⽬標的盲⽬信奉，只需要隨⼼⾏事、遵循個⼈興趣的指引即可。不是所有的事情都需要以嚴謹的⽬標為指導。如果你對某件事有強烈的直覺，不妨順應本⼼。如果你沒有明確的⽬標，那也沒必要患得患失，因為不論你最終⾛到哪⾥，結果都不會太壞。</p>
-</blockquote>
-</li>
-<li><p>一直以來我們都有所誤會，物競天擇的重點不在於競爭，而是避開競爭。避開競爭才能夠有更大的生存空間。</p>
-<blockquote>
-<p>⾃然進化並不是通過競爭來獲得⽣物多樣性，⽽是通過避免競爭。特別是某⼀⽣物如果能以⼀種新⽅式謀得⽣存，那便是成功找到了⾃⼰的專屬⽣態位。因為它會成為第⼀個以這種新⽅式⽣存的⽣物，所以作為此道開⼭者，競爭不會太激烈，繁衍也會更容易。</p>
-</blockquote>
-</li>
-<li><p>過於專注在支微末節的競爭沒有太大意義，重點是這個是不是能夠帶來全新領域的踏腳石。想想自己是不是也常在不重要的地方跟別人競爭那細微的差異呢？</p>
-<blockquote>
-<p>通過細枝末節的調整，擠出最後⼀絲性能提升空間的做法，並不會帶來令⼈振奮的洞見…所有被歷史記住的算法，必然是為未來的開拓者奠定基礎的算法。它們將推動新算法的誕⽣，甚⾄幫助我們開闢全新的領域。到那時，誰還會在乎這些新算法在剛開始出現時，與「⽼靠譜」算法⽐較時的表現如何呢？</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="個人想法"><a href="#個人想法" class="headerlink" title="個人想法"></a>個人想法</h2><p>從小我就很相信目標論。相信任何事物都可以透過設定目標並且執行詳實的計畫來完成。越是想達成偉大的成就就更應該設定遠大的目標、加倍的努力、以及嚴謹的紀律。然而這本書卻打破了想像，提供了完全不一樣的視角。下面三點是我從中獲得的最大收穫。</p>
-<h3 id="偉大目標無法被設定"><a href="#偉大目標無法被設定" class="headerlink" title="偉大目標無法被設定"></a>偉大目標無法被設定</h3><p>作者的圖片孵化器網站讓人們能夠協作從最基本的圖形，過程不斷產生些微隨機變異，最終產生出各種有趣的圖片。然而，人們卻無法透過事先設定想要產生某種圖案來達成，只能在產生圖片的過程中挑選比較新奇的圖片並且持續嘗試。舉例來說，就像是下圖，我們沒辦法透過事先設定好要創作汽車來產生期待的結果，反而意外是從外星人的圖片演化而來。當初的創作者從來也不會想過外星人的眼睛可以轉換成汽車的輪子。</p>
-<p><img src="/images/%E5%A4%96%E6%98%9F%E4%BA%BA%E5%88%B0%E8%BB%8A%E5%AD%90.png" alt="外星人到車子"><br>圖片取自 <a href="https://www.youtube.com/watch?v=dKazBM3b74I">Kenneth Stanley 的演講</a></p>
-<p>這樣的現象其實在其他研究中也有同樣發現，就像是走迷宮，如果只是設定要往最接近出口的方向前進，很可能會卡在死胡同出不來。然而如果我們不要設定目標，讓探索更隨意，單純去嘗試過去沒試過的路線，反而更有機會走出迷宮。讓機器人學習走路的過程中，設定目標要它不要跌倒反而學不會走路，因為飛踢是往前邁步的開端。這些目標的設定反而成了目標的阻礙。</p>
-<p>在人類偉大的發現發明中，因為繞路反而達成目標的情況並不罕見。例如，當初發明真空管並不知道可以用來製作電腦；而人類想要飛行不是像鳥一樣使用翅膀，而是發明內燃機，有趣的是內燃機最一開始也不是為了飛機而做。沒有這些看似不相關的發明，或者說踏腳石，後續更偉大的成就就不可能達成。<strong>越是困難、高大上的目標，越是無法被詳實計畫。因為從所在位置到目標之間，並不是筆直一條線</strong>。</p>
-<h3 id="新奇搜索：放棄目標才有可能成就偉大"><a href="#新奇搜索：放棄目標才有可能成就偉大" class="headerlink" title="新奇搜索：放棄目標才有可能成就偉大"></a>新奇搜索：放棄目標才有可能成就偉大</h3><p>既然設定目標不管用，難道就沒有什麼其他比較好的方法了嗎？確實是有其他的方法，也就是所謂的新奇搜索法。主動去尋找新奇有趣的事物，因為這些事物看似雖然沒有關聯，但是卻是有可能成為未知目標所需要的踏板。</p>
-<p>這裡作者用的比方我很喜歡：各種偉大的成就就像是散落在一個很大的空間之中，要前往某個偉大的目的地，這之間我們需要有很多踏腳石。然而不能期望前進的方向上所有踏腳石都清晰可見，有時離下一個踏腳石距離太遠根本勾不到。不過也許換個方向走，尋找其他看似不相關的踏腳石，卻反而有可能抵達該目的地。目標就像是指向偉大成就的羅盤一樣，方向明確但並不一定有用。</p>
-<p>從上面的比喻我們可以知道，要在這個巨大的搜索空間中尋找有價值的事物，比起一味朝著某個方向前進，不斷去搜尋可以成為踏腳石的地方更為重要。最適合在這個空間中搜尋這些踏腳石的方法，就是所謂的新奇搜索法。我們越是去尋找有趣，從未見過的事物，它們可以創造的可能性越多，通往下個踏腳石，甚至是偉大的成就的機會也越大。<strong>我們放棄了偉大的目標，追隨自己的好奇心走，反而可能會抵達另一個不在計畫中的偉大</strong>。</p>
-<h3 id="避開競爭，走出屬於自己的人生道路"><a href="#避開競爭，走出屬於自己的人生道路" class="headerlink" title="避開競爭，走出屬於自己的人生道路"></a>避開競爭，走出屬於自己的人生道路</h3><p>書中我最喜歡的一段是把生物的演化論拿來類比新奇搜索法。生物之所以會存在就是不斷的生存和繁衍，過去課本所學到的物競天擇會進行篩選，留下可以有競爭力、有能力存活的物種，讓生命持續「進化」。然而，作者反對這樣的思維方式，他認為生物演化就像是把牛奶往外潑，牛奶會持續向外擴散，直到遇到障礙物為止。生物也一樣，會不斷去尋找不同的可能性，盡量避免競爭。比起與同物種競爭，最終產生出一個超級生物，更好的方式是尋找新的生活空間、到新的生存環境，相對來說這個更容易達成。這也是為什麼我們會看到世界上有那麼多生物種類，不同環境都有自己的生態圈的原因。</p>
-<p>用企業的角度來看，這也是一樣的。在上個世紀各種石油巨無霸、汽車製造巨頭主導著市場，但我們並沒有看到有什麼新的相關領域企業出現並與其競爭。反而是在未知領域，半導體、軟體、網路等方向有新的巨頭出現，對比這些舊企業對世界有更大的影響力。因為避開了在同個市場的直接競爭，所以有新的生存空間能夠發展。這個也是人們常說的紅海藍海的概念，在沒有過多競爭的藍海，才能有更大的可能性。</p>
-<p>回歸到個人，老生常談中的做自己就好以及跟著興趣走其實也是有道理的。<strong>在人多的地方就會充滿各種競爭，跟著直覺覺得有意思的方向走，依據自己的個人特點避開競爭，反而更有可能得到世俗意義上的成功</strong>。書中有個比喻，假設目標是要成為百萬富翁，我就會避開沒有支薪的實習，就算非常喜愛這個工作。然而現實往往是因為追尋了內心的激情和興趣，而不是向「錢」看，某天才意識到自己離百萬富翁只差一個踏腳石而已。</p>
-<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p><strong>小目標可以被計畫，但是偉大則不能</strong>。本書打破了目標的迷思，大從政府企業，小到個人，對於偉大的成就需要有新的認知。在<a href="https://www.books.com.tw/products/0010819494">黑馬思維</a>那本書有提到很多成功人士都是不會執著於特定目標，願意嘗試各種新事物，一旦感到苗頭正確，就做出特定的改變。或許這也是有異曲同工之妙。先追尋自我找到有趣的事情，一旦發展到後來對他人有價值，就能發揮出影響力，這時反而各種一般人所盼望的成就也會隨之而來。對於偉大，越是汲汲營營，越是不可得，就像是「眾裡尋他千百度，驀然回首，那人卻在燈火闌珊處」一樣。</p>
-<h2 id="反思與行動"><a href="#反思與行動" class="headerlink" title="反思與行動"></a>反思與行動</h2><p>雖然這本書是比較概念性的內容，還是盡可能轉換成可執行的行動，應用在自己人生中。</p>
-<ol>
-<li>自己會走到當下這個位置，是經過無數選擇和探索，跟其他人完全不同。因此對於未來要走的道路，也不需要跟別人比較與競爭。</li>
-<li>在當下所處的位置去思考有哪些可能性，保持好奇心，以實際行動去探索新奇事物。</li>
-<li>一旦發現吸引自己的事情，就安心地跟著直覺走，勇於改變方向並前進。</li>
-</ol>
 ]]></content>
       <categories>
         <category>讀書心得</category>
@@ -3101,6 +3042,65 @@
       </tags>
   </entry>
   <entry>
+    <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
+    <url>/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/</url>
+    <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/CN11869057">為什麼偉大不能被計劃</a>」是由兩位作者 Kenneth Stanley 和 Joel Lehman 所著。他們是機器學習和人工智慧研究學者，其團隊做了一個圖片孵化網站，意外發現要從亂數中產生出好的圖片並不能透過事先的計劃，而是只能透過不斷嘗試，發掘夠新奇有趣的圖片，然後以此為踏腳石繼續往下探索。這樣的發現也可以套用到其他人類偉大的發現和發明之中。這些偉大的成就，大多都不是透過設定目標和安排計畫來達成，反而都是因為在興趣探索時意外發現。</p>
+<p>在現代社會中，人生也都有既定的目標，讀書升學、找個好工作、結婚買房、賺到可以退休的錢。有時候也會不禁想到按照這樣目標走，好像缺乏了什麼，無法創造不一樣的可能性。若是對這樣的人生有所疑惑的話，卻又沒有個方向的話，這本書可以很好地釐清並啟發自己不同的想法。</p>
+<h2 id="我畫線的地方"><a href="#我畫線的地方" class="headerlink" title="我畫線的地方"></a>我畫線的地方</h2><p>書中有些讓我特別有感觸的地方：</p>
+<ul>
+<li><p>越是遠大的目標，越是不可能透過計畫來達成。能夠透過努力和計畫達成的目標根本稱不上偉大，因為每個人都可以透過同樣的方式達成。</p>
+<blockquote>
+<p>若⽬標設置⾜夠適度，它就會起到積極作⽤；反之，⽬標越「⾼⼤上」，情況就越複雜…關鍵在於，通向「⾼⼤上」⽬標的踏腳⽯，往往⾮常奇怪。也就是說，若你只是悶頭盯著⾃⼰的⽬標，那它們可能就是你根本意想不到的東西。</p>
+</blockquote>
+</li>
+<li><p>新奇比起固定方向的目標更為可靠，因為沒有人踩過，更有可能有別人所沒注意到的發現，雖然我們並不知道是什麼。</p>
+<blockquote>
+<p>設定⽬標意味著遵循⼀條未知的路徑，朝著遙遠的⽬的地前⾏，⽽新奇性只要求我們遠離已經到過的地⽅。離開⼀個已經到過的地⽅，不僅更簡單輕鬆，還蘊含了更豐富的信息…相信新奇性是推動進步的⼀台有意義的引擎。</p>
+</blockquote>
+</li>
+<li><p>我們的教育讓大家少了目標就沒有方向了，這時或許順應興趣、本心直覺去走，會是一個更靠譜的方式。</p>
+<blockquote>
+<p>如果你想知道如何擺脫對⽬標的盲⽬信奉，只需要隨⼼⾏事、遵循個⼈興趣的指引即可。不是所有的事情都需要以嚴謹的⽬標為指導。如果你對某件事有強烈的直覺，不妨順應本⼼。如果你沒有明確的⽬標，那也沒必要患得患失，因為不論你最終⾛到哪⾥，結果都不會太壞。</p>
+</blockquote>
+</li>
+<li><p>一直以來我們都有所誤會，物競天擇的重點不在於競爭，而是避開競爭。避開競爭才能夠有更大的生存空間。</p>
+<blockquote>
+<p>⾃然進化並不是通過競爭來獲得⽣物多樣性，⽽是通過避免競爭。特別是某⼀⽣物如果能以⼀種新⽅式謀得⽣存，那便是成功找到了⾃⼰的專屬⽣態位。因為它會成為第⼀個以這種新⽅式⽣存的⽣物，所以作為此道開⼭者，競爭不會太激烈，繁衍也會更容易。</p>
+</blockquote>
+</li>
+<li><p>過於專注在支微末節的競爭沒有太大意義，重點是這個是不是能夠帶來全新領域的踏腳石。想想自己是不是也常在不重要的地方跟別人競爭那細微的差異呢？</p>
+<blockquote>
+<p>通過細枝末節的調整，擠出最後⼀絲性能提升空間的做法，並不會帶來令⼈振奮的洞見…所有被歷史記住的算法，必然是為未來的開拓者奠定基礎的算法。它們將推動新算法的誕⽣，甚⾄幫助我們開闢全新的領域。到那時，誰還會在乎這些新算法在剛開始出現時，與「⽼靠譜」算法⽐較時的表現如何呢？</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="個人想法"><a href="#個人想法" class="headerlink" title="個人想法"></a>個人想法</h2><p>從小我就很相信目標論。相信任何事物都可以透過設定目標並且執行詳實的計畫來完成。越是想達成偉大的成就就更應該設定遠大的目標、加倍的努力、以及嚴謹的紀律。然而這本書卻打破了想像，提供了完全不一樣的視角。下面三點是我從中獲得的最大收穫。</p>
+<h3 id="偉大目標無法被設定"><a href="#偉大目標無法被設定" class="headerlink" title="偉大目標無法被設定"></a>偉大目標無法被設定</h3><p>作者的圖片孵化器網站讓人們能夠協作從最基本的圖形，過程不斷產生些微隨機變異，最終產生出各種有趣的圖片。然而，人們卻無法透過事先設定想要產生某種圖案來達成，只能在產生圖片的過程中挑選比較新奇的圖片並且持續嘗試。舉例來說，就像是下圖，我們沒辦法透過事先設定好要創作汽車來產生期待的結果，反而意外是從外星人的圖片演化而來。當初的創作者從來也不會想過外星人的眼睛可以轉換成汽車的輪子。</p>
+<p><img src="/images/%E5%A4%96%E6%98%9F%E4%BA%BA%E5%88%B0%E8%BB%8A%E5%AD%90.png" alt="外星人到車子"><br>圖片取自 <a href="https://www.youtube.com/watch?v=dKazBM3b74I">Kenneth Stanley 的演講</a></p>
+<p>這樣的現象其實在其他研究中也有同樣發現，就像是走迷宮，如果只是設定要往最接近出口的方向前進，很可能會卡在死胡同出不來。然而如果我們不要設定目標，讓探索更隨意，單純去嘗試過去沒試過的路線，反而更有機會走出迷宮。讓機器人學習走路的過程中，設定目標要它不要跌倒反而學不會走路，因為飛踢是往前邁步的開端。這些目標的設定反而成了目標的阻礙。</p>
+<p>在人類偉大的發現發明中，因為繞路反而達成目標的情況並不罕見。例如，當初發明真空管並不知道可以用來製作電腦；而人類想要飛行不是像鳥一樣使用翅膀，而是發明內燃機，有趣的是內燃機最一開始也不是為了飛機而做。沒有這些看似不相關的發明，或者說踏腳石，後續更偉大的成就就不可能達成。<strong>越是困難、高大上的目標，越是無法被詳實計畫。因為從所在位置到目標之間，並不是筆直一條線</strong>。</p>
+<h3 id="新奇搜索：放棄目標才有可能成就偉大"><a href="#新奇搜索：放棄目標才有可能成就偉大" class="headerlink" title="新奇搜索：放棄目標才有可能成就偉大"></a>新奇搜索：放棄目標才有可能成就偉大</h3><p>既然設定目標不管用，難道就沒有什麼其他比較好的方法了嗎？確實是有其他的方法，也就是所謂的新奇搜索法。主動去尋找新奇有趣的事物，因為這些事物看似雖然沒有關聯，但是卻是有可能成為未知目標所需要的踏板。</p>
+<p>這裡作者用的比方我很喜歡：各種偉大的成就就像是散落在一個很大的空間之中，要前往某個偉大的目的地，這之間我們需要有很多踏腳石。然而不能期望前進的方向上所有踏腳石都清晰可見，有時離下一個踏腳石距離太遠根本勾不到。不過也許換個方向走，尋找其他看似不相關的踏腳石，卻反而有可能抵達該目的地。目標就像是指向偉大成就的羅盤一樣，方向明確但並不一定有用。</p>
+<p>從上面的比喻我們可以知道，要在這個巨大的搜索空間中尋找有價值的事物，比起一味朝著某個方向前進，不斷去搜尋可以成為踏腳石的地方更為重要。最適合在這個空間中搜尋這些踏腳石的方法，就是所謂的新奇搜索法。我們越是去尋找有趣，從未見過的事物，它們可以創造的可能性越多，通往下個踏腳石，甚至是偉大的成就的機會也越大。<strong>我們放棄了偉大的目標，追隨自己的好奇心走，反而可能會抵達另一個不在計畫中的偉大</strong>。</p>
+<h3 id="避開競爭，走出屬於自己的人生道路"><a href="#避開競爭，走出屬於自己的人生道路" class="headerlink" title="避開競爭，走出屬於自己的人生道路"></a>避開競爭，走出屬於自己的人生道路</h3><p>書中我最喜歡的一段是把生物的演化論拿來類比新奇搜索法。生物之所以會存在就是不斷的生存和繁衍，過去課本所學到的物競天擇會進行篩選，留下可以有競爭力、有能力存活的物種，讓生命持續「進化」。然而，作者反對這樣的思維方式，他認為生物演化就像是把牛奶往外潑，牛奶會持續向外擴散，直到遇到障礙物為止。生物也一樣，會不斷去尋找不同的可能性，盡量避免競爭。比起與同物種競爭，最終產生出一個超級生物，更好的方式是尋找新的生活空間、到新的生存環境，相對來說這個更容易達成。這也是為什麼我們會看到世界上有那麼多生物種類，不同環境都有自己的生態圈的原因。</p>
+<p>用企業的角度來看，這也是一樣的。在上個世紀各種石油巨無霸、汽車製造巨頭主導著市場，但我們並沒有看到有什麼新的相關領域企業出現並與其競爭。反而是在未知領域，半導體、軟體、網路等方向有新的巨頭出現，對比這些舊企業對世界有更大的影響力。因為避開了在同個市場的直接競爭，所以有新的生存空間能夠發展。這個也是人們常說的紅海藍海的概念，在沒有過多競爭的藍海，才能有更大的可能性。</p>
+<p>回歸到個人，老生常談中的做自己就好以及跟著興趣走其實也是有道理的。<strong>在人多的地方就會充滿各種競爭，跟著直覺覺得有意思的方向走，依據自己的個人特點避開競爭，反而更有可能得到世俗意義上的成功</strong>。書中有個比喻，假設目標是要成為百萬富翁，我就會避開沒有支薪的實習，就算非常喜愛這個工作。然而現實往往是因為追尋了內心的激情和興趣，而不是向「錢」看，某天才意識到自己離百萬富翁只差一個踏腳石而已。</p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p><strong>小目標可以被計畫，但是偉大則不能</strong>。本書打破了目標的迷思，大從政府企業，小到個人，對於偉大的成就需要有新的認知。在<a href="https://www.books.com.tw/products/0010819494">黑馬思維</a>那本書有提到很多成功人士都是不會執著於特定目標，願意嘗試各種新事物，一旦感到苗頭正確，就做出特定的改變。或許這也是有異曲同工之妙。先追尋自我找到有趣的事情，一旦發展到後來對他人有價值，就能發揮出影響力，這時反而各種一般人所盼望的成就也會隨之而來。對於偉大，越是汲汲營營，越是不可得，就像是「眾裡尋他千百度，驀然回首，那人卻在燈火闌珊處」一樣。</p>
+<h2 id="反思與行動"><a href="#反思與行動" class="headerlink" title="反思與行動"></a>反思與行動</h2><p>雖然這本書是比較概念性的內容，還是盡可能轉換成可執行的行動，應用在自己人生中。</p>
+<ol>
+<li>自己會走到當下這個位置，是經過無數選擇和探索，跟其他人完全不同。因此對於未來要走的道路，也不需要跟別人比較與競爭。</li>
+<li>在當下所處的位置去思考有哪些可能性，保持好奇心，以實際行動去探索新奇事物。</li>
+<li>一旦發現吸引自己的事情，就安心地跟著直覺走，勇於改變方向並前進。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>為什麼動機比努力重要</title>
     <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
     <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
@@ -3132,6 +3132,23 @@
 <p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
 <p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
 <p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>為什麼社會有分歧</title>
+    <url>/2024/10/27/%E7%82%BA%E4%BB%80%E9%BA%BC%E7%A4%BE%E6%9C%83%E6%9C%89%E5%88%86%E6%AD%A7/</url>
+    <content><![CDATA[<p>在現代社會中，人們常常都在說社會分裂越來越嚴重。由於網路的發展，各種意見容易匯聚，然後又因為社群媒體的演算法不斷擴大同溫層，讓某些意見持續放大，最終產生出衝突。常見的例子像是國家定位、同性婚姻、核電使用，而在國外更有持槍議題、移民、人種平權等等。</p>
+<p>在社會中，某些議題上有立場衝突必定是會存在的。社會是由人組成的，人人也都有不同意見。當大家對某個方向都贊同，那社會肯定是會朝這個方向前進，這時就沒有太多討論價值。會吸引人們目光的總是那些有不同意見的議題，透過激烈討論，直到達成某種程度的共識後才會逐漸潛伏，被其他更引人注目的議題所取代。這就如同大海上有很多波浪，當最大的波浪消失了，大家的注意力就會集中在次高的波浪上一樣。</p>
+<p>隨著時代的推進，人們的價值觀也不斷更新，過去認為正確的概念在現代可能也會被推翻。其中最著名的就是種族不平等。以美國為例，奴隸制度直到內戰才被廢除，但是一直要到二戰後才真正落實廢除種族隔離。而現在很多社會運動者更加追求在各個領域，各種人種都要能一定程度的參與，例如大學入學或是公司聘用。</p>
+<p>然而這類社會進步價值的推進，也一定會帶來反作用力。追求進步價值的人 (SJW)，常常會被其他相對比較保守的人嘲笑為「覺青」、「左膠」。這個非常正常，任何對社會現狀的改動都會有阻力。一開始可能因為某些事件爆發(如 Black Lives Matter、Me too)，改革的動力非常強大，不斷在某個議題上面往前推進，社會也願意支持。但隨著時間推移，改革者的要求越來越多，社會大眾也會逐漸對議題失去興趣，其中的保守派也會開始抗拒，最終反而形成另一股強烈的反對力量把改革派反推回去。這就像是鐘擺一樣，在議題中的兩個立場不斷擺盪，直到形成社會可以接受的新共識。</p>
+<p>這樣的現象其實我們可以在很多例子上看見。以前陣子台灣的同婚議題來看，同志對同性婚姻的訴求得到年輕人的認可，產生出改革力量，推動公投。然而社會雖然對同性戀愛的接受度越來越大，卻還是無法忍受改變傳統上對婚姻的定義，最終在公投上否決了這項改變。不過從結果上來說，儘管同性婚姻沒成功，但是社會也接受了新的同性伴侶相關法律。就像是改革派往前兩步，保守派往後推一步，最終還是前進一步，社會達成了新的共識。</p>
+<p>同樣的狀況也發生在全球化上面，過去幾十年由於全球化，人們可以享受發展中國家製造的便宜商品，但卻也造成了先進國家的製造業外流。美國的藍領階層在 2016 年的大選反撲中選出了川普，透過拉高關稅而造成逆全球化。現在再加上地緣政治和疫情的原因，逆全球化的趨勢短時間內應該是不會緩解，但可預期的是也不會回到大家完全閉關鎖國的格局。整體態勢應該最終還是在一個新的共識點達成平衡，直到下一股外在力量再次引發改變。</p>
+<p>回到我們個人，我們所參與的團體，例如公司、社團等等，其實也是一種小社會。當遇到外在壓力下，通常也會產生出改革和保守兩股力量。舉例來說，公司營收不好需要進行轉型、社團老化需要吸引新血加入。改革派會認為不變動就是等死，保守派則是擔心太大的變動會失去了團體本身的價值，導致團體的崩解。兩種力量在內部不斷拉扯，直到找出新的平衡出來。</p>
+<p>雖然我們這裡使用改革和保守兩種詞，但這並沒有任何的褒義和貶義。改革並不代表有完美結局，看看多少國家在革命後陷入貧窮崩壞。保守而轉型太慢也常常是公司被新的挑戰者所取代的原因。改革沒有保守的制約往往會衝太快，讓系統不穩定而崩潰，反過來說，保守也需要有改革派的驅動來應對新的挑戰。有智慧的領導人必須要在這兩種勢力中小心翼翼維持平衡，走出緩慢並有力的改變力量。</p>
+<p>我們人類總是喜歡有共識沒分歧，但是分歧在一個正常的社會中是一定存在的，因為人與人彼此間就是不一樣。分歧從來不是壞事，這是社會多樣性的一種展現。當我們可以用比較自然態度看待他人意見不同時，社會也越不會二極化、彼此相互對立。因為我們知道不同立場都有存在的必要，唯一需要的是一套穩定合理產生出彼此都能接受共識的方法。這個方法可能是公投、可能是選舉，只要人們可以接受即可。當分歧可以用這套系統來彌合，社會就不會因此而產生分裂，進而朝有共識的方向往前邁進。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -3265,23 +3282,6 @@
       </categories>
   </entry>
   <entry>
-    <title>為什麼社會有分歧</title>
-    <url>/2024/10/27/%E7%82%BA%E4%BB%80%E9%BA%BC%E7%A4%BE%E6%9C%83%E6%9C%89%E5%88%86%E6%AD%A7/</url>
-    <content><![CDATA[<p>在現代社會中，人們常常都在說社會分裂越來越嚴重。由於網路的發展，各種意見容易匯聚，然後又因為社群媒體的演算法不斷擴大同溫層，讓某些意見持續放大，最終產生出衝突。常見的例子像是國家定位、同性婚姻、核電使用，而在國外更有持槍議題、移民、人種平權等等。</p>
-<p>在社會中，某些議題上有立場衝突必定是會存在的。社會是由人組成的，人人也都有不同意見。當大家對某個方向都贊同，那社會肯定是會朝這個方向前進，這時就沒有太多討論價值。會吸引人們目光的總是那些有不同意見的議題，透過激烈討論，直到達成某種程度的共識後才會逐漸潛伏，被其他更引人注目的議題所取代。這就如同大海上有很多波浪，當最大的波浪消失了，大家的注意力就會集中在次高的波浪上一樣。</p>
-<p>隨著時代的推進，人們的價值觀也不斷更新，過去認為正確的概念在現代可能也會被推翻。其中最著名的就是種族不平等。以美國為例，奴隸制度直到內戰才被廢除，但是一直要到二戰後才真正落實廢除種族隔離。而現在很多社會運動者更加追求在各個領域，各種人種都要能一定程度的參與，例如大學入學或是公司聘用。</p>
-<p>然而這類社會進步價值的推進，也一定會帶來反作用力。追求進步價值的人 (SJW)，常常會被其他相對比較保守的人嘲笑為「覺青」、「左膠」。這個非常正常，任何對社會現狀的改動都會有阻力。一開始可能因為某些事件爆發(如 Black Lives Matter、Me too)，改革的動力非常強大，不斷在某個議題上面往前推進，社會也願意支持。但隨著時間推移，改革者的要求越來越多，社會大眾也會逐漸對議題失去興趣，其中的保守派也會開始抗拒，最終反而形成另一股強烈的反對力量把改革派反推回去。這就像是鐘擺一樣，在議題中的兩個立場不斷擺盪，直到形成社會可以接受的新共識。</p>
-<p>這樣的現象其實我們可以在很多例子上看見。以前陣子台灣的同婚議題來看，同志對同性婚姻的訴求得到年輕人的認可，產生出改革力量，推動公投。然而社會雖然對同性戀愛的接受度越來越大，卻還是無法忍受改變傳統上對婚姻的定義，最終在公投上否決了這項改變。不過從結果上來說，儘管同性婚姻沒成功，但是社會也接受了新的同性伴侶相關法律。就像是改革派往前兩步，保守派往後推一步，最終還是前進一步，社會達成了新的共識。</p>
-<p>同樣的狀況也發生在全球化上面，過去幾十年由於全球化，人們可以享受發展中國家製造的便宜商品，但卻也造成了先進國家的製造業外流。美國的藍領階層在 2016 年的大選反撲中選出了川普，透過拉高關稅而造成逆全球化。現在再加上地緣政治和疫情的原因，逆全球化的趨勢短時間內應該是不會緩解，但可預期的是也不會回到大家完全閉關鎖國的格局。整體態勢應該最終還是在一個新的共識點達成平衡，直到下一股外在力量再次引發改變。</p>
-<p>回到我們個人，我們所參與的團體，例如公司、社團等等，其實也是一種小社會。當遇到外在壓力下，通常也會產生出改革和保守兩股力量。舉例來說，公司營收不好需要進行轉型、社團老化需要吸引新血加入。改革派會認為不變動就是等死，保守派則是擔心太大的變動會失去了團體本身的價值，導致團體的崩解。兩種力量在內部不斷拉扯，直到找出新的平衡出來。</p>
-<p>雖然我們這裡使用改革和保守兩種詞，但這並沒有任何的褒義和貶義。改革並不代表有完美結局，看看多少國家在革命後陷入貧窮崩壞。保守而轉型太慢也常常是公司被新的挑戰者所取代的原因。改革沒有保守的制約往往會衝太快，讓系統不穩定而崩潰，反過來說，保守也需要有改革派的驅動來應對新的挑戰。有智慧的領導人必須要在這兩種勢力中小心翼翼維持平衡，走出緩慢並有力的改變力量。</p>
-<p>我們人類總是喜歡有共識沒分歧，但是分歧在一個正常的社會中是一定存在的，因為人與人彼此間就是不一樣。分歧從來不是壞事，這是社會多樣性的一種展現。當我們可以用比較自然態度看待他人意見不同時，社會也越不會二極化、彼此相互對立。因為我們知道不同立場都有存在的必要，唯一需要的是一套穩定合理產生出彼此都能接受共識的方法。這個方法可能是公投、可能是選舉，只要人們可以接受即可。當分歧可以用這套系統來彌合，社會就不會因此而產生分裂，進而朝有共識的方向往前邁進。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>為何比特幣是加密貨幣中的定海神針</title>
     <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
     <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
@@ -3408,6 +3408,26 @@
       </tags>
   </entry>
   <entry>
+    <title>系統演化：穩定中間態的關鍵角色</title>
+    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
+    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
+<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
+<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
+<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
+<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
+<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
+<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
+<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
+<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
+<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
+<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
+<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>筆記：自己的外部大腦</title>
     <url>/2024/11/03/%E7%AD%86%E8%A8%98%EF%BC%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A4%96%E9%83%A8%E5%A4%A7%E8%85%A6/</url>
     <content><![CDATA[<p>對人類來說，紀錄筆記可能真的是不得不做的必要之惡。我們的大腦天生就不善於記憶東西，而為了讓自己更容易找出過去某個時間點的知識，我們需要有個外部系統來輔助，這也就是所謂的筆記。</p>
@@ -3444,26 +3464,6 @@
 </li>
 </ul>
 <h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>筆記只是輔助，但是卻也不可或缺。找出適合自己的筆記方法是非常值得的投資，會幫助思考並且讓生活更容易被掌握。以我的經驗來說，筆記確實讓我感到生活工作各個方面都更加可控，不過也要記得過猶不及，花太多時間在筆記上反而會阻礙了我們發揮創意並思考。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>系統演化：穩定中間態的關鍵角色</title>
-    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
-    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
-<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
-<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
-<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
-<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
-<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
-<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
-<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
-<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
-<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
-<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
-<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -3551,6 +3551,23 @@
       </tags>
   </entry>
   <entry>
+    <title>《請停止無效努力》：尋找適合自己的方向</title>
+    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
+<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
+<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
+<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
+<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
+<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《認知驅動》：輸出重於努力</title>
     <url>/2024/09/17/%E8%AA%8D%E7%9F%A5%E9%A9%85%E5%8B%95%EF%BC%9A%E5%81%9A%E6%88%90%E4%B8%80%E4%BB%B6%E5%B0%8D%E4%BB%96%E4%BA%BA%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/0010933681">認知驅動</a>」是周嶺「認知覺醒」的續作。如果要用一句話概括這本書，那就是不要過度關注內在的自我成長，要對外為他人產生創造價值，而外在的回饋將會回到自身。本書雖然零零散散引用很多其他人觀念或道理，但我覺得這些都圍繞在如何行動並對外創造價值上。</p>
@@ -3603,23 +3620,6 @@
 <li>反思自己可以為他人創造的獨特價值為何。當學習新事物的時候，可以想想有沒有什麼方式可以輸出價值。</li>
 <li>用較大的時間刻度看看自己過去的成就，可以用時間軸的方式來呈現。然後想想接下來的人生階段要以什麼事情為最大的優先目標。</li>
 </ol>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《請停止無效努力》：尋找適合自己的方向</title>
-    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
-    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
-<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
-<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
-<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
-<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
-<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
