@@ -96,3 +96,7 @@ feed:
   content: true
   content_limit: 30
   content_limit_delim: ' '
+
+# sitemap
+sitemap:
+    path: sitemap.xml
