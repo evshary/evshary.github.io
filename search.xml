@@ -323,6 +323,108 @@
       </tags>
   </entry>
   <entry>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
+<li>指令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+</ul>
+</li>
+</ul>
+<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
+<li><p>先產生key</p>
+<ul>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
+<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
+<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
+<li><p>查看目前的鑰匙</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>編輯key(對key簽名也是用同樣的方法)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
+<li><p>首先先搜尋對象的public key</p>
+<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看與更新朋友的public key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
+<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>import&#x2F;export自己的金鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
+<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果要確認發信人身份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>關於ELF的兩三事</title>
     <url>/2018/05/06/ELF-format/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。</p>
@@ -519,223 +621,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
-<li>指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
-</ul>
-</li>
-</ul>
-<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
-<li><p>先產生key</p>
-<ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
-<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
-<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
-<li><p>查看目前的鑰匙</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>編輯key(對key簽名也是用同樣的方法)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
-<li><p>首先先搜尋對象的public key</p>
-<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看與更新朋友的public key</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
-<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>import&#x2F;export自己的金鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
-<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果要確認發信人身份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果要在別的port開啟</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux和程式的互動</title>
-    <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
-<h2 id="程式如何執行main"><a href="#程式如何執行main" class="headerlink" title="程式如何執行main"></a>程式如何執行main</h2><p>一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似<code>./a.out</code>的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。</p>
-<p>下面例子我們以Kernel v4.17為例</p>
-<ol>
-<li><p>首先 shell 會 fork 一個 process，然後再呼叫 exec 系列函數把該 process 置換成指定的程式</p>
-</li>
-<li><p>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs&#x2F;exec.c的1856行</a></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">do_execve</span><span class="params">(<span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__argv,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">  <span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接著do_execveat_common會讀取struct linux_binprm，並且根據檔案格式尋找適合的binary header</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">do_execveat_common</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr argv,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr envp,</span></span><br><span class="line"><span class="params">                              <span class="type">int</span> flags)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 重要的structure，保留執行檔的相關訊息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">linux_binprm</span> *<span class="title">bprm</span>;</span></span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 打開要執行的ELF檔</span></span><br><span class="line">    file = do_open_execat(fd, filename, flags);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 生成mm_struct，供執行檔使用</span></span><br><span class="line">    retval = bprm_mm_init(bprm);</span><br><span class="line">    <span class="keyword">if</span> (retval)</span><br><span class="line">        <span class="keyword">goto</span> out_unmark;</span><br><span class="line">    <span class="comment">// 計算帶入的參數</span></span><br><span class="line">    bprm-&gt;argc = count(argv, MAX_ARG_STRINGS);</span><br><span class="line">    <span class="keyword">if</span> ((retval = bprm-&gt;argc) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取 header</span></span><br><span class="line">    retval = prepare_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 裡面會呼叫 search_binary_handler，根據檔案格式呼叫適合的binary_handler</span></span><br><span class="line">    retval = exec_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ELF的binary handler位在<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs&#x2F;binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">load_elf_binary</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">    elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">    current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">    current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">    current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">    current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是&#x2F;lib&#x2F;ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc&#x2F;elf&#x2F;rtld.c</a>的_dl_start，針對環境變數做處理。</p>
-<ul>
-<li>我們常見的LD_PRELOAD也是在這邊進行處理的</li>
-</ul>
-</li>
-<li><p>當上述工作都做完後，就會進入 ELF binary 的<code>_start</code>，其中會呼叫 glibc 的<a href="https://code.woboq.org/userspace/glibc/csu/libc-start.c.html">__libc_start_main</a>進行初始設定，最後就會呼叫main()</p>
-</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">result = main (argc, argv, __environ MAIN_AUXVEC_PARAM);</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用-system-call"><a href="#使用-system-call" class="headerlink" title="使用 system call"></a>使用 system call</h2><p>通常AP在Linux要跟kernel層互動大概只能透過system call，然而system call的使用大多數已經被包裝起來，所以幾乎不會看到，這邊我們來探討一下要怎麼在Linux直接呼叫system call。以下範例皆來自<a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></p>
-<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>最簡單的呼叫system call方法是syscall。</p>
-<p>syscall.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    ret = syscall(__NR_getpid);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>執行結果如下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make syscall</span><br><span class="line">$ ./syscall</span><br><span class="line">ret=18 pid=18</span><br></pre></td></tr></table></figure>
-
-<p>看起來是很順利取得PID。我們可以把__NR_getpid換成其他的system call數字，也可以達到同樣效果。</p>
-<h3 id="int-0x80"><a href="#int-0x80" class="headerlink" title="int 0x80"></a>int 0x80</h3><p>當然我們也可以用<code>int 0x80</code>來做到同樣的事情，但是要注意的是這樣的效率不會比較好，可參考<a href="https://stackoverflow.com/questions/12806584/what-is-better-int-0x80-or-syscall">What is better “int 0x80” or “syscall”?</a></p>
-<p>另外這個做法在x64的架構是無法被使用的，可參考<a href="https://stackoverflow.com/questions/46087730/what-happens-if-you-use-the-32-bit-int-0x80-linux-abi-in-64-bit-code">What happens if you use the 32-bit int 0x80 Linux ABI in 64-bit code?</a></p>
-<p>syscall2.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;int $0x80&quot;</span>:<span class="string">&quot;=a&quot;</span>(ret):<span class="string">&quot;0&quot;</span>(__NR_getpid))</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="sysenter"><a href="#sysenter" class="headerlink" title="sysenter"></a>sysenter</h3><p>這部分也是只能在x86的平台上使用，會出現這個機制的理由是int 0x80的效率實在太差了。這邊的使用方式有點複雜，就不列出來了。</p>
-<h3 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h3><p>這三種方式的比較簡單統整一下</p>
-<p>syscall：現在主流，能在x64運行<br>int 0x80：只能在x86，效率差，已被捨棄<br>sysenter：只能在x86，用來替代int 0x80</p>
-<p>詳情可以參考<a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a>，寫得非常詳細。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="https://blog.csdn.net/eleven_xiy/article/details/77876702">Linux系统ELF程序的执行过程</a></li>
-<li><a href="https://blog.csdn.net/conansonic/article/details/54236335">_dl_start源码分析</a></li>
-<li><a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -939,6 +824,121 @@
       </categories>
       <tags>
         <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果要在別的port開啟</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux和程式的互動</title>
+    <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
+<h2 id="程式如何執行main"><a href="#程式如何執行main" class="headerlink" title="程式如何執行main"></a>程式如何執行main</h2><p>一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似<code>./a.out</code>的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。</p>
+<p>下面例子我們以Kernel v4.17為例</p>
+<ol>
+<li><p>首先 shell 會 fork 一個 process，然後再呼叫 exec 系列函數把該 process 置換成指定的程式</p>
+</li>
+<li><p>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs&#x2F;exec.c的1856行</a></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">do_execve</span><span class="params">(<span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__argv,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">  <span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著do_execveat_common會讀取struct linux_binprm，並且根據檔案格式尋找適合的binary header</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">do_execveat_common</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr argv,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr envp,</span></span><br><span class="line"><span class="params">                              <span class="type">int</span> flags)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 重要的structure，保留執行檔的相關訊息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">linux_binprm</span> *<span class="title">bprm</span>;</span></span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 打開要執行的ELF檔</span></span><br><span class="line">    file = do_open_execat(fd, filename, flags);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 生成mm_struct，供執行檔使用</span></span><br><span class="line">    retval = bprm_mm_init(bprm);</span><br><span class="line">    <span class="keyword">if</span> (retval)</span><br><span class="line">        <span class="keyword">goto</span> out_unmark;</span><br><span class="line">    <span class="comment">// 計算帶入的參數</span></span><br><span class="line">    bprm-&gt;argc = count(argv, MAX_ARG_STRINGS);</span><br><span class="line">    <span class="keyword">if</span> ((retval = bprm-&gt;argc) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取 header</span></span><br><span class="line">    retval = prepare_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 裡面會呼叫 search_binary_handler，根據檔案格式呼叫適合的binary_handler</span></span><br><span class="line">    retval = exec_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ELF的binary handler位在<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs&#x2F;binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">load_elf_binary</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">    elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">    current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">    current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">    current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">    current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是&#x2F;lib&#x2F;ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc&#x2F;elf&#x2F;rtld.c</a>的_dl_start，針對環境變數做處理。</p>
+<ul>
+<li>我們常見的LD_PRELOAD也是在這邊進行處理的</li>
+</ul>
+</li>
+<li><p>當上述工作都做完後，就會進入 ELF binary 的<code>_start</code>，其中會呼叫 glibc 的<a href="https://code.woboq.org/userspace/glibc/csu/libc-start.c.html">__libc_start_main</a>進行初始設定，最後就會呼叫main()</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">result = main (argc, argv, __environ MAIN_AUXVEC_PARAM);</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-system-call"><a href="#使用-system-call" class="headerlink" title="使用 system call"></a>使用 system call</h2><p>通常AP在Linux要跟kernel層互動大概只能透過system call，然而system call的使用大多數已經被包裝起來，所以幾乎不會看到，這邊我們來探討一下要怎麼在Linux直接呼叫system call。以下範例皆來自<a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></p>
+<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>最簡單的呼叫system call方法是syscall。</p>
+<p>syscall.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    ret = syscall(__NR_getpid);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>執行結果如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make syscall</span><br><span class="line">$ ./syscall</span><br><span class="line">ret=18 pid=18</span><br></pre></td></tr></table></figure>
+
+<p>看起來是很順利取得PID。我們可以把__NR_getpid換成其他的system call數字，也可以達到同樣效果。</p>
+<h3 id="int-0x80"><a href="#int-0x80" class="headerlink" title="int 0x80"></a>int 0x80</h3><p>當然我們也可以用<code>int 0x80</code>來做到同樣的事情，但是要注意的是這樣的效率不會比較好，可參考<a href="https://stackoverflow.com/questions/12806584/what-is-better-int-0x80-or-syscall">What is better “int 0x80” or “syscall”?</a></p>
+<p>另外這個做法在x64的架構是無法被使用的，可參考<a href="https://stackoverflow.com/questions/46087730/what-happens-if-you-use-the-32-bit-int-0x80-linux-abi-in-64-bit-code">What happens if you use the 32-bit int 0x80 Linux ABI in 64-bit code?</a></p>
+<p>syscall2.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;int $0x80&quot;</span>:<span class="string">&quot;=a&quot;</span>(ret):<span class="string">&quot;0&quot;</span>(__NR_getpid))</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="sysenter"><a href="#sysenter" class="headerlink" title="sysenter"></a>sysenter</h3><p>這部分也是只能在x86的平台上使用，會出現這個機制的理由是int 0x80的效率實在太差了。這邊的使用方式有點複雜，就不列出來了。</p>
+<h3 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h3><p>這三種方式的比較簡單統整一下</p>
+<p>syscall：現在主流，能在x64運行<br>int 0x80：只能在x86，效率差，已被捨棄<br>sysenter：只能在x86，用來替代int 0x80</p>
+<p>詳情可以參考<a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a>，寫得非常詳細。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="https://blog.csdn.net/eleven_xiy/article/details/77876702">Linux系统ELF程序的执行过程</a></li>
+<li><a href="https://blog.csdn.net/conansonic/article/details/54236335">_dl_start源码分析</a></li>
+<li><a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -2191,70 +2191,6 @@
       </tags>
   </entry>
   <entry>
-    <title>一些減少code size的方法</title>
-    <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
-<h2 id="Compile-Optimization"><a href="#Compile-Optimization" class="headerlink" title="Compile Optimization"></a>Compile Optimization</h2><p>首先我們可以看一下compiler是不是已經做過優化了，大家都知道gcc在編譯的時候可以選擇optimization的level，從0-3。0代表的是default，而隨著數字越高，對code size和execution time的優化就越高。</p>
-<p>大部分的人都會建議使用-O2，在code size和execution time取平衡，但是如果真的對code size十分在意的話，其實也可以使用-Os，代表的是-O2但是不包含部分會影響code size的優化。</p>
-<p>到底每個optimization的level是做了那些優化，可參考<a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC的官方文件</a></p>
-<h2 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h2><p>strip算是最基本的降低code size工具，他會移除debug資訊(可供gdb使用的資訊)以及symbol table，因此size會降低許多。</p>
-<p>這邊簡單做個實驗：</p>
-<ul>
-<li>我們先寫個簡單程式：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">func</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;func\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    func();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接著來編譯，為了凸顯strip的效果，我們加上-g來加上gdb debug訊息</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -g test.c -o <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接著我們可以用<code>nm -a test</code>來看到他的symbol table</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0000000000000000 a</span><br><span class="line">0000000000201030 b .bss</span><br><span class="line">0000000000201030 B __bss_start</span><br><span class="line">0000000000000000 n .comment</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>以及用<code>objdump -h test</code>來看到有哪些section header，可以發現有許多debug資訊</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"> 27 .debug_aranges 00000030  0000000000000000  0000000000000000  0000105d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 28 .debug_info   0000033a  0000000000000000  0000000000000000  0000108d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 29 .debug_abbrev 000000f6  0000000000000000  0000000000000000  000013c7  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 30 .debug_line   000000d4  0000000000000000  0000000000000000  000014bd  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 31 .debug_str    0000028a  0000000000000000  0000000000000000  00001591  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接著執行<code>strip test</code>後，會發現symbol table已經消失了(無法使用nm)，以及沒有debug的section header。兩者size有極大差異。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 11152 Aug  4 11:34 <span class="built_in">test</span></span><br><span class="line">&gt; strip <span class="built_in">test</span></span><br><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h2><p>strip可以減少極大部分的code size，但是如果這樣還不夠的話，我們可以用objcopy把一些沒用到的section header移除掉，但是要提醒一下，這個移除幾乎不會影響太大，大概就幾百byte而已。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version <span class="built_in">test</span> small_test</span><br><span class="line">-&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
-
-<p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
-<h2 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h2><p>我們知道程式裡面常常會有些程式碼(function&#x2F;data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
-<p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
-<p>細節可以參考<a href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C&#x2F;C++ symbols with GCC and ld?</a>。</p>
-<h2 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h2><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
-<p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
-<h2 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h2><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
-<p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
-<p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
-<h2 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h2><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1&#x2F;3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
-<p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
-<h2 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h2><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
-<p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
-<p>web壓縮的方式網路上有很多，有些甚至提供online的服務，例如<a href="https://htmlcompressor.com/compressor/">HTMLCompressor</a>或是<a href="https://www.textfixer.com/html/compress-html-compression.php">textfixer</a>等等，可以自己尋找適合的工具。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>上面分享了許多方法，但最後我要先澄清一下，自己需要搞清楚到底不夠的是flash還是memory，上面的方法並不是做了兩個都一定會減少。舉個例子來說，移除沒有必要用到的大變數通常只會影響memory的使用率，因為compile出來firmware的size並沒有包括大變數(因為是bss section，未初始化區段)，而file system的壓縮通常也只會影響flash的使用率，除非firmware有把檔案預先從flash讀出來放在memory中。我想強調的是使用這些方法時，還是要有必備的系統觀以及對你的系統有一定熟悉程度。</p>
-<p>老實說軟體開發者最討厭的大概就是被各種硬體條件所限制，然而這些在embedded的世界中還是有很大的機會會遇到，特別是考量到成本的時候。雖然很討厭這類的問題，但是解決後其實還是蠻有成就感的。以上分享希望能夠幫助大家解決code size issue。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://linux.vbird.org/somepaper/20050117-jianfei.pdf">程式減肥三步走</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>youtube-dl網路影片下載器</title>
     <url>/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
@@ -2346,6 +2282,70 @@
       </categories>
       <tags>
         <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一些減少code size的方法</title>
+    <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
+<h2 id="Compile-Optimization"><a href="#Compile-Optimization" class="headerlink" title="Compile Optimization"></a>Compile Optimization</h2><p>首先我們可以看一下compiler是不是已經做過優化了，大家都知道gcc在編譯的時候可以選擇optimization的level，從0-3。0代表的是default，而隨著數字越高，對code size和execution time的優化就越高。</p>
+<p>大部分的人都會建議使用-O2，在code size和execution time取平衡，但是如果真的對code size十分在意的話，其實也可以使用-Os，代表的是-O2但是不包含部分會影響code size的優化。</p>
+<p>到底每個optimization的level是做了那些優化，可參考<a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC的官方文件</a></p>
+<h2 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h2><p>strip算是最基本的降低code size工具，他會移除debug資訊(可供gdb使用的資訊)以及symbol table，因此size會降低許多。</p>
+<p>這邊簡單做個實驗：</p>
+<ul>
+<li>我們先寫個簡單程式：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">func</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;func\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    func();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接著來編譯，為了凸顯strip的效果，我們加上-g來加上gdb debug訊息</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -g test.c -o <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接著我們可以用<code>nm -a test</code>來看到他的symbol table</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0000000000000000 a</span><br><span class="line">0000000000201030 b .bss</span><br><span class="line">0000000000201030 B __bss_start</span><br><span class="line">0000000000000000 n .comment</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>以及用<code>objdump -h test</code>來看到有哪些section header，可以發現有許多debug資訊</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"> 27 .debug_aranges 00000030  0000000000000000  0000000000000000  0000105d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 28 .debug_info   0000033a  0000000000000000  0000000000000000  0000108d  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 29 .debug_abbrev 000000f6  0000000000000000  0000000000000000  000013c7  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 30 .debug_line   000000d4  0000000000000000  0000000000000000  000014bd  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line"> 31 .debug_str    0000028a  0000000000000000  0000000000000000  00001591  2**0</span><br><span class="line">                  CONTENTS, READONLY, DEBUGGING</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接著執行<code>strip test</code>後，會發現symbol table已經消失了(無法使用nm)，以及沒有debug的section header。兩者size有極大差異。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 11152 Aug  4 11:34 <span class="built_in">test</span></span><br><span class="line">&gt; strip <span class="built_in">test</span></span><br><span class="line">&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h2><p>strip可以減少極大部分的code size，但是如果這樣還不夠的話，我們可以用objcopy把一些沒用到的section header移除掉，但是要提醒一下，這個移除幾乎不會影響太大，大概就幾百byte而已。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; objcopy -R .comment -R .note.ABI-tag -R .gnu.version <span class="built_in">test</span> small_test</span><br><span class="line">-&gt; <span class="built_in">ls</span> -al</span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6304 Aug  4 11:39 <span class="built_in">test</span></span><br><span class="line">-rwxrwxrwx 1 evshary evshary 6024 Aug  4 11:45 small_test</span><br></pre></td></tr></table></figure>
+
+<p>這邊所謂的沒用到section header主要是一些環境的版本資訊，到底這些header代表什麼意思，可以參考<a href="http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html">Linux Standard Base PDA Specification 3.0RC1 - Chapter 5. Special Sections</a></p>
+<h2 id="利用-compile-option-來移除沒用到的-symbol"><a href="#利用-compile-option-來移除沒用到的-symbol" class="headerlink" title="利用 compile option 來移除沒用到的 symbol"></a>利用 compile option 來移除沒用到的 symbol</h2><p>我們知道程式裡面常常會有些程式碼(function&#x2F;data)並沒有被人使用到，不論是因為長久maintain被修修改改，還是因為本身就有預留給未來使用。但是這些沒用到的功能如果都被編進去程式中其實是很浪費的，我們這邊可以用一些小手段來移除。</p>
+<p>在gcc的編譯過程中我們可以加上特別的編譯參數<code>-fdata-sections</code>和<code>-ffunction-sections</code>，這兩個的意思是把每個symbol(function或data)獨立成不同的section。為什麼要這樣做呢？當然是為了後面在link的時候我們可以直接移除沒用到的section，在link的時候多加上<code>--gc-sections</code>參數即可。</p>
+<p>細節可以參考<a href="https://stackoverflow.com/questions/6687630/how-to-remove-unused-c-c-symbols-with-gcc-and-ld">How to remove unused C&#x2F;C++ symbols with GCC and ld?</a>。</p>
+<h2 id="觀察-map-file"><a href="#觀察-map-file" class="headerlink" title="觀察 map file"></a>觀察 map file</h2><p>map file是我們在編譯過程中很重要的一個工具，他可以用來檢視目前symbol的size有多大，我們可以用nm來取得symbol table，甚至根據symbol的size大小來排序(指令是<code>nm --size-sort -r -S [執行檔]</code>)。透過觀察map file，我們可以瞭解程式內部每個功能佔的大小為何，進一步思考有沒有優化的空間，甚至發現該功能根本是沒有在使用的。</p>
+<p>我自己也曾經有遇過code size的問題，那時候我一樣是用nm來讀取map file，忽然發現某個變數大到不可思議，觀察了一下發現那個變數是直接用global的方式宣告，並不是要用的時候才malloc，導致在一般firmware運作的過程中那塊記憶體完全沒辦法被使用。更重要的是那個功能並不常被使用，而且還會隨著硬體平台有不一樣的大小，結果RD為了方便，直接保留可能會用到的最大值，造成空間的極度浪費。</p>
+<h2 id="Remove-debug-message"><a href="#Remove-debug-message" class="headerlink" title="Remove debug message"></a>Remove debug message</h2><p>其實RD在開發的過程中，或多或少都會留一些debug訊息，雖然少少的，但是累積起來量也是很驚人，畢竟一個debug訊息就是一個字串。在code size緊張的情況下，應該可以審視一下，看能不能把debug訊息移除。</p>
+<p>值得注意的是有些embedded的firmware確實是會有關閉debug資訊的方式，但是這個有可能只是不顯示(例如關閉console顯示)，並不是真的移除，要仔細確認自己的狀況是哪種。</p>
+<p>不過如果真的到了一定要移除debug訊息程式才能夠被使用的情況，這樣也挺危險的了，因為未來如果要maintain，必要的debug訊息還是逃不了。我會建議程式開發的過程中每個功能都可以自行決定要不要把debug的程式碼編進去，至少遇到bug還可以只開啟相關功能的debug訊息，而不是全部訊息都全開。</p>
+<h2 id="移除沒用到的功能-library-、檔案"><a href="#移除沒用到的功能-library-、檔案" class="headerlink" title="移除沒用到的功能(library)、檔案"></a>移除沒用到的功能(library)、檔案</h2><p>在我們的embedded firmware裡面有些會需要使用SSL或SSH這種非常龐大的library，可能佔firmware的size超過1&#x2F;3。像是這種library其實有很多功能是我們沒有用到的，以SSL、SSH來說，其實我們只會用到其中少部分的加密cipher，而不是全部。如果真要使用，建議要對library本身功能機制足夠熟悉，在編譯的時候只開用到的option即可。</p>
+<p>除了library外，一個產品經過長時間的maintain，中間一定會有許多功能是後來沒用到，卻沒被移除的。如果只是程式碼倒還好，可以用前面提到的gc-section來排除，但是如果是file system的檔案，那就要靠自己來處理了。我個人的經驗是，有很多功能是過去產品有的，但是因為後來時代不符合被移除，結果相關檔案就都一直遺留下來，例如可在browser上面運作的java plugin等等，這些的size是也很可觀的。</p>
+<h2 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h2><p>壓縮也是減少code size的其中一個方法，除了啟動的程式外，我們可以把runtime過程才要load的東西進行壓縮。通常這類的角色可以是kernel啟動完成後另外加載的AP，或是filesystem。不過壓縮要考慮的點就是壓縮率、解壓的程式碼的大小以及速度，最好可以在這其中之間取得平衡。壓縮率對我們來說就是可以把程式縮小到什麼地步，如果縮小不大就沒有意義了，然後解壓的部分也很重要，要是有很高壓縮率，但是解壓程式很大，那整體來說並沒有得到多高的效益。而如果壓縮率高，但解壓速度過慢，也會影響到使用者體驗，這些都需要考慮到。</p>
+<p>filesystem的部分有點可以稍微注意一下，大部分的應用都是web居多，而web其實是有壓縮的空間，且不需另外解壓的。我們知道一般web都是由html、CSS、javascript所組成，而這些內容丟給browser的時候並不需要是人眼比較好閱讀的方式，例如說不需要換行、縮排等等。這麼一來我們就有可以動手腳的空間，可以在編譯過程中，把原始的檔案做壓縮，最後才變成file system，這樣的壓縮率是很可觀的。除了減少size外，這還帶來另外一個很大的好處就是減少網路流量的傳輸，特別在embedded system中系統效能其實都不快。提醒一下，記得開發過程使用git追蹤的web檔案最好是原始檔案(人眼好讀的)，編譯過程才壓縮，不然這只是給自己帶來開發的困擾而已。</p>
+<p>web壓縮的方式網路上有很多，有些甚至提供online的服務，例如<a href="https://htmlcompressor.com/compressor/">HTMLCompressor</a>或是<a href="https://www.textfixer.com/html/compress-html-compression.php">textfixer</a>等等，可以自己尋找適合的工具。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>上面分享了許多方法，但最後我要先澄清一下，自己需要搞清楚到底不夠的是flash還是memory，上面的方法並不是做了兩個都一定會減少。舉個例子來說，移除沒有必要用到的大變數通常只會影響memory的使用率，因為compile出來firmware的size並沒有包括大變數(因為是bss section，未初始化區段)，而file system的壓縮通常也只會影響flash的使用率，除非firmware有把檔案預先從flash讀出來放在memory中。我想強調的是使用這些方法時，還是要有必備的系統觀以及對你的系統有一定熟悉程度。</p>
+<p>老實說軟體開發者最討厭的大概就是被各種硬體條件所限制，然而這些在embedded的世界中還是有很大的機會會遇到，特別是考量到成本的時候。雖然很討厭這類的問題，但是解決後其實還是蠻有成就感的。以上分享希望能夠幫助大家解決code size issue。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://linux.vbird.org/somepaper/20050117-jianfei.pdf">程式減肥三步走</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -3551,23 +3551,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《請停止無效努力》：尋找適合自己的方向</title>
-    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
-    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
-<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
-<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
-<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
-<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
-<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>《認知驅動》：輸出重於努力</title>
     <url>/2024/09/17/%E8%AA%8D%E7%9F%A5%E9%A9%85%E5%8B%95%EF%BC%9A%E5%81%9A%E6%88%90%E4%B8%80%E4%BB%B6%E5%B0%8D%E4%BB%96%E4%BA%BA%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/0010933681">認知驅動</a>」是周嶺「認知覺醒」的續作。如果要用一句話概括這本書，那就是不要過度關注內在的自我成長，要對外為他人產生創造價值，而外在的回饋將會回到自身。本書雖然零零散散引用很多其他人觀念或道理，但我覺得這些都圍繞在如何行動並對外創造價值上。</p>
@@ -3620,6 +3603,23 @@
 <li>反思自己可以為他人創造的獨特價值為何。當學習新事物的時候，可以想想有沒有什麼方式可以輸出價值。</li>
 <li>用較大的時間刻度看看自己過去的成就，可以用時間軸的方式來呈現。然後想想接下來的人生階段要以什麼事情為最大的優先目標。</li>
 </ol>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《請停止無效努力》：尋找適合自己的方向</title>
+    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
+<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
+<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
+<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
+<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
+<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
