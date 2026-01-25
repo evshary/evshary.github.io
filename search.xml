@@ -624,6 +624,60 @@
       </tags>
   </entry>
   <entry>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果要在別的port開啟</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HTTP header 安全設定</title>
     <url>/2018/01/03/HTTP-header-%E5%AE%89%E5%85%A8%E8%A8%AD%E5%AE%9A/</url>
     <content><![CDATA[<h2 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h2><p>根據<a href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
@@ -824,60 +878,6 @@
       </categories>
       <tags>
         <tag>security</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果要在別的port開啟</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1159,6 +1159,88 @@
       </tags>
   </entry>
   <entry>
+    <title>dd - 資料處理的好工具</title>
+    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
+<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
+<li>輸入輸出參數<ul>
+<li>if&#x3D;FILE：輸入名稱</li>
+<li>of&#x3D;FILE：輸出名稱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
+
+<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
+<li>做相對應的轉換<code>conv=CONVS</code><ul>
+<li>lcase：大寫字母換小寫</li>
+<li>ucase：小寫字母換大寫</li>
+<li>nocreat：不要建立輸出檔案</li>
+<li>notrunc：input小於output時，仍維持output大小</li>
+<li>fdatasync：讓資料同步寫入硬碟</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
+
+<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
+<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
+<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
+<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
+</ul>
+</li>
+<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
+<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
+<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
+</ul>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
+<li><p>大小寫轉換</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>產生一個特定大小的檔案</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>把特定檔案的開頭512 byte清空</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份硬碟</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
+<ol>
+<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然後應該會出現類似如下內容</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
+<ul>
+<li>拆分檔案，例如把檔案切成好幾個1G</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>合併檔案，例如好幾個1G合併起來</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>code review</title>
     <url>/2017/08/27/code-review/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
@@ -1289,88 +1371,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dd - 資料處理的好工具</title>
-    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
-<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
-<li>輸入輸出參數<ul>
-<li>if&#x3D;FILE：輸入名稱</li>
-<li>of&#x3D;FILE：輸出名稱</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
-
-<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
-<li>做相對應的轉換<code>conv=CONVS</code><ul>
-<li>lcase：大寫字母換小寫</li>
-<li>ucase：小寫字母換大寫</li>
-<li>nocreat：不要建立輸出檔案</li>
-<li>notrunc：input小於output時，仍維持output大小</li>
-<li>fdatasync：讓資料同步寫入硬碟</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
-
-<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
-<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
-<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
-<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
-</ul>
-</li>
-<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
-<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
-<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
-</ul>
-<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
-<li><p>大小寫轉換</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>產生一個特定大小的檔案</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>把特定檔案的開頭512 byte清空</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份硬碟</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
-<ol>
-<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然後應該會出現類似如下內容</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
-<ul>
-<li>拆分檔案，例如把檔案切成好幾個1G</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>合併檔案，例如好幾個1G合併起來</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>dependency</title>
     <url>/2017/08/26/dependency/</url>
     <content><![CDATA[<h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>通常我們都會用Makefile來看相依性，如果有改動make會自動幫我們判別<br>但是有些情況，make可能無法判斷<br>以下面為例，我們有四個檔案：main.c, test.c, test.h, private.h</p>
@@ -1419,187 +1419,6 @@
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
 <li><a href="http://www.ncpress.com.cn/zhuanti/0613_1360GCC/d-015.htm">GCC 技术参考大全 附录D 命令行选项</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>gcc常用擴充功能</title>
-    <url>/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
-<h2 id="內建函式"><a href="#內建函式" class="headerlink" title="內建函式"></a>內建函式</h2><p>要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上<code>-fno-builtin</code>選項，通常<code>-fno-builtin</code>是為了幫助我們確保程式的結果是如同我們所想像的樣子呈現，而不會被一些最佳化改變樣子，方便設定breakpoint和debug。</p>
-<h3 id="找呼叫者"><a href="#找呼叫者" class="headerlink" title="找呼叫者"></a>找呼叫者</h3><p>首先我們先來談談找呼叫者這件事，我想大家應該都有經驗曾經發現程式死在某一行，但是卻不知道是誰呼叫的，這時候只能痛苦地去從stack反推return address。但是其實gcc內是有特殊內建函式可以幫助我們的，這邊介紹下面兩個好用函式。</p>
-<ul>
-<li><code>void *builtin_return_address(unsigned int LEVEL)</code>：找到函式的return address是什麼，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的下一個執行指令。</li>
-<li><code>void *builtin_frame_address(unsigned int LEVEL)</code>：找到函式的frame pointer，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的frame pointer。</li>
-</ul>
-<p>要注意的是LEVEL不能填變數，也就是編譯時必須確定該數字。</p>
-<h4 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h4><p>我們還是透過一個簡單的例子來說明一下</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test3</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">3</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;3: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test3\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test2</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test2\n&quot;</span>);</span><br><span class="line">    test3();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test1\n&quot;</span>);</span><br><span class="line">    test2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    test1();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>好，那我們來編譯並執行看看</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make <span class="built_in">test</span></span><br><span class="line">$ ./test</span><br><span class="line">0: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line"><span class="built_in">test</span></span><br><span class="line">0: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">1: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test1</span><br><span class="line">0: ret_addr=0x40076d frame_addr=0x2bba8b60</span><br><span class="line">1: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">2: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test2</span><br><span class="line">0: ret_addr=0x4006e1 frame_addr=0x2bba8b40</span><br><span class="line">1: ret_addr=0x40076d frame_addr=0x2bba8b60</span><br><span class="line">2: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">3: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test3</span><br></pre></td></tr></table></figure>
-
-<p>可以看到每層function所對應的return address和frame address都被列出來，但是要怎麼驗證是否真的是這樣呢？我們把程式逆向一下看位置。這邊我們鎖定test1()的return address，也就是0x4007bc，應該是test()函式的呼叫test1()的下一行。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ objdump -d <span class="built_in">test</span></span><br><span class="line">...</span><br><span class="line">0000000000400770 &lt;<span class="built_in">test</span>&gt;:</span><br><span class="line">  400770:       55                      push   %rbp</span><br><span class="line">  400771:       48 89 e5                mov    %rsp,%rbp</span><br><span class="line">...</span><br><span class="line">  4007b2:       e8 59 <span class="built_in">fc</span> ff ff          callq  400410 &lt;puts@plt&gt;</span><br><span class="line">  4007b7:       e8 28 ff ff ff          callq  4006e4 &lt;test1&gt;</span><br><span class="line">  4007bc:       90                      nop</span><br><span class="line">  4007bd:       c9                      leaveq</span><br><span class="line">  4007be:       c3                      retq</span><br><span class="line"></span><br><span class="line">00000000004007bf &lt;main&gt;:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>的確，下一行nop的位置就是就是4007bc，符合我們的想法。</p>
-<h3 id="其他有用的builtin函式"><a href="#其他有用的builtin函式" class="headerlink" title="其他有用的builtin函式"></a>其他有用的builtin函式</h3><p>除了上面的例子，其實還有其他有用的builtin函式，這邊就只是列出來提供參考：</p>
-<ul>
-<li><code>int __builtin_types_compatible_p(TYPE1, TYPE2)</code>：檢查TYPE1和TYPE2是否是相同type，相同回傳1，否則為0。注意這邊const和非const會視為同種類型。</li>
-<li><code>TYPE __builtin_choose_expr(CONST_EXP, EXP1, EXP2)</code>：同<code>CONST_EXP?EXP1:EXP2</code>的概念，但是這個寫法會在編譯時就決定結果。常用方式是在寫macro時可以搭配<code>__builtin_types_compatible_p</code>當作CONST_EXP，選擇要呼叫什麼函式。</li>
-<li><code>int __builtin_constant_p(EXP)</code>：判斷EXP是否是常數。</li>
-<li><code>long __builtin_expect(long EXP, long C)</code>：預先知道EXP的值很大機率會是C，藉此做最佳化，kernel的likely和unlikely也是靠這個實現的。</li>
-<li><code>void __builtin_prefetch(const void *ADDR, int RW, int LOCALITY)</code>：把ADDR預先載入快取使用。<ul>
-<li>RW：1代表會寫入資料，0代表只會讀取</li>
-<li>LOCALITY：範圍是0~3，0代表用了馬上就不用(不用關心time locality)、3代表之後還會常用到</li>
-</ul>
-</li>
-<li><code>int __builtin_ffs (int X)</code>：回傳X中從最小位數開始計算第一個1的位置，例如<code>__builtin_ffs(0xc)=3</code>，當X是0時，回傳0。</li>
-<li><code>int __builtin_popcount (unsigned int X)</code>：在X中1的個數</li>
-<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X&#x3D;0時undefined。</li>
-<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X&#x3D;0時undefined。</li>
-<li><code>int __builtin_parity (unsigned int x)</code>：Ｘ值的parity。</li>
-</ul>
-<h2 id="attribute"><a href="#attribute" class="headerlink" title="__attribute__"></a><code>__attribute__</code></h2><h3 id="weak-alias"><a href="#weak-alias" class="headerlink" title="weak &amp; alias"></a>weak &amp; alias</h3><h4 id="測試是否支援某function"><a href="#測試是否支援某function" class="headerlink" title="測試是否支援某function"></a>測試是否支援某function</h4><p>通常會使用<code>__attribute__(weak)</code>是為了避免有函式衝突的狀況，我們看個例子</p>
-<p>a.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">printf_test</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak))</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(printf_test)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Here is printf_test result: \n&quot;</span>);</span><br><span class="line">        printf_test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;We don&#x27;t support printf_test\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make a</span><br><span class="line">$ ./a</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">We don<span class="string">&#x27;t support printf_test</span></span><br></pre></td></tr></table></figure>
-
-<p>雖然我們沒有printf_test，但是直接編譯是會通過的，因為printf_test被視為weak，假設在連結時找不到，是會被填0的。</p>
-<p>那如果有printf_test的情況呢？我們加上b.c重新編譯看看</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">printf_test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is b function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ ./a.out</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">Here is printf_test result:</span><br><span class="line">This is b <span class="keyword">function</span>.</span><br></pre></td></tr></table></figure>
-
-<p>看起來就會執行printf_test了。這樣的功能對我們要動態看有無支援函式幫助很大。</p>
-<h4 id="為函式加上default值"><a href="#為函式加上default值" class="headerlink" title="為函式加上default值"></a>為函式加上default值</h4><p>這邊我們會用到alias的attribute，alias的話通常會跟weak一起使用，最常被用到的是幫不確定有無支援的函式加上default值。</p>
-<p>a.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_default</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Not support this function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_foo</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">print_bar</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    print_foo();</span><br><span class="line">    print_bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>b.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_foo</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;foo function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ ./a.out</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">foo <span class="keyword">function</span>.</span><br><span class="line">Not support this <span class="keyword">function</span>.</span><br></pre></td></tr></table></figure>
-
-<p>可以看到因為print_bar並沒有被宣告，所以最後會執行alias的print_default。</p>
-<h3 id="在main前後執行程式"><a href="#在main前後執行程式" class="headerlink" title="在main前後執行程式"></a>在main前後執行程式</h3><p>有時候會想要在main的執行前後可以做些事，這時候就會用到下面兩個attribute</p>
-<ul>
-<li>constructor：main前做事</li>
-<li>destructor：main之後做事</li>
-</ul>
-<p>讓我們看個範例</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">__attribute__((constructor))</span><br><span class="line"><span class="type">void</span> <span class="title function_">before</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;before main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__attribute__((destructor))</span><br><span class="line"><span class="type">void</span> <span class="title function_">after</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make <span class="built_in">test</span></span><br><span class="line">$ ./test</span><br><span class="line">before main</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">after main</span><br></pre></td></tr></table></figure>
-
-<p>結果的確如我們所料。另外這邊有點要注意，跟前面不一樣的是，<code>__attribute__((constructor))</code>和<code>__attribute__((destructor))</code>必須放在函式前面，不然會有<code>error: attributes should be specified before the declarator in a function definition</code>的錯誤。</p>
-<h3 id="其他attribute"><a href="#其他attribute" class="headerlink" title="其他attribute"></a>其他attribute</h3><p>剩下還有一些有機會會用到的attribute，這邊就不多談，只列出來參考。</p>
-<ul>
-<li><code>__attribute__((section(&quot;section_name&quot;)))</code>：代表要把這個symbol放到<code>section_name</code>中</li>
-<li><code>__attribute__((used))</code>：不管有沒有被引用，這個symbol都不會被優化掉</li>
-<li><code>__attribute__((unused))</code>：沒有被引用到的時候也不會跳出警告</li>
-<li><code>__attribute__((deprecated))</code>：用到的時候會跳出警告，用來警示使用者這個函式將要廢棄</li>
-<li><code>__attribute__((stdcall))</code>：從右到左把參數放入stack，由callee(被呼叫者)把stack恢復正常</li>
-<li><code>__attribute__((cdecl))</code>：C語言預設的作法，從右到左把參數放入stack，由caller把stack恢復正常</li>
-<li><code>__attribute__((fastcall))</code>：頭兩個參數是用register來存放，剩下一樣放入stack</li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="https://blog.csdn.net/jasonchen_gbd/article/details/44948523">gcc的__builtin_函数介绍</a></li>
-<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html">6.57 Other Built-in Functions Provided by GCC</a></li>
-<li><a href="http://blog.sina.com.cn/s/blog_a9303fd90101d5su.html"><code>__attribute__</code>之weak,alias属性</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -1745,6 +1564,88 @@
       </tags>
   </entry>
   <entry>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
+
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放音樂</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>gnuplot：報告必備的繪圖工具</title>
     <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
@@ -1811,6 +1712,105 @@
       </categories>
       <tags>
         <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gcc常用擴充功能</title>
+    <url>/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
+<h2 id="內建函式"><a href="#內建函式" class="headerlink" title="內建函式"></a>內建函式</h2><p>要特別注意的是，這些內建函數是跟CPU架構息息相關，所以並不是每個平台都可以順利使用。另外就是編譯的時候不能帶上<code>-fno-builtin</code>選項，通常<code>-fno-builtin</code>是為了幫助我們確保程式的結果是如同我們所想像的樣子呈現，而不會被一些最佳化改變樣子，方便設定breakpoint和debug。</p>
+<h3 id="找呼叫者"><a href="#找呼叫者" class="headerlink" title="找呼叫者"></a>找呼叫者</h3><p>首先我們先來談談找呼叫者這件事，我想大家應該都有經驗曾經發現程式死在某一行，但是卻不知道是誰呼叫的，這時候只能痛苦地去從stack反推return address。但是其實gcc內是有特殊內建函式可以幫助我們的，這邊介紹下面兩個好用函式。</p>
+<ul>
+<li><code>void *builtin_return_address(unsigned int LEVEL)</code>：找到函式的return address是什麼，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的下一個執行指令。</li>
+<li><code>void *builtin_frame_address(unsigned int LEVEL)</code>：找到函式的frame pointer，參數的LEVEL代表要往上找幾層，填0的話代表呼叫當前函式者的frame pointer。</li>
+</ul>
+<p>要注意的是LEVEL不能填變數，也就是編譯時必須確定該數字。</p>
+<h4 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h4><p>我們還是透過一個簡單的例子來說明一下</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test3</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">3</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;3: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test3\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test2</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">2</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test2\n&quot;</span>);</span><br><span class="line">    test3();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">1</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test1\n&quot;</span>);</span><br><span class="line">    test2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *ret_addr, *frame_addr;</span><br><span class="line">    ret_addr = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line">    frame_addr = __builtin_frame_address(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret_addr=0x%x frame_addr=0x%x\n&quot;</span>, ret_addr, frame_addr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    test1();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好，那我們來編譯並執行看看</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make <span class="built_in">test</span></span><br><span class="line">$ ./test</span><br><span class="line">0: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line"><span class="built_in">test</span></span><br><span class="line">0: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">1: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test1</span><br><span class="line">0: ret_addr=0x40076d frame_addr=0x2bba8b60</span><br><span class="line">1: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">2: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test2</span><br><span class="line">0: ret_addr=0x4006e1 frame_addr=0x2bba8b40</span><br><span class="line">1: ret_addr=0x40076d frame_addr=0x2bba8b60</span><br><span class="line">2: ret_addr=0x4007bc frame_addr=0x2bba8b80</span><br><span class="line">3: ret_addr=0x4007c8 frame_addr=0x2bba8ba0</span><br><span class="line">test3</span><br></pre></td></tr></table></figure>
+
+<p>可以看到每層function所對應的return address和frame address都被列出來，但是要怎麼驗證是否真的是這樣呢？我們把程式逆向一下看位置。這邊我們鎖定test1()的return address，也就是0x4007bc，應該是test()函式的呼叫test1()的下一行。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ objdump -d <span class="built_in">test</span></span><br><span class="line">...</span><br><span class="line">0000000000400770 &lt;<span class="built_in">test</span>&gt;:</span><br><span class="line">  400770:       55                      push   %rbp</span><br><span class="line">  400771:       48 89 e5                mov    %rsp,%rbp</span><br><span class="line">...</span><br><span class="line">  4007b2:       e8 59 <span class="built_in">fc</span> ff ff          callq  400410 &lt;puts@plt&gt;</span><br><span class="line">  4007b7:       e8 28 ff ff ff          callq  4006e4 &lt;test1&gt;</span><br><span class="line">  4007bc:       90                      nop</span><br><span class="line">  4007bd:       c9                      leaveq</span><br><span class="line">  4007be:       c3                      retq</span><br><span class="line"></span><br><span class="line">00000000004007bf &lt;main&gt;:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>的確，下一行nop的位置就是就是4007bc，符合我們的想法。</p>
+<h3 id="其他有用的builtin函式"><a href="#其他有用的builtin函式" class="headerlink" title="其他有用的builtin函式"></a>其他有用的builtin函式</h3><p>除了上面的例子，其實還有其他有用的builtin函式，這邊就只是列出來提供參考：</p>
+<ul>
+<li><code>int __builtin_types_compatible_p(TYPE1, TYPE2)</code>：檢查TYPE1和TYPE2是否是相同type，相同回傳1，否則為0。注意這邊const和非const會視為同種類型。</li>
+<li><code>TYPE __builtin_choose_expr(CONST_EXP, EXP1, EXP2)</code>：同<code>CONST_EXP?EXP1:EXP2</code>的概念，但是這個寫法會在編譯時就決定結果。常用方式是在寫macro時可以搭配<code>__builtin_types_compatible_p</code>當作CONST_EXP，選擇要呼叫什麼函式。</li>
+<li><code>int __builtin_constant_p(EXP)</code>：判斷EXP是否是常數。</li>
+<li><code>long __builtin_expect(long EXP, long C)</code>：預先知道EXP的值很大機率會是C，藉此做最佳化，kernel的likely和unlikely也是靠這個實現的。</li>
+<li><code>void __builtin_prefetch(const void *ADDR, int RW, int LOCALITY)</code>：把ADDR預先載入快取使用。<ul>
+<li>RW：1代表會寫入資料，0代表只會讀取</li>
+<li>LOCALITY：範圍是0~3，0代表用了馬上就不用(不用關心time locality)、3代表之後還會常用到</li>
+</ul>
+</li>
+<li><code>int __builtin_ffs (int X)</code>：回傳X中從最小位數開始計算第一個1的位置，例如<code>__builtin_ffs(0xc)=3</code>，當X是0時，回傳0。</li>
+<li><code>int __builtin_popcount (unsigned int X)</code>：在X中1的個數</li>
+<li><code>int __builtin_ctz (unsigned int X)</code>：X末尾的0個數，X&#x3D;0時undefined。</li>
+<li><code>int __builtin_clz (unsigned int X)</code>：X前面的0個數，X&#x3D;0時undefined。</li>
+<li><code>int __builtin_parity (unsigned int x)</code>：Ｘ值的parity。</li>
+</ul>
+<h2 id="attribute"><a href="#attribute" class="headerlink" title="__attribute__"></a><code>__attribute__</code></h2><h3 id="weak-alias"><a href="#weak-alias" class="headerlink" title="weak &amp; alias"></a>weak &amp; alias</h3><h4 id="測試是否支援某function"><a href="#測試是否支援某function" class="headerlink" title="測試是否支援某function"></a>測試是否支援某function</h4><p>通常會使用<code>__attribute__(weak)</code>是為了避免有函式衝突的狀況，我們看個例子</p>
+<p>a.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">printf_test</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak))</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(printf_test)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Here is printf_test result: \n&quot;</span>);</span><br><span class="line">        printf_test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;We don&#x27;t support printf_test\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make a</span><br><span class="line">$ ./a</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">We don<span class="string">&#x27;t support printf_test</span></span><br></pre></td></tr></table></figure>
+
+<p>雖然我們沒有printf_test，但是直接編譯是會通過的，因為printf_test被視為weak，假設在連結時找不到，是會被填0的。</p>
+<p>那如果有printf_test的情況呢？我們加上b.c重新編譯看看</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">printf_test</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is b function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ ./a.out</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">Here is printf_test result:</span><br><span class="line">This is b <span class="keyword">function</span>.</span><br></pre></td></tr></table></figure>
+
+<p>看起來就會執行printf_test了。這樣的功能對我們要動態看有無支援函式幫助很大。</p>
+<h4 id="為函式加上default值"><a href="#為函式加上default值" class="headerlink" title="為函式加上default值"></a>為函式加上default值</h4><p>這邊我們會用到alias的attribute，alias的話通常會跟weak一起使用，最常被用到的是幫不確定有無支援的函式加上default值。</p>
+<p>a.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_default</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Not support this function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_foo</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">print_bar</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((weak, alias(<span class="string">&quot;print_default&quot;</span>)))</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    print_foo();</span><br><span class="line">    print_bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>b.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_foo</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;foo function.\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc a.c b.c</span><br><span class="line">$ ./a.out</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">foo <span class="keyword">function</span>.</span><br><span class="line">Not support this <span class="keyword">function</span>.</span><br></pre></td></tr></table></figure>
+
+<p>可以看到因為print_bar並沒有被宣告，所以最後會執行alias的print_default。</p>
+<h3 id="在main前後執行程式"><a href="#在main前後執行程式" class="headerlink" title="在main前後執行程式"></a>在main前後執行程式</h3><p>有時候會想要在main的執行前後可以做些事，這時候就會用到下面兩個attribute</p>
+<ul>
+<li>constructor：main前做事</li>
+<li>destructor：main之後做事</li>
+</ul>
+<p>讓我們看個範例</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">__attribute__((constructor))</span><br><span class="line"><span class="type">void</span> <span class="title function_">before</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;before main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__attribute__((destructor))</span><br><span class="line"><span class="type">void</span> <span class="title function_">after</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after main\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;This is main function\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make <span class="built_in">test</span></span><br><span class="line">$ ./test</span><br><span class="line">before main</span><br><span class="line">This is main <span class="keyword">function</span></span><br><span class="line">after main</span><br></pre></td></tr></table></figure>
+
+<p>結果的確如我們所料。另外這邊有點要注意，跟前面不一樣的是，<code>__attribute__((constructor))</code>和<code>__attribute__((destructor))</code>必須放在函式前面，不然會有<code>error: attributes should be specified before the declarator in a function definition</code>的錯誤。</p>
+<h3 id="其他attribute"><a href="#其他attribute" class="headerlink" title="其他attribute"></a>其他attribute</h3><p>剩下還有一些有機會會用到的attribute，這邊就不多談，只列出來參考。</p>
+<ul>
+<li><code>__attribute__((section(&quot;section_name&quot;)))</code>：代表要把這個symbol放到<code>section_name</code>中</li>
+<li><code>__attribute__((used))</code>：不管有沒有被引用，這個symbol都不會被優化掉</li>
+<li><code>__attribute__((unused))</code>：沒有被引用到的時候也不會跳出警告</li>
+<li><code>__attribute__((deprecated))</code>：用到的時候會跳出警告，用來警示使用者這個函式將要廢棄</li>
+<li><code>__attribute__((stdcall))</code>：從右到左把參數放入stack，由callee(被呼叫者)把stack恢復正常</li>
+<li><code>__attribute__((cdecl))</code>：C語言預設的作法，從右到左把參數放入stack，由caller把stack恢復正常</li>
+<li><code>__attribute__((fastcall))</code>：頭兩個參數是用register來存放，剩下一樣放入stack</li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="https://blog.csdn.net/jasonchen_gbd/article/details/44948523">gcc的__builtin_函数介绍</a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html">6.57 Other Built-in Functions Provided by GCC</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_a9303fd90101d5su.html"><code>__attribute__</code>之weak,alias属性</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>系統程式</tag>
       </tags>
   </entry>
   <entry>
@@ -3042,43 +3042,6 @@
       </tags>
   </entry>
   <entry>
-    <title>為什麼動機比努力重要</title>
-    <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
-    <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
-<p>這是某次面試我被問到的問題。原本以為我對網路架構已經足夠熟悉，然而卻發現自己沒辦法很流暢地回答這個看似基本的問題。不僅面試官不滿意，我也不滿意自己的答案。</p>
-<p>這是因為工作不認真，沒有學好技術嗎？不，以客觀標準來說，我絕對屬於認真的那群。那難道是經驗不夠嗎？也不是，自從畢業以來，我從事的工作都和網路相關。這並不能當作藉口。</p>
-<p>那麼問題出在哪裡呢？又或者我們可以進一步問，明明花同樣的時間，為何人與人之間的能力差距會這麼大呢？這個疑惑不斷在心中徘徊，困擾了很久，最終找到了真正的答案：</p>
-<p>那就是「動機」。</p>
-<h2 id="你的努力搞錯了方向"><a href="#你的努力搞錯了方向" class="headerlink" title="你的努力搞錯了方向"></a>你的努力搞錯了方向</h2><p>或許你對這樣的答案不以為然：動機只是做一件事情的理由罷了，哪會影響做這件事的結果。</p>
-<p>我原本也是這樣想，但是回想自己過去學習與工作的經歷，那些表現好的領域，無不是因為我對那些知識感到好奇，想要徹底搞懂；而表現不突出的，往往都不是為了學習本身而行動，而是為了得到好成績或是完成某個任務，學會那些領域知識只是副產品罷了。</p>
-<p>明明都花一樣時間、一樣努力，只是動機不同，可是最後成果卻天差地別。</p>
-<p>為什麼會這樣呢？讓我們用更加實際的情境來說明：</p>
-<p>想像有兩個能力伯仲之間的員工，一個想要得到老闆賞識，認為完成越多任務越好，而另一個人則是對事情充滿好奇心，接收到的任務會想盡辦法了解各種細節。</p>
-<p>前者只要任務完成了就會馬上著手下一個任務，所以完成的數量遠遠高於後者。然而有好奇心的員工卻會在完成任務之餘嘗試理解其中的各種知識，而這些知識又可以用在未來其他任務上。拉長時間來看，他才是真正累積了這個領域的專業能力，能解決未來更加困難的問題。</p>
-<p>兩個人都付出了同等的努力，但是由於各自的動機不同，最終所能達成的成就也不同。</p>
-<p>如果努力是汽車的油門，那麼動機就是方向盤。一旦動機有稍微的偏差，差之毫釐失之千里，我們將會駛向錯誤的目的地。</p>
-<h2 id="經驗並不重要"><a href="#經驗並不重要" class="headerlink" title="經驗並不重要"></a>經驗並不重要</h2><p>但是不管動機如何，如果一個事情做了十年，總會變成這個領域的佼佼者吧？也許你會想這樣反駁。</p>
-<p>我有個朋友當了產品經理十多年，然而其他人私底下評價他都認為能力差不多就是剛畢業的學生。對於他所管理的產品，從來不會想進一步了解，完全是別人怎麼說就怎麼做，一個指令一個動作。對他而言，能完成主管交辦的工作就好，並沒有任何動機學習產品的技術原理、市場趨勢和發展前景。</p>
-<p>就如同我們天天開車不會哪天變成 F1 賽車手一樣，我們也不會因為用同樣的技能做重複性的工作，就能獲得突破性成果。所謂的經驗累積並非單純的時間累積。究竟我們是用一年的工作能力重複做十年，還是十年內有意識不斷學習新的知識呢？</p>
-<p>這也正是「刻意練習」這本書所強調的觀念：一個技能要有所成長，需要持續突破舒適圈，克服自己的弱點。單純重複同個行為一萬小時並不會讓自己成為專家。</p>
-<p>時間從來都不是重點，重要的是在這段時間內我們的內在動機為何，以及採取了什麼行動。只有不斷經歷各式各樣的事物，時間的積累才會有價值。</p>
-<h2 id="好奇心才是最佳的動機"><a href="#好奇心才是最佳的動機" class="headerlink" title="好奇心才是最佳的動機"></a>好奇心才是最佳的動機</h2><p>知名物理學家費曼曾說：「對任何事物都充滿了好奇，是我學習和理解世界的方式」。發明蘋果手機的賈伯斯也說過：「Stay Hungry, Stay Foolish」。</p>
-<p>過去我都很無法理解為什麼這些有所成就的人總是強調好奇心的重要性，明明看起來跟他們所獲得的成功沒有太大關聯。我的想像中他們應該要更強調天賦、努力等等更直接的因素才對。</p>
-<p>然而，好奇心正是他們行動背後的真正動機，這些人不追求成功本身，而是想要瞭解世界運作背後的本質和原理，只是在探索的過程中不經意得到成功這個副產品罷了。如果一開始就以功成名就為目標，反而會離它越來越遠。</p>
-<p>越單純的心念，越能夠接觸事物的本質，而越能掌握本質的人，越能在這世界中發揮影響力。一旦混入了對名利的追求，就無法全心投入其中。</p>
-<p>對世界的好奇，是人類與生俱來的天賦，每個孩子一誕生就有的才能，只是我們在長大的過程中被蒙蔽了而已。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回到最一開始的問題，為什麼我沒辦法回答看似基本的問題。原因也很簡單，過去的工作中我很認真，或者說太過認真，全心全力解決被交辦的任務。我所累積的並不是技術能力，而是怎麼把工作做好的能力。</p>
-<p>當有取巧的做法可以繞過問題時，我不會回過頭思考問題根因在哪裡。當遇到一個樹木的問題時，我只看見樹木，而不是從整個樹林的角度來思考。錯誤的動機侷限了我行動的方向。</p>
-<p>我很努力，但只是在努力成為好員工，而不是努力理解技術原理、滿足好奇心。</p>
-<p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
-<p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
-<p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
     <url>/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/CN11869057">為什麼偉大不能被計劃</a>」是由兩位作者 Kenneth Stanley 和 Joel Lehman 所著。他們是機器學習和人工智慧研究學者，其團隊做了一個圖片孵化網站，意外發現要從亂數中產生出好的圖片並不能透過事先的計劃，而是只能透過不斷嘗試，發掘夠新奇有趣的圖片，然後以此為踏腳石繼續往下探索。這樣的發現也可以套用到其他人類偉大的發現和發明之中。這些偉大的成就，大多都不是透過設定目標和安排計畫來達成，反而都是因為在興趣探索時意外發現。</p>
@@ -3136,6 +3099,60 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>為什麼動機比努力重要</title>
+    <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
+    <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
+<p>這是某次面試我被問到的問題。原本以為我對網路架構已經足夠熟悉，然而卻發現自己沒辦法很流暢地回答這個看似基本的問題。不僅面試官不滿意，我也不滿意自己的答案。</p>
+<p>這是因為工作不認真，沒有學好技術嗎？不，以客觀標準來說，我絕對屬於認真的那群。那難道是經驗不夠嗎？也不是，自從畢業以來，我從事的工作都和網路相關。這並不能當作藉口。</p>
+<p>那麼問題出在哪裡呢？又或者我們可以進一步問，明明花同樣的時間，為何人與人之間的能力差距會這麼大呢？這個疑惑不斷在心中徘徊，困擾了很久，最終找到了真正的答案：</p>
+<p>那就是「動機」。</p>
+<h2 id="你的努力搞錯了方向"><a href="#你的努力搞錯了方向" class="headerlink" title="你的努力搞錯了方向"></a>你的努力搞錯了方向</h2><p>或許你對這樣的答案不以為然：動機只是做一件事情的理由罷了，哪會影響做這件事的結果。</p>
+<p>我原本也是這樣想，但是回想自己過去學習與工作的經歷，那些表現好的領域，無不是因為我對那些知識感到好奇，想要徹底搞懂；而表現不突出的，往往都不是為了學習本身而行動，而是為了得到好成績或是完成某個任務，學會那些領域知識只是副產品罷了。</p>
+<p>明明都花一樣時間、一樣努力，只是動機不同，可是最後成果卻天差地別。</p>
+<p>為什麼會這樣呢？讓我們用更加實際的情境來說明：</p>
+<p>想像有兩個能力伯仲之間的員工，一個想要得到老闆賞識，認為完成越多任務越好，而另一個人則是對事情充滿好奇心，接收到的任務會想盡辦法了解各種細節。</p>
+<p>前者只要任務完成了就會馬上著手下一個任務，所以完成的數量遠遠高於後者。然而有好奇心的員工卻會在完成任務之餘嘗試理解其中的各種知識，而這些知識又可以用在未來其他任務上。拉長時間來看，他才是真正累積了這個領域的專業能力，能解決未來更加困難的問題。</p>
+<p>兩個人都付出了同等的努力，但是由於各自的動機不同，最終所能達成的成就也不同。</p>
+<p>如果努力是汽車的油門，那麼動機就是方向盤。一旦動機有稍微的偏差，差之毫釐失之千里，我們將會駛向錯誤的目的地。</p>
+<h2 id="經驗並不重要"><a href="#經驗並不重要" class="headerlink" title="經驗並不重要"></a>經驗並不重要</h2><p>但是不管動機如何，如果一個事情做了十年，總會變成這個領域的佼佼者吧？也許你會想這樣反駁。</p>
+<p>我有個朋友當了產品經理十多年，然而其他人私底下評價他都認為能力差不多就是剛畢業的學生。對於他所管理的產品，從來不會想進一步了解，完全是別人怎麼說就怎麼做，一個指令一個動作。對他而言，能完成主管交辦的工作就好，並沒有任何動機學習產品的技術原理、市場趨勢和發展前景。</p>
+<p>就如同我們天天開車不會哪天變成 F1 賽車手一樣，我們也不會因為用同樣的技能做重複性的工作，就能獲得突破性成果。所謂的經驗累積並非單純的時間累積。究竟我們是用一年的工作能力重複做十年，還是十年內有意識不斷學習新的知識呢？</p>
+<p>這也正是「刻意練習」這本書所強調的觀念：一個技能要有所成長，需要持續突破舒適圈，克服自己的弱點。單純重複同個行為一萬小時並不會讓自己成為專家。</p>
+<p>時間從來都不是重點，重要的是在這段時間內我們的內在動機為何，以及採取了什麼行動。只有不斷經歷各式各樣的事物，時間的積累才會有價值。</p>
+<h2 id="好奇心才是最佳的動機"><a href="#好奇心才是最佳的動機" class="headerlink" title="好奇心才是最佳的動機"></a>好奇心才是最佳的動機</h2><p>知名物理學家費曼曾說：「對任何事物都充滿了好奇，是我學習和理解世界的方式」。發明蘋果手機的賈伯斯也說過：「Stay Hungry, Stay Foolish」。</p>
+<p>過去我都很無法理解為什麼這些有所成就的人總是強調好奇心的重要性，明明看起來跟他們所獲得的成功沒有太大關聯。我的想像中他們應該要更強調天賦、努力等等更直接的因素才對。</p>
+<p>然而，好奇心正是他們行動背後的真正動機，這些人不追求成功本身，而是想要瞭解世界運作背後的本質和原理，只是在探索的過程中不經意得到成功這個副產品罷了。如果一開始就以功成名就為目標，反而會離它越來越遠。</p>
+<p>越單純的心念，越能夠接觸事物的本質，而越能掌握本質的人，越能在這世界中發揮影響力。一旦混入了對名利的追求，就無法全心投入其中。</p>
+<p>對世界的好奇，是人類與生俱來的天賦，每個孩子一誕生就有的才能，只是我們在長大的過程中被蒙蔽了而已。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回到最一開始的問題，為什麼我沒辦法回答看似基本的問題。原因也很簡單，過去的工作中我很認真，或者說太過認真，全心全力解決被交辦的任務。我所累積的並不是技術能力，而是怎麼把工作做好的能力。</p>
+<p>當有取巧的做法可以繞過問題時，我不會回過頭思考問題根因在哪裡。當遇到一個樹木的問題時，我只看見樹木，而不是從整個樹林的角度來思考。錯誤的動機侷限了我行動的方向。</p>
+<p>我很努力，但只是在努力成為好員工，而不是努力理解技術原理、滿足好奇心。</p>
+<p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
+<p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
+<p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>為什麼社會有分歧</title>
+    <url>/2024/10/27/%E7%82%BA%E4%BB%80%E9%BA%BC%E7%A4%BE%E6%9C%83%E6%9C%89%E5%88%86%E6%AD%A7/</url>
+    <content><![CDATA[<p>在現代社會中，人們常常都在說社會分裂越來越嚴重。由於網路的發展，各種意見容易匯聚，然後又因為社群媒體的演算法不斷擴大同溫層，讓某些意見持續放大，最終產生出衝突。常見的例子像是國家定位、同性婚姻、核電使用，而在國外更有持槍議題、移民、人種平權等等。</p>
+<p>在社會中，某些議題上有立場衝突必定是會存在的。社會是由人組成的，人人也都有不同意見。當大家對某個方向都贊同，那社會肯定是會朝這個方向前進，這時就沒有太多討論價值。會吸引人們目光的總是那些有不同意見的議題，透過激烈討論，直到達成某種程度的共識後才會逐漸潛伏，被其他更引人注目的議題所取代。這就如同大海上有很多波浪，當最大的波浪消失了，大家的注意力就會集中在次高的波浪上一樣。</p>
+<p>隨著時代的推進，人們的價值觀也不斷更新，過去認為正確的概念在現代可能也會被推翻。其中最著名的就是種族不平等。以美國為例，奴隸制度直到內戰才被廢除，但是一直要到二戰後才真正落實廢除種族隔離。而現在很多社會運動者更加追求在各個領域，各種人種都要能一定程度的參與，例如大學入學或是公司聘用。</p>
+<p>然而這類社會進步價值的推進，也一定會帶來反作用力。追求進步價值的人 (SJW)，常常會被其他相對比較保守的人嘲笑為「覺青」、「左膠」。這個非常正常，任何對社會現狀的改動都會有阻力。一開始可能因為某些事件爆發(如 Black Lives Matter、Me too)，改革的動力非常強大，不斷在某個議題上面往前推進，社會也願意支持。但隨著時間推移，改革者的要求越來越多，社會大眾也會逐漸對議題失去興趣，其中的保守派也會開始抗拒，最終反而形成另一股強烈的反對力量把改革派反推回去。這就像是鐘擺一樣，在議題中的兩個立場不斷擺盪，直到形成社會可以接受的新共識。</p>
+<p>這樣的現象其實我們可以在很多例子上看見。以前陣子台灣的同婚議題來看，同志對同性婚姻的訴求得到年輕人的認可，產生出改革力量，推動公投。然而社會雖然對同性戀愛的接受度越來越大，卻還是無法忍受改變傳統上對婚姻的定義，最終在公投上否決了這項改變。不過從結果上來說，儘管同性婚姻沒成功，但是社會也接受了新的同性伴侶相關法律。就像是改革派往前兩步，保守派往後推一步，最終還是前進一步，社會達成了新的共識。</p>
+<p>同樣的狀況也發生在全球化上面，過去幾十年由於全球化，人們可以享受發展中國家製造的便宜商品，但卻也造成了先進國家的製造業外流。美國的藍領階層在 2016 年的大選反撲中選出了川普，透過拉高關稅而造成逆全球化。現在再加上地緣政治和疫情的原因，逆全球化的趨勢短時間內應該是不會緩解，但可預期的是也不會回到大家完全閉關鎖國的格局。整體態勢應該最終還是在一個新的共識點達成平衡，直到下一股外在力量再次引發改變。</p>
+<p>回到我們個人，我們所參與的團體，例如公司、社團等等，其實也是一種小社會。當遇到外在壓力下，通常也會產生出改革和保守兩股力量。舉例來說，公司營收不好需要進行轉型、社團老化需要吸引新血加入。改革派會認為不變動就是等死，保守派則是擔心太大的變動會失去了團體本身的價值，導致團體的崩解。兩種力量在內部不斷拉扯，直到找出新的平衡出來。</p>
+<p>雖然我們這裡使用改革和保守兩種詞，但這並沒有任何的褒義和貶義。改革並不代表有完美結局，看看多少國家在革命後陷入貧窮崩壞。保守而轉型太慢也常常是公司被新的挑戰者所取代的原因。改革沒有保守的制約往往會衝太快，讓系統不穩定而崩潰，反過來說，保守也需要有改革派的驅動來應對新的挑戰。有智慧的領導人必須要在這兩種勢力中小心翼翼維持平衡，走出緩慢並有力的改變力量。</p>
+<p>我們人類總是喜歡有共識沒分歧，但是分歧在一個正常的社會中是一定存在的，因為人與人彼此間就是不一樣。分歧從來不是壞事，這是社會多樣性的一種展現。當我們可以用比較自然態度看待他人意見不同時，社會也越不會二極化、彼此相互對立。因為我們知道不同立場都有存在的必要，唯一需要的是一套穩定合理產生出彼此都能接受共識的方法。這個方法可能是公投、可能是選舉，只要人們可以接受即可。當分歧可以用這套系統來彌合，社會就不會因此而產生分裂，進而朝有共識的方向往前邁進。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>為何我選擇定期定額投入市值型 ETF</title>
@@ -3259,23 +3276,6 @@
 <h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>人總是會高估自己忍受低谷的能力。我也曾認為自己從事科技業，應該能看得準行業趨勢。在買進了 Netflix、META 和 Palantir 後，2022 年剛好慘遇股災，每天看著股票價值不斷向下跌，砍半再砍半。心中不斷質疑我會不會其實看錯了，這些科技公司確實要不行了。最終忍受不了，全部出清，轉為 VTI 和 QQQ 這類的 ETF。然而就像大多數人所經歷的一樣，這些股票全部都在 2023-2024 年大反彈，恢復前高。特別是 Palantir，在 2025 年初已經抵達 100 元，距離低點漲超過 10 倍。</p>
 <p>其實我很感謝這樣的經驗。沒有經歷過股市大跌，就不會真的認識自己的能力極限。現在我只會把大部分的部位放在市值型 ETF。就算它們大跌，我也很清楚這只是一時的，遲早會回來，甚至更應該趁機加碼。因為我知道它們的背後原理，而且過去的歷史也提供了佐證。</p>
 <p><strong>唯有明白事物的運作機制，才能堅信不移。而唯有堅信不疑，才能在低谷時持續堅持。</strong></p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>為什麼社會有分歧</title>
-    <url>/2024/10/27/%E7%82%BA%E4%BB%80%E9%BA%BC%E7%A4%BE%E6%9C%83%E6%9C%89%E5%88%86%E6%AD%A7/</url>
-    <content><![CDATA[<p>在現代社會中，人們常常都在說社會分裂越來越嚴重。由於網路的發展，各種意見容易匯聚，然後又因為社群媒體的演算法不斷擴大同溫層，讓某些意見持續放大，最終產生出衝突。常見的例子像是國家定位、同性婚姻、核電使用，而在國外更有持槍議題、移民、人種平權等等。</p>
-<p>在社會中，某些議題上有立場衝突必定是會存在的。社會是由人組成的，人人也都有不同意見。當大家對某個方向都贊同，那社會肯定是會朝這個方向前進，這時就沒有太多討論價值。會吸引人們目光的總是那些有不同意見的議題，透過激烈討論，直到達成某種程度的共識後才會逐漸潛伏，被其他更引人注目的議題所取代。這就如同大海上有很多波浪，當最大的波浪消失了，大家的注意力就會集中在次高的波浪上一樣。</p>
-<p>隨著時代的推進，人們的價值觀也不斷更新，過去認為正確的概念在現代可能也會被推翻。其中最著名的就是種族不平等。以美國為例，奴隸制度直到內戰才被廢除，但是一直要到二戰後才真正落實廢除種族隔離。而現在很多社會運動者更加追求在各個領域，各種人種都要能一定程度的參與，例如大學入學或是公司聘用。</p>
-<p>然而這類社會進步價值的推進，也一定會帶來反作用力。追求進步價值的人 (SJW)，常常會被其他相對比較保守的人嘲笑為「覺青」、「左膠」。這個非常正常，任何對社會現狀的改動都會有阻力。一開始可能因為某些事件爆發(如 Black Lives Matter、Me too)，改革的動力非常強大，不斷在某個議題上面往前推進，社會也願意支持。但隨著時間推移，改革者的要求越來越多，社會大眾也會逐漸對議題失去興趣，其中的保守派也會開始抗拒，最終反而形成另一股強烈的反對力量把改革派反推回去。這就像是鐘擺一樣，在議題中的兩個立場不斷擺盪，直到形成社會可以接受的新共識。</p>
-<p>這樣的現象其實我們可以在很多例子上看見。以前陣子台灣的同婚議題來看，同志對同性婚姻的訴求得到年輕人的認可，產生出改革力量，推動公投。然而社會雖然對同性戀愛的接受度越來越大，卻還是無法忍受改變傳統上對婚姻的定義，最終在公投上否決了這項改變。不過從結果上來說，儘管同性婚姻沒成功，但是社會也接受了新的同性伴侶相關法律。就像是改革派往前兩步，保守派往後推一步，最終還是前進一步，社會達成了新的共識。</p>
-<p>同樣的狀況也發生在全球化上面，過去幾十年由於全球化，人們可以享受發展中國家製造的便宜商品，但卻也造成了先進國家的製造業外流。美國的藍領階層在 2016 年的大選反撲中選出了川普，透過拉高關稅而造成逆全球化。現在再加上地緣政治和疫情的原因，逆全球化的趨勢短時間內應該是不會緩解，但可預期的是也不會回到大家完全閉關鎖國的格局。整體態勢應該最終還是在一個新的共識點達成平衡，直到下一股外在力量再次引發改變。</p>
-<p>回到我們個人，我們所參與的團體，例如公司、社團等等，其實也是一種小社會。當遇到外在壓力下，通常也會產生出改革和保守兩股力量。舉例來說，公司營收不好需要進行轉型、社團老化需要吸引新血加入。改革派會認為不變動就是等死，保守派則是擔心太大的變動會失去了團體本身的價值，導致團體的崩解。兩種力量在內部不斷拉扯，直到找出新的平衡出來。</p>
-<p>雖然我們這裡使用改革和保守兩種詞，但這並沒有任何的褒義和貶義。改革並不代表有完美結局，看看多少國家在革命後陷入貧窮崩壞。保守而轉型太慢也常常是公司被新的挑戰者所取代的原因。改革沒有保守的制約往往會衝太快，讓系統不穩定而崩潰，反過來說，保守也需要有改革派的驅動來應對新的挑戰。有智慧的領導人必須要在這兩種勢力中小心翼翼維持平衡，走出緩慢並有力的改變力量。</p>
-<p>我們人類總是喜歡有共識沒分歧，但是分歧在一個正常的社會中是一定存在的，因為人與人彼此間就是不一樣。分歧從來不是壞事，這是社會多樣性的一種展現。當我們可以用比較自然態度看待他人意見不同時，社會也越不會二極化、彼此相互對立。因為我們知道不同立場都有存在的必要，唯一需要的是一套穩定合理產生出彼此都能接受共識的方法。這個方法可能是公投、可能是選舉，只要人們可以接受即可。當分歧可以用這套系統來彌合，社會就不會因此而產生分裂，進而朝有共識的方向往前邁進。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -3408,6 +3408,26 @@
       </tags>
   </entry>
   <entry>
+    <title>系統演化：穩定中間態的關鍵角色</title>
+    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
+    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
+<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
+<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
+<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
+<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
+<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
+<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
+<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
+<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
+<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
+<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
+<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>筆記：自己的外部大腦</title>
     <url>/2024/11/03/%E7%AD%86%E8%A8%98%EF%BC%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A4%96%E9%83%A8%E5%A4%A7%E8%85%A6/</url>
     <content><![CDATA[<p>對人類來說，紀錄筆記可能真的是不得不做的必要之惡。我們的大腦天生就不善於記憶東西，而為了讓自己更容易找出過去某個時間點的知識，我們需要有個外部系統來輔助，這也就是所謂的筆記。</p>
@@ -3444,26 +3464,6 @@
 </li>
 </ul>
 <h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>筆記只是輔助，但是卻也不可或缺。找出適合自己的筆記方法是非常值得的投資，會幫助思考並且讓生活更容易被掌握。以我的經驗來說，筆記確實讓我感到生活工作各個方面都更加可控，不過也要記得過猶不及，花太多時間在筆記上反而會阻礙了我們發揮創意並思考。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>系統演化：穩定中間態的關鍵角色</title>
-    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
-    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
-<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
-<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
-<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
-<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
-<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
-<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
-<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
-<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
-<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
-<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
-<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -3531,6 +3531,58 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>藝術是什麼</title>
+    <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
+    <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
+<center>法國史前時代拉斯科洞窟壁畫，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%94%BB">維基百科</a></center>
+
+<p><img src="/images/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%95%AB.jpg" alt="拉斯科洞窟壁畫"></p>
+<p>對於理工人來說，想要學習一件事情，必然要先從定義開始。那麼藝術的定義是什麼呢？</p>
+<p>藝術是透過創造性活動運用各種媒介，如文字、聲音、形象等等，來表達情感、思想或觀念，最重要的是要追求審美愉悅和精神昇華。</p>
+<p>為了追求美感，藝術並不直接傳達明確的訊息，而是建立一種感受空間。可以說，如果一個事物是被設計來觸動觀賞者的感官，這就是廣義上的藝術定義。</p>
+<p>為何不應該要有明確訊息呢？因為那會造成扁平化。人類是經驗的生物，我們透過生活上的各種經驗總結出自己的感受。當別人直接告訴我們結論，我們無法感同身受，但是當這個訊息是用間接的方式傳達給我們，反而可以能激發思考、直達我們內心。</p>
+<p>舉個例子，我們描述一個人的好心情，如果只是用「愉悅」來描述，很難讓我們有更深入的想像。但如果是說「嘴裡哼著歌，踏著輕快的腳步」，整個形象就立體起來了。完全沒提到心情好，讀者卻能從字裡行間中讀出來。</p>
+<p>日本的近代文學大師夏目漱石曾說過，「我愛你」對日本人來說太過直白，可以委婉地說「今晚月色真美」。這某種程度上也是用間接的方式來傳遞訊息，對於聽者來說，由於需要自行做訊息的轉譯，心裡上會更有親近感，更加能夠接受。</p>
+<p>因此，比起用總結方式傳達明確訊息，間接傳達經驗空間才是藝術的本質。</p>
+<p>這也是為何我們不喜歡教科書、電器說明書等直接了當的文字，但是卻喜歡閱讀小說，並可以從其中的故事來領悟作者想傳遞的訊息。</p>
+<p>從詩集小說，到繪畫音樂，不同的藝術表現形式都是在提供觀賞者一種獨特的體驗。我們可以從杜甫的詩集讀出他憂國憂民的理想，梵谷的畫作感受到他創作時的內心衝突與扭曲。這些體驗無法完全用文字清楚描述，只能透過藝術來傳達給他人。</p>
+<center>梵谷自畫像，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%96%87%E6%A3%AE%E7%89%B9%C2%B7%E6%A2%B5%E9%AB%98">維基百科</a></center>
+
+<p><img src="/images/%E6%A2%B5%E8%B0%B7%E8%87%AA%E7%95%AB%E5%83%8F.jpg" alt="梵谷自畫像"></p>
+<p>既然藝術不是要傳達明確資訊，所以就沒有所謂什麼傳播媒介最好、最有效率這件事。</p>
+<p>如果我們只是要比較資訊量的話，歌曲本身攜帶的資訊已經包含文字和聲音，比起純粹的詩還要豐富，理論上可以直接取代詩。然而，從體驗的角度來說，有時候缺失的訊息本身也有重要性，由於可以激發我們的想像，反而獲得截然不同的經驗。正因為詩沒有既定的旋律，所以讀者可以用屬於自己的節奏來決定欣賞其中字句的快慢。</p>
+<p>由此我們可以看出一般溝通和欣賞藝術兩者的不同。</p>
+<p>一般人與人的溝通是要把資訊有效從一個人的大腦傳到另一個人的大腦，因此我們需要組織語言，甚至用圖表輔助，才能確保這個資訊傳輸過程沒有遺失。</p>
+<p>藝術並不是如此，本質上創作者不是在傳達訊息，而是要透過某種形式刺激觀賞者的感官，創造出獨特的體驗。觀賞者接收到的訊息和創作者最一開始傳達的可能是兩回事，但這也沒關係，因為觀眾的感受才是最重要的事情。</p>
+<p>很多作品在經過大眾媒體廣泛傳播以後，人們對他的印象早就不是作者最初的設定，而是包含了作品本身的歷史、群體對他的記憶。</p>
+<p>最明顯的例子是貝多芬的「給愛麗絲」。對台灣人來說，比起貝多芬創作這首曲目的原意（據傳是要給自己暗戀的女性），我們第一時間會想到的是垃圾車要來了，也許還會進而聯想到自己過去跟家人一起出去丟垃圾的回憶。</p>
+<p>同樣的道理也可以套用到大家朗朗上口的民謠上，例如「望春風」。這首歌最早是日治時代創作的台語流行音樂，因為廣受喜愛，所以在國民政府來台以後仍然被多個歌手不斷改編成國語傳唱，到現在國外樂團來台灣演奏幾乎都會準備這首歌曲來拉近與聽眾的關係。不同時代的台灣人對「望春風」的印象都有所不同，但唯一相同的是它確實承載了每一代人的回憶。當我們聽到望春風，自然而然就會想到故鄉台灣，這也是這個作品最有價值的地方。</p>
+<p>有時候我們會以為作品的名氣和它的藝術性掛勾，越有名氣的作品，代表藝術價值越高，人們也越容易被其感動。其實因果關係可能是倒過來的，很多時候是因為這個作品在機緣巧合下出了名，商人藉此進行商業傳播，又更加擴展它的名氣。我們對這個作品有感覺是因為它的高名氣，而不是藝術價值本身。</p>
+<p>大家耳熟能詳的達文西「蒙娜麗莎的微笑」就是最好的案例。雖然同樣是達文西所創作的優秀作品，「蒙娜麗莎的微笑」的名氣明顯就是高過一截。這個其實是起源自 1911 年的一起竊盜案。</p>
+<p>當初羅浮宮的「蒙娜麗莎的微笑」被竊取，引發了法國的轟動，甚至很多人特別跑去展廳朝聖空白的牆面。兩年後後才發現竊賊是義大利一名工匠，他聲稱是因為愛國心想把這幅畫帶回義大利，同樣也感動義大利人民。就這樣這幅畫的知名度不只在法國和義大利，也開始在全世界廣為傳播。人人都知道有這幅畫的存在，到羅浮宮也是想去看看這幅畫。</p>
+<p>另外補充一下，這幅畫真實尺寸其實不大，但是因為保安緣故所以人們只能遠遠看，基本上是看不清楚。在現場與其說是欣賞畫作，不如說是欣賞看畫的人，這反而更加有意思。</p>
+<center>羅浮宮觀賞蒙娜麗莎的人群</center>
+
+<p><img src="/images/%E7%BE%85%E6%B5%AE%E5%AE%AE%E8%A7%80%E8%B3%9E%E8%92%99%E5%A8%9C%E9%BA%97%E8%8E%8E%E7%9A%84%E4%BA%BA%E7%BE%A4.jpg" alt="羅浮宮觀賞蒙娜麗莎的人群"></p>
+<p>既然藝術欣賞很依賴於個人感受，那為何我們需要有導覽、需要聽別人的賞評呢？獨自欣賞不就好了？</p>
+<p>首先要了解的一點，藝術沒有正確答案，並沒有一個權威的人或機構能決定我們要怎麼看待任何作品。導覽本身不過是提供我們欣賞作品的另一個角度罷了，不論是技巧、創作背景、作品本身的故事。</p>
+<p>我們完全可以不認同他們的看法，不過聽聽其他人的欣賞方式也許能拓展我們的視野，找到另一種觸動我們內心的路徑。</p>
+<p>就如同喝茶一樣，在沒有任何訓練下，會覺得茶可能微微苦澀。但是若是更細緻去體會，就會發現原來其中還有一些不一樣的元素，鮮度、回甘等等。藝術賞析的價值正是幫助我們發現沒有注意到的元素，提高感受層次。</p>
+<p>然而藝術到了當前，越來越多人會抱怨無法看懂現代的藝術。以前的藝術，不論是繪畫還是雕刻，我們都可以看出作者在上面花費的心血，也許是宏偉壯觀，也許是精緻細膩。但是現今的藝術常常脫離這個範疇，我們看不出作品的創作難度，甚至也搞不懂為何要叫作這個名字。看了作品的簡介，並沒有得到解答，反而更一頭霧水。</p>
+<center>之前上新聞的香蕉藝術品「喜劇演員」，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1_(%E8%97%9D%E8%A1%93%E5%93%81)">維基百科</a></center>
+
+<p><img src="/images/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1.jpg" alt="喜劇演員"></p>
+<p>我想這可能跟技術的進步有關係。當相機出現了，過去寫實主義的繪畫風格就慢慢沒落，因為沒有什麼會比相片還要寫實。因此新技術會逼著藝術家探索不一樣的可能性，用更抽象的方式來表現。這也是為何現代藝術越來越難懂的原因。</p>
+<p>AI 的出現更是挑戰了藝術的價值。以往要畫一幅畫或寫一首詩，都需要人們經過長時間訓練，才能培養出相對應的技巧和敏感度。然而，當現在這些都可以輕易用 AI 創作，那我們該怎麼評判人類還是 AI 創作的作品價值呢？</p>
+<p>我們已經無法再用創作的技術難度來評估一個作品了，因為這些都能夠用 AI 輕易複製。然而 AI 並沒有真實的人生體驗，本質上它只是一種機率性的產物，能利用大量已有資料來產生出類似的作品。不論是歷史上各個著名的藝術流派，AI 都能快速模仿，產生出讓人驚豔的作品。</p>
+<p>因此，現在更重要的是創作者本身的獨特性，他想傳達什麼訊息、他個人的視角以及隱含的背後人生故事。這些獨一無二的性質是包含 AI 在內，世界上任何其他人都無法取代，也正因為如此才能為觀眾建立出特別的感受空間，直擊他們的內心。</p>
+<p>只要人類還有表達情緒的需求，藝術家就有存在的意義。而真正偉大的藝術，則是能觸碰隱藏在我們內心那個說不清楚的部份，搔到我們心中的癢處。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>《被討厭的勇氣》：擁有承擔責任的勇氣</title>
@@ -3786,31 +3838,6 @@
       </tags>
   </entry>
   <entry>
-    <title>雙重授權：兼顧開源和商業的模式</title>
-    <url>/2025/06/24/%E9%9B%99%E9%87%8D%E6%8E%88%E6%AC%8A%EF%BC%9A%E5%85%BC%E9%A1%A7%E9%96%8B%E6%BA%90%E5%92%8C%E5%95%86%E6%A5%AD%E7%9A%84%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<p>對於貢獻開源軟體專案的廠商來說，這一直是很兩難的議題：如何在提供免費服務給一般開發者的同時，又避免被其他商業公司搭便車。一方面希望維持開源社群的活躍而不限縮使用門檻；另一方面，為了維持公司營運，又需要避免他人直接拿來商業使用卻不回饋社群。</p>
-<p>一個常見的做法是使用<strong>雙重授權模式</strong>。第一種是類似 GPL 這種具有「感染性」的授權，規定只要使用了該專案的程式碼，衍生作品也必須開源。這些限制對於普通開發者影響不大，但對商業公司來說就不那麼方便了。第二種則是商業授權，使用者若不願受開源限制，可以付費取得，從而解除使用上的約束。</p>
-<p>最常見的例子是 Qt 和 MySQL。Qt 是非常熱門的桌面圖形化開發框架，針對開源部分提供了 GPL 和 LGPL 兩種 License。兩者最大的差異在於 LGPL 明確規範，即使程式與 LGPL 函式庫動態連結也不會被感染。儘管如此，整體來說其使用規範對商業應用仍較具限制，因此商業用戶常會直接向 Qt 購買授權以求一勞永逸，並可獲得商業工具、技術諮詢等服務。</p>
-<p>至於 MySQL 這個熱門的資料庫也是採取類似策略，針對開源版提供 GPL License。這邊要特別提一下 GPL 的感染性，並不是修改程式碼的行為才會被迫開源，只要有分發就會觸發感染性。所以如果軟體在賣給客戶的時候內部包含 MySQL 這個資料庫，就滿足分發的條件，整個軟體都必須要開源。因此很多使用者也因此轉向使用商業授權，而不是開源版本。</p>
-<p>這一切看起來很美好：開發者能獲得利潤，廠商有商業保證，而社群也能免費使用，似乎是三贏的局面。然而，當軟體部署到雲端時就不一樣了，這時多了一個雲端服務商的角色。</p>
-<p>一般來說，雲端服務商會拿這些開源的軟體提供給客戶，提供加值服務，然後自己的平台獲得更廣泛的使用。在原本的 GPL 和 LGPL 並沒有定義雲端服務的這個行為，因此後來又新增了 AGPL 來要求雲端服務商需要將提供雲服務的軟體也開源。</p>
-<p>但是，這時便開始有了利益衝突。從軟體開發商的角度來看，如 MongoDB、Redis、ElasticSearch，他們的軟體本來就是要賣給商業公司，付費客戶能獲得品質保證。然而，大部分公司會直接將軟體部署在雲端上，雲端服務商便順勢將這些開源專案納入其服務。這導致原本會付費的客戶，大多轉而直接使用雲端服務商的方案。沒錯，儘管雲端服務商也符合 AGPL，將其雲端軟體開源了，但這對他們影響不大，因為本來就只是加值服務，並不影響核心業務。</p>
-<p>為了限制雲端服務商，尤其是市場占有率最大的 AWS，軟體服務商紛紛採取了 SSPL 和商業授權的雙重模式。SSPL 授權最早由 MongoDB 提出，隨後 Redis 和 ElasticSearch 也分別調整為 SSPL 授權。SSPL 和 AGPL 最大的不同在於，前者不僅要求提供服務的軟體需開源，連雲端服務商的基礎設施軟體也必須開源，這對服務商來說是不可接受的。</p>
-<p>對於 OSI (Open Source Initiative) 來說，像 SSPL 這樣的授權不符合開源軟體的精神。因為其條款顯然旨在保護軟體開發商的商業利益，限制雲端服務商使用。OSI 不認定其為開放原始碼許可證，頂多只能算是原始碼可用。因此，大部分主流的 Linux 發行版都不會將 SSPL 軟體納入其公開軟體庫中。</p>
-<p>從雲端服務商的角度來看，他們認為自己一切都按照開源授權規範走，甚至也有投入開發者參與上游程式碼的開發，不能說沒有回饋社群。只能說問題點出在他們實在太大了，所得到的獲利和回饋不成正比，導致原始的開發者的利潤都被他們吸走。</p>
-<p>雲端服務商為了反制，也就採取了開源世界最常做的事情――分叉 (fork)。針對 MongoDB，AWS 有了 Amazon DocumentDB；針對 Redis，聯合其他人成立了 Valkey；針對 ElasticSearch 則是推出 OpenSearch。由於我們前面提到 OSI 不承認 SSPL 的因素，他們打著軟體開放的大旗，吸引了大量開發者轉向，反而倒逼著這些軟體廠商改成較為寬鬆的 AGPL。</p>
-<p>其實最大的問題在於這些公司所提供的軟體性質，它們都是資料庫的提供者，而資料庫實在太容易直接被包裝成服務。讓我們看看通訊協定 Kafka 則又是另一番狀況：Kafka 本身是 Apache 授權，符合開源精神，但是其公司 Confluent 另外推出的 Confluent Platform 則使用類似 SSPL 限制雲端服務商的 Confluent Community License (CCL)。通訊協定本身人人可用，但若要真正發揮其效用，仍需經大量的開發才能包裝成服務。因此，即使這部分有所限制，人們也比較不會反彈。當社群沒有反對聲浪時，雲端服務商就很難再另起爐灶。</p>
-<p>除了 SSPL，還有另一種相對來說比較溫和的 BSL 授權，最早由 MariaDB 提出。它和 SSPL 一樣會限制雲端使用，但是主要差異在於經過 3-4 年後會自動轉變成普通的開源授權，如 MIT。後來 CoakroachDB 和 HashiCorp 也都採用這種模式，希望能減輕社群反彈。當然以 HashiCorp 旗下的 Terraform 來說可能是失敗了，社群仍分叉出 OpenTofu 來抗衡。</p>
-<p>開源軟體的授權方式是非常有意思的話題，軟體廠商需要在商業和開源精神中取得很好的平衡。若是太過開放，很容易被其他人搭便車，但如果限制太過嚴格，反而會讓社群分裂，進而失去開源軟體最大的價值――廣大的使用者和開發者。過去因為雲端的興起，出現了 AGPL、SSPL、BSL 等等相對應的授權。未來隨著 AI 的發展，是不是也會有類似的問題出現呢？這很值得觀察。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>開源</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>閱讀是一種朋友間的對話</title>
     <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
     <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
@@ -3841,5 +3868,30 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>雙重授權：兼顧開源和商業的模式</title>
+    <url>/2025/06/24/%E9%9B%99%E9%87%8D%E6%8E%88%E6%AC%8A%EF%BC%9A%E5%85%BC%E9%A1%A7%E9%96%8B%E6%BA%90%E5%92%8C%E5%95%86%E6%A5%AD%E7%9A%84%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>對於貢獻開源軟體專案的廠商來說，這一直是很兩難的議題：如何在提供免費服務給一般開發者的同時，又避免被其他商業公司搭便車。一方面希望維持開源社群的活躍而不限縮使用門檻；另一方面，為了維持公司營運，又需要避免他人直接拿來商業使用卻不回饋社群。</p>
+<p>一個常見的做法是使用<strong>雙重授權模式</strong>。第一種是類似 GPL 這種具有「感染性」的授權，規定只要使用了該專案的程式碼，衍生作品也必須開源。這些限制對於普通開發者影響不大，但對商業公司來說就不那麼方便了。第二種則是商業授權，使用者若不願受開源限制，可以付費取得，從而解除使用上的約束。</p>
+<p>最常見的例子是 Qt 和 MySQL。Qt 是非常熱門的桌面圖形化開發框架，針對開源部分提供了 GPL 和 LGPL 兩種 License。兩者最大的差異在於 LGPL 明確規範，即使程式與 LGPL 函式庫動態連結也不會被感染。儘管如此，整體來說其使用規範對商業應用仍較具限制，因此商業用戶常會直接向 Qt 購買授權以求一勞永逸，並可獲得商業工具、技術諮詢等服務。</p>
+<p>至於 MySQL 這個熱門的資料庫也是採取類似策略，針對開源版提供 GPL License。這邊要特別提一下 GPL 的感染性，並不是修改程式碼的行為才會被迫開源，只要有分發就會觸發感染性。所以如果軟體在賣給客戶的時候內部包含 MySQL 這個資料庫，就滿足分發的條件，整個軟體都必須要開源。因此很多使用者也因此轉向使用商業授權，而不是開源版本。</p>
+<p>這一切看起來很美好：開發者能獲得利潤，廠商有商業保證，而社群也能免費使用，似乎是三贏的局面。然而，當軟體部署到雲端時就不一樣了，這時多了一個雲端服務商的角色。</p>
+<p>一般來說，雲端服務商會拿這些開源的軟體提供給客戶，提供加值服務，然後自己的平台獲得更廣泛的使用。在原本的 GPL 和 LGPL 並沒有定義雲端服務的這個行為，因此後來又新增了 AGPL 來要求雲端服務商需要將提供雲服務的軟體也開源。</p>
+<p>但是，這時便開始有了利益衝突。從軟體開發商的角度來看，如 MongoDB、Redis、ElasticSearch，他們的軟體本來就是要賣給商業公司，付費客戶能獲得品質保證。然而，大部分公司會直接將軟體部署在雲端上，雲端服務商便順勢將這些開源專案納入其服務。這導致原本會付費的客戶，大多轉而直接使用雲端服務商的方案。沒錯，儘管雲端服務商也符合 AGPL，將其雲端軟體開源了，但這對他們影響不大，因為本來就只是加值服務，並不影響核心業務。</p>
+<p>為了限制雲端服務商，尤其是市場占有率最大的 AWS，軟體服務商紛紛採取了 SSPL 和商業授權的雙重模式。SSPL 授權最早由 MongoDB 提出，隨後 Redis 和 ElasticSearch 也分別調整為 SSPL 授權。SSPL 和 AGPL 最大的不同在於，前者不僅要求提供服務的軟體需開源，連雲端服務商的基礎設施軟體也必須開源，這對服務商來說是不可接受的。</p>
+<p>對於 OSI (Open Source Initiative) 來說，像 SSPL 這樣的授權不符合開源軟體的精神。因為其條款顯然旨在保護軟體開發商的商業利益，限制雲端服務商使用。OSI 不認定其為開放原始碼許可證，頂多只能算是原始碼可用。因此，大部分主流的 Linux 發行版都不會將 SSPL 軟體納入其公開軟體庫中。</p>
+<p>從雲端服務商的角度來看，他們認為自己一切都按照開源授權規範走，甚至也有投入開發者參與上游程式碼的開發，不能說沒有回饋社群。只能說問題點出在他們實在太大了，所得到的獲利和回饋不成正比，導致原始的開發者的利潤都被他們吸走。</p>
+<p>雲端服務商為了反制，也就採取了開源世界最常做的事情――分叉 (fork)。針對 MongoDB，AWS 有了 Amazon DocumentDB；針對 Redis，聯合其他人成立了 Valkey；針對 ElasticSearch 則是推出 OpenSearch。由於我們前面提到 OSI 不承認 SSPL 的因素，他們打著軟體開放的大旗，吸引了大量開發者轉向，反而倒逼著這些軟體廠商改成較為寬鬆的 AGPL。</p>
+<p>其實最大的問題在於這些公司所提供的軟體性質，它們都是資料庫的提供者，而資料庫實在太容易直接被包裝成服務。讓我們看看通訊協定 Kafka 則又是另一番狀況：Kafka 本身是 Apache 授權，符合開源精神，但是其公司 Confluent 另外推出的 Confluent Platform 則使用類似 SSPL 限制雲端服務商的 Confluent Community License (CCL)。通訊協定本身人人可用，但若要真正發揮其效用，仍需經大量的開發才能包裝成服務。因此，即使這部分有所限制，人們也比較不會反彈。當社群沒有反對聲浪時，雲端服務商就很難再另起爐灶。</p>
+<p>除了 SSPL，還有另一種相對來說比較溫和的 BSL 授權，最早由 MariaDB 提出。它和 SSPL 一樣會限制雲端使用，但是主要差異在於經過 3-4 年後會自動轉變成普通的開源授權，如 MIT。後來 CoakroachDB 和 HashiCorp 也都採用這種模式，希望能減輕社群反彈。當然以 HashiCorp 旗下的 Terraform 來說可能是失敗了，社群仍分叉出 OpenTofu 來抗衡。</p>
+<p>開源軟體的授權方式是非常有意思的話題，軟體廠商需要在商業和開源精神中取得很好的平衡。若是太過開放，很容易被其他人搭便車，但如果限制太過嚴格，反而會讓社群分裂，進而失去開源軟體最大的價值――廣大的使用者和開發者。過去因為雲端的興起，出現了 AGPL、SSPL、BSL 等等相對應的授權。未來隨著 AI 的發展，是不是也會有類似的問題出現呢？這很值得觀察。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>開源</tag>
+      </tags>
   </entry>
 </search>
