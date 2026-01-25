@@ -11,6 +11,7 @@ build:
   find contents/ -type f -name "*.md" -exec cp {} source/_posts/ \;
   find contents/ -type f -name "*.png" -exec cp {} source/images/ \;
   find contents/ -type f -name "*.svg" -exec cp {} source/images/ \;
+  find contents/ -type f -name "*.jpg" -exec cp {} source/images/ \;
   # Copy images
   cp images/* source/images/
   # Generate the site
