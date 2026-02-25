@@ -624,60 +624,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果要在別的port開啟</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTTP header 安全設定</title>
     <url>/2018/01/03/HTTP-header-%E5%AE%89%E5%85%A8%E8%A8%AD%E5%AE%9A/</url>
     <content><![CDATA[<h2 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h2><p>根據<a href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
@@ -878,6 +824,60 @@
       </categories>
       <tags>
         <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果要在別的port開啟</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1159,88 +1159,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dd - 資料處理的好工具</title>
-    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
-<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
-<li>輸入輸出參數<ul>
-<li>if&#x3D;FILE：輸入名稱</li>
-<li>of&#x3D;FILE：輸出名稱</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
-
-<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
-<li>做相對應的轉換<code>conv=CONVS</code><ul>
-<li>lcase：大寫字母換小寫</li>
-<li>ucase：小寫字母換大寫</li>
-<li>nocreat：不要建立輸出檔案</li>
-<li>notrunc：input小於output時，仍維持output大小</li>
-<li>fdatasync：讓資料同步寫入硬碟</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
-
-<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
-<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
-<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
-<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
-</ul>
-</li>
-<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
-<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
-<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
-</ul>
-<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
-<li><p>大小寫轉換</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>產生一個特定大小的檔案</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>把特定檔案的開頭512 byte清空</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份硬碟</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
-<ol>
-<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然後應該會出現類似如下內容</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
-<ul>
-<li>拆分檔案，例如把檔案切成好幾個1G</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>合併檔案，例如好幾個1G合併起來</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>code review</title>
     <url>/2017/08/27/code-review/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
@@ -1368,6 +1286,88 @@
       </categories>
       <tags>
         <tag>軟體開發</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dd - 資料處理的好工具</title>
+    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
+<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
+<li>輸入輸出參數<ul>
+<li>if&#x3D;FILE：輸入名稱</li>
+<li>of&#x3D;FILE：輸出名稱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
+
+<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
+<li>做相對應的轉換<code>conv=CONVS</code><ul>
+<li>lcase：大寫字母換小寫</li>
+<li>ucase：小寫字母換大寫</li>
+<li>nocreat：不要建立輸出檔案</li>
+<li>notrunc：input小於output時，仍維持output大小</li>
+<li>fdatasync：讓資料同步寫入硬碟</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
+
+<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
+<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
+<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
+<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
+</ul>
+</li>
+<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
+<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
+<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
+</ul>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
+<li><p>大小寫轉換</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>產生一個特定大小的檔案</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>把特定檔案的開頭512 byte清空</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份硬碟</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
+<ol>
+<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然後應該會出現類似如下內容</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
+<ul>
+<li>拆分檔案，例如把檔案切成好幾個1G</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>合併檔案，例如好幾個1G合併起來</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1646,75 +1646,6 @@
       </tags>
   </entry>
   <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
-
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>如果要開啟多個檔案</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
-
-<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>gcc常用擴充功能</title>
     <url>/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
@@ -1811,6 +1742,75 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要開啟多個檔案</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
+
+<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -2818,6 +2818,65 @@
       </tags>
   </entry>
   <entry>
+    <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
+    <url>/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/</url>
+    <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/CN11869057">為什麼偉大不能被計劃</a>」是由兩位作者 Kenneth Stanley 和 Joel Lehman 所著。他們是機器學習和人工智慧研究學者，其團隊做了一個圖片孵化網站，意外發現要從亂數中產生出好的圖片並不能透過事先的計劃，而是只能透過不斷嘗試，發掘夠新奇有趣的圖片，然後以此為踏腳石繼續往下探索。這樣的發現也可以套用到其他人類偉大的發現和發明之中。這些偉大的成就，大多都不是透過設定目標和安排計畫來達成，反而都是因為在興趣探索時意外發現。</p>
+<p>在現代社會中，人生也都有既定的目標，讀書升學、找個好工作、結婚買房、賺到可以退休的錢。有時候也會不禁想到按照這樣目標走，好像缺乏了什麼，無法創造不一樣的可能性。若是對這樣的人生有所疑惑的話，卻又沒有個方向的話，這本書可以很好地釐清並啟發自己不同的想法。</p>
+<h2 id="我畫線的地方"><a href="#我畫線的地方" class="headerlink" title="我畫線的地方"></a>我畫線的地方</h2><p>書中有些讓我特別有感觸的地方：</p>
+<ul>
+<li><p>越是遠大的目標，越是不可能透過計畫來達成。能夠透過努力和計畫達成的目標根本稱不上偉大，因為每個人都可以透過同樣的方式達成。</p>
+<blockquote>
+<p>若⽬標設置⾜夠適度，它就會起到積極作⽤；反之，⽬標越「⾼⼤上」，情況就越複雜…關鍵在於，通向「⾼⼤上」⽬標的踏腳⽯，往往⾮常奇怪。也就是說，若你只是悶頭盯著⾃⼰的⽬標，那它們可能就是你根本意想不到的東西。</p>
+</blockquote>
+</li>
+<li><p>新奇比起固定方向的目標更為可靠，因為沒有人踩過，更有可能有別人所沒注意到的發現，雖然我們並不知道是什麼。</p>
+<blockquote>
+<p>設定⽬標意味著遵循⼀條未知的路徑，朝著遙遠的⽬的地前⾏，⽽新奇性只要求我們遠離已經到過的地⽅。離開⼀個已經到過的地⽅，不僅更簡單輕鬆，還蘊含了更豐富的信息…相信新奇性是推動進步的⼀台有意義的引擎。</p>
+</blockquote>
+</li>
+<li><p>我們的教育讓大家少了目標就沒有方向了，這時或許順應興趣、本心直覺去走，會是一個更靠譜的方式。</p>
+<blockquote>
+<p>如果你想知道如何擺脫對⽬標的盲⽬信奉，只需要隨⼼⾏事、遵循個⼈興趣的指引即可。不是所有的事情都需要以嚴謹的⽬標為指導。如果你對某件事有強烈的直覺，不妨順應本⼼。如果你沒有明確的⽬標，那也沒必要患得患失，因為不論你最終⾛到哪⾥，結果都不會太壞。</p>
+</blockquote>
+</li>
+<li><p>一直以來我們都有所誤會，物競天擇的重點不在於競爭，而是避開競爭。避開競爭才能夠有更大的生存空間。</p>
+<blockquote>
+<p>⾃然進化並不是通過競爭來獲得⽣物多樣性，⽽是通過避免競爭。特別是某⼀⽣物如果能以⼀種新⽅式謀得⽣存，那便是成功找到了⾃⼰的專屬⽣態位。因為它會成為第⼀個以這種新⽅式⽣存的⽣物，所以作為此道開⼭者，競爭不會太激烈，繁衍也會更容易。</p>
+</blockquote>
+</li>
+<li><p>過於專注在支微末節的競爭沒有太大意義，重點是這個是不是能夠帶來全新領域的踏腳石。想想自己是不是也常在不重要的地方跟別人競爭那細微的差異呢？</p>
+<blockquote>
+<p>通過細枝末節的調整，擠出最後⼀絲性能提升空間的做法，並不會帶來令⼈振奮的洞見…所有被歷史記住的算法，必然是為未來的開拓者奠定基礎的算法。它們將推動新算法的誕⽣，甚⾄幫助我們開闢全新的領域。到那時，誰還會在乎這些新算法在剛開始出現時，與「⽼靠譜」算法⽐較時的表現如何呢？</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="個人想法"><a href="#個人想法" class="headerlink" title="個人想法"></a>個人想法</h2><p>從小我就很相信目標論。相信任何事物都可以透過設定目標並且執行詳實的計畫來完成。越是想達成偉大的成就就更應該設定遠大的目標、加倍的努力、以及嚴謹的紀律。然而這本書卻打破了想像，提供了完全不一樣的視角。下面三點是我從中獲得的最大收穫。</p>
+<h3 id="偉大目標無法被設定"><a href="#偉大目標無法被設定" class="headerlink" title="偉大目標無法被設定"></a>偉大目標無法被設定</h3><p>作者的圖片孵化器網站讓人們能夠協作從最基本的圖形，過程不斷產生些微隨機變異，最終產生出各種有趣的圖片。然而，人們卻無法透過事先設定想要產生某種圖案來達成，只能在產生圖片的過程中挑選比較新奇的圖片並且持續嘗試。舉例來說，就像是下圖，我們沒辦法透過事先設定好要創作汽車來產生期待的結果，反而意外是從外星人的圖片演化而來。當初的創作者從來也不會想過外星人的眼睛可以轉換成汽車的輪子。</p>
+<p><img src="/images/%E5%A4%96%E6%98%9F%E4%BA%BA%E5%88%B0%E8%BB%8A%E5%AD%90.png" alt="外星人到車子"><br>圖片取自 <a href="https://www.youtube.com/watch?v=dKazBM3b74I">Kenneth Stanley 的演講</a></p>
+<p>這樣的現象其實在其他研究中也有同樣發現，就像是走迷宮，如果只是設定要往最接近出口的方向前進，很可能會卡在死胡同出不來。然而如果我們不要設定目標，讓探索更隨意，單純去嘗試過去沒試過的路線，反而更有機會走出迷宮。讓機器人學習走路的過程中，設定目標要它不要跌倒反而學不會走路，因為飛踢是往前邁步的開端。這些目標的設定反而成了目標的阻礙。</p>
+<p>在人類偉大的發現發明中，因為繞路反而達成目標的情況並不罕見。例如，當初發明真空管並不知道可以用來製作電腦；而人類想要飛行不是像鳥一樣使用翅膀，而是發明內燃機，有趣的是內燃機最一開始也不是為了飛機而做。沒有這些看似不相關的發明，或者說踏腳石，後續更偉大的成就就不可能達成。<strong>越是困難、高大上的目標，越是無法被詳實計畫。因為從所在位置到目標之間，並不是筆直一條線</strong>。</p>
+<h3 id="新奇搜索：放棄目標才有可能成就偉大"><a href="#新奇搜索：放棄目標才有可能成就偉大" class="headerlink" title="新奇搜索：放棄目標才有可能成就偉大"></a>新奇搜索：放棄目標才有可能成就偉大</h3><p>既然設定目標不管用，難道就沒有什麼其他比較好的方法了嗎？確實是有其他的方法，也就是所謂的新奇搜索法。主動去尋找新奇有趣的事物，因為這些事物看似雖然沒有關聯，但是卻是有可能成為未知目標所需要的踏板。</p>
+<p>這裡作者用的比方我很喜歡：各種偉大的成就就像是散落在一個很大的空間之中，要前往某個偉大的目的地，這之間我們需要有很多踏腳石。然而不能期望前進的方向上所有踏腳石都清晰可見，有時離下一個踏腳石距離太遠根本勾不到。不過也許換個方向走，尋找其他看似不相關的踏腳石，卻反而有可能抵達該目的地。目標就像是指向偉大成就的羅盤一樣，方向明確但並不一定有用。</p>
+<p>從上面的比喻我們可以知道，要在這個巨大的搜索空間中尋找有價值的事物，比起一味朝著某個方向前進，不斷去搜尋可以成為踏腳石的地方更為重要。最適合在這個空間中搜尋這些踏腳石的方法，就是所謂的新奇搜索法。我們越是去尋找有趣，從未見過的事物，它們可以創造的可能性越多，通往下個踏腳石，甚至是偉大的成就的機會也越大。<strong>我們放棄了偉大的目標，追隨自己的好奇心走，反而可能會抵達另一個不在計畫中的偉大</strong>。</p>
+<h3 id="避開競爭，走出屬於自己的人生道路"><a href="#避開競爭，走出屬於自己的人生道路" class="headerlink" title="避開競爭，走出屬於自己的人生道路"></a>避開競爭，走出屬於自己的人生道路</h3><p>書中我最喜歡的一段是把生物的演化論拿來類比新奇搜索法。生物之所以會存在就是不斷的生存和繁衍，過去課本所學到的物競天擇會進行篩選，留下可以有競爭力、有能力存活的物種，讓生命持續「進化」。然而，作者反對這樣的思維方式，他認為生物演化就像是把牛奶往外潑，牛奶會持續向外擴散，直到遇到障礙物為止。生物也一樣，會不斷去尋找不同的可能性，盡量避免競爭。比起與同物種競爭，最終產生出一個超級生物，更好的方式是尋找新的生活空間、到新的生存環境，相對來說這個更容易達成。這也是為什麼我們會看到世界上有那麼多生物種類，不同環境都有自己的生態圈的原因。</p>
+<p>用企業的角度來看，這也是一樣的。在上個世紀各種石油巨無霸、汽車製造巨頭主導著市場，但我們並沒有看到有什麼新的相關領域企業出現並與其競爭。反而是在未知領域，半導體、軟體、網路等方向有新的巨頭出現，對比這些舊企業對世界有更大的影響力。因為避開了在同個市場的直接競爭，所以有新的生存空間能夠發展。這個也是人們常說的紅海藍海的概念，在沒有過多競爭的藍海，才能有更大的可能性。</p>
+<p>回歸到個人，老生常談中的做自己就好以及跟著興趣走其實也是有道理的。<strong>在人多的地方就會充滿各種競爭，跟著直覺覺得有意思的方向走，依據自己的個人特點避開競爭，反而更有可能得到世俗意義上的成功</strong>。書中有個比喻，假設目標是要成為百萬富翁，我就會避開沒有支薪的實習，就算非常喜愛這個工作。然而現實往往是因為追尋了內心的激情和興趣，而不是向「錢」看，某天才意識到自己離百萬富翁只差一個踏腳石而已。</p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p><strong>小目標可以被計畫，但是偉大則不能</strong>。本書打破了目標的迷思，大從政府企業，小到個人，對於偉大的成就需要有新的認知。在<a href="https://www.books.com.tw/products/0010819494">黑馬思維</a>那本書有提到很多成功人士都是不會執著於特定目標，願意嘗試各種新事物，一旦感到苗頭正確，就做出特定的改變。或許這也是有異曲同工之妙。先追尋自我找到有趣的事情，一旦發展到後來對他人有價值，就能發揮出影響力，這時反而各種一般人所盼望的成就也會隨之而來。對於偉大，越是汲汲營營，越是不可得，就像是「眾裡尋他千百度，驀然回首，那人卻在燈火闌珊處」一樣。</p>
+<h2 id="反思與行動"><a href="#反思與行動" class="headerlink" title="反思與行動"></a>反思與行動</h2><p>雖然這本書是比較概念性的內容，還是盡可能轉換成可執行的行動，應用在自己人生中。</p>
+<ol>
+<li>自己會走到當下這個位置，是經過無數選擇和探索，跟其他人完全不同。因此對於未來要走的道路，也不需要跟別人比較與競爭。</li>
+<li>在當下所處的位置去思考有哪些可能性，保持好奇心，以實際行動去探索新奇事物。</li>
+<li>一旦發現吸引自己的事情，就安心地跟著直覺走，勇於改變方向並前進。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>淺談函式庫</title>
     <url>/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/</url>
     <content><![CDATA[<h2 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared&#x2F;static library"></a>比較shared&#x2F;static library</h2><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
@@ -3039,65 +3098,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
-    <url>/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/</url>
-    <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/CN11869057">為什麼偉大不能被計劃</a>」是由兩位作者 Kenneth Stanley 和 Joel Lehman 所著。他們是機器學習和人工智慧研究學者，其團隊做了一個圖片孵化網站，意外發現要從亂數中產生出好的圖片並不能透過事先的計劃，而是只能透過不斷嘗試，發掘夠新奇有趣的圖片，然後以此為踏腳石繼續往下探索。這樣的發現也可以套用到其他人類偉大的發現和發明之中。這些偉大的成就，大多都不是透過設定目標和安排計畫來達成，反而都是因為在興趣探索時意外發現。</p>
-<p>在現代社會中，人生也都有既定的目標，讀書升學、找個好工作、結婚買房、賺到可以退休的錢。有時候也會不禁想到按照這樣目標走，好像缺乏了什麼，無法創造不一樣的可能性。若是對這樣的人生有所疑惑的話，卻又沒有個方向的話，這本書可以很好地釐清並啟發自己不同的想法。</p>
-<h2 id="我畫線的地方"><a href="#我畫線的地方" class="headerlink" title="我畫線的地方"></a>我畫線的地方</h2><p>書中有些讓我特別有感觸的地方：</p>
-<ul>
-<li><p>越是遠大的目標，越是不可能透過計畫來達成。能夠透過努力和計畫達成的目標根本稱不上偉大，因為每個人都可以透過同樣的方式達成。</p>
-<blockquote>
-<p>若⽬標設置⾜夠適度，它就會起到積極作⽤；反之，⽬標越「⾼⼤上」，情況就越複雜…關鍵在於，通向「⾼⼤上」⽬標的踏腳⽯，往往⾮常奇怪。也就是說，若你只是悶頭盯著⾃⼰的⽬標，那它們可能就是你根本意想不到的東西。</p>
-</blockquote>
-</li>
-<li><p>新奇比起固定方向的目標更為可靠，因為沒有人踩過，更有可能有別人所沒注意到的發現，雖然我們並不知道是什麼。</p>
-<blockquote>
-<p>設定⽬標意味著遵循⼀條未知的路徑，朝著遙遠的⽬的地前⾏，⽽新奇性只要求我們遠離已經到過的地⽅。離開⼀個已經到過的地⽅，不僅更簡單輕鬆，還蘊含了更豐富的信息…相信新奇性是推動進步的⼀台有意義的引擎。</p>
-</blockquote>
-</li>
-<li><p>我們的教育讓大家少了目標就沒有方向了，這時或許順應興趣、本心直覺去走，會是一個更靠譜的方式。</p>
-<blockquote>
-<p>如果你想知道如何擺脫對⽬標的盲⽬信奉，只需要隨⼼⾏事、遵循個⼈興趣的指引即可。不是所有的事情都需要以嚴謹的⽬標為指導。如果你對某件事有強烈的直覺，不妨順應本⼼。如果你沒有明確的⽬標，那也沒必要患得患失，因為不論你最終⾛到哪⾥，結果都不會太壞。</p>
-</blockquote>
-</li>
-<li><p>一直以來我們都有所誤會，物競天擇的重點不在於競爭，而是避開競爭。避開競爭才能夠有更大的生存空間。</p>
-<blockquote>
-<p>⾃然進化並不是通過競爭來獲得⽣物多樣性，⽽是通過避免競爭。特別是某⼀⽣物如果能以⼀種新⽅式謀得⽣存，那便是成功找到了⾃⼰的專屬⽣態位。因為它會成為第⼀個以這種新⽅式⽣存的⽣物，所以作為此道開⼭者，競爭不會太激烈，繁衍也會更容易。</p>
-</blockquote>
-</li>
-<li><p>過於專注在支微末節的競爭沒有太大意義，重點是這個是不是能夠帶來全新領域的踏腳石。想想自己是不是也常在不重要的地方跟別人競爭那細微的差異呢？</p>
-<blockquote>
-<p>通過細枝末節的調整，擠出最後⼀絲性能提升空間的做法，並不會帶來令⼈振奮的洞見…所有被歷史記住的算法，必然是為未來的開拓者奠定基礎的算法。它們將推動新算法的誕⽣，甚⾄幫助我們開闢全新的領域。到那時，誰還會在乎這些新算法在剛開始出現時，與「⽼靠譜」算法⽐較時的表現如何呢？</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="個人想法"><a href="#個人想法" class="headerlink" title="個人想法"></a>個人想法</h2><p>從小我就很相信目標論。相信任何事物都可以透過設定目標並且執行詳實的計畫來完成。越是想達成偉大的成就就更應該設定遠大的目標、加倍的努力、以及嚴謹的紀律。然而這本書卻打破了想像，提供了完全不一樣的視角。下面三點是我從中獲得的最大收穫。</p>
-<h3 id="偉大目標無法被設定"><a href="#偉大目標無法被設定" class="headerlink" title="偉大目標無法被設定"></a>偉大目標無法被設定</h3><p>作者的圖片孵化器網站讓人們能夠協作從最基本的圖形，過程不斷產生些微隨機變異，最終產生出各種有趣的圖片。然而，人們卻無法透過事先設定想要產生某種圖案來達成，只能在產生圖片的過程中挑選比較新奇的圖片並且持續嘗試。舉例來說，就像是下圖，我們沒辦法透過事先設定好要創作汽車來產生期待的結果，反而意外是從外星人的圖片演化而來。當初的創作者從來也不會想過外星人的眼睛可以轉換成汽車的輪子。</p>
-<p><img src="/images/%E5%A4%96%E6%98%9F%E4%BA%BA%E5%88%B0%E8%BB%8A%E5%AD%90.png" alt="外星人到車子"><br>圖片取自 <a href="https://www.youtube.com/watch?v=dKazBM3b74I">Kenneth Stanley 的演講</a></p>
-<p>這樣的現象其實在其他研究中也有同樣發現，就像是走迷宮，如果只是設定要往最接近出口的方向前進，很可能會卡在死胡同出不來。然而如果我們不要設定目標，讓探索更隨意，單純去嘗試過去沒試過的路線，反而更有機會走出迷宮。讓機器人學習走路的過程中，設定目標要它不要跌倒反而學不會走路，因為飛踢是往前邁步的開端。這些目標的設定反而成了目標的阻礙。</p>
-<p>在人類偉大的發現發明中，因為繞路反而達成目標的情況並不罕見。例如，當初發明真空管並不知道可以用來製作電腦；而人類想要飛行不是像鳥一樣使用翅膀，而是發明內燃機，有趣的是內燃機最一開始也不是為了飛機而做。沒有這些看似不相關的發明，或者說踏腳石，後續更偉大的成就就不可能達成。<strong>越是困難、高大上的目標，越是無法被詳實計畫。因為從所在位置到目標之間，並不是筆直一條線</strong>。</p>
-<h3 id="新奇搜索：放棄目標才有可能成就偉大"><a href="#新奇搜索：放棄目標才有可能成就偉大" class="headerlink" title="新奇搜索：放棄目標才有可能成就偉大"></a>新奇搜索：放棄目標才有可能成就偉大</h3><p>既然設定目標不管用，難道就沒有什麼其他比較好的方法了嗎？確實是有其他的方法，也就是所謂的新奇搜索法。主動去尋找新奇有趣的事物，因為這些事物看似雖然沒有關聯，但是卻是有可能成為未知目標所需要的踏板。</p>
-<p>這裡作者用的比方我很喜歡：各種偉大的成就就像是散落在一個很大的空間之中，要前往某個偉大的目的地，這之間我們需要有很多踏腳石。然而不能期望前進的方向上所有踏腳石都清晰可見，有時離下一個踏腳石距離太遠根本勾不到。不過也許換個方向走，尋找其他看似不相關的踏腳石，卻反而有可能抵達該目的地。目標就像是指向偉大成就的羅盤一樣，方向明確但並不一定有用。</p>
-<p>從上面的比喻我們可以知道，要在這個巨大的搜索空間中尋找有價值的事物，比起一味朝著某個方向前進，不斷去搜尋可以成為踏腳石的地方更為重要。最適合在這個空間中搜尋這些踏腳石的方法，就是所謂的新奇搜索法。我們越是去尋找有趣，從未見過的事物，它們可以創造的可能性越多，通往下個踏腳石，甚至是偉大的成就的機會也越大。<strong>我們放棄了偉大的目標，追隨自己的好奇心走，反而可能會抵達另一個不在計畫中的偉大</strong>。</p>
-<h3 id="避開競爭，走出屬於自己的人生道路"><a href="#避開競爭，走出屬於自己的人生道路" class="headerlink" title="避開競爭，走出屬於自己的人生道路"></a>避開競爭，走出屬於自己的人生道路</h3><p>書中我最喜歡的一段是把生物的演化論拿來類比新奇搜索法。生物之所以會存在就是不斷的生存和繁衍，過去課本所學到的物競天擇會進行篩選，留下可以有競爭力、有能力存活的物種，讓生命持續「進化」。然而，作者反對這樣的思維方式，他認為生物演化就像是把牛奶往外潑，牛奶會持續向外擴散，直到遇到障礙物為止。生物也一樣，會不斷去尋找不同的可能性，盡量避免競爭。比起與同物種競爭，最終產生出一個超級生物，更好的方式是尋找新的生活空間、到新的生存環境，相對來說這個更容易達成。這也是為什麼我們會看到世界上有那麼多生物種類，不同環境都有自己的生態圈的原因。</p>
-<p>用企業的角度來看，這也是一樣的。在上個世紀各種石油巨無霸、汽車製造巨頭主導著市場，但我們並沒有看到有什麼新的相關領域企業出現並與其競爭。反而是在未知領域，半導體、軟體、網路等方向有新的巨頭出現，對比這些舊企業對世界有更大的影響力。因為避開了在同個市場的直接競爭，所以有新的生存空間能夠發展。這個也是人們常說的紅海藍海的概念，在沒有過多競爭的藍海，才能有更大的可能性。</p>
-<p>回歸到個人，老生常談中的做自己就好以及跟著興趣走其實也是有道理的。<strong>在人多的地方就會充滿各種競爭，跟著直覺覺得有意思的方向走，依據自己的個人特點避開競爭，反而更有可能得到世俗意義上的成功</strong>。書中有個比喻，假設目標是要成為百萬富翁，我就會避開沒有支薪的實習，就算非常喜愛這個工作。然而現實往往是因為追尋了內心的激情和興趣，而不是向「錢」看，某天才意識到自己離百萬富翁只差一個踏腳石而已。</p>
-<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p><strong>小目標可以被計畫，但是偉大則不能</strong>。本書打破了目標的迷思，大從政府企業，小到個人，對於偉大的成就需要有新的認知。在<a href="https://www.books.com.tw/products/0010819494">黑馬思維</a>那本書有提到很多成功人士都是不會執著於特定目標，願意嘗試各種新事物，一旦感到苗頭正確，就做出特定的改變。或許這也是有異曲同工之妙。先追尋自我找到有趣的事情，一旦發展到後來對他人有價值，就能發揮出影響力，這時反而各種一般人所盼望的成就也會隨之而來。對於偉大，越是汲汲營營，越是不可得，就像是「眾裡尋他千百度，驀然回首，那人卻在燈火闌珊處」一樣。</p>
-<h2 id="反思與行動"><a href="#反思與行動" class="headerlink" title="反思與行動"></a>反思與行動</h2><p>雖然這本書是比較概念性的內容，還是盡可能轉換成可執行的行動，應用在自己人生中。</p>
-<ol>
-<li>自己會走到當下這個位置，是經過無數選擇和探索，跟其他人完全不同。因此對於未來要走的道路，也不需要跟別人比較與競爭。</li>
-<li>在當下所處的位置去思考有哪些可能性，保持好奇心，以實際行動去探索新奇事物。</li>
-<li>一旦發現吸引自己的事情，就安心地跟著直覺走，勇於改變方向並前進。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
       </tags>
   </entry>
   <entry>
@@ -3408,26 +3408,6 @@
       </tags>
   </entry>
   <entry>
-    <title>系統演化：穩定中間態的關鍵角色</title>
-    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
-    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
-<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
-<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
-<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
-<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
-<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
-<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
-<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
-<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
-<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
-<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
-<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>筆記：自己的外部大腦</title>
     <url>/2024/11/03/%E7%AD%86%E8%A8%98%EF%BC%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A4%96%E9%83%A8%E5%A4%A7%E8%85%A6/</url>
     <content><![CDATA[<p>對人類來說，紀錄筆記可能真的是不得不做的必要之惡。我們的大腦天生就不善於記憶東西，而為了讓自己更容易找出過去某個時間點的知識，我們需要有個外部系統來輔助，這也就是所謂的筆記。</p>
@@ -3464,6 +3444,26 @@
 </li>
 </ul>
 <h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>筆記只是輔助，但是卻也不可或缺。找出適合自己的筆記方法是非常值得的投資，會幫助思考並且讓生活更容易被掌握。以我的經驗來說，筆記確實讓我感到生活工作各個方面都更加可控，不過也要記得過猶不及，花太多時間在筆記上反而會阻礙了我們發揮創意並思考。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>系統演化：穩定中間態的關鍵角色</title>
+    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
+    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
+<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
+<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
+<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
+<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
+<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
+<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
+<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
+<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
+<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
+<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
+<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
