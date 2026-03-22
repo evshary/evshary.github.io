@@ -1159,88 +1159,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dd - 資料處理的好工具</title>
-    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
-<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
-<li>輸入輸出參數<ul>
-<li>if&#x3D;FILE：輸入名稱</li>
-<li>of&#x3D;FILE：輸出名稱</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
-
-<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
-<li>做相對應的轉換<code>conv=CONVS</code><ul>
-<li>lcase：大寫字母換小寫</li>
-<li>ucase：小寫字母換大寫</li>
-<li>nocreat：不要建立輸出檔案</li>
-<li>notrunc：input小於output時，仍維持output大小</li>
-<li>fdatasync：讓資料同步寫入硬碟</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
-
-<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
-<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
-<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
-<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
-</ul>
-</li>
-<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
-<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
-<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
-</ul>
-<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
-<li><p>大小寫轉換</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>產生一個特定大小的檔案</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>把特定檔案的開頭512 byte清空</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份硬碟</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
-<ol>
-<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然後應該會出現類似如下內容</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
-<ul>
-<li>拆分檔案，例如把檔案切成好幾個1G</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>合併檔案，例如好幾個1G合併起來</li>
-</ul>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>code review</title>
     <url>/2017/08/27/code-review/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
@@ -1368,6 +1286,88 @@
       </categories>
       <tags>
         <tag>軟體開發</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dd - 資料處理的好工具</title>
+    <url>/2018/11/25/dd-%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>dd全名叫做data duplicator，這個工具最主要的功能是對資料作複製、修改、備份，是一個很方便的小工具。通常Linux中預設都會有，不需要額外安裝。</p>
+<h2 id="使用教學"><a href="#使用教學" class="headerlink" title="使用教學"></a>使用教學</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ul>
+<li>輸入輸出參數<ul>
+<li>if&#x3D;FILE：輸入名稱</li>
+<li>of&#x3D;FILE：輸出名稱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file]</span><br></pre></td></tr></table></figure>
+
+<h3 id="轉換"><a href="#轉換" class="headerlink" title="轉換"></a>轉換</h3><ul>
+<li>做相對應的轉換<code>conv=CONVS</code><ul>
+<li>lcase：大寫字母換小寫</li>
+<li>ucase：小寫字母換大寫</li>
+<li>nocreat：不要建立輸出檔案</li>
+<li>notrunc：input小於output時，仍維持output大小</li>
+<li>fdatasync：讓資料同步寫入硬碟</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 轉為小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input_file] of=[output_file] conv=lcase</span><br></pre></td></tr></table></figure>
+
+<h3 id="區塊"><a href="#區塊" class="headerlink" title="區塊"></a>區塊</h3><ul>
+<li>bs&#x3D;[bytes]：等同於同時設定ibs和obs，一次讀或寫的block size。<ul>
+<li>ibs&#x3D;[bytes]：指定每次讀取的block size(default 512 bytes)</li>
+<li>obs&#x3D;[bytes]：指定每次寫入的block size(default 512 bytes)</li>
+</ul>
+</li>
+<li>count&#x3D;[number]：只處理前[number]輸入區塊，block size要參考ibs。</li>
+<li>seek&#x3D;[number]：輸出檔案跳過前[number]個區塊，block size要參考obs。</li>
+<li>skip&#x3D;[number]：輸入檔案跳過前[number]個區塊，block size要參考ibs。</li>
+</ul>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ul>
+<li><p>大小寫轉換</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 換大寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=ucase</span><br><span class="line"><span class="comment"># 換小寫</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[input] of=[output] conv=lcase</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>產生一個特定大小的檔案</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 內容為空的1KB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=1024 count=1</span><br><span class="line"><span class="comment"># 內容為亂數的1MB檔案</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/urandom of=[output] bs=1m count=1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>把特定檔案的開頭512 byte清空</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=[output] bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份硬碟</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[來源] of=[目標]</span><br><span class="line"><span class="comment"># 例如從/dev/sda備份到/dev/sdb</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/dev/sdb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>備份光碟，可參考<a href="https://www.thomas-krenn.com/en/wiki/Create_an_ISO_Image_from_a_source_CD_or_DVD_under_Linux">Create an ISO Image from a source CD or DVD under Linux</a></p>
+<ol>
+<li><p>先觀察&#x2F;dev&#x2F;cdrom</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">isoinfo -d -i /dev/cdrom | grep -i -E <span class="string">&#x27;block size|volume size&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然後應該會出現類似如下內容</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logical block size is: 2048</span><br><span class="line">Volume size is: 327867</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著參考上面的數字使用dd指令(bs大部分都是2048，而count其實有加沒加都沒差)</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=test.iso bs=&lt;block size from above&gt; count=&lt;volume size from above&gt;</span><br><span class="line"><span class="comment"># 以上述例子</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/cdrom of=outputCD.iso bs=2048 count=327867</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>拆分&amp;合併檔案，可參考<a href="https://www.linuxquestions.org/linux/answers/applications_gui_multimedia/splitting_and_merging_files_using_dd">Splitting and Merging files using dd</a></p>
+<ul>
+<li>拆分檔案，例如把檔案切成好幾個1G</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part1] bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[大檔案] of=[part2] bs=1m count=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>合併檔案，例如好幾個1G合併起來</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part1] of=大檔案 bs=1m count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=[part2] of=大檔案 bs=1m count=1024 seek=1024</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://blog.gtwang.org/linux/dd-command-examples/">dd 指令教學與實用範例，備份與回復資料的小工具</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1745,75 +1745,6 @@
       </tags>
   </entry>
   <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
-
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>如果要開啟多個檔案</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
-
-<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo 教學</title>
     <url>/2017/09/09/hexo%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<p>我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩。另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇。Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介面，而且還可以用 markdown 來寫 blog。</p>
@@ -1964,6 +1895,175 @@
       </tags>
   </entry>
   <entry>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要開啟多個檔案</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
+
+<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 openssl 工具與函式庫</title>
+    <url>/2018/05/13/openssl-library-example/</url>
+    <content><![CDATA[<h2 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install openssl</span><br></pre></td></tr></table></figure>
+
+<p>MAC上如果要使用library有點麻煩，需要先找到對應的路徑</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;libssl.*&quot;</span>  <span class="comment"># 找到library的路徑</span></span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/pkgconfig/libssl.pc</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/libssl.dylib</span><br><span class="line">...</span><br><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;ssl.h&quot;</span>  <span class="comment"># 找到header的路徑</span></span><br><span class="line">/usr/local/Cellar//node/8.4.0/include/node/openssl/ssl.h</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/include/openssl/ssl.h</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>看起來路徑是在<code>/usr/local/Cellar/openssl/1.0.2o_1/</code>我們先記起來，後面編譯時會用到。</p>
+<h2 id="創造憑證"><a href="#創造憑證" class="headerlink" title="創造憑證"></a>創造憑證</h2><p>openssl本身就有提供很多好用的工具，我們最常用到的大概就是用來產生憑證吧！</p>
+<p>這邊介紹產生兩種常見憑證(RSA,ECC)的方法。</p>
+<h3 id="產生RSA憑證"><a href="#產生RSA憑證" class="headerlink" title="產生RSA憑證"></a>產生RSA憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生2048長度的key</span></span><br><span class="line">openssl genrsa -out server.key 2048</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key server.key -out server.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey server.key -<span class="keyword">in</span> server.csr -out server.crt</span><br></pre></td></tr></table></figure>
+
+<h3 id="產生ECC憑證"><a href="#產生ECC憑證" class="headerlink" title="產生ECC憑證"></a>產生ECC憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生ECC key</span></span><br><span class="line">openssl ecparam -genkey -name secp384r1 -out ecc.key</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key ecc.key -out ecc.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey ecc.key -<span class="keyword">in</span> ecc.csr -out ecc.crt</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用openssl內建的連線工具"><a href="#使用openssl內建的連線工具" class="headerlink" title="使用openssl內建的連線工具"></a>使用openssl內建的連線工具</h2><p>有時候我們只是想要測試ssl連線而已，還要自己寫程式有點麻煩，還好我們可以使用openssl提供的連線工具</p>
+<p>client和server都有提供，非常方便的！</p>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><ul>
+<li><code>-msg</code>：看細節(hex格式)</li>
+<li><code>-cipher</code>：決定要用哪種cipher連線</li>
+<li><code>-showcerts</code>：把cert的chain也列出來</li>
+<li><code>-curves</code>：指定要用的橢圓算法，client hello的extension中的elliptic_curves</li>
+<li><code>-sigalgs</code>：指定交換key要用的簽名方式，client hello的extension中的signature_algorithms</li>
+<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 最基本連線</span></span><br><span class="line">openssl s_client -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 看連線細節</span></span><br><span class="line">openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 指定連線方式</span></span><br><span class="line">openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"><span class="comment"># 限制只能用TLS1.2連線</span></span><br><span class="line">openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure>
+
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># server開啟5678 port並且用server.key當private key，cert用server.pem</span></span><br><span class="line">openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果要看有哪些連線方式，可使用如下指令</span></span><br><span class="line">openssl ciphers ALL</span><br></pre></td></tr></table></figure>
+
+<h2 id="函式庫使用"><a href="#函式庫使用" class="headerlink" title="函式庫使用"></a>函式庫使用</h2><p>我們來介紹openssl的函式庫最基本的使用方式。</p>
+<h3 id="基本範例-client-server"><a href="#基本範例-client-server" class="headerlink" title="基本範例 - client &amp; server"></a>基本範例 - client &amp; server</h3><p>這邊寫了兩個client和server的基本範例當作參考，大家可以基於這兩者來拓展自己的程式。</p>
+<h4 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h4><p>ssl_client.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RECV_SIZE 256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_client_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">char</span> *ip, <span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// New socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// TCP connect to server</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = inet_addr(ip);</span><br><span class="line">    <span class="keyword">if</span> (connect(fd, (<span class="keyword">struct</span> sockaddr *)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_client.out [IP] [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="type">char</span> buf[RECV_SIZE];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Parse parameter</span></span><br><span class="line">    port = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Connect to %s:%d\n&quot;</span>, argv[<span class="number">1</span>], port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = create_socket(argv[<span class="number">1</span>], port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Start to build ssl connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_connect(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL write/read</span></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Write data to server (q for quit): &quot;</span>);</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        gets(buf);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">&quot;q&quot;</span>, buf) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf)) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, RECV_SIZE);</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Recv %d bytes: %s\n&quot;</span>, len, buf);</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// SSL close</span></span><br><span class="line">    SSL_shutdown(ssl);</span><br><span class="line">    <span class="comment">// Free resource</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ssl_server.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_CERT <span class="string">&quot;server.crt&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_KEY  <span class="string">&quot;server.key&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUF_LEN  256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_server_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">configure_sslcertkey_file</span><span class="params">(SSL_CTX *ctx)</span></span><br><span class="line">&#123;</span><br><span class="line">    SSL_CTX_set_ecdh_auto(ctx, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// Load certificate file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_certificate_file(ctx, SSL_CERT, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Load private key file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_PrivateKey_file(ctx, SSL_KEY, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (bind(fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (listen(fd, <span class="number">1</span>) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_server.out [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> server_fd, client_fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line">    uint len = <span class="keyword">sizeof</span>(addr);</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">char</span> buf[BUF_LEN];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    port = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Listen port: %d\n&quot;</span>, port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Configure cert and key</span></span><br><span class="line">    <span class="keyword">if</span> (configure_sslcertkey_file(ctx) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((server_fd = create_socket(port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Accept connection</span></span><br><span class="line">    <span class="keyword">if</span> ((client_fd = accept(server_fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, &amp;len)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Build SSL connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, client_fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_accept(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL read/write</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, BUF_LEN);</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Close client</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(client_fd);</span><br><span class="line">    <span class="comment">// Close server and relase resource</span></span><br><span class="line">    close(server_fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="編譯與執行"><a href="#編譯與執行" class="headerlink" title="編譯與執行"></a>編譯與執行</h4><p>接下來寫個簡單的Makefile，這時候就要用到前面所找到的路徑了。</p>
+<figure class="highlight mak"><table><tr><td class="code"><pre><span class="line">SSL_PATH=/usr/local/Cellar/openssl/1.0.2o_1/</span><br><span class="line">CFLAGS=-I<span class="variable">$(SSL_PATH)</span><span class="keyword">include</span> -L<span class="variable">$(SSL_PATH)</span>lib/ -lcrypto -lssl</span><br><span class="line">CC=gcc</span><br><span class="line">BIN=ssl_server ssl_client</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(BIN)</span></span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_server: ssl_server.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_client: ssl_client.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        -rm *.o</span><br><span class="line">        -rm *.out</span><br></pre></td></tr></table></figure>
+
+<p><strong>這邊要特別記住<code>-lcrypto -lssl</code>要放最後面，不然有些平台會有error</strong></p>
+<p>然後就可以執行看看了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ ./ssl_server 2222</span><br><span class="line">Listen port: 2222</span><br></pre></td></tr></table></figure>
+
+<p>這時候另一邊再來執行client</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./ssl_client.out 127.0.0.1 2222</span><br><span class="line">Connect to 127.0.0.1:2222</span><br><span class="line">Write data to server (q <span class="keyword">for</span> quit): abcd</span><br><span class="line">Recv 4 bytes: abcd</span><br></pre></td></tr></table></figure>
+
+<p>可以順利收送資料了！</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://unix.stackexchange.com/questions/346864/how-to-link-openssl-library-in-macos-using-gcc">How to link OpenSSL library in macOS using gcc?</a></li>
+<li><a href="https://wiki.openssl.org/index.php/Simple_TLS_Server">Simple TLS Server</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+        <tag>protocol</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>port knocking</title>
+    <url>/2017/08/27/port-knocking/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>我這邊server是用Ubuntu, client是MAC環境。</p>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install knockd</span><br></pre></td></tr></table></figure>
+
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
+
+<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[options]</span></span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line"><span class="section">[openSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">3389</span>:udp,<span class="number">80</span>:tcp,<span class="number">21</span>:udp,<span class="number">53</span>:tcp,<span class="number">23</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -I INPUT <span class="number">1</span> -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br><span class="line"></span><br><span class="line"><span class="section">[closeSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">443</span>:tcp,<span class="number">80</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br></pre></td></tr></table></figure>
+
+<p>功能大概看名字也可以猜出來</p>
+<ul>
+<li>sequence: 敲port的順序</li>
+<li>seq_timeout: 間隔時間</li>
+<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
+<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service knockd start</span><br></pre></td></tr></table></figure>
+
+<p>記得防火牆要先設定不讓外面的人進入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><p>須先安裝knock</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linker script 簡單教學</title>
     <url>/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
@@ -2088,106 +2188,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用 openssl 工具與函式庫</title>
-    <url>/2018/05/13/openssl-library-example/</url>
-    <content><![CDATA[<h2 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install openssl</span><br></pre></td></tr></table></figure>
-
-<p>MAC上如果要使用library有點麻煩，需要先找到對應的路徑</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;libssl.*&quot;</span>  <span class="comment"># 找到library的路徑</span></span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/pkgconfig/libssl.pc</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/libssl.dylib</span><br><span class="line">...</span><br><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;ssl.h&quot;</span>  <span class="comment"># 找到header的路徑</span></span><br><span class="line">/usr/local/Cellar//node/8.4.0/include/node/openssl/ssl.h</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/include/openssl/ssl.h</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>看起來路徑是在<code>/usr/local/Cellar/openssl/1.0.2o_1/</code>我們先記起來，後面編譯時會用到。</p>
-<h2 id="創造憑證"><a href="#創造憑證" class="headerlink" title="創造憑證"></a>創造憑證</h2><p>openssl本身就有提供很多好用的工具，我們最常用到的大概就是用來產生憑證吧！</p>
-<p>這邊介紹產生兩種常見憑證(RSA,ECC)的方法。</p>
-<h3 id="產生RSA憑證"><a href="#產生RSA憑證" class="headerlink" title="產生RSA憑證"></a>產生RSA憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生2048長度的key</span></span><br><span class="line">openssl genrsa -out server.key 2048</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key server.key -out server.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey server.key -<span class="keyword">in</span> server.csr -out server.crt</span><br></pre></td></tr></table></figure>
-
-<h3 id="產生ECC憑證"><a href="#產生ECC憑證" class="headerlink" title="產生ECC憑證"></a>產生ECC憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生ECC key</span></span><br><span class="line">openssl ecparam -genkey -name secp384r1 -out ecc.key</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key ecc.key -out ecc.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey ecc.key -<span class="keyword">in</span> ecc.csr -out ecc.crt</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用openssl內建的連線工具"><a href="#使用openssl內建的連線工具" class="headerlink" title="使用openssl內建的連線工具"></a>使用openssl內建的連線工具</h2><p>有時候我們只是想要測試ssl連線而已，還要自己寫程式有點麻煩，還好我們可以使用openssl提供的連線工具</p>
-<p>client和server都有提供，非常方便的！</p>
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><ul>
-<li><code>-msg</code>：看細節(hex格式)</li>
-<li><code>-cipher</code>：決定要用哪種cipher連線</li>
-<li><code>-showcerts</code>：把cert的chain也列出來</li>
-<li><code>-curves</code>：指定要用的橢圓算法，client hello的extension中的elliptic_curves</li>
-<li><code>-sigalgs</code>：指定交換key要用的簽名方式，client hello的extension中的signature_algorithms</li>
-<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 最基本連線</span></span><br><span class="line">openssl s_client -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 看連線細節</span></span><br><span class="line">openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 指定連線方式</span></span><br><span class="line">openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"><span class="comment"># 限制只能用TLS1.2連線</span></span><br><span class="line">openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure>
-
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># server開啟5678 port並且用server.key當private key，cert用server.pem</span></span><br><span class="line">openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
-
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果要看有哪些連線方式，可使用如下指令</span></span><br><span class="line">openssl ciphers ALL</span><br></pre></td></tr></table></figure>
-
-<h2 id="函式庫使用"><a href="#函式庫使用" class="headerlink" title="函式庫使用"></a>函式庫使用</h2><p>我們來介紹openssl的函式庫最基本的使用方式。</p>
-<h3 id="基本範例-client-server"><a href="#基本範例-client-server" class="headerlink" title="基本範例 - client &amp; server"></a>基本範例 - client &amp; server</h3><p>這邊寫了兩個client和server的基本範例當作參考，大家可以基於這兩者來拓展自己的程式。</p>
-<h4 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h4><p>ssl_client.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RECV_SIZE 256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_client_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">char</span> *ip, <span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// New socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// TCP connect to server</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = inet_addr(ip);</span><br><span class="line">    <span class="keyword">if</span> (connect(fd, (<span class="keyword">struct</span> sockaddr *)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_client.out [IP] [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="type">char</span> buf[RECV_SIZE];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Parse parameter</span></span><br><span class="line">    port = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Connect to %s:%d\n&quot;</span>, argv[<span class="number">1</span>], port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = create_socket(argv[<span class="number">1</span>], port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Start to build ssl connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_connect(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL write/read</span></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Write data to server (q for quit): &quot;</span>);</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        gets(buf);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">&quot;q&quot;</span>, buf) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf)) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, RECV_SIZE);</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Recv %d bytes: %s\n&quot;</span>, len, buf);</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// SSL close</span></span><br><span class="line">    SSL_shutdown(ssl);</span><br><span class="line">    <span class="comment">// Free resource</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>ssl_server.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_CERT <span class="string">&quot;server.crt&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_KEY  <span class="string">&quot;server.key&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUF_LEN  256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_server_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">configure_sslcertkey_file</span><span class="params">(SSL_CTX *ctx)</span></span><br><span class="line">&#123;</span><br><span class="line">    SSL_CTX_set_ecdh_auto(ctx, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// Load certificate file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_certificate_file(ctx, SSL_CERT, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Load private key file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_PrivateKey_file(ctx, SSL_KEY, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (bind(fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (listen(fd, <span class="number">1</span>) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_server.out [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> server_fd, client_fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line">    uint len = <span class="keyword">sizeof</span>(addr);</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">char</span> buf[BUF_LEN];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    port = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Listen port: %d\n&quot;</span>, port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Configure cert and key</span></span><br><span class="line">    <span class="keyword">if</span> (configure_sslcertkey_file(ctx) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((server_fd = create_socket(port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Accept connection</span></span><br><span class="line">    <span class="keyword">if</span> ((client_fd = accept(server_fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, &amp;len)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Build SSL connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, client_fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_accept(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL read/write</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, BUF_LEN);</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Close client</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(client_fd);</span><br><span class="line">    <span class="comment">// Close server and relase resource</span></span><br><span class="line">    close(server_fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="編譯與執行"><a href="#編譯與執行" class="headerlink" title="編譯與執行"></a>編譯與執行</h4><p>接下來寫個簡單的Makefile，這時候就要用到前面所找到的路徑了。</p>
-<figure class="highlight mak"><table><tr><td class="code"><pre><span class="line">SSL_PATH=/usr/local/Cellar/openssl/1.0.2o_1/</span><br><span class="line">CFLAGS=-I<span class="variable">$(SSL_PATH)</span><span class="keyword">include</span> -L<span class="variable">$(SSL_PATH)</span>lib/ -lcrypto -lssl</span><br><span class="line">CC=gcc</span><br><span class="line">BIN=ssl_server ssl_client</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(BIN)</span></span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_server: ssl_server.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_client: ssl_client.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        -rm *.o</span><br><span class="line">        -rm *.out</span><br></pre></td></tr></table></figure>
-
-<p><strong>這邊要特別記住<code>-lcrypto -lssl</code>要放最後面，不然有些平台會有error</strong></p>
-<p>然後就可以執行看看了</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ ./ssl_server 2222</span><br><span class="line">Listen port: 2222</span><br></pre></td></tr></table></figure>
-
-<p>這時候另一邊再來執行client</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./ssl_client.out 127.0.0.1 2222</span><br><span class="line">Connect to 127.0.0.1:2222</span><br><span class="line">Write data to server (q <span class="keyword">for</span> quit): abcd</span><br><span class="line">Recv 4 bytes: abcd</span><br></pre></td></tr></table></figure>
-
-<p>可以順利收送資料了！</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://unix.stackexchange.com/questions/346864/how-to-link-openssl-library-in-macos-using-gcc">How to link OpenSSL library in macOS using gcc?</a></li>
-<li><a href="https://wiki.openssl.org/index.php/Simple_TLS_Server">Simple TLS Server</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-        <tag>protocol</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>port knocking</title>
-    <url>/2017/08/27/port-knocking/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>我這邊server是用Ubuntu, client是MAC環境。</p>
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install knockd</span><br></pre></td></tr></table></figure>
-
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
-
-<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[options]</span></span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line"><span class="section">[openSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">3389</span>:udp,<span class="number">80</span>:tcp,<span class="number">21</span>:udp,<span class="number">53</span>:tcp,<span class="number">23</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -I INPUT <span class="number">1</span> -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br><span class="line"></span><br><span class="line"><span class="section">[closeSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">443</span>:tcp,<span class="number">80</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br></pre></td></tr></table></figure>
-
-<p>功能大概看名字也可以猜出來</p>
-<ul>
-<li>sequence: 敲port的順序</li>
-<li>seq_timeout: 間隔時間</li>
-<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
-<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
-</ul>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service knockd start</span><br></pre></td></tr></table></figure>
-
-<p>記得防火牆要先設定不讓外面的人進入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
-
-<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><p>須先安裝knock</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
-
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -2404,6 +2404,32 @@
       </tags>
   </entry>
   <entry>
+    <title>不要被政治所操弄</title>
+    <url>/2026/03/22/%E4%B8%8D%E8%A6%81%E8%A2%AB%E6%94%BF%E6%B2%BB%E6%89%80%E6%93%8D%E5%BC%84/</url>
+    <content><![CDATA[<p>最近，因為台灣的行政權和立法權分屬不同政黨，所以國家政治弄得紛紛擾擾的。常常看到很多人在臉書、YouTube、LINE、PTT 等平台上面各種大肆批評對方立場，而且言語常常都是非理性辱罵，這讓我的心情也常常會被影響到。</p>
+<p>當其中一方看似說的有道理時，我也會跟著憤慨為什麼另一方不這樣做，他們是不是想賣國、是不是有腐敗。好像所有問題都來自敵對政黨，只要他們消失，一切都會好轉，從此國家就會走上正軌。</p>
+<p>不過如果仔細思考一下就會發現其中邏輯根本就不通順，不論是哪個政黨都有曾經完全執政過，但是那段時間難道國家就完全沒問題嗎？不，一樣有貪污腐敗，一樣有政策錯誤，認為某個政黨更為優秀的想法根本就太天真了。</p>
+<p>政黨是由人所組成，而人本來就有形形色色，各種不同樣貌，其中一定都會有害群之馬。時間一久，這些人自然就會出現在國家某些要位上，影響國家運行。這是系統性問題，不會因為有哪位天縱英明的領導人出現就能改變，這也是為何民主國家都會有定期選舉、監督制衡的機制。</p>
+<p>對於政治人物來說，想要持續獲得權利，就必須獲得選民的支持，因此不論對手的政見是否真的是對國家有利，他們一定要將其抹黑，營造出一種氛圍───現在人民有任何不滿都是來自對方的錯。透過放大負面情緒，他們就能從中獲益。</p>
+<p>政客操弄選民情緒是民主國家必然會出現的現象，因為不這麼做，他們就無法上位。這就如同網紅們透過追時事熱點來獲得流量、新聞媒體用聳動標題來搏人眼球一樣自然。這時候如果我們的情緒也跟著被這些政客們所操弄，那不就是正中他們的下懷了嗎？</p>
+<p>有些人會說，我們不能看著國家被一群賣國賊帶往錯誤的道路，他們為了自己的私利煽動無知的支持者，瓦解國家的力量，破壞我們的體制。</p>
+<p>我們要相信我們制度的力量，台灣已經經過多次政黨輪替，我們的體制有糾錯的機制，如果做不好，下次選舉就會被趕下台。沒有任何一個人或是一個黨，有那麼大的力量去破壞這套運行的規則。我們現在所擔心的檯面上議題，放到四年後來看，有時甚至根本不用那麼久，都不過是小事而已，根本沒有那麼大的破壞力。只是政客們希望你相信，並且站在他們那側，這樣他們就更容易從對手那邊奪得權力而已。</p>
+<p>在網路上看到很多政治口水的發言，各個黨派的支持者彼此互嗆，嘲笑對方。當我們站在其中一派的立場時，就會覺得怎麼會有那麼不講理的人出現，明明事實就是這樣，為何他們不要接受。任何一個政治事件發生的時候，就會開始轉發相同理念的人的文章，並與立場相悖的人辯論，藉由這樣的動作來滿足內心的需求。</p>
+<p>但是，任何網路上的爭論永遠都是平行線。沒有任何人會因為辯論而轉變立場，想像一下如果你在一場辯論中輸了，你就會相信對方是對的嗎？更有可能的是認為自己只是一時表現不好，所以才會在爭論中落入下風而已。人的思想是最難改變的事物，當遭受到挑戰時，反而會因為感覺受到侵犯，更加進入防禦姿態。</p>
+<p>不論是政壇上政客的各種政治操弄，又或者是網路上的政治口水戰，仔細想想，我們個人的意見根本不會改變現況。不會因為我們個體的支持或反對，態度就會急轉彎，網友就會改變立場，這些都不是在我們能控制的範圍中。</p>
+<p>人生是由一個個當下所組成，而我們當下的注意力在哪邊，也就意味我們生命在哪邊。如果把注意力放在一個我們無法控制的事情上面，那就是在浪費我們的生命。因此，過度關注政治對於人生是百害而無一利的。</p>
+<p>那麼身為普通人，我們要如何避免變成政客的棋子，被其操弄呢？</p>
+<p>首先，不要把某個政黨或是某個政治人物當成自我認同。一般來說，防禦性的心態都來自我們的自我被他人侵犯，為了保護自己，就會開始奮起抵抗。任何政黨或是政治人物都會犯錯，若是我們把自我跟他們綁在一起，當他們被抨擊時，就好像自己被攻擊，下意識就會反擊。然而，何必呢？他們的行為不是我們能控制的，我們如同被綁在一個大石頭上不斷往水裡沉，雖然無法控制石頭的重量，但是我們可以選擇切斷繩索，讓自己自由。</p>
+<p>再來，雖然就像公民課本所說，我們必須要參與政治，可是這並不代表我們需要支持某一個政黨。政治是一個資源分配的過程，政黨不過是扮演反饋民意的角色而已。我們需要的是針對自己重視的議題發聲，不需要多，只要看最看重的那個就好。有可能是高房價，有可能是國防安全，也有可能是科技發展。針對這個議題，選擇要支持的政黨或候選人，這樣我們就不會被政治所綁架了。</p>
+<p>第三，我們要尊重世界的複雜性。當我們批評當權者為何不去做一個看似理所當然的事情，往往背後都是有反作用力在牽扯，一定是有一群跟我們持不同意見的人存在，才導致政治人物不願意去積極處理。例如當我們批評高房價時，也有一大群人畢生資產就在自己好不容易存錢買的房子上，他們肯定不願意看到房價下跌，政府也會因為這個原因不敢下重手。</p>
+<p>最後，政治雖然很重要，但真正重要的還是我們自己的生活過得好不好。我們關心政治，是因為要讓自己生活過得更好，而不是被政治口號牽著跑。政客們很喜歡用宏大的敘事來吸引人民，讓他們好像吃了毒品一樣上癮，相信只要票投給自己，充滿希望的未來就在眼前。任何政策或是國際事件，我們要想的是這會怎麼影響我的生活，我要怎麼應對，而不是去大肆批評，藉機多踩自己不喜歡的政黨幾腳。</p>
+<p>我們的時間、思想、情緒等等，都是屬於自己生命中很重要的一部分，別讓它們被政治所操弄了。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>在非標準的道路上</title>
     <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
     <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
@@ -2418,6 +2444,22 @@
 <p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
 <p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
 <p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>天性與熱情</title>
+    <url>/2024/12/01/%E5%A4%A9%E6%80%A7%E8%88%87%E7%86%B1%E6%83%85/</url>
+    <content><![CDATA[<p>長久以來，專長與興趣一直是人們爭論的焦點。往往我們所擅長的事情和感興趣的事情不會完全一致，所以這也被大家一直拿出來討論，到底要順著自己能力走，還是應該要順著自己喜愛的方向去。長輩或老師們很常給出的建議是，用自己擅長的能力來為生，然後多餘的時間再來發展自己的興趣。這個可以說是最穩健的做法了。</p>
+<p>最常拿出來的例子就是愛因斯坦。他是人類歷史上最偉大也是最知名的物理學家之一，能與他相比的大概也只有牛頓而已。然而在成為物理學家之前，他是想成為帕格尼尼一樣出色的小提琴演奏家。最終，他還是選擇了物理當他的工作，小提琴當成是興趣。根據一位音樂評論家所說，愛因斯坦的演奏很棒，但是世界上還有很多跟他一樣優秀的演奏家。因此可以合理判斷他如果轉職去當小提琴演奏家，可能並不會有像他在物理學界中這樣偉大的地位。</p>
+<p>不過我最近讀了「<a href="https://www.books.com.tw/products/0010914870">別做熱愛的事，要做真實的自己</a>」，對於所謂的專長與興趣的爭論有了不一樣的觀點。其實書中的核心概念是就算做你有熱情的事情，但是偏離自己的核心價值觀和核心能力，一樣不會感到快樂。我原來的想像是如果能做自己感到興趣的事情，就算沒有其他人優秀，應該也會很開心才對。然而事情並不是這樣的。</p>
+<p>比起過去所謂的專長與興趣，天性和熱情或許是更適合拿來討論的框架。所謂的天性並不只是關於你擅長什麼，更多的是你在什麼樣的狀態會最舒適，能發揮出潛力。至於熱情則是更加和自我理想相關，期望能夠在某個領域有所成就，產生出影響力。這兩者並不必然會一致。我們可能會因為社會期待、過去經歷等等原因，希望得到像心目中典範人物的成就，但是因為生長背景的關係，欠缺達到這樣成就的個性和能力。這時就算我們非常有熱情，也會因為和自己天性不合，而不斷消耗精力，過得很不快樂。</p>
+<p>用實際一點的例子來說，一個人可能因為過去受到老師的啟發，希望未來也能成為像恩師一樣幫助更多小孩。但是如果他本身並不善於與人溝通打交道，更別說年紀差距很大對象，這時就算他對教育很有熱情，也會不斷被現實所消磨，不再那麼快樂。又或者說，我們看到名人非凡的成就，如 Elon Musk 創造了對人類未來影響巨大的多間公司，內心感到彭湃衝動，覺得大丈夫當如是也。然而回歸到現實層面，姑且不論金錢或是運氣成分，有多少人可以像是 Musk 一樣不斷去賭身家冒險，一次失敗可能就跌落谷底，更別說他敢於得罪人，一旦覺得成本不划算就大幅裁員。他能夠為了達到目標不擇手段，因此可以有如此偉大的成就，這是他的天性，所以做起來沒太大壓力，而想要模仿他的人，光是這些事情的內在消耗就足以讓人精疲力竭了。</p>
+<p>由上述例子可以知道，專長和興趣比較集中在技能上面的討論，但是天性和熱情則是更廣泛，更加注重我們內在的價值觀和動機。因此，我們更有可能找出兩者的交集，也正是<strong>在具有熱情的領域中做符合自己天性的事情</strong>。同樣用上面的例子，對教育有熱忱但卻又相對內向的人或許不適合當直接面對孩子的老師，他也許可以鎖定在家長身上，又或者是撰寫兒童教育相關的文章教學，提供給家長們參考。對崇拜 Elon Musk 的人來說，更重要的是了解為何自己會對他的成就所感染，也許是享受被人關注、又或者是對人類未來科技發展非常關注，找出動機，然後試著搭配符合天性的能力，這或許才是自己真正所想要的。</p>
+<p>如何找到適合自己天性與熱情的工作一直都不是容易的事情，<strong>重點在於要認識自己的天性以及尋找自己的熱情</strong>。到底自己擅長做什麼，什麼環境讓自己舒適能發揮能力，更重要的是什麼是內心不可退讓的核心價值觀。這些是很多人都無法明確回答的問題。另一方面，我們也要尋找什麼事情能夠感染自己，這唯一能做的只有多加嘗試和閱讀。嘗試去經歷不同的事情，多加與不一樣的人交流，都是很好的方式知道適不適合。其中成本最低的方式莫過於閱讀了，透過閱讀可以非常輕易地了解與自己完全不一樣的人的經驗與觀點。我非常相信這個世界上一定有一個最適合自己並且能產生無可取代價值的位置，只是現在我們還沒遇到而已。</p>
+<p>不用過於著急，畢竟宏觀來說，人生的目的不過就是一趟尋找自己天性與熱情交會之處的旅程而已。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -2451,22 +2493,6 @@
       <tags>
         <tag>機器人</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>天性與熱情</title>
-    <url>/2024/12/01/%E5%A4%A9%E6%80%A7%E8%88%87%E7%86%B1%E6%83%85/</url>
-    <content><![CDATA[<p>長久以來，專長與興趣一直是人們爭論的焦點。往往我們所擅長的事情和感興趣的事情不會完全一致，所以這也被大家一直拿出來討論，到底要順著自己能力走，還是應該要順著自己喜愛的方向去。長輩或老師們很常給出的建議是，用自己擅長的能力來為生，然後多餘的時間再來發展自己的興趣。這個可以說是最穩健的做法了。</p>
-<p>最常拿出來的例子就是愛因斯坦。他是人類歷史上最偉大也是最知名的物理學家之一，能與他相比的大概也只有牛頓而已。然而在成為物理學家之前，他是想成為帕格尼尼一樣出色的小提琴演奏家。最終，他還是選擇了物理當他的工作，小提琴當成是興趣。根據一位音樂評論家所說，愛因斯坦的演奏很棒，但是世界上還有很多跟他一樣優秀的演奏家。因此可以合理判斷他如果轉職去當小提琴演奏家，可能並不會有像他在物理學界中這樣偉大的地位。</p>
-<p>不過我最近讀了「<a href="https://www.books.com.tw/products/0010914870">別做熱愛的事，要做真實的自己</a>」，對於所謂的專長與興趣的爭論有了不一樣的觀點。其實書中的核心概念是就算做你有熱情的事情，但是偏離自己的核心價值觀和核心能力，一樣不會感到快樂。我原來的想像是如果能做自己感到興趣的事情，就算沒有其他人優秀，應該也會很開心才對。然而事情並不是這樣的。</p>
-<p>比起過去所謂的專長與興趣，天性和熱情或許是更適合拿來討論的框架。所謂的天性並不只是關於你擅長什麼，更多的是你在什麼樣的狀態會最舒適，能發揮出潛力。至於熱情則是更加和自我理想相關，期望能夠在某個領域有所成就，產生出影響力。這兩者並不必然會一致。我們可能會因為社會期待、過去經歷等等原因，希望得到像心目中典範人物的成就，但是因為生長背景的關係，欠缺達到這樣成就的個性和能力。這時就算我們非常有熱情，也會因為和自己天性不合，而不斷消耗精力，過得很不快樂。</p>
-<p>用實際一點的例子來說，一個人可能因為過去受到老師的啟發，希望未來也能成為像恩師一樣幫助更多小孩。但是如果他本身並不善於與人溝通打交道，更別說年紀差距很大對象，這時就算他對教育很有熱情，也會不斷被現實所消磨，不再那麼快樂。又或者說，我們看到名人非凡的成就，如 Elon Musk 創造了對人類未來影響巨大的多間公司，內心感到彭湃衝動，覺得大丈夫當如是也。然而回歸到現實層面，姑且不論金錢或是運氣成分，有多少人可以像是 Musk 一樣不斷去賭身家冒險，一次失敗可能就跌落谷底，更別說他敢於得罪人，一旦覺得成本不划算就大幅裁員。他能夠為了達到目標不擇手段，因此可以有如此偉大的成就，這是他的天性，所以做起來沒太大壓力，而想要模仿他的人，光是這些事情的內在消耗就足以讓人精疲力竭了。</p>
-<p>由上述例子可以知道，專長和興趣比較集中在技能上面的討論，但是天性和熱情則是更廣泛，更加注重我們內在的價值觀和動機。因此，我們更有可能找出兩者的交集，也正是<strong>在具有熱情的領域中做符合自己天性的事情</strong>。同樣用上面的例子，對教育有熱忱但卻又相對內向的人或許不適合當直接面對孩子的老師，他也許可以鎖定在家長身上，又或者是撰寫兒童教育相關的文章教學，提供給家長們參考。對崇拜 Elon Musk 的人來說，更重要的是了解為何自己會對他的成就所感染，也許是享受被人關注、又或者是對人類未來科技發展非常關注，找出動機，然後試著搭配符合天性的能力，這或許才是自己真正所想要的。</p>
-<p>如何找到適合自己天性與熱情的工作一直都不是容易的事情，<strong>重點在於要認識自己的天性以及尋找自己的熱情</strong>。到底自己擅長做什麼，什麼環境讓自己舒適能發揮能力，更重要的是什麼是內心不可退讓的核心價值觀。這些是很多人都無法明確回答的問題。另一方面，我們也要尋找什麼事情能夠感染自己，這唯一能做的只有多加嘗試和閱讀。嘗試去經歷不同的事情，多加與不一樣的人交流，都是很好的方式知道適不適合。其中成本最低的方式莫過於閱讀了，透過閱讀可以非常輕易地了解與自己完全不一樣的人的經驗與觀點。我非常相信這個世界上一定有一個最適合自己並且能產生無可取代價值的位置，只是現在我們還沒遇到而已。</p>
-<p>不用過於著急，畢竟宏觀來說，人生的目的不過就是一趟尋找自己天性與熱情交會之處的旅程而已。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
   </entry>
   <entry>
     <title>學習之道</title>
@@ -2800,24 +2826,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《深度學習的技術》：一種學習的框架</title>
-    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
-    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
-<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
-<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
-<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
-<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
-<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
-<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>淺談函式庫</title>
     <url>/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/</url>
     <content><![CDATA[<h2 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared&#x2F;static library"></a>比較shared&#x2F;static library</h2><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
@@ -3042,41 +3050,22 @@
       </tags>
   </entry>
   <entry>
-    <title>為什麼動機比努力重要</title>
-    <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
-    <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
-<p>這是某次面試我被問到的問題。原本以為我對網路架構已經足夠熟悉，然而卻發現自己沒辦法很流暢地回答這個看似基本的問題。不僅面試官不滿意，我也不滿意自己的答案。</p>
-<p>這是因為工作不認真，沒有學好技術嗎？不，以客觀標準來說，我絕對屬於認真的那群。那難道是經驗不夠嗎？也不是，自從畢業以來，我從事的工作都和網路相關。這並不能當作藉口。</p>
-<p>那麼問題出在哪裡呢？又或者我們可以進一步問，明明花同樣的時間，為何人與人之間的能力差距會這麼大呢？這個疑惑不斷在心中徘徊，困擾了很久，最終找到了真正的答案：</p>
-<p>那就是「動機」。</p>
-<h2 id="你的努力搞錯了方向"><a href="#你的努力搞錯了方向" class="headerlink" title="你的努力搞錯了方向"></a>你的努力搞錯了方向</h2><p>或許你對這樣的答案不以為然：動機只是做一件事情的理由罷了，哪會影響做這件事的結果。</p>
-<p>我原本也是這樣想，但是回想自己過去學習與工作的經歷，那些表現好的領域，無不是因為我對那些知識感到好奇，想要徹底搞懂；而表現不突出的，往往都不是為了學習本身而行動，而是為了得到好成績或是完成某個任務，學會那些領域知識只是副產品罷了。</p>
-<p>明明都花一樣時間、一樣努力，只是動機不同，可是最後成果卻天差地別。</p>
-<p>為什麼會這樣呢？讓我們用更加實際的情境來說明：</p>
-<p>想像有兩個能力伯仲之間的員工，一個想要得到老闆賞識，認為完成越多任務越好，而另一個人則是對事情充滿好奇心，接收到的任務會想盡辦法了解各種細節。</p>
-<p>前者只要任務完成了就會馬上著手下一個任務，所以完成的數量遠遠高於後者。然而有好奇心的員工卻會在完成任務之餘嘗試理解其中的各種知識，而這些知識又可以用在未來其他任務上。拉長時間來看，他才是真正累積了這個領域的專業能力，能解決未來更加困難的問題。</p>
-<p>兩個人都付出了同等的努力，但是由於各自的動機不同，最終所能達成的成就也不同。</p>
-<p>如果努力是汽車的油門，那麼動機就是方向盤。一旦動機有稍微的偏差，差之毫釐失之千里，我們將會駛向錯誤的目的地。</p>
-<h2 id="經驗並不重要"><a href="#經驗並不重要" class="headerlink" title="經驗並不重要"></a>經驗並不重要</h2><p>但是不管動機如何，如果一個事情做了十年，總會變成這個領域的佼佼者吧？也許你會想這樣反駁。</p>
-<p>我有個朋友當了產品經理十多年，然而其他人私底下評價他都認為能力差不多就是剛畢業的學生。對於他所管理的產品，從來不會想進一步了解，完全是別人怎麼說就怎麼做，一個指令一個動作。對他而言，能完成主管交辦的工作就好，並沒有任何動機學習產品的技術原理、市場趨勢和發展前景。</p>
-<p>就如同我們天天開車不會哪天變成 F1 賽車手一樣，我們也不會因為用同樣的技能做重複性的工作，就能獲得突破性成果。所謂的經驗累積並非單純的時間累積。究竟我們是用一年的工作能力重複做十年，還是十年內有意識不斷學習新的知識呢？</p>
-<p>這也正是「刻意練習」這本書所強調的觀念：一個技能要有所成長，需要持續突破舒適圈，克服自己的弱點。單純重複同個行為一萬小時並不會讓自己成為專家。</p>
-<p>時間從來都不是重點，重要的是在這段時間內我們的內在動機為何，以及採取了什麼行動。只有不斷經歷各式各樣的事物，時間的積累才會有價值。</p>
-<h2 id="好奇心才是最佳的動機"><a href="#好奇心才是最佳的動機" class="headerlink" title="好奇心才是最佳的動機"></a>好奇心才是最佳的動機</h2><p>知名物理學家費曼曾說：「對任何事物都充滿了好奇，是我學習和理解世界的方式」。發明蘋果手機的賈伯斯也說過：「Stay Hungry, Stay Foolish」。</p>
-<p>過去我都很無法理解為什麼這些有所成就的人總是強調好奇心的重要性，明明看起來跟他們所獲得的成功沒有太大關聯。我的想像中他們應該要更強調天賦、努力等等更直接的因素才對。</p>
-<p>然而，好奇心正是他們行動背後的真正動機，這些人不追求成功本身，而是想要瞭解世界運作背後的本質和原理，只是在探索的過程中不經意得到成功這個副產品罷了。如果一開始就以功成名就為目標，反而會離它越來越遠。</p>
-<p>越單純的心念，越能夠接觸事物的本質，而越能掌握本質的人，越能在這世界中發揮影響力。一旦混入了對名利的追求，就無法全心投入其中。</p>
-<p>對世界的好奇，是人類與生俱來的天賦，每個孩子一誕生就有的才能，只是我們在長大的過程中被蒙蔽了而已。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回到最一開始的問題，為什麼我沒辦法回答看似基本的問題。原因也很簡單，過去的工作中我很認真，或者說太過認真，全心全力解決被交辦的任務。我所累積的並不是技術能力，而是怎麼把工作做好的能力。</p>
-<p>當有取巧的做法可以繞過問題時，我不會回過頭思考問題根因在哪裡。當遇到一個樹木的問題時，我只看見樹木，而不是從整個樹林的角度來思考。錯誤的動機侷限了我行動的方向。</p>
-<p>我很努力，但只是在努力成為好員工，而不是努力理解技術原理、滿足好奇心。</p>
-<p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
-<p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
-<p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
+    <title>《深度學習的技術》：一種學習的框架</title>
+    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
+    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
+<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
+<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
+<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
+<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
+<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
+<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
 ]]></content>
       <categories>
-        <category>雜七雜八</category>
+        <category>讀書心得</category>
       </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
   </entry>
   <entry>
     <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
@@ -3136,6 +3125,43 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>為什麼動機比努力重要</title>
+    <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
+    <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
+<p>這是某次面試我被問到的問題。原本以為我對網路架構已經足夠熟悉，然而卻發現自己沒辦法很流暢地回答這個看似基本的問題。不僅面試官不滿意，我也不滿意自己的答案。</p>
+<p>這是因為工作不認真，沒有學好技術嗎？不，以客觀標準來說，我絕對屬於認真的那群。那難道是經驗不夠嗎？也不是，自從畢業以來，我從事的工作都和網路相關。這並不能當作藉口。</p>
+<p>那麼問題出在哪裡呢？又或者我們可以進一步問，明明花同樣的時間，為何人與人之間的能力差距會這麼大呢？這個疑惑不斷在心中徘徊，困擾了很久，最終找到了真正的答案：</p>
+<p>那就是「動機」。</p>
+<h2 id="你的努力搞錯了方向"><a href="#你的努力搞錯了方向" class="headerlink" title="你的努力搞錯了方向"></a>你的努力搞錯了方向</h2><p>或許你對這樣的答案不以為然：動機只是做一件事情的理由罷了，哪會影響做這件事的結果。</p>
+<p>我原本也是這樣想，但是回想自己過去學習與工作的經歷，那些表現好的領域，無不是因為我對那些知識感到好奇，想要徹底搞懂；而表現不突出的，往往都不是為了學習本身而行動，而是為了得到好成績或是完成某個任務，學會那些領域知識只是副產品罷了。</p>
+<p>明明都花一樣時間、一樣努力，只是動機不同，可是最後成果卻天差地別。</p>
+<p>為什麼會這樣呢？讓我們用更加實際的情境來說明：</p>
+<p>想像有兩個能力伯仲之間的員工，一個想要得到老闆賞識，認為完成越多任務越好，而另一個人則是對事情充滿好奇心，接收到的任務會想盡辦法了解各種細節。</p>
+<p>前者只要任務完成了就會馬上著手下一個任務，所以完成的數量遠遠高於後者。然而有好奇心的員工卻會在完成任務之餘嘗試理解其中的各種知識，而這些知識又可以用在未來其他任務上。拉長時間來看，他才是真正累積了這個領域的專業能力，能解決未來更加困難的問題。</p>
+<p>兩個人都付出了同等的努力，但是由於各自的動機不同，最終所能達成的成就也不同。</p>
+<p>如果努力是汽車的油門，那麼動機就是方向盤。一旦動機有稍微的偏差，差之毫釐失之千里，我們將會駛向錯誤的目的地。</p>
+<h2 id="經驗並不重要"><a href="#經驗並不重要" class="headerlink" title="經驗並不重要"></a>經驗並不重要</h2><p>但是不管動機如何，如果一個事情做了十年，總會變成這個領域的佼佼者吧？也許你會想這樣反駁。</p>
+<p>我有個朋友當了產品經理十多年，然而其他人私底下評價他都認為能力差不多就是剛畢業的學生。對於他所管理的產品，從來不會想進一步了解，完全是別人怎麼說就怎麼做，一個指令一個動作。對他而言，能完成主管交辦的工作就好，並沒有任何動機學習產品的技術原理、市場趨勢和發展前景。</p>
+<p>就如同我們天天開車不會哪天變成 F1 賽車手一樣，我們也不會因為用同樣的技能做重複性的工作，就能獲得突破性成果。所謂的經驗累積並非單純的時間累積。究竟我們是用一年的工作能力重複做十年，還是十年內有意識不斷學習新的知識呢？</p>
+<p>這也正是「刻意練習」這本書所強調的觀念：一個技能要有所成長，需要持續突破舒適圈，克服自己的弱點。單純重複同個行為一萬小時並不會讓自己成為專家。</p>
+<p>時間從來都不是重點，重要的是在這段時間內我們的內在動機為何，以及採取了什麼行動。只有不斷經歷各式各樣的事物，時間的積累才會有價值。</p>
+<h2 id="好奇心才是最佳的動機"><a href="#好奇心才是最佳的動機" class="headerlink" title="好奇心才是最佳的動機"></a>好奇心才是最佳的動機</h2><p>知名物理學家費曼曾說：「對任何事物都充滿了好奇，是我學習和理解世界的方式」。發明蘋果手機的賈伯斯也說過：「Stay Hungry, Stay Foolish」。</p>
+<p>過去我都很無法理解為什麼這些有所成就的人總是強調好奇心的重要性，明明看起來跟他們所獲得的成功沒有太大關聯。我的想像中他們應該要更強調天賦、努力等等更直接的因素才對。</p>
+<p>然而，好奇心正是他們行動背後的真正動機，這些人不追求成功本身，而是想要瞭解世界運作背後的本質和原理，只是在探索的過程中不經意得到成功這個副產品罷了。如果一開始就以功成名就為目標，反而會離它越來越遠。</p>
+<p>越單純的心念，越能夠接觸事物的本質，而越能掌握本質的人，越能在這世界中發揮影響力。一旦混入了對名利的追求，就無法全心投入其中。</p>
+<p>對世界的好奇，是人類與生俱來的天賦，每個孩子一誕生就有的才能，只是我們在長大的過程中被蒙蔽了而已。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回到最一開始的問題，為什麼我沒辦法回答看似基本的問題。原因也很簡單，過去的工作中我很認真，或者說太過認真，全心全力解決被交辦的任務。我所累積的並不是技術能力，而是怎麼把工作做好的能力。</p>
+<p>當有取巧的做法可以繞過問題時，我不會回過頭思考問題根因在哪裡。當遇到一個樹木的問題時，我只看見樹木，而不是從整個樹林的角度來思考。錯誤的動機侷限了我行動的方向。</p>
+<p>我很努力，但只是在努力成為好員工，而不是努力理解技術原理、滿足好奇心。</p>
+<p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
+<p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
+<p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>為什麼社會有分歧</title>
@@ -3282,41 +3308,6 @@
       </categories>
   </entry>
   <entry>
-    <title>為何比特幣是加密貨幣中的定海神針</title>
-    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
-    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
-<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
-<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
-<center>比特幣市值佔比圖，資料來源：coingecko</center>
-
-<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
-<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
-<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
-<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
-<ul>
-<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
-<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
-<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
-</ul>
-<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
-<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
-<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
-<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
-<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
-<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
-<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
-<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
-<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>區塊鏈</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>獲取資訊來源的方法</title>
     <url>/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。</p>
@@ -3372,21 +3363,38 @@
       </categories>
   </entry>
   <entry>
-    <title>《稀缺》：稀缺其實是一種陷阱</title>
-    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%EF%BC%9A%E6%88%91%E5%80%91%E6%98%AF%E5%A6%82%E4%BD%95%E9%99%B7%E5%85%A5%E8%B2%A7%E7%AA%AE%E8%88%87%E5%BF%99%E7%A2%8C%E7%9A%84/</url>
-    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「<a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a>」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
-<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
-<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
-<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
-<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
-<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
-<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
+    <title>為何比特幣是加密貨幣中的定海神針</title>
+    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
+    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
+<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
+<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
+<center>比特幣市值佔比圖，資料來源：coingecko</center>
+
+<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
+<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
+<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
+<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
+<ul>
+<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
+<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
+<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
+</ul>
+<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
+<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
+<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
+<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
+<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
+<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
+<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
+<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
+<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
 ]]></content>
       <categories>
-        <category>讀書心得</category>
+        <category>技術</category>
       </categories>
       <tags>
-        <tag>自我成長</tag>
+        <tag>區塊鏈</tag>
       </tags>
   </entry>
   <entry>
@@ -3406,6 +3414,24 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>《稀缺》：稀缺其實是一種陷阱</title>
+    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%EF%BC%9A%E6%88%91%E5%80%91%E6%98%AF%E5%A6%82%E4%BD%95%E9%99%B7%E5%85%A5%E8%B2%A7%E7%AA%AE%E8%88%87%E5%BF%99%E7%A2%8C%E7%9A%84/</url>
+    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「<a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a>」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
+<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
+<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
+<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
+<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
+<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
+<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
   </entry>
   <entry>
     <title>筆記：自己的外部大腦</title>
@@ -3603,41 +3629,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《請停止無效努力》：尋找適合自己的方向</title>
-    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
-    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
-<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
-<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
-<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
-<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
-<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《軟技能》：軟體界的「原則」</title>
-    <url>/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E4%BB%A3%E7%A2%BC%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<p>今天想要來介紹一本對軟體工程師來說很棒的書，叫做<a href="https://www.tenlong.com.tw/products/9787115429476">軟技能：代碼之外的生存指南 (Soft Skills : The software developer’s life manual)</a>。最一開始會關注到這本書是因為有人介紹說這本書堪稱是軟體界的「<a href="http://www.books.com.tw/products/0010782941">原則</a>」。由於對「原則」有還不錯的評價，所以就有了閱讀的興趣。這本書號稱是給軟體工程師看的書，但是裡面卻沒有任何一行程式碼，作者希望告訴讀者的是要成好的軟體工程師，不能只專注在專業上，要把重點放在「整個人」上。書中分享了如何找工作、自我營銷、自我學習等等，甚至還有理財、健身和愛情。同樣身為軟體工程師，我認為可以從前人身上觀察和學習他的經驗應該是蠻有幫助的，因此下面會分享幾個從書中學到比較重要的概念。</p>
-<p>第一個是就算是受聘於公司，也應該要當作自己是在經營生意。只有把「我」當成是一家公司看待，才能做出好的商業決策。在一般公司朝九晚六(如果沒加班的話)的生活，很容易把個人的思維限制住，認為就是把固定事情做好然後領固定的薪水。然而，如果從經濟學的角度來看，其實我們都是在販賣服務並且獲取報酬，只是販賣的對象是固定某個客戶而已。當可以用比較宏觀的角度看待工作的時候，就會發現可以選擇的策略比想像中多很多，例如開始評估自己所提供的服務和價錢跟當前市場狀況是否有吻合，不吻合的話就會進一步精進服務的內容(提升能力)，或是開拓其他可能的客戶(找其他公司)。這種心態上的轉變會讓我們不會只是被動接受現況，而會有積極的思維去影響現實，獲得更好的結果。</p>
-<p>再來關於自我行銷的方面作者也提到很多，自我行銷其實跟前面相呼應，如果要把工作當作在經營生意，怎麼讓潛在客戶知道自己就很重要。找工作最容易的方法是讓工作來找你，當別人有求於你時，就更容易得到比較好的條件。對軟體工程師來說，最好的行銷方式就是寫blog，有許多有價值的文章，自然知名度就會打開。書中強調了好幾次經營blog的重要性，然後還提到最重要的就是毅力，只要持之以恆地撰寫文章，就已經勝過大多數的同行了。雖然我本身已經有意識地在經營blog了，但是常常都只是想說留個紀錄供自己未來參考。然而作者反對這種做法，他認為如果要能吸引別人最重要的是出發點是對他人有益，如果能夠對他人產生價值，就會受到關注，因此文章不是自己寫開心就好。這對我過去寫文章的方式是一種震撼，現在開始會思考我的記錄事情的角度是否可以解決讀者遇到的問題，是否容易閱讀及理解。</p>
-<p>在變動很快的科技業中，如何自我學習是非常重要的，特別是軟體業，沒多久就有新的framework或程式語言出現，這些技術大概很難透過學校老師教導，只能靠著自己尋找資源去學習。書中作者介紹了十步學習法，不過我不打算在這裡細部講解這個方法，取而代之，我想分享作者提到的四個自學方式循環：學習、實踐、掌握、教授。我們不應該期待自己把某個領域學完後再開始應用，要盡量在最短時間內找到必須要學會的內容，然後就去實踐，從實踐過程中一定會遇到問題，這時再回去翻資料掌握這些問題，當有一定程度的理解後，嘗試跟他人分享，確認是否真的理解。透過這樣的循環，可以幫助自己更快掌握該領域知識。其實這套方法跟之前我看過的有效自學方式很類似，例如<a href="https://rocket.cafe/talks/85231">最小必要知識架構術</a>、<a href="https://www.drcleaner.com/zh-hans/%E6%9C%80%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%EF%BC%9A%E8%B4%B9%E6%9B%BC%E6%B3%95/">費曼法</a>，很明顯這些方法已經成為主流了。我想，不應該被傳統的學習概念(從基礎知識一步步慢慢學習)所限制，而是從應用面來學習，也就是知道自己要做到什麼，反推回去需要學習哪些知識，不但有效率，而且也更符合這個社會緊湊的腳步。</p>
-<p>關於時間管理的部分，作者推薦用使用番茄鐘(通常代表的是工作25min後休息5min)，如果不知道番茄鐘可以參考<a href="https://zh.wikipedia.org/zh-tw/%E7%95%AA%E8%8C%84%E5%B7%A5%E4%BD%9C%E6%B3%95">wiki的介紹</a>。這一年下來，其實我都是用番茄鐘來管理我的時間，目前也覺得透過番茄鐘，確實可以幫助專注力，然而我卻從書中發現自己並沒有善用番茄鐘最大的威力。番茄鐘並不只是用來幫助自己提升效率的工具，更重要的是可以用來幫助時間規劃。在時間管理上，最常遇到的問題就是不知道每項工作到底要花多少時間做完，而在固定時間內，到底可以做完多少事情。這兩個問題番茄鐘都幫忙解決了，透過把一項大任務切割成番茄鐘的長度，代表的是強迫自己分割大任務變成可估算完成時間的小任務，而每個人每天可以完成多少的番茄鐘是有數量限制的，也代表我們會很清楚每天可以做多少事情，這樣規劃方式可以加強預測工作進度的準確度。另外番茄鐘帶來的另一個好處是可以更安心地進行休閒活動，大家應該會有經驗如果去玩樂會有種罪惡感想逼自己去工作，如果清楚每日能做到的番茄鐘數量，那休息享樂時就不會感到內疚，因為每天該完成的工作都已經達成了！</p>
-<p>最後一點是關於自我弱點的方面，從小到大我們所受的教育都是要把缺點彌補起來，然而這在專業上其實是說不通的，大家應該常聽過樣樣通，樣樣鬆。與其告訴他人自己會很多東西，不如專精在比較小的領域(或是大領域中的某種應用)，也許在市場上並沒有那麼多的需求，但是錄取機率則會大幅增加。不過也是有要去彌補弱點的情況，那就是該弱點會大幅影響效率時。當不知道某項技術其實可以很容易達成某件事前，可能都會很排斥去學習，但其實只要花幾個小時就能獲得很大的效益，也就是常聽到的CP值很高。然而要怎麼找到這些CP值高的技術呢？我們可以記錄每個自己沒聽過技術的遇到頻率，當遇到頻率高於一定值時，那就代表有學習的價值。舉個例子，其實我有時候看經濟新聞都會聽到A輪、B輪等等名詞，但是都一直沒動力去搞懂，結果對新聞內容都一知半解。在看本書的理財部份時，作者有做一個簡單的解釋，結果花不到半小時，就對這些常見名詞有初步認識了，也變相了加深我對經濟新聞理解，像是這種知識就很值得花時間投資。</p>
-<p>當然這本書還有很多很有價值的內容，不過受限於篇幅，無法每個都說。如果對上面的分享心有戚戚焉的話，我想這本書應該蠻適合你。進入科技業也不過快三年而已，未來應該還有很長的職業生涯，如何好好經營是很大的課題。目前還是以多多參考前輩們的經驗以及不斷自我反省為主，找出真正適合自己的道路。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>《認知驅動》：輸出重於努力</title>
     <url>/2024/09/17/%E8%AA%8D%E7%9F%A5%E9%A9%85%E5%8B%95%EF%BC%9A%E5%81%9A%E6%88%90%E4%B8%80%E4%BB%B6%E5%B0%8D%E4%BB%96%E4%BA%BA%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/0010933681">認知驅動</a>」是周嶺「認知覺醒」的續作。如果要用一句話概括這本書，那就是不要過度關注內在的自我成長，要對外為他人產生創造價值，而外在的回饋將會回到自身。本書雖然零零散散引用很多其他人觀念或道理，但我覺得這些都圍繞在如何行動並對外創造價值上。</p>
@@ -3690,6 +3681,41 @@
 <li>反思自己可以為他人創造的獨特價值為何。當學習新事物的時候，可以想想有沒有什麼方式可以輸出價值。</li>
 <li>用較大的時間刻度看看自己過去的成就，可以用時間軸的方式來呈現。然後想想接下來的人生階段要以什麼事情為最大的優先目標。</li>
 </ol>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《請停止無效努力》：尋找適合自己的方向</title>
+    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
+<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
+<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
+<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
+<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
+<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《軟技能》：軟體界的「原則」</title>
+    <url>/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E4%BB%A3%E7%A2%BC%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<p>今天想要來介紹一本對軟體工程師來說很棒的書，叫做<a href="https://www.tenlong.com.tw/products/9787115429476">軟技能：代碼之外的生存指南 (Soft Skills : The software developer’s life manual)</a>。最一開始會關注到這本書是因為有人介紹說這本書堪稱是軟體界的「<a href="http://www.books.com.tw/products/0010782941">原則</a>」。由於對「原則」有還不錯的評價，所以就有了閱讀的興趣。這本書號稱是給軟體工程師看的書，但是裡面卻沒有任何一行程式碼，作者希望告訴讀者的是要成好的軟體工程師，不能只專注在專業上，要把重點放在「整個人」上。書中分享了如何找工作、自我營銷、自我學習等等，甚至還有理財、健身和愛情。同樣身為軟體工程師，我認為可以從前人身上觀察和學習他的經驗應該是蠻有幫助的，因此下面會分享幾個從書中學到比較重要的概念。</p>
+<p>第一個是就算是受聘於公司，也應該要當作自己是在經營生意。只有把「我」當成是一家公司看待，才能做出好的商業決策。在一般公司朝九晚六(如果沒加班的話)的生活，很容易把個人的思維限制住，認為就是把固定事情做好然後領固定的薪水。然而，如果從經濟學的角度來看，其實我們都是在販賣服務並且獲取報酬，只是販賣的對象是固定某個客戶而已。當可以用比較宏觀的角度看待工作的時候，就會發現可以選擇的策略比想像中多很多，例如開始評估自己所提供的服務和價錢跟當前市場狀況是否有吻合，不吻合的話就會進一步精進服務的內容(提升能力)，或是開拓其他可能的客戶(找其他公司)。這種心態上的轉變會讓我們不會只是被動接受現況，而會有積極的思維去影響現實，獲得更好的結果。</p>
+<p>再來關於自我行銷的方面作者也提到很多，自我行銷其實跟前面相呼應，如果要把工作當作在經營生意，怎麼讓潛在客戶知道自己就很重要。找工作最容易的方法是讓工作來找你，當別人有求於你時，就更容易得到比較好的條件。對軟體工程師來說，最好的行銷方式就是寫blog，有許多有價值的文章，自然知名度就會打開。書中強調了好幾次經營blog的重要性，然後還提到最重要的就是毅力，只要持之以恆地撰寫文章，就已經勝過大多數的同行了。雖然我本身已經有意識地在經營blog了，但是常常都只是想說留個紀錄供自己未來參考。然而作者反對這種做法，他認為如果要能吸引別人最重要的是出發點是對他人有益，如果能夠對他人產生價值，就會受到關注，因此文章不是自己寫開心就好。這對我過去寫文章的方式是一種震撼，現在開始會思考我的記錄事情的角度是否可以解決讀者遇到的問題，是否容易閱讀及理解。</p>
+<p>在變動很快的科技業中，如何自我學習是非常重要的，特別是軟體業，沒多久就有新的framework或程式語言出現，這些技術大概很難透過學校老師教導，只能靠著自己尋找資源去學習。書中作者介紹了十步學習法，不過我不打算在這裡細部講解這個方法，取而代之，我想分享作者提到的四個自學方式循環：學習、實踐、掌握、教授。我們不應該期待自己把某個領域學完後再開始應用，要盡量在最短時間內找到必須要學會的內容，然後就去實踐，從實踐過程中一定會遇到問題，這時再回去翻資料掌握這些問題，當有一定程度的理解後，嘗試跟他人分享，確認是否真的理解。透過這樣的循環，可以幫助自己更快掌握該領域知識。其實這套方法跟之前我看過的有效自學方式很類似，例如<a href="https://rocket.cafe/talks/85231">最小必要知識架構術</a>、<a href="https://www.drcleaner.com/zh-hans/%E6%9C%80%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%EF%BC%9A%E8%B4%B9%E6%9B%BC%E6%B3%95/">費曼法</a>，很明顯這些方法已經成為主流了。我想，不應該被傳統的學習概念(從基礎知識一步步慢慢學習)所限制，而是從應用面來學習，也就是知道自己要做到什麼，反推回去需要學習哪些知識，不但有效率，而且也更符合這個社會緊湊的腳步。</p>
+<p>關於時間管理的部分，作者推薦用使用番茄鐘(通常代表的是工作25min後休息5min)，如果不知道番茄鐘可以參考<a href="https://zh.wikipedia.org/zh-tw/%E7%95%AA%E8%8C%84%E5%B7%A5%E4%BD%9C%E6%B3%95">wiki的介紹</a>。這一年下來，其實我都是用番茄鐘來管理我的時間，目前也覺得透過番茄鐘，確實可以幫助專注力，然而我卻從書中發現自己並沒有善用番茄鐘最大的威力。番茄鐘並不只是用來幫助自己提升效率的工具，更重要的是可以用來幫助時間規劃。在時間管理上，最常遇到的問題就是不知道每項工作到底要花多少時間做完，而在固定時間內，到底可以做完多少事情。這兩個問題番茄鐘都幫忙解決了，透過把一項大任務切割成番茄鐘的長度，代表的是強迫自己分割大任務變成可估算完成時間的小任務，而每個人每天可以完成多少的番茄鐘是有數量限制的，也代表我們會很清楚每天可以做多少事情，這樣規劃方式可以加強預測工作進度的準確度。另外番茄鐘帶來的另一個好處是可以更安心地進行休閒活動，大家應該會有經驗如果去玩樂會有種罪惡感想逼自己去工作，如果清楚每日能做到的番茄鐘數量，那休息享樂時就不會感到內疚，因為每天該完成的工作都已經達成了！</p>
+<p>最後一點是關於自我弱點的方面，從小到大我們所受的教育都是要把缺點彌補起來，然而這在專業上其實是說不通的，大家應該常聽過樣樣通，樣樣鬆。與其告訴他人自己會很多東西，不如專精在比較小的領域(或是大領域中的某種應用)，也許在市場上並沒有那麼多的需求，但是錄取機率則會大幅增加。不過也是有要去彌補弱點的情況，那就是該弱點會大幅影響效率時。當不知道某項技術其實可以很容易達成某件事前，可能都會很排斥去學習，但其實只要花幾個小時就能獲得很大的效益，也就是常聽到的CP值很高。然而要怎麼找到這些CP值高的技術呢？我們可以記錄每個自己沒聽過技術的遇到頻率，當遇到頻率高於一定值時，那就代表有學習的價值。舉個例子，其實我有時候看經濟新聞都會聽到A輪、B輪等等名詞，但是都一直沒動力去搞懂，結果對新聞內容都一知半解。在看本書的理財部份時，作者有做一個簡單的解釋，結果花不到半小時，就對這些常見名詞有初步認識了，也變相了加深我對經濟新聞理解，像是這種知識就很值得花時間投資。</p>
+<p>當然這本書還有很多很有價值的內容，不過受限於篇幅，無法每個都說。如果對上面的分享心有戚戚焉的話，我想這本書應該蠻適合你。進入科技業也不過快三年而已，未來應該還有很長的職業生涯，如何好好經營是很大的課題。目前還是以多多參考前輩們的經驗以及不斷自我反省為主，找出真正適合自己的道路。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
