@@ -187,32 +187,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker 開源的歷史</title>
-    <url>/2025/04/27/Docker%E9%96%8B%E6%BA%90%E7%9A%84%E6%AD%B7%E5%8F%B2/</url>
-    <content><![CDATA[<p>目前服務的公司主打開源軟體為核心，透過公開程式碼來吸引使用者、創造社群的聲量以及獲得回饋。我們相信軟體必須要有更多人使用才能創造更高的價值。然而開源軟體的精神雖然很好，但是公司為了生存還是得有生財之道，我們總是為了如何制定商業策略、如何營利所困擾。因此，我開始研究市場上到底其他以開源軟體為主體的公司是如何生存的。</p>
-<p>開源軟體的概念存在已久，一開始是理想主義者希望擁有自由修改軟體的基本權力，到現在已經更多成為一種商業手段。大部分的開源專案沒有商業公司在背後支持都無法長久，而公司在商場這個殘酷的叢林中依然需要遵循適者生存的法則。</p>
-<p>因此，<strong>生存是目的，開放是手段</strong>。這完全體現在著名軟體公司 Docker 的成長背景中。</p>
-<p>Docker 這家公司最一開始的名字是 DotCloud，在那時雲端概念如日中天時，主打提供平台即服務 (PaaS) 的業務。然而這個產業競爭十分激烈，因此他們決定在 2013 年開源內部所使用的容器技術 Docker 來吸引社群的目光。這種方式也是一個為何要開源的常見理由，開源的專案相對於閉源比較能吸引開發者注意，而有了流量就類似於打廣告，開發者們更有可能採用他們的 PaaS 解決方案。</p>
-<p>沒有想到的是，這個技術比想像中更受歡迎。儘管人們都可以在 Linux 上採用 cgroup 和 namespace 等來做到類似容器化的功能，但是設定實在太複雜了。Docker 的出現能夠隱藏 Linux 上複雜的設定，用簡單的映像檔打包了容器，讓使用者可以輕易使用容器。</p>
-<p>這時 DotCloud 也順應趨勢把重心改放到 Docker 上面，推動其生態成長，並且改名為 Docker Inc.。Docker 為了統一生態系，在 2015 年成立了 OCI (Open Container Initiative) 這個組織來定義容器的規範。在那時 Docker 可以說是容器的等義詞，就像 Google 與網路搜尋的關係一樣。不過也因為這樣，當 Docker 限制這個名稱的商標使用時，社群也有反彈聲浪，認為他們利用開源捧紅了 Docker 卻又將其納為商標。</p>
-<p>事情並非一帆風順，Docker 很快就面臨了一系列的挑戰者，其中最著名的就是 Google 提出鼎鼎大名的 Kubernetes。</p>
-<p>Kubernetes 是為了企業容器部屬與管理所產生的開源專案，功能完整且擴充性高。儘管 Docker 也有提出類似的解決方案 Docker Swarm，但是開發速度太慢，而且它比較偏向給開發者入門簡單的管理功能，因此眾多企業紛紛選擇使用 Kubernetes。由於 Docker 的商業產品 Docker Enterprise 深度綁定 Docker Swarm，而沒有在發現社群轉向時趕緊與 Kubernetes 整合，也因此慢慢喪失了競爭力。</p>
-<p>我們可以看出在開源的世界裡，為了維持頭部玩家的地位必須不斷推陳出新，不然隨時會被其他競爭者超越。當社群的目光不再集中在自己身上時，就開始失去開源的種種好處，例如使用者的回饋、開發者的貢獻以及生態系的活躍（各種圍繞自己的套件與工具）。我也曾經親眼見證這段歷史，當初 Kubernetes 崛起時，我正在讀研究所，實驗室討論的熱門雲端關鍵字從 Docker 轉移到 Kubernetes，大家都在想怎麼有效利用這個新技術。</p>
-<p>當在開源領域的品牌逐漸遭受侵蝕，Docker 不再是唯一呼風喚雨的公司了。它意識到不能繼續把核心的底層技術握在手裡，不然市場上的玩家遲早會開發出另外一套技術。因此，Docker 捐贈了它容器技術的核心 containerd 到 CNCF (Cloud Native Computing Foundation) 這個第三方機構，讓其他依賴這個技術的人更安心，Kubernetes 也能持續使用 containerd 作為其核心。</p>
-<p>在 2019 年時，Docker 判斷自己再也無法與 Kubernetes 競爭，因為後者更加受如 Google、Redhat 等大型公司所青睞。於是便把自己的商業解決方案 (Docker Enterprise) 出售給 Mirantis。瘦身之後的 Docker 則是專注於工具以及平台服務上。</p>
-<p>目前 Docker 有兩個主要產品：</p>
-<p>• Docker Desktop: 在 Windows 和 MAC 下的圖形化工具，一定規模以上的企業要付費。這也是目前的最大宗收入來源。<br>• Docker Hub: 提供雲端託管平台，可以存放 Docker Image，一般使用者可以免費使用，但也提供企業更好的加值服務。這與 GitHub 的策略相似。</p>
-<p>從 Docker 的歷史可以看出，他每一次的轉變和開放都與商業考量息息相關。最一開始為了推廣自家 PaaS 而開源 Docker，再來因為受競爭對手的壓力而放棄 containerd 的所有權，最終放棄商業方案並專心提供工具和平台給開發者。儘管開源可以吸引大量使用者，但當發現某項技術有用的時候，其實也沒有足夠的護城河防止其他競爭者的進入。先行者仍必須要持續進步，維持在社群中的話語權。一旦不再是舞台的中心了，其價值也就大幅度滑落。</p>
-<p>Docker 是一家曾經站在時代巨浪上的公司，乘著雲端和開源浪潮而起，卻也因開源的激烈競爭而落。這讓人不禁懷疑開源專案的最佳策略是否是納為大型企業的其中一部分。大型企業不缺養活這些專案的錢，但是這些專案卻能為其提供新的增長點，就像是 Google 的 Kubernetes 為其雲端方案 GCP (Google Cloud Platform) 帶來好處一樣。聽說微軟曾經出價 40 億美元要買下 Docker，或許當初接受了，如今的容器化的戰場又是另一種不同的格局吧！</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>開源</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C語言的行內組譯</title>
     <url>/2018/05/20/C-Inline-Assembly/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
@@ -320,6 +294,32 @@
         <tag>程式語言</tag>
         <tag>C</tag>
         <tag>GNU tool</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker 開源的歷史</title>
+    <url>/2025/04/27/Docker%E9%96%8B%E6%BA%90%E7%9A%84%E6%AD%B7%E5%8F%B2/</url>
+    <content><![CDATA[<p>目前服務的公司主打開源軟體為核心，透過公開程式碼來吸引使用者、創造社群的聲量以及獲得回饋。我們相信軟體必須要有更多人使用才能創造更高的價值。然而開源軟體的精神雖然很好，但是公司為了生存還是得有生財之道，我們總是為了如何制定商業策略、如何營利所困擾。因此，我開始研究市場上到底其他以開源軟體為主體的公司是如何生存的。</p>
+<p>開源軟體的概念存在已久，一開始是理想主義者希望擁有自由修改軟體的基本權力，到現在已經更多成為一種商業手段。大部分的開源專案沒有商業公司在背後支持都無法長久，而公司在商場這個殘酷的叢林中依然需要遵循適者生存的法則。</p>
+<p>因此，<strong>生存是目的，開放是手段</strong>。這完全體現在著名軟體公司 Docker 的成長背景中。</p>
+<p>Docker 這家公司最一開始的名字是 DotCloud，在那時雲端概念如日中天時，主打提供平台即服務 (PaaS) 的業務。然而這個產業競爭十分激烈，因此他們決定在 2013 年開源內部所使用的容器技術 Docker 來吸引社群的目光。這種方式也是一個為何要開源的常見理由，開源的專案相對於閉源比較能吸引開發者注意，而有了流量就類似於打廣告，開發者們更有可能採用他們的 PaaS 解決方案。</p>
+<p>沒有想到的是，這個技術比想像中更受歡迎。儘管人們都可以在 Linux 上採用 cgroup 和 namespace 等來做到類似容器化的功能，但是設定實在太複雜了。Docker 的出現能夠隱藏 Linux 上複雜的設定，用簡單的映像檔打包了容器，讓使用者可以輕易使用容器。</p>
+<p>這時 DotCloud 也順應趨勢把重心改放到 Docker 上面，推動其生態成長，並且改名為 Docker Inc.。Docker 為了統一生態系，在 2015 年成立了 OCI (Open Container Initiative) 這個組織來定義容器的規範。在那時 Docker 可以說是容器的等義詞，就像 Google 與網路搜尋的關係一樣。不過也因為這樣，當 Docker 限制這個名稱的商標使用時，社群也有反彈聲浪，認為他們利用開源捧紅了 Docker 卻又將其納為商標。</p>
+<p>事情並非一帆風順，Docker 很快就面臨了一系列的挑戰者，其中最著名的就是 Google 提出鼎鼎大名的 Kubernetes。</p>
+<p>Kubernetes 是為了企業容器部屬與管理所產生的開源專案，功能完整且擴充性高。儘管 Docker 也有提出類似的解決方案 Docker Swarm，但是開發速度太慢，而且它比較偏向給開發者入門簡單的管理功能，因此眾多企業紛紛選擇使用 Kubernetes。由於 Docker 的商業產品 Docker Enterprise 深度綁定 Docker Swarm，而沒有在發現社群轉向時趕緊與 Kubernetes 整合，也因此慢慢喪失了競爭力。</p>
+<p>我們可以看出在開源的世界裡，為了維持頭部玩家的地位必須不斷推陳出新，不然隨時會被其他競爭者超越。當社群的目光不再集中在自己身上時，就開始失去開源的種種好處，例如使用者的回饋、開發者的貢獻以及生態系的活躍（各種圍繞自己的套件與工具）。我也曾經親眼見證這段歷史，當初 Kubernetes 崛起時，我正在讀研究所，實驗室討論的熱門雲端關鍵字從 Docker 轉移到 Kubernetes，大家都在想怎麼有效利用這個新技術。</p>
+<p>當在開源領域的品牌逐漸遭受侵蝕，Docker 不再是唯一呼風喚雨的公司了。它意識到不能繼續把核心的底層技術握在手裡，不然市場上的玩家遲早會開發出另外一套技術。因此，Docker 捐贈了它容器技術的核心 containerd 到 CNCF (Cloud Native Computing Foundation) 這個第三方機構，讓其他依賴這個技術的人更安心，Kubernetes 也能持續使用 containerd 作為其核心。</p>
+<p>在 2019 年時，Docker 判斷自己再也無法與 Kubernetes 競爭，因為後者更加受如 Google、Redhat 等大型公司所青睞。於是便把自己的商業解決方案 (Docker Enterprise) 出售給 Mirantis。瘦身之後的 Docker 則是專注於工具以及平台服務上。</p>
+<p>目前 Docker 有兩個主要產品：</p>
+<p>• Docker Desktop: 在 Windows 和 MAC 下的圖形化工具，一定規模以上的企業要付費。這也是目前的最大宗收入來源。<br>• Docker Hub: 提供雲端託管平台，可以存放 Docker Image，一般使用者可以免費使用，但也提供企業更好的加值服務。這與 GitHub 的策略相似。</p>
+<p>從 Docker 的歷史可以看出，他每一次的轉變和開放都與商業考量息息相關。最一開始為了推廣自家 PaaS 而開源 Docker，再來因為受競爭對手的壓力而放棄 containerd 的所有權，最終放棄商業方案並專心提供工具和平台給開發者。儘管開源可以吸引大量使用者，但當發現某項技術有用的時候，其實也沒有足夠的護城河防止其他競爭者的進入。先行者仍必須要持續進步，維持在社群中的話語權。一旦不再是舞台的中心了，其價值也就大幅度滑落。</p>
+<p>Docker 是一家曾經站在時代巨浪上的公司，乘著雲端和開源浪潮而起，卻也因開源的激烈競爭而落。這讓人不禁懷疑開源專案的最佳策略是否是納為大型企業的其中一部分。大型企業不缺養活這些專案的錢，但是這些專案卻能為其提供新的增長點，就像是 Google 的 Kubernetes 為其雲端方案 GCP (Google Cloud Platform) 帶來好處一樣。聽說微軟曾經出價 40 億美元要買下 Docker，或許當初接受了，如今的容器化的戰場又是另一種不同的格局吧！</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>開源</tag>
       </tags>
   </entry>
   <entry>
@@ -519,108 +519,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
-<li>指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
-</ul>
-</li>
-</ul>
-<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
-<li><p>先產生key</p>
-<ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
-<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
-<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
-<li><p>查看目前的鑰匙</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>編輯key(對key簽名也是用同樣的方法)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
-<li><p>首先先搜尋對象的public key</p>
-<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看與更新朋友的public key</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
-<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>import&#x2F;export自己的金鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
-<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果要確認發信人身份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -824,6 +722,108 @@
       </categories>
       <tags>
         <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
+<li>指令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+</ul>
+</li>
+</ul>
+<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
+<li><p>先產生key</p>
+<ul>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
+<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
+<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
+<li><p>查看目前的鑰匙</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>編輯key(對key簽名也是用同樣的方法)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
+<li><p>首先先搜尋對象的public key</p>
+<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看與更新朋友的public key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
+<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>import&#x2F;export自己的金鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
+<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果要確認發信人身份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1745,75 +1745,6 @@
       </tags>
   </entry>
   <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
-
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>如果要開啟多個檔案</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
-
-<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo 教學</title>
     <url>/2017/09/09/hexo%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<p>我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩。另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇。Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介面，而且還可以用 markdown 來寫 blog。</p>
@@ -1955,6 +1886,75 @@
 </ol>
 <p>可參考 <a href="https://bearbeargo.com/posts/how-to-play-with-live2d-on-hexo/">用Live2D让看板喵入住你的Hexo博客吧(^o^)&#x2F;~</a></p>
 <p>不過這邊提一下，<a href="https://github.com/EYHN/hexo-helper-live2d">EYHN&#x2F;hexo-helper-live2d</a> 已經沒有再更新了，如果上到 GitHub，可能會有些套件安全疑慮，以後可能需要找些替代套件了。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要開啟多個檔案</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
+
+<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>技術</category>
@@ -2349,6 +2349,61 @@
       </tags>
   </entry>
   <entry>
+    <title>三年的工作省思</title>
+    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
+<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
+<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
+<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
+<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
+<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
+<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
+<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
+<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
+<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
+<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
+<ol>
+<li>發問前一定要再三思考<ul>
+<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
+<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
+</ul>
+</li>
+<li>定期反省，找出更有效率的做法<ul>
+<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
+<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
+</ul>
+</li>
+<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
+<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
+<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
+</ul>
+</li>
+<li>溝通的時候，站在對方的立場思考<ul>
+<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
+<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
+</ul>
+</li>
+<li>要定期盤點自己的能力<ul>
+<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
+</ul>
+</li>
+<li>負起責任<ul>
+<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
+<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
+</ul>
+</li>
+</ol>
+<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>不要被政治所操弄</title>
     <url>/2026/03/22/%E4%B8%8D%E8%A6%81%E8%A2%AB%E6%94%BF%E6%B2%BB%E6%89%80%E6%93%8D%E5%BC%84/</url>
     <content><![CDATA[<p>最近，因為台灣的行政權和立法權分屬不同政黨，所以國家政治弄得紛紛擾擾的。常常看到很多人在臉書、YouTube、LINE、PTT 等平台上面各種大肆批評對方立場，而且言語常常都是非理性辱罵，這讓我的心情也常常會被影響到。</p>
@@ -2422,61 +2477,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>三年的工作省思</title>
-    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
-<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
-<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
-<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
-<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
-<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
-<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
-<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
-<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
-<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
-<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
-<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
-<ol>
-<li>發問前一定要再三思考<ul>
-<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
-<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
-</ul>
-</li>
-<li>定期反省，找出更有效率的做法<ul>
-<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
-<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
-</ul>
-</li>
-<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
-<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
-<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
-</ul>
-</li>
-<li>溝通的時候，站在對方的立場思考<ul>
-<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
-<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
-</ul>
-</li>
-<li>要定期盤點自己的能力<ul>
-<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
-</ul>
-</li>
-<li>負起責任<ul>
-<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
-<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
-</ul>
-</li>
-</ol>
-<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
   </entry>
   <entry>
     <title>天性與熱情</title>
@@ -3181,6 +3181,41 @@
       </categories>
   </entry>
   <entry>
+    <title>為何比特幣是加密貨幣中的定海神針</title>
+    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
+    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
+<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
+<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
+<center>比特幣市值佔比圖，資料來源：coingecko</center>
+
+<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
+<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
+<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
+<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
+<ul>
+<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
+<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
+<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
+</ul>
+<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
+<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
+<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
+<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
+<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
+<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
+<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
+<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
+<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>區塊鏈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>為何我選擇定期定額投入市值型 ETF</title>
     <url>/2025/02/09/%E7%82%BA%E4%BD%95%E6%88%91%E9%81%B8%E6%93%87%E5%AE%9A%E6%9C%9F%E5%AE%9A%E9%A1%8D%E6%8A%95%E5%85%A5%E5%B8%82%E5%80%BC%E5%9E%8B%20ETF/</url>
     <content><![CDATA[<p>從小因為家庭的教育，我對股票市場一直有種莫名的恐懼，聽過好多例子因為投資股票而傾家蕩產。直到出了社會接觸了更多資訊後才發現，股票其實也有很穩健的投資方式。目前，大多數推薦的作法是定期定額投入市值型的 ETF。</p>
@@ -3306,41 +3341,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>為何比特幣是加密貨幣中的定海神針</title>
-    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
-    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
-<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
-<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
-<center>比特幣市值佔比圖，資料來源：coingecko</center>
-
-<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
-<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
-<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
-<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
-<ul>
-<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
-<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
-<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
-</ul>
-<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
-<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
-<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
-<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
-<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
-<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
-<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
-<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
-<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>區塊鏈</tag>
-      </tags>
   </entry>
   <entry>
     <title>獲取資訊來源的方法</title>
@@ -3707,6 +3707,56 @@
       </tags>
   </entry>
   <entry>
+    <title>《軟技能》：軟體界的「原則」</title>
+    <url>/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E4%BB%A3%E7%A2%BC%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<p>今天想要來介紹一本對軟體工程師來說很棒的書，叫做<a href="https://www.tenlong.com.tw/products/9787115429476">軟技能：代碼之外的生存指南 (Soft Skills : The software developer’s life manual)</a>。最一開始會關注到這本書是因為有人介紹說這本書堪稱是軟體界的「<a href="http://www.books.com.tw/products/0010782941">原則</a>」。由於對「原則」有還不錯的評價，所以就有了閱讀的興趣。這本書號稱是給軟體工程師看的書，但是裡面卻沒有任何一行程式碼，作者希望告訴讀者的是要成好的軟體工程師，不能只專注在專業上，要把重點放在「整個人」上。書中分享了如何找工作、自我營銷、自我學習等等，甚至還有理財、健身和愛情。同樣身為軟體工程師，我認為可以從前人身上觀察和學習他的經驗應該是蠻有幫助的，因此下面會分享幾個從書中學到比較重要的概念。</p>
+<p>第一個是就算是受聘於公司，也應該要當作自己是在經營生意。只有把「我」當成是一家公司看待，才能做出好的商業決策。在一般公司朝九晚六(如果沒加班的話)的生活，很容易把個人的思維限制住，認為就是把固定事情做好然後領固定的薪水。然而，如果從經濟學的角度來看，其實我們都是在販賣服務並且獲取報酬，只是販賣的對象是固定某個客戶而已。當可以用比較宏觀的角度看待工作的時候，就會發現可以選擇的策略比想像中多很多，例如開始評估自己所提供的服務和價錢跟當前市場狀況是否有吻合，不吻合的話就會進一步精進服務的內容(提升能力)，或是開拓其他可能的客戶(找其他公司)。這種心態上的轉變會讓我們不會只是被動接受現況，而會有積極的思維去影響現實，獲得更好的結果。</p>
+<p>再來關於自我行銷的方面作者也提到很多，自我行銷其實跟前面相呼應，如果要把工作當作在經營生意，怎麼讓潛在客戶知道自己就很重要。找工作最容易的方法是讓工作來找你，當別人有求於你時，就更容易得到比較好的條件。對軟體工程師來說，最好的行銷方式就是寫blog，有許多有價值的文章，自然知名度就會打開。書中強調了好幾次經營blog的重要性，然後還提到最重要的就是毅力，只要持之以恆地撰寫文章，就已經勝過大多數的同行了。雖然我本身已經有意識地在經營blog了，但是常常都只是想說留個紀錄供自己未來參考。然而作者反對這種做法，他認為如果要能吸引別人最重要的是出發點是對他人有益，如果能夠對他人產生價值，就會受到關注，因此文章不是自己寫開心就好。這對我過去寫文章的方式是一種震撼，現在開始會思考我的記錄事情的角度是否可以解決讀者遇到的問題，是否容易閱讀及理解。</p>
+<p>在變動很快的科技業中，如何自我學習是非常重要的，特別是軟體業，沒多久就有新的framework或程式語言出現，這些技術大概很難透過學校老師教導，只能靠著自己尋找資源去學習。書中作者介紹了十步學習法，不過我不打算在這裡細部講解這個方法，取而代之，我想分享作者提到的四個自學方式循環：學習、實踐、掌握、教授。我們不應該期待自己把某個領域學完後再開始應用，要盡量在最短時間內找到必須要學會的內容，然後就去實踐，從實踐過程中一定會遇到問題，這時再回去翻資料掌握這些問題，當有一定程度的理解後，嘗試跟他人分享，確認是否真的理解。透過這樣的循環，可以幫助自己更快掌握該領域知識。其實這套方法跟之前我看過的有效自學方式很類似，例如<a href="https://rocket.cafe/talks/85231">最小必要知識架構術</a>、<a href="https://www.drcleaner.com/zh-hans/%E6%9C%80%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%EF%BC%9A%E8%B4%B9%E6%9B%BC%E6%B3%95/">費曼法</a>，很明顯這些方法已經成為主流了。我想，不應該被傳統的學習概念(從基礎知識一步步慢慢學習)所限制，而是從應用面來學習，也就是知道自己要做到什麼，反推回去需要學習哪些知識，不但有效率，而且也更符合這個社會緊湊的腳步。</p>
+<p>關於時間管理的部分，作者推薦用使用番茄鐘(通常代表的是工作25min後休息5min)，如果不知道番茄鐘可以參考<a href="https://zh.wikipedia.org/zh-tw/%E7%95%AA%E8%8C%84%E5%B7%A5%E4%BD%9C%E6%B3%95">wiki的介紹</a>。這一年下來，其實我都是用番茄鐘來管理我的時間，目前也覺得透過番茄鐘，確實可以幫助專注力，然而我卻從書中發現自己並沒有善用番茄鐘最大的威力。番茄鐘並不只是用來幫助自己提升效率的工具，更重要的是可以用來幫助時間規劃。在時間管理上，最常遇到的問題就是不知道每項工作到底要花多少時間做完，而在固定時間內，到底可以做完多少事情。這兩個問題番茄鐘都幫忙解決了，透過把一項大任務切割成番茄鐘的長度，代表的是強迫自己分割大任務變成可估算完成時間的小任務，而每個人每天可以完成多少的番茄鐘是有數量限制的，也代表我們會很清楚每天可以做多少事情，這樣規劃方式可以加強預測工作進度的準確度。另外番茄鐘帶來的另一個好處是可以更安心地進行休閒活動，大家應該會有經驗如果去玩樂會有種罪惡感想逼自己去工作，如果清楚每日能做到的番茄鐘數量，那休息享樂時就不會感到內疚，因為每天該完成的工作都已經達成了！</p>
+<p>最後一點是關於自我弱點的方面，從小到大我們所受的教育都是要把缺點彌補起來，然而這在專業上其實是說不通的，大家應該常聽過樣樣通，樣樣鬆。與其告訴他人自己會很多東西，不如專精在比較小的領域(或是大領域中的某種應用)，也許在市場上並沒有那麼多的需求，但是錄取機率則會大幅增加。不過也是有要去彌補弱點的情況，那就是該弱點會大幅影響效率時。當不知道某項技術其實可以很容易達成某件事前，可能都會很排斥去學習，但其實只要花幾個小時就能獲得很大的效益，也就是常聽到的CP值很高。然而要怎麼找到這些CP值高的技術呢？我們可以記錄每個自己沒聽過技術的遇到頻率，當遇到頻率高於一定值時，那就代表有學習的價值。舉個例子，其實我有時候看經濟新聞都會聽到A輪、B輪等等名詞，但是都一直沒動力去搞懂，結果對新聞內容都一知半解。在看本書的理財部份時，作者有做一個簡單的解釋，結果花不到半小時，就對這些常見名詞有初步認識了，也變相了加深我對經濟新聞理解，像是這種知識就很值得花時間投資。</p>
+<p>當然這本書還有很多很有價值的內容，不過受限於篇幅，無法每個都說。如果對上面的分享心有戚戚焉的話，我想這本書應該蠻適合你。進入科技業也不過快三年而已，未來應該還有很長的職業生涯，如何好好經營是很大的課題。目前還是以多多參考前輩們的經驗以及不斷自我反省為主，找出真正適合自己的道路。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>閱讀是一種朋友間的對話</title>
+    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
+    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
+<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
+<ol>
+<li>為什麼我想要看這本書？我想從中得到什麼？</li>
+<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
+</ol>
+<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
+<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
+<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
+<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
+<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
+<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
+<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
+<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
+<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
+<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
+<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
+<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
+<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
+<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
+<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>開源軟體的商業策略</title>
     <url>/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>開源軟體，或者說開放原始碼，最早是由 Richard Stallman 的 Free Software Foundation 所提出。這個概念最初源於他想自己修復辦公室印表機的 bug，卻苦於無法取得程式碼。他因此主張，所謂的自由軟體應允許使用者不限任何目的，皆可自由修改及分發。</p>
@@ -3846,24 +3896,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《軟技能》：軟體界的「原則」</title>
-    <url>/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E4%BB%A3%E7%A2%BC%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<p>今天想要來介紹一本對軟體工程師來說很棒的書，叫做<a href="https://www.tenlong.com.tw/products/9787115429476">軟技能：代碼之外的生存指南 (Soft Skills : The software developer’s life manual)</a>。最一開始會關注到這本書是因為有人介紹說這本書堪稱是軟體界的「<a href="http://www.books.com.tw/products/0010782941">原則</a>」。由於對「原則」有還不錯的評價，所以就有了閱讀的興趣。這本書號稱是給軟體工程師看的書，但是裡面卻沒有任何一行程式碼，作者希望告訴讀者的是要成好的軟體工程師，不能只專注在專業上，要把重點放在「整個人」上。書中分享了如何找工作、自我營銷、自我學習等等，甚至還有理財、健身和愛情。同樣身為軟體工程師，我認為可以從前人身上觀察和學習他的經驗應該是蠻有幫助的，因此下面會分享幾個從書中學到比較重要的概念。</p>
-<p>第一個是就算是受聘於公司，也應該要當作自己是在經營生意。只有把「我」當成是一家公司看待，才能做出好的商業決策。在一般公司朝九晚六(如果沒加班的話)的生活，很容易把個人的思維限制住，認為就是把固定事情做好然後領固定的薪水。然而，如果從經濟學的角度來看，其實我們都是在販賣服務並且獲取報酬，只是販賣的對象是固定某個客戶而已。當可以用比較宏觀的角度看待工作的時候，就會發現可以選擇的策略比想像中多很多，例如開始評估自己所提供的服務和價錢跟當前市場狀況是否有吻合，不吻合的話就會進一步精進服務的內容(提升能力)，或是開拓其他可能的客戶(找其他公司)。這種心態上的轉變會讓我們不會只是被動接受現況，而會有積極的思維去影響現實，獲得更好的結果。</p>
-<p>再來關於自我行銷的方面作者也提到很多，自我行銷其實跟前面相呼應，如果要把工作當作在經營生意，怎麼讓潛在客戶知道自己就很重要。找工作最容易的方法是讓工作來找你，當別人有求於你時，就更容易得到比較好的條件。對軟體工程師來說，最好的行銷方式就是寫blog，有許多有價值的文章，自然知名度就會打開。書中強調了好幾次經營blog的重要性，然後還提到最重要的就是毅力，只要持之以恆地撰寫文章，就已經勝過大多數的同行了。雖然我本身已經有意識地在經營blog了，但是常常都只是想說留個紀錄供自己未來參考。然而作者反對這種做法，他認為如果要能吸引別人最重要的是出發點是對他人有益，如果能夠對他人產生價值，就會受到關注，因此文章不是自己寫開心就好。這對我過去寫文章的方式是一種震撼，現在開始會思考我的記錄事情的角度是否可以解決讀者遇到的問題，是否容易閱讀及理解。</p>
-<p>在變動很快的科技業中，如何自我學習是非常重要的，特別是軟體業，沒多久就有新的framework或程式語言出現，這些技術大概很難透過學校老師教導，只能靠著自己尋找資源去學習。書中作者介紹了十步學習法，不過我不打算在這裡細部講解這個方法，取而代之，我想分享作者提到的四個自學方式循環：學習、實踐、掌握、教授。我們不應該期待自己把某個領域學完後再開始應用，要盡量在最短時間內找到必須要學會的內容，然後就去實踐，從實踐過程中一定會遇到問題，這時再回去翻資料掌握這些問題，當有一定程度的理解後，嘗試跟他人分享，確認是否真的理解。透過這樣的循環，可以幫助自己更快掌握該領域知識。其實這套方法跟之前我看過的有效自學方式很類似，例如<a href="https://rocket.cafe/talks/85231">最小必要知識架構術</a>、<a href="https://www.drcleaner.com/zh-hans/%E6%9C%80%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%EF%BC%9A%E8%B4%B9%E6%9B%BC%E6%B3%95/">費曼法</a>，很明顯這些方法已經成為主流了。我想，不應該被傳統的學習概念(從基礎知識一步步慢慢學習)所限制，而是從應用面來學習，也就是知道自己要做到什麼，反推回去需要學習哪些知識，不但有效率，而且也更符合這個社會緊湊的腳步。</p>
-<p>關於時間管理的部分，作者推薦用使用番茄鐘(通常代表的是工作25min後休息5min)，如果不知道番茄鐘可以參考<a href="https://zh.wikipedia.org/zh-tw/%E7%95%AA%E8%8C%84%E5%B7%A5%E4%BD%9C%E6%B3%95">wiki的介紹</a>。這一年下來，其實我都是用番茄鐘來管理我的時間，目前也覺得透過番茄鐘，確實可以幫助專注力，然而我卻從書中發現自己並沒有善用番茄鐘最大的威力。番茄鐘並不只是用來幫助自己提升效率的工具，更重要的是可以用來幫助時間規劃。在時間管理上，最常遇到的問題就是不知道每項工作到底要花多少時間做完，而在固定時間內，到底可以做完多少事情。這兩個問題番茄鐘都幫忙解決了，透過把一項大任務切割成番茄鐘的長度，代表的是強迫自己分割大任務變成可估算完成時間的小任務，而每個人每天可以完成多少的番茄鐘是有數量限制的，也代表我們會很清楚每天可以做多少事情，這樣規劃方式可以加強預測工作進度的準確度。另外番茄鐘帶來的另一個好處是可以更安心地進行休閒活動，大家應該會有經驗如果去玩樂會有種罪惡感想逼自己去工作，如果清楚每日能做到的番茄鐘數量，那休息享樂時就不會感到內疚，因為每天該完成的工作都已經達成了！</p>
-<p>最後一點是關於自我弱點的方面，從小到大我們所受的教育都是要把缺點彌補起來，然而這在專業上其實是說不通的，大家應該常聽過樣樣通，樣樣鬆。與其告訴他人自己會很多東西，不如專精在比較小的領域(或是大領域中的某種應用)，也許在市場上並沒有那麼多的需求，但是錄取機率則會大幅增加。不過也是有要去彌補弱點的情況，那就是該弱點會大幅影響效率時。當不知道某項技術其實可以很容易達成某件事前，可能都會很排斥去學習，但其實只要花幾個小時就能獲得很大的效益，也就是常聽到的CP值很高。然而要怎麼找到這些CP值高的技術呢？我們可以記錄每個自己沒聽過技術的遇到頻率，當遇到頻率高於一定值時，那就代表有學習的價值。舉個例子，其實我有時候看經濟新聞都會聽到A輪、B輪等等名詞，但是都一直沒動力去搞懂，結果對新聞內容都一知半解。在看本書的理財部份時，作者有做一個簡單的解釋，結果花不到半小時，就對這些常見名詞有初步認識了，也變相了加深我對經濟新聞理解，像是這種知識就很值得花時間投資。</p>
-<p>當然這本書還有很多很有價值的內容，不過受限於篇幅，無法每個都說。如果對上面的分享心有戚戚焉的話，我想這本書應該蠻適合你。進入科技業也不過快三年而已，未來應該還有很長的職業生涯，如何好好經營是很大的課題。目前還是以多多參考前輩們的經驗以及不斷自我反省為主，找出真正適合自己的道路。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>雙重授權：兼顧開源和商業的模式</title>
     <url>/2025/06/24/%E9%9B%99%E9%87%8D%E6%8E%88%E6%AC%8A%EF%BC%9A%E5%85%BC%E9%A1%A7%E9%96%8B%E6%BA%90%E5%92%8C%E5%95%86%E6%A5%AD%E7%9A%84%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>對於貢獻開源軟體專案的廠商來說，這一直是很兩難的議題：如何在提供免費服務給一般開發者的同時，又避免被其他商業公司搭便車。一方面希望維持開源社群的活躍而不限縮使用門檻；另一方面，為了維持公司營運，又需要避免他人直接拿來商業使用卻不回饋社群。</p>
@@ -3887,37 +3919,5 @@
       <tags>
         <tag>開源</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>閱讀是一種朋友間的對話</title>
-    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
-    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
-<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
-<ol>
-<li>為什麼我想要看這本書？我想從中得到什麼？</li>
-<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
-</ol>
-<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
-<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
-<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
-<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
-<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
-<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
-<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
-<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
-<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
-<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
-<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
-<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
-<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
-<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
-<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
   </entry>
 </search>
