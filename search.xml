@@ -187,116 +187,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C語言的行內組譯</title>
-    <url>/2018/05/20/C-Inline-Assembly/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
-<p>舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 一個nop指令 */</span></span><br><span class="line"><span class="keyword">asm</span>(<span class="string">&quot;nop&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 多行要用\n隔開 */</span></span><br><span class="line">__asm__(<span class="string">&quot;nop\n&quot;</span></span><br><span class="line">        <span class="string">&quot;nop\n&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>不管是<code>asm</code>還是<code>__asm__</code>都是合法的，只要不要跟自己的symbol有衝突即可。</p>
-<p>聰明的你可能發覺一件事，剛剛的例子只有指令而已，那如果假設我們要跟自己設定的變數互動那要怎麼辦呢？這時候就要用比較複雜的格式</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">asm ( assembler template               /* 組合語言內容 */</span><br><span class="line">    : output operands                  /* 輸出的參數 */</span><br><span class="line">    : input operands                   /* 輸入的參數 */</span><br><span class="line">    : list of clobbered registers      /* 組合語言執行後會改變的項目 */</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
-
-<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><p>我們還是直接來看看程式比較有感覺</p>
-<h3 id="範例一"><a href="#範例一" class="headerlink" title="範例一"></a>範例一</h3><p>我們寫一個簡單的test.c，只負責做加法。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>編譯並且看一下組語的內容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc test.c -s test.s</span><br><span class="line">$ <span class="built_in">cat</span> test.s</span><br><span class="line">        .file   <span class="string">&quot;test.c&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .section        .rodata</span><br><span class="line">.LC0:</span><br><span class="line">        .string <span class="string">&quot;sum=%d\r\n&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .globl  main</span><br><span class="line">        .<span class="built_in">type</span>   main, @<span class="keyword">function</span></span><br><span class="line">main:</span><br><span class="line">.LFB0:</span><br><span class="line">        .cfi_startproc</span><br><span class="line">        pushq   %rbp</span><br><span class="line">        .cfi_def_cfa_offset 16</span><br><span class="line">        .cfi_offset 6, -16</span><br><span class="line">        movq    %rsp, %rbp</span><br><span class="line">        .cfi_def_cfa_register 6</span><br><span class="line">        subq    <span class="variable">$16</span>, %rsp</span><br><span class="line">        movl    <span class="variable">$1</span>, -4(%rbp)</span><br><span class="line">        movl    <span class="variable">$2</span>, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %edx</span><br><span class="line">        movl    -8(%rbp), %eax</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        call    <span class="built_in">printf</span></span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        leave</span><br><span class="line">        .cfi_def_cfa 7, 8</span><br><span class="line">        ret</span><br><span class="line">        .cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">        .size   main, .-main</span><br><span class="line">        .ident  <span class="string">&quot;GCC: (GNU) 8.1.0&quot;</span></span><br><span class="line">        .section        .note.GNU-stack,<span class="string">&quot;&quot;</span>,@progbits</span><br></pre></td></tr></table></figure>
-
-<p>先不管其他細節，可以看到中間有兩行<code>addl    %edx, %eax</code>和<code>movl    %eax, -12(%rbp)</code>，對應的也就是<code>sum = num1 + num2;</code>，那我們來改寫一下吧！</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %%edx, %%eax\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=a&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;a&quot;</span>(num1), <span class="string">&quot;d&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>編譯並執行後就會發現結果是一樣的。不過到這邊我想大部分的人心中一定充滿了三個小朋友，所以還是在稍微解釋一下。</p>
-<p>如前面所提，我們最主要執行的是<code>addl    %%edx, %%eax\n</code>，這邊跟前面不一樣的是%另有用途(後面會提)，所以要表示暫存器%eax時，我們要用%%來取代%字元。<br>然後第二行的<code>&quot;=a&quot;(sum)</code>中，<code>=</code>代表執行結束後我們要把某個值填到某個變數內(這邊指的就是括號中的sum)，可是某個值又是怎麼決定的呢？這個就是a的概念，也就是「規範條件」，要求編譯器只能對應到符合條件的register。</p>
-<p>如果以x86的架構為例(這邊要注意每個CPU架構的規範條件都不同)：</p>
-<table>
-<thead>
-<tr>
-<th>規範條件</th>
-<th>Register(s)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>a</td>
-<td>%eax, %ax, %al</td>
-</tr>
-<tr>
-<td>b</td>
-<td>%ebx, %bx, %bl</td>
-</tr>
-<tr>
-<td>c</td>
-<td>%ecx, %cx, %cl</td>
-</tr>
-<tr>
-<td>d</td>
-<td>%edx, %dx, %dl</td>
-</tr>
-<tr>
-<td>S</td>
-<td>%esi, %si</td>
-</tr>
-<tr>
-<td>D</td>
-<td>%edi, %di</td>
-</tr>
-<tr>
-<td>f</td>
-<td>fp</td>
-</tr>
-</tbody></table>
-<p>由此可知就是要把%eax的結果填入sum中。同理，第三行的input部分<code>&quot;a&quot;(num1), &quot;d&quot;(num2)</code>分別也代表在執行組合語言前為num1和num2選擇register(這邊的例子是num1填入%eax、num2填入%edx)。</p>
-<p>回頭看一下如果編成組合語言會是什麼樣子</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">        movl    $1, -4(%rbp)</span><br><span class="line">        movl    $2, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %eax</span><br><span class="line">        movl    -8(%rbp), %edx</span><br><span class="line">#APP</span><br><span class="line"># 8 &quot;test.c&quot; 1</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line"></span><br><span class="line"># 0 &quot;&quot; 2</span><br><span class="line">#NO_APP</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    $0, %eax</span><br><span class="line">        call    printf</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<p>在#APP和#NO_APP間就是我們的組語部分，看起來蠻符合我們的預期。</p>
-<h3 id="範例二"><a href="#範例二" class="headerlink" title="範例二"></a>範例二</h3><p>可是我們難道都一定要自行決定register嗎？我們想要交由compiler決定。這時候其實可以用比較寬鬆的限制條件。一樣是x86的架構才能用：</p>
-<table>
-<thead>
-<tr>
-<th>規範條件</th>
-<th>Register(s)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>r</td>
-<td>%eax, %ebx, %ecx, %edx, %esi, %edi</td>
-</tr>
-<tr>
-<td>q</td>
-<td>%eax, %ebx, %ecx, %edx</td>
-</tr>
-<tr>
-<td>0,1,2..</td>
-<td>%0, %1, %2…(代表第幾個參數)</td>
-</tr>
-</tbody></table>
-<p>那就修改程式吧！</p>
-<p>test.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
-<p>當然最後執行結果也會和範例一一樣。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="http://sp1.wikidot.com/gnuinlineassembly">在 C 語言當中內嵌 GNU 的組合語言</a></li>
-<li><a href="http://wen00072.github.io/blog/2015/12/10/about-inline-asm/">關於GNU Inline Assembly</a></li>
-<li><a href="http://www.ethernut.de/en/documents/arm-inline-asm.html">ARM GCC Inline Assembler Cookbook</a></li>
-<li><a href="https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>程式語言</tag>
-        <tag>C</tag>
-        <tag>GNU tool</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker 開源的歷史</title>
     <url>/2025/04/27/Docker%E9%96%8B%E6%BA%90%E7%9A%84%E6%AD%B7%E5%8F%B2/</url>
     <content><![CDATA[<p>目前服務的公司主打開源軟體為核心，透過公開程式碼來吸引使用者、創造社群的聲量以及獲得回饋。我們相信軟體必須要有更多人使用才能創造更高的價值。然而開源軟體的精神雖然很好，但是公司為了生存還是得有生財之道，我們總是為了如何制定商業策略、如何營利所困擾。因此，我開始研究市場上到底其他以開源軟體為主體的公司是如何生存的。</p>
@@ -517,8 +407,220 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>GNU tool</tag>
         <tag>系統程式</tag>
+        <tag>GNU tool</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C語言的行內組譯</title>
+    <url>/2018/05/20/C-Inline-Assembly/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
+<p>舉個最簡單的範例，如果我們要求加入nop的指令，那就會變成如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 一個nop指令 */</span></span><br><span class="line"><span class="keyword">asm</span>(<span class="string">&quot;nop&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 多行要用\n隔開 */</span></span><br><span class="line">__asm__(<span class="string">&quot;nop\n&quot;</span></span><br><span class="line">        <span class="string">&quot;nop\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>不管是<code>asm</code>還是<code>__asm__</code>都是合法的，只要不要跟自己的symbol有衝突即可。</p>
+<p>聰明的你可能發覺一件事，剛剛的例子只有指令而已，那如果假設我們要跟自己設定的變數互動那要怎麼辦呢？這時候就要用比較複雜的格式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">asm ( assembler template               /* 組合語言內容 */</span><br><span class="line">    : output operands                  /* 輸出的參數 */</span><br><span class="line">    : input operands                   /* 輸入的參數 */</span><br><span class="line">    : list of clobbered registers      /* 組合語言執行後會改變的項目 */</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><p>我們還是直接來看看程式比較有感覺</p>
+<h3 id="範例一"><a href="#範例一" class="headerlink" title="範例一"></a>範例一</h3><p>我們寫一個簡單的test.c，只負責做加法。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>編譯並且看一下組語的內容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc test.c -s test.s</span><br><span class="line">$ <span class="built_in">cat</span> test.s</span><br><span class="line">        .file   <span class="string">&quot;test.c&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .section        .rodata</span><br><span class="line">.LC0:</span><br><span class="line">        .string <span class="string">&quot;sum=%d\r\n&quot;</span></span><br><span class="line">        .text</span><br><span class="line">        .globl  main</span><br><span class="line">        .<span class="built_in">type</span>   main, @<span class="keyword">function</span></span><br><span class="line">main:</span><br><span class="line">.LFB0:</span><br><span class="line">        .cfi_startproc</span><br><span class="line">        pushq   %rbp</span><br><span class="line">        .cfi_def_cfa_offset 16</span><br><span class="line">        .cfi_offset 6, -16</span><br><span class="line">        movq    %rsp, %rbp</span><br><span class="line">        .cfi_def_cfa_register 6</span><br><span class="line">        subq    <span class="variable">$16</span>, %rsp</span><br><span class="line">        movl    <span class="variable">$1</span>, -4(%rbp)</span><br><span class="line">        movl    <span class="variable">$2</span>, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %edx</span><br><span class="line">        movl    -8(%rbp), %eax</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        call    <span class="built_in">printf</span></span><br><span class="line">        movl    <span class="variable">$0</span>, %eax</span><br><span class="line">        leave</span><br><span class="line">        .cfi_def_cfa 7, 8</span><br><span class="line">        ret</span><br><span class="line">        .cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">        .size   main, .-main</span><br><span class="line">        .ident  <span class="string">&quot;GCC: (GNU) 8.1.0&quot;</span></span><br><span class="line">        .section        .note.GNU-stack,<span class="string">&quot;&quot;</span>,@progbits</span><br></pre></td></tr></table></figure>
+
+<p>先不管其他細節，可以看到中間有兩行<code>addl    %edx, %eax</code>和<code>movl    %eax, -12(%rbp)</code>，對應的也就是<code>sum = num1 + num2;</code>，那我們來改寫一下吧！</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> sum, num1, num2;</span><br><span class="line">    num1 = <span class="number">1</span>;</span><br><span class="line">    num2 = <span class="number">2</span>;</span><br><span class="line">    sum = num1 + num2;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %%edx, %%eax\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=a&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;a&quot;</span>(num1), <span class="string">&quot;d&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;sum=%d\r\n&quot;</span>, sum);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>編譯並執行後就會發現結果是一樣的。不過到這邊我想大部分的人心中一定充滿了三個小朋友，所以還是在稍微解釋一下。</p>
+<p>如前面所提，我們最主要執行的是<code>addl    %%edx, %%eax\n</code>，這邊跟前面不一樣的是%另有用途(後面會提)，所以要表示暫存器%eax時，我們要用%%來取代%字元。<br>然後第二行的<code>&quot;=a&quot;(sum)</code>中，<code>=</code>代表執行結束後我們要把某個值填到某個變數內(這邊指的就是括號中的sum)，可是某個值又是怎麼決定的呢？這個就是a的概念，也就是「規範條件」，要求編譯器只能對應到符合條件的register。</p>
+<p>如果以x86的架構為例(這邊要注意每個CPU架構的規範條件都不同)：</p>
+<table>
+<thead>
+<tr>
+<th>規範條件</th>
+<th>Register(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>%eax, %ax, %al</td>
+</tr>
+<tr>
+<td>b</td>
+<td>%ebx, %bx, %bl</td>
+</tr>
+<tr>
+<td>c</td>
+<td>%ecx, %cx, %cl</td>
+</tr>
+<tr>
+<td>d</td>
+<td>%edx, %dx, %dl</td>
+</tr>
+<tr>
+<td>S</td>
+<td>%esi, %si</td>
+</tr>
+<tr>
+<td>D</td>
+<td>%edi, %di</td>
+</tr>
+<tr>
+<td>f</td>
+<td>fp</td>
+</tr>
+</tbody></table>
+<p>由此可知就是要把%eax的結果填入sum中。同理，第三行的input部分<code>&quot;a&quot;(num1), &quot;d&quot;(num2)</code>分別也代表在執行組合語言前為num1和num2選擇register(這邊的例子是num1填入%eax、num2填入%edx)。</p>
+<p>回頭看一下如果編成組合語言會是什麼樣子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">        movl    $1, -4(%rbp)</span><br><span class="line">        movl    $2, -8(%rbp)</span><br><span class="line">        movl    -4(%rbp), %eax</span><br><span class="line">        movl    -8(%rbp), %edx</span><br><span class="line">#APP</span><br><span class="line"># 8 &quot;test.c&quot; 1</span><br><span class="line">        addl    %edx, %eax</span><br><span class="line"></span><br><span class="line"># 0 &quot;&quot; 2</span><br><span class="line">#NO_APP</span><br><span class="line">        movl    %eax, -12(%rbp)</span><br><span class="line">        movl    -12(%rbp), %eax</span><br><span class="line">        movl    %eax, %esi</span><br><span class="line">        movl    $.LC0, %edi</span><br><span class="line">        movl    $0, %eax</span><br><span class="line">        call    printf</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>在#APP和#NO_APP間就是我們的組語部分，看起來蠻符合我們的預期。</p>
+<h3 id="範例二"><a href="#範例二" class="headerlink" title="範例二"></a>範例二</h3><p>可是我們難道都一定要自行決定register嗎？我們想要交由compiler決定。這時候其實可以用比較寬鬆的限制條件。一樣是x86的架構才能用：</p>
+<table>
+<thead>
+<tr>
+<th>規範條件</th>
+<th>Register(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>%eax, %ebx, %ecx, %edx, %esi, %edi</td>
+</tr>
+<tr>
+<td>q</td>
+<td>%eax, %ebx, %ecx, %edx</td>
+</tr>
+<tr>
+<td>0,1,2..</td>
+<td>%0, %1, %2…(代表第幾個參數)</td>
+</tr>
+</tbody></table>
+<p>那就修改程式吧！</p>
+<p>test.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;addl    %2, %0\n&quot;</span></span><br><span class="line">        :<span class="string">&quot;=r&quot;</span>(sum)</span><br><span class="line">        :<span class="string">&quot;0&quot;</span>(num1), <span class="string">&quot;r&quot;</span>(num2)</span><br><span class="line">       );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>在這裡，我們input使用sum和num2使用<code>r</code>，代表交由compiler決定要用哪個register。但是num1為什麼是0呢？這個意思是我們要num1的值所放入的register要跟sum同樣。<br>0,1,2分別代表我們所決定的register順序，也就是%0&#x3D;&gt;之後要輸出到sum的register，%1&#x3D;&gt;num1放入的register，%2&#x3D;&gt;num2放入的register。</p>
+<p>當然最後執行結果也會和範例一一樣。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="http://sp1.wikidot.com/gnuinlineassembly">在 C 語言當中內嵌 GNU 的組合語言</a></li>
+<li><a href="http://wen00072.github.io/blog/2015/12/10/about-inline-asm/">關於GNU Inline Assembly</a></li>
+<li><a href="http://www.ethernut.de/en/documents/arm-inline-asm.html">ARM GCC Inline Assembler Cookbook</a></li>
+<li><a href="https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>程式語言</tag>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
+<li>指令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+</ul>
+</li>
+</ul>
+<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
+<li><p>先產生key</p>
+<ul>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
+<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
+<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
+<li><p>查看目前的鑰匙</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>編輯key(對key簽名也是用同樣的方法)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
+<li><p>首先先搜尋對象的public key</p>
+<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看與更新朋友的public key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
+<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>import&#x2F;export自己的金鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
+<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果要確認發信人身份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -722,108 +824,6 @@
       </categories>
       <tags>
         <tag>security</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
-<li>指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
-</ul>
-</li>
-</ul>
-<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
-<li><p>先產生key</p>
-<ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
-<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
-<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
-<li><p>查看目前的鑰匙</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>編輯key(對key簽名也是用同樣的方法)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
-<li><p>首先先搜尋對象的public key</p>
-<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看與更新朋友的public key</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
-<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>import&#x2F;export自己的金鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
-<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果要確認發信人身份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1425,8 +1425,8 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>GNU tool</tag>
         <tag>系統程式</tag>
+        <tag>GNU tool</tag>
       </tags>
   </entry>
   <entry>
@@ -1740,8 +1740,77 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>GNU tool</tag>
         <tag>系統程式</tag>
+        <tag>GNU tool</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要開啟多個檔案</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
+
+<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1895,75 +1964,6 @@
       </tags>
   </entry>
   <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
-
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>如果要開啟多個檔案</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
-
-<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>linker script 簡單教學</title>
     <url>/2018/06/02/linker-script-%E7%B0%A1%E5%96%AE%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>最近由於工作常常會用到，所以打算來談談如何來撰寫 linker script，也可以當作未來自己參考用途。</p>
@@ -2086,8 +2086,8 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>GNU tool</tag>
         <tag>系統程式</tag>
+        <tag>GNU tool</tag>
       </tags>
   </entry>
   <entry>
@@ -2430,6 +2430,26 @@
       </categories>
   </entry>
   <entry>
+    <title>在非標準的道路上</title>
+    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
+    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
+<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
+<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
+<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
+<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
+<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
+<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：**目前在做的事情是不是我想做的？**畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
+<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
+<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
+<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
+<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
+<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>人形機器人與自動化的趨勢</title>
     <url>/2025/06/08/%E4%BA%BA%E5%BD%A2%E6%A9%9F%E5%99%A8%E4%BA%BA%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E7%9A%84%E8%B6%A8%E5%8B%A2/</url>
     <content><![CDATA[<p>最近，人形機器人的概念越來越熱門，從在 NVIDIA GTC 2025 跟黃仁勳一起登場的可愛機器人 BLUE，到 Elon Musk 的人形機器人 Optimus 能夠輕易跳舞，就連中國各家的機器人公司也紛紛提出相應的競品。這顯示人們對於機器人的關注不斷提升，也預示著人工智慧將會從虛擬的網路世界推展到實體的現實生活中。</p>
@@ -2459,26 +2479,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在非標準的道路上</title>
-    <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
-    <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
-<p>不僅如此，為了更有效率地完成這個過程，社會還發展出了各種方法。為了得到好的成績，因此有了補習班的存在；為了升遷或是加薪，坊間充斥著各種提昇工作技能、如何跳槽等等的書籍和課程。社會鼓勵著人們為這段已知的旅程做好事先規劃，考上好的大學、加入優秀的公司、透過跳槽或升遷提昇待遇、買房子、生孩子、並且讓孩子得到比自己更好的教育環境。每個階段都押上了截止日，透過社會的壓力以及與同齡者的比較，讓人不得不跟隨這樣的洪流前進。</p>
-<p>然而，對有些人來說，常常會懷疑人生真的只是這樣而已嗎？</p>
-<p>最近讀了不少這方面的書或文章，包括黑馬思維、<a href="/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計劃</a>、知名創投 Paul Graham 的<a href="https://www.paulgraham.com/greatwork.html">如何做出偉大成就</a>等等。其中有個同樣被反覆提及的論點，那就是不需要事先去設定目標，依據自己的特質，跟隨內心的好奇心不斷去探索。在探索的路上不是跟著外在價值行動，而是傾聽心中的聲音，保持彈性隨時轉向最適合自己的機會。原本按照社會標準化的流程只會產生出標準化的個體。可是由於每個人都不一樣，感興趣的東西也不同，追尋個人價值反而更能抵達前所未見的目的地。</p>
-<p>我想，往自己好奇的方向前進，雖然不一定真的能成就偉大的事業——那需要有運氣的加成——但是至少內心是滿足的。當能夠非常投入自己想做的事情，就能獲得自我實現的充實感。</p>
-<p>不過跟隨好奇心走，堅持在非標準化的道路，也並不那麼容易。特別當見到他人在典型社會期望下達成一個個人生目標的時候，會不斷迷惘自己是否走錯了路。<strong>「我是不是應該跟大家一樣比較好」這樣的疑惑時不時會浮現在心中</strong>。</p>
-<p>我自己是先嘗試忽略別人的目光，也不要和別人比較。當疑惑產生時，先問問：**目前在做的事情是不是我想做的？**畢竟做想做的事情才能產生出滿足感。除此之外，這也能幫助我們把重心放回自己身上。適當與人比較雖然可以協助定位自己，但更多的時候是消耗寶貴的內心能量。</p>
-<p>通常我也會把過去的經歷整理起來，這有兩個好處，第一是給予自己信心，原來我也已經成就了那麼多事情。第二則是從這些經歷中更加認識自我。現在的我是由過去的我做了種種決定而來的，從這些決策中可以看清心中真正的價值觀與動力。</p>
-<p>接下來，我會思考要怎麼往前進。人有追求自我成長的天性，同樣的工作做上千百次也是會感到煩膩。因此基於目前的位置持續往前進是有必要的。這點其實蠻困難的，特別有時候會覺得已經走到死胡同，一切都卡住了。這時能做的只有把所有潛在選項（或可能感興趣的事情）列出來，一一去嘗試看看。重點是不要停下來，不要害怕失敗。<strong>比起坐在那邊空想，唯有透過實際的行動才會知道某些選項可不可行，親身的經驗可以提供我們很多無法口語表達的資訊</strong>。</p>
-<p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
-<p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
-<p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>天性與熱情</title>
     <url>/2024/12/01/%E5%A4%A9%E6%80%A7%E8%88%87%E7%86%B1%E6%83%85/</url>
     <content><![CDATA[<p>長久以來，專長與興趣一直是人們爭論的焦點。往往我們所擅長的事情和感興趣的事情不會完全一致，所以這也被大家一直拿出來討論，到底要順著自己能力走，還是應該要順著自己喜愛的方向去。長輩或老師們很常給出的建議是，用自己擅長的能力來為生，然後多餘的時間再來發展自己的興趣。這個可以說是最穩健的做法了。</p>
@@ -2489,29 +2489,6 @@
 <p>由上述例子可以知道，專長和興趣比較集中在技能上面的討論，但是天性和熱情則是更廣泛，更加注重我們內在的價值觀和動機。因此，我們更有可能找出兩者的交集，也正是<strong>在具有熱情的領域中做符合自己天性的事情</strong>。同樣用上面的例子，對教育有熱忱但卻又相對內向的人或許不適合當直接面對孩子的老師，他也許可以鎖定在家長身上，又或者是撰寫兒童教育相關的文章教學，提供給家長們參考。對崇拜 Elon Musk 的人來說，更重要的是了解為何自己會對他的成就所感染，也許是享受被人關注、又或者是對人類未來科技發展非常關注，找出動機，然後試著搭配符合天性的能力，這或許才是自己真正所想要的。</p>
 <p>如何找到適合自己天性與熱情的工作一直都不是容易的事情，<strong>重點在於要認識自己的天性以及尋找自己的熱情</strong>。到底自己擅長做什麼，什麼環境讓自己舒適能發揮能力，更重要的是什麼是內心不可退讓的核心價值觀。這些是很多人都無法明確回答的問題。另一方面，我們也要尋找什麼事情能夠感染自己，這唯一能做的只有多加嘗試和閱讀。嘗試去經歷不同的事情，多加與不一樣的人交流，都是很好的方式知道適不適合。其中成本最低的方式莫過於閱讀了，透過閱讀可以非常輕易地了解與自己完全不一樣的人的經驗與觀點。我非常相信這個世界上一定有一個最適合自己並且能產生無可取代價值的位置，只是現在我們還沒遇到而已。</p>
 <p>不用過於著急，畢竟宏觀來說，人生的目的不過就是一趟尋找自己天性與熱情交會之處的旅程而已。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>學習之道</title>
-    <url>/2025/01/26/%E5%AD%B8%E7%BF%92%E4%B9%8B%E9%81%93/</url>
-    <content><![CDATA[<p>學習並非是一件容易的事情，但在變化迅速的現代社會中，學習新技能卻又是不可避免的事情。以前人們可以靠一門手藝就能成家立業，然而現在隨著電腦、手機、AI 等科技不斷演化，任何一門行業也都必須要不斷與時俱進才行。不會使用新的科技，競爭力就會弱於精通的同行，舉例來說，會使用 Uber 的店家比起傳統餐廳會多了新的客源。「活到老，學到老」或許不再是勵志的鼓勵，而是未來社會生存所需遵守的殘酷法則。</p>
-<p>話說如此，其實也是有些技巧可以輔助我們學習的。</p>
-<h2 id="學問的骨架"><a href="#學問的骨架" class="headerlink" title="學問的骨架"></a>學問的骨架</h2><p>首先，最重要的是要掌握骨架。人類並不擅長把所有細節都記住，但是卻非常善於聯想。利用這個特點，我們可以先把某門學問的衣架穩固搭建起來，然後在上面掛上各種知識的衣服。用比較實際的例子來說，假設我們現在要學某個國家的歷史，最好的方式會是先記住這個國家有哪些朝代，而不用管每個朝代的特色和細節。甚至應該說，<strong>學習時要有意識地去忽略各種細節，直到框架被建立起來為止</strong>。當我們可以隨時從腦海中調用出框架時，在上面連結的各種知識才會有所本，不至於變成零散的小知識，遺失在大腦的某個角落裡。</p>
-<p>下個問題可能是，那我怎麼知道這個框架長什麼樣子？這分成兩種情況：如果是已經比較成熟的領域，可以直接參考各種書的目錄。大部分優秀的書籍都會有很好的方式來梳理知識的脈落，我們可以利用這個框架，然後在大腦中重新搭建屬於自己的架構出來。另一種情況則是比較嶄新的領域，尚未有人做好整理，只有很多知識零碎地散在網路上。這時候必須依靠自己來為知識做分類歸納。一般來說可以先找出架構圖，基於這架構來拓展自己的知識。例如說現在比較新的電動車領域，我們可以用車子本身的架構當作基礎，然後再針對每個元件來一一了解，如電池、馬達等等。之後隨著自己對該領域理解的增加，可以再逐漸調整認知的框架。</p>
-<h2 id="重視輸出"><a href="#重視輸出" class="headerlink" title="重視輸出"></a>重視輸出</h2><p>任何學習都不能只是接收資訊而已，沒有具體輸出、實際使用，一切都只是空談而已。最有名的費曼學習法就是運用這個道理：我們嘗試用簡單的方式向他人解釋某個知識，在過程中發現有解釋不清楚的地方，就回過頭來重新檢視自己的理解，直到能夠清楚講解為止。很多時候我們以為已經學會了，但其實並沒有，那只是大腦的錯覺。唯有嘗試用自己的話語來表達，才會發現某個環節並沒有想像中那麼清楚。<strong>語言對人類思考有著至關重要的影響，當我們能組織好言語脈落，才能證明已經真正理解其中意義</strong>。</p>
-<p>這也印證了前面提到的骨架重要性。要能講清楚某件事情，其實很大程度依賴於一個清楚的框架，如此才能有條不紊地陳述，讓他人容易理解。缺乏框架，不只自己不好學習，也容易讓聽眾混淆，無法真正理解想傳達的概念。</p>
-<p>除了用講的，若是學習技能類的事物，一定要去使用，特別在自己所需的情境下使用。學習而沒有使用，就好像單純看著地圖認路一樣。我們可以記住某條路到某條路的交叉口要右轉，但是一個熟悉的在地人更多是靠著明顯的路標來記憶路線要怎麼走。這些路標也可以稱之為「情境」。背了很多單字文法，和實際上跟外國人對話所需要的能力並非一致。按照書本學習寫程式的語法和最佳實踐，和實際開發專案所用到的知識也是有所落差。這並非是學習教材有問題，而是<strong>只有我們真正使用時才會意識到有些細微的情境並無法完整用言語呈現，必須透過親身經歷才行</strong>。</p>
-<h2 id="善用-AI-工具"><a href="#善用-AI-工具" class="headerlink" title="善用 AI 工具"></a>善用 AI 工具</h2><p>在 AI 尚未出現前要自學其實難度並不低，最大的困難點在於學習不免會碰上卡關的地方。如果有老師在可以快速給予反饋，若是沒有就需要花大量時間去尋找資料，比對不同教材，看看有沒有誰的講法更讓自己易懂。這是我過去自學所遇到的最大困難。</p>
-<p>現在有了 AI 輔助，大大減少了尋找資料的時間。對一門新的領域，可以先讓 AI 用簡單的方式講述基本框架，並且取得適合的參考連結。學習的過程中，一有問題馬上就直接詢問，還是不懂的地方也能追問或請它換個方式講述。這就好像多了一位老師可以 24 小時待命一樣。更別說像是語言類的學習還能夠直接與它對話，就像是真的與老外對談一樣。</p>
-<p>不過，如果是要學習嶄新或冷門領域的學問，AI 可以給予的幫助就有限了。AI 擅長的是在大量資料中整理出脈絡，因此資料的品質極為重要。全新或冷門領域的知識，一來量少，二來品質也參差不齊，必須要有批判性的判斷來篩選才行。有些 AI 會提供它的資訊來源，最好需要仔細驗證才行。</p>
-<h2 id="重視動機"><a href="#重視動機" class="headerlink" title="重視動機"></a>重視動機</h2><p>學習動機或許是學習過程中最重要的部分了。我們被過去的應試教育所訓練，認為學習要積極主動、甚至在碰到問題前就先學起來放。然而這反而會加大自己的壓力、增添煩惱、並且失去動機，最後聽到學習就退避三舍。</p>
-<p>最好的方式是偷懶一點，當有需要用到的時候再來學。我們動機應該是遇到了問題需要解決，而非因為榮譽或是其他外在因素。這個很重要，因為它代表了學習的方向。以程式為例，我們可能是要解決某個專案的問題而不得不學，這時目標就很明確，只需要學習需要用到的部分就好，而不是完全精通所有程式語法。<strong>人類比我們想像中更善於解決問題，當明確知道方向時，所能展現的能力將會出乎意料</strong>。</p>
-<p>另外一種動機可能是好奇心，其實某種程度上也是要解決問題，只是這個問題是來自我們心中的疑惑。解決心中的疑惑並不必要把某門知識從頭學起。也許我們對物理的相對論感興趣，但是比起從大學的普通物理開始讀起，更好的方式是去看點科普讀物，當有更多疑惑時再一個個去理解就好。</p>
-<p>總而言之，學習的動機應該要具體而微，而非大又廣泛。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>市面上教導如何學習的書千百種，各式各樣的方法都有，例如刻意練習、沉浸式學習、間隔學習等等，而上面所分享的是個人經驗中對我特別有用的方法。不過，比起討論什麼學習方法才正確，更重要的是找出適合自己的方法。現代社會中最需要學習的不是某門特定的學問和知識，而是學會「元學習」，也就是學習如何學習這回事！</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -2727,6 +2704,29 @@
         <tag>tools</tag>
         <tag>updating</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>學習之道</title>
+    <url>/2025/01/26/%E5%AD%B8%E7%BF%92%E4%B9%8B%E9%81%93/</url>
+    <content><![CDATA[<p>學習並非是一件容易的事情，但在變化迅速的現代社會中，學習新技能卻又是不可避免的事情。以前人們可以靠一門手藝就能成家立業，然而現在隨著電腦、手機、AI 等科技不斷演化，任何一門行業也都必須要不斷與時俱進才行。不會使用新的科技，競爭力就會弱於精通的同行，舉例來說，會使用 Uber 的店家比起傳統餐廳會多了新的客源。「活到老，學到老」或許不再是勵志的鼓勵，而是未來社會生存所需遵守的殘酷法則。</p>
+<p>話說如此，其實也是有些技巧可以輔助我們學習的。</p>
+<h2 id="學問的骨架"><a href="#學問的骨架" class="headerlink" title="學問的骨架"></a>學問的骨架</h2><p>首先，最重要的是要掌握骨架。人類並不擅長把所有細節都記住，但是卻非常善於聯想。利用這個特點，我們可以先把某門學問的衣架穩固搭建起來，然後在上面掛上各種知識的衣服。用比較實際的例子來說，假設我們現在要學某個國家的歷史，最好的方式會是先記住這個國家有哪些朝代，而不用管每個朝代的特色和細節。甚至應該說，<strong>學習時要有意識地去忽略各種細節，直到框架被建立起來為止</strong>。當我們可以隨時從腦海中調用出框架時，在上面連結的各種知識才會有所本，不至於變成零散的小知識，遺失在大腦的某個角落裡。</p>
+<p>下個問題可能是，那我怎麼知道這個框架長什麼樣子？這分成兩種情況：如果是已經比較成熟的領域，可以直接參考各種書的目錄。大部分優秀的書籍都會有很好的方式來梳理知識的脈落，我們可以利用這個框架，然後在大腦中重新搭建屬於自己的架構出來。另一種情況則是比較嶄新的領域，尚未有人做好整理，只有很多知識零碎地散在網路上。這時候必須依靠自己來為知識做分類歸納。一般來說可以先找出架構圖，基於這架構來拓展自己的知識。例如說現在比較新的電動車領域，我們可以用車子本身的架構當作基礎，然後再針對每個元件來一一了解，如電池、馬達等等。之後隨著自己對該領域理解的增加，可以再逐漸調整認知的框架。</p>
+<h2 id="重視輸出"><a href="#重視輸出" class="headerlink" title="重視輸出"></a>重視輸出</h2><p>任何學習都不能只是接收資訊而已，沒有具體輸出、實際使用，一切都只是空談而已。最有名的費曼學習法就是運用這個道理：我們嘗試用簡單的方式向他人解釋某個知識，在過程中發現有解釋不清楚的地方，就回過頭來重新檢視自己的理解，直到能夠清楚講解為止。很多時候我們以為已經學會了，但其實並沒有，那只是大腦的錯覺。唯有嘗試用自己的話語來表達，才會發現某個環節並沒有想像中那麼清楚。<strong>語言對人類思考有著至關重要的影響，當我們能組織好言語脈落，才能證明已經真正理解其中意義</strong>。</p>
+<p>這也印證了前面提到的骨架重要性。要能講清楚某件事情，其實很大程度依賴於一個清楚的框架，如此才能有條不紊地陳述，讓他人容易理解。缺乏框架，不只自己不好學習，也容易讓聽眾混淆，無法真正理解想傳達的概念。</p>
+<p>除了用講的，若是學習技能類的事物，一定要去使用，特別在自己所需的情境下使用。學習而沒有使用，就好像單純看著地圖認路一樣。我們可以記住某條路到某條路的交叉口要右轉，但是一個熟悉的在地人更多是靠著明顯的路標來記憶路線要怎麼走。這些路標也可以稱之為「情境」。背了很多單字文法，和實際上跟外國人對話所需要的能力並非一致。按照書本學習寫程式的語法和最佳實踐，和實際開發專案所用到的知識也是有所落差。這並非是學習教材有問題，而是<strong>只有我們真正使用時才會意識到有些細微的情境並無法完整用言語呈現，必須透過親身經歷才行</strong>。</p>
+<h2 id="善用-AI-工具"><a href="#善用-AI-工具" class="headerlink" title="善用 AI 工具"></a>善用 AI 工具</h2><p>在 AI 尚未出現前要自學其實難度並不低，最大的困難點在於學習不免會碰上卡關的地方。如果有老師在可以快速給予反饋，若是沒有就需要花大量時間去尋找資料，比對不同教材，看看有沒有誰的講法更讓自己易懂。這是我過去自學所遇到的最大困難。</p>
+<p>現在有了 AI 輔助，大大減少了尋找資料的時間。對一門新的領域，可以先讓 AI 用簡單的方式講述基本框架，並且取得適合的參考連結。學習的過程中，一有問題馬上就直接詢問，還是不懂的地方也能追問或請它換個方式講述。這就好像多了一位老師可以 24 小時待命一樣。更別說像是語言類的學習還能夠直接與它對話，就像是真的與老外對談一樣。</p>
+<p>不過，如果是要學習嶄新或冷門領域的學問，AI 可以給予的幫助就有限了。AI 擅長的是在大量資料中整理出脈絡，因此資料的品質極為重要。全新或冷門領域的知識，一來量少，二來品質也參差不齊，必須要有批判性的判斷來篩選才行。有些 AI 會提供它的資訊來源，最好需要仔細驗證才行。</p>
+<h2 id="重視動機"><a href="#重視動機" class="headerlink" title="重視動機"></a>重視動機</h2><p>學習動機或許是學習過程中最重要的部分了。我們被過去的應試教育所訓練，認為學習要積極主動、甚至在碰到問題前就先學起來放。然而這反而會加大自己的壓力、增添煩惱、並且失去動機，最後聽到學習就退避三舍。</p>
+<p>最好的方式是偷懶一點，當有需要用到的時候再來學。我們動機應該是遇到了問題需要解決，而非因為榮譽或是其他外在因素。這個很重要，因為它代表了學習的方向。以程式為例，我們可能是要解決某個專案的問題而不得不學，這時目標就很明確，只需要學習需要用到的部分就好，而不是完全精通所有程式語法。<strong>人類比我們想像中更善於解決問題，當明確知道方向時，所能展現的能力將會出乎意料</strong>。</p>
+<p>另外一種動機可能是好奇心，其實某種程度上也是要解決問題，只是這個問題是來自我們心中的疑惑。解決心中的疑惑並不必要把某門知識從頭學起。也許我們對物理的相對論感興趣，但是比起從大學的普通物理開始讀起，更好的方式是去看點科普讀物，當有更多疑惑時再一個個去理解就好。</p>
+<p>總而言之，學習的動機應該要具體而微，而非大又廣泛。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>市面上教導如何學習的書千百種，各式各樣的方法都有，例如刻意練習、沉浸式學習、間隔學習等等，而上面所分享的是個人經驗中對我特別有用的方法。不過，比起討論什麼學習方法才正確，更重要的是找出適合自己的方法。現代社會中最需要學習的不是某門特定的學問和知識，而是學會「元學習」，也就是學習如何學習這回事！</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>《心流》：最佳體驗的專注</title>
@@ -3063,9 +3063,46 @@
         <category>技術</category>
       </categories>
       <tags>
-        <tag>GNU tool</tag>
         <tag>系統程式</tag>
+        <tag>GNU tool</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>為什麼動機比努力重要</title>
+    <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
+    <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
+<p>這是某次面試我被問到的問題。原本以為我對網路架構已經足夠熟悉，然而卻發現自己沒辦法很流暢地回答這個看似基本的問題。不僅面試官不滿意，我也不滿意自己的答案。</p>
+<p>這是因為工作不認真，沒有學好技術嗎？不，以客觀標準來說，我絕對屬於認真的那群。那難道是經驗不夠嗎？也不是，自從畢業以來，我從事的工作都和網路相關。這並不能當作藉口。</p>
+<p>那麼問題出在哪裡呢？又或者我們可以進一步問，明明花同樣的時間，為何人與人之間的能力差距會這麼大呢？這個疑惑不斷在心中徘徊，困擾了很久，最終找到了真正的答案：</p>
+<p>那就是「動機」。</p>
+<h2 id="你的努力搞錯了方向"><a href="#你的努力搞錯了方向" class="headerlink" title="你的努力搞錯了方向"></a>你的努力搞錯了方向</h2><p>或許你對這樣的答案不以為然：動機只是做一件事情的理由罷了，哪會影響做這件事的結果。</p>
+<p>我原本也是這樣想，但是回想自己過去學習與工作的經歷，那些表現好的領域，無不是因為我對那些知識感到好奇，想要徹底搞懂；而表現不突出的，往往都不是為了學習本身而行動，而是為了得到好成績或是完成某個任務，學會那些領域知識只是副產品罷了。</p>
+<p>明明都花一樣時間、一樣努力，只是動機不同，可是最後成果卻天差地別。</p>
+<p>為什麼會這樣呢？讓我們用更加實際的情境來說明：</p>
+<p>想像有兩個能力伯仲之間的員工，一個想要得到老闆賞識，認為完成越多任務越好，而另一個人則是對事情充滿好奇心，接收到的任務會想盡辦法了解各種細節。</p>
+<p>前者只要任務完成了就會馬上著手下一個任務，所以完成的數量遠遠高於後者。然而有好奇心的員工卻會在完成任務之餘嘗試理解其中的各種知識，而這些知識又可以用在未來其他任務上。拉長時間來看，他才是真正累積了這個領域的專業能力，能解決未來更加困難的問題。</p>
+<p>兩個人都付出了同等的努力，但是由於各自的動機不同，最終所能達成的成就也不同。</p>
+<p>如果努力是汽車的油門，那麼動機就是方向盤。一旦動機有稍微的偏差，差之毫釐失之千里，我們將會駛向錯誤的目的地。</p>
+<h2 id="經驗並不重要"><a href="#經驗並不重要" class="headerlink" title="經驗並不重要"></a>經驗並不重要</h2><p>但是不管動機如何，如果一個事情做了十年，總會變成這個領域的佼佼者吧？也許你會想這樣反駁。</p>
+<p>我有個朋友當了產品經理十多年，然而其他人私底下評價他都認為能力差不多就是剛畢業的學生。對於他所管理的產品，從來不會想進一步了解，完全是別人怎麼說就怎麼做，一個指令一個動作。對他而言，能完成主管交辦的工作就好，並沒有任何動機學習產品的技術原理、市場趨勢和發展前景。</p>
+<p>就如同我們天天開車不會哪天變成 F1 賽車手一樣，我們也不會因為用同樣的技能做重複性的工作，就能獲得突破性成果。所謂的經驗累積並非單純的時間累積。究竟我們是用一年的工作能力重複做十年，還是十年內有意識不斷學習新的知識呢？</p>
+<p>這也正是「刻意練習」這本書所強調的觀念：一個技能要有所成長，需要持續突破舒適圈，克服自己的弱點。單純重複同個行為一萬小時並不會讓自己成為專家。</p>
+<p>時間從來都不是重點，重要的是在這段時間內我們的內在動機為何，以及採取了什麼行動。只有不斷經歷各式各樣的事物，時間的積累才會有價值。</p>
+<h2 id="好奇心才是最佳的動機"><a href="#好奇心才是最佳的動機" class="headerlink" title="好奇心才是最佳的動機"></a>好奇心才是最佳的動機</h2><p>知名物理學家費曼曾說：「對任何事物都充滿了好奇，是我學習和理解世界的方式」。發明蘋果手機的賈伯斯也說過：「Stay Hungry, Stay Foolish」。</p>
+<p>過去我都很無法理解為什麼這些有所成就的人總是強調好奇心的重要性，明明看起來跟他們所獲得的成功沒有太大關聯。我的想像中他們應該要更強調天賦、努力等等更直接的因素才對。</p>
+<p>然而，好奇心正是他們行動背後的真正動機，這些人不追求成功本身，而是想要瞭解世界運作背後的本質和原理，只是在探索的過程中不經意得到成功這個副產品罷了。如果一開始就以功成名就為目標，反而會離它越來越遠。</p>
+<p>越單純的心念，越能夠接觸事物的本質，而越能掌握本質的人，越能在這世界中發揮影響力。一旦混入了對名利的追求，就無法全心投入其中。</p>
+<p>對世界的好奇，是人類與生俱來的天賦，每個孩子一誕生就有的才能，只是我們在長大的過程中被蒙蔽了而已。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回到最一開始的問題，為什麼我沒辦法回答看似基本的問題。原因也很簡單，過去的工作中我很認真，或者說太過認真，全心全力解決被交辦的任務。我所累積的並不是技術能力，而是怎麼把工作做好的能力。</p>
+<p>當有取巧的做法可以繞過問題時，我不會回過頭思考問題根因在哪裡。當遇到一個樹木的問題時，我只看見樹木，而不是從整個樹林的角度來思考。錯誤的動機侷限了我行動的方向。</p>
+<p>我很努力，但只是在努力成為好員工，而不是努力理解技術原理、滿足好奇心。</p>
+<p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
+<p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
+<p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
@@ -3125,43 +3162,6 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>為什麼動機比努力重要</title>
-    <url>/2025/03/30/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8B%95%E6%A9%9F%E6%AF%94%E5%8A%AA%E5%8A%9B%E9%87%8D%E8%A6%81/</url>
-    <content><![CDATA[<p>「能請你描述網路封包從網卡接收到使用者程式的流程嗎？」</p>
-<p>這是某次面試我被問到的問題。原本以為我對網路架構已經足夠熟悉，然而卻發現自己沒辦法很流暢地回答這個看似基本的問題。不僅面試官不滿意，我也不滿意自己的答案。</p>
-<p>這是因為工作不認真，沒有學好技術嗎？不，以客觀標準來說，我絕對屬於認真的那群。那難道是經驗不夠嗎？也不是，自從畢業以來，我從事的工作都和網路相關。這並不能當作藉口。</p>
-<p>那麼問題出在哪裡呢？又或者我們可以進一步問，明明花同樣的時間，為何人與人之間的能力差距會這麼大呢？這個疑惑不斷在心中徘徊，困擾了很久，最終找到了真正的答案：</p>
-<p>那就是「動機」。</p>
-<h2 id="你的努力搞錯了方向"><a href="#你的努力搞錯了方向" class="headerlink" title="你的努力搞錯了方向"></a>你的努力搞錯了方向</h2><p>或許你對這樣的答案不以為然：動機只是做一件事情的理由罷了，哪會影響做這件事的結果。</p>
-<p>我原本也是這樣想，但是回想自己過去學習與工作的經歷，那些表現好的領域，無不是因為我對那些知識感到好奇，想要徹底搞懂；而表現不突出的，往往都不是為了學習本身而行動，而是為了得到好成績或是完成某個任務，學會那些領域知識只是副產品罷了。</p>
-<p>明明都花一樣時間、一樣努力，只是動機不同，可是最後成果卻天差地別。</p>
-<p>為什麼會這樣呢？讓我們用更加實際的情境來說明：</p>
-<p>想像有兩個能力伯仲之間的員工，一個想要得到老闆賞識，認為完成越多任務越好，而另一個人則是對事情充滿好奇心，接收到的任務會想盡辦法了解各種細節。</p>
-<p>前者只要任務完成了就會馬上著手下一個任務，所以完成的數量遠遠高於後者。然而有好奇心的員工卻會在完成任務之餘嘗試理解其中的各種知識，而這些知識又可以用在未來其他任務上。拉長時間來看，他才是真正累積了這個領域的專業能力，能解決未來更加困難的問題。</p>
-<p>兩個人都付出了同等的努力，但是由於各自的動機不同，最終所能達成的成就也不同。</p>
-<p>如果努力是汽車的油門，那麼動機就是方向盤。一旦動機有稍微的偏差，差之毫釐失之千里，我們將會駛向錯誤的目的地。</p>
-<h2 id="經驗並不重要"><a href="#經驗並不重要" class="headerlink" title="經驗並不重要"></a>經驗並不重要</h2><p>但是不管動機如何，如果一個事情做了十年，總會變成這個領域的佼佼者吧？也許你會想這樣反駁。</p>
-<p>我有個朋友當了產品經理十多年，然而其他人私底下評價他都認為能力差不多就是剛畢業的學生。對於他所管理的產品，從來不會想進一步了解，完全是別人怎麼說就怎麼做，一個指令一個動作。對他而言，能完成主管交辦的工作就好，並沒有任何動機學習產品的技術原理、市場趨勢和發展前景。</p>
-<p>就如同我們天天開車不會哪天變成 F1 賽車手一樣，我們也不會因為用同樣的技能做重複性的工作，就能獲得突破性成果。所謂的經驗累積並非單純的時間累積。究竟我們是用一年的工作能力重複做十年，還是十年內有意識不斷學習新的知識呢？</p>
-<p>這也正是「刻意練習」這本書所強調的觀念：一個技能要有所成長，需要持續突破舒適圈，克服自己的弱點。單純重複同個行為一萬小時並不會讓自己成為專家。</p>
-<p>時間從來都不是重點，重要的是在這段時間內我們的內在動機為何，以及採取了什麼行動。只有不斷經歷各式各樣的事物，時間的積累才會有價值。</p>
-<h2 id="好奇心才是最佳的動機"><a href="#好奇心才是最佳的動機" class="headerlink" title="好奇心才是最佳的動機"></a>好奇心才是最佳的動機</h2><p>知名物理學家費曼曾說：「對任何事物都充滿了好奇，是我學習和理解世界的方式」。發明蘋果手機的賈伯斯也說過：「Stay Hungry, Stay Foolish」。</p>
-<p>過去我都很無法理解為什麼這些有所成就的人總是強調好奇心的重要性，明明看起來跟他們所獲得的成功沒有太大關聯。我的想像中他們應該要更強調天賦、努力等等更直接的因素才對。</p>
-<p>然而，好奇心正是他們行動背後的真正動機，這些人不追求成功本身，而是想要瞭解世界運作背後的本質和原理，只是在探索的過程中不經意得到成功這個副產品罷了。如果一開始就以功成名就為目標，反而會離它越來越遠。</p>
-<p>越單純的心念，越能夠接觸事物的本質，而越能掌握本質的人，越能在這世界中發揮影響力。一旦混入了對名利的追求，就無法全心投入其中。</p>
-<p>對世界的好奇，是人類與生俱來的天賦，每個孩子一誕生就有的才能，只是我們在長大的過程中被蒙蔽了而已。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回到最一開始的問題，為什麼我沒辦法回答看似基本的問題。原因也很簡單，過去的工作中我很認真，或者說太過認真，全心全力解決被交辦的任務。我所累積的並不是技術能力，而是怎麼把工作做好的能力。</p>
-<p>當有取巧的做法可以繞過問題時，我不會回過頭思考問題根因在哪裡。當遇到一個樹木的問題時，我只看見樹木，而不是從整個樹林的角度來思考。錯誤的動機侷限了我行動的方向。</p>
-<p>我很努力，但只是在努力成為好員工，而不是努力理解技術原理、滿足好奇心。</p>
-<p>在「<a href="https://evshary.com/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/">為什麼偉大不能被計畫</a>」這本書中強調過去人類的偉大成就都不是靠著設定目標而達成，而是一小群人追尋新奇事物，意外發現這可以有獨特的應用，進而創造了科技的突破。就像是真空管，一開始發明的人也沒想過用在電腦上，但最終卻引領了電腦革命。</p>
-<p>以往，我們過度強調了努力的重要性，設定好目標，遵循著社會定義的道路前進。然而，我們更應該跟隨內心最純粹的好奇心、單純滿足自己的求知慾，而不是被外在成就這個副產品所蒙蔽。</p>
-<p><strong>人與人最大的差異不在於努力、不在於經驗，而是動機。</strong></p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
   </entry>
   <entry>
     <title>為什麼社會有分歧</title>
@@ -3343,6 +3343,42 @@
       </categories>
   </entry>
   <entry>
+    <title>理論與經驗：知識如何落地</title>
+    <url>/2024/12/15/%E7%90%86%E8%AB%96%E8%88%87%E7%B6%93%E9%A9%97%EF%BC%9A%E7%9F%A5%E8%AD%98%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/</url>
+    <content><![CDATA[<p>傳聞中，德國皇帝威廉二世在第一次世界大戰兵敗退位二十年後，讀到了德文版的孫子兵法，感慨自己若是能早點讀到這本書，也不至於落到如此境地。聽到這個故事不禁讓我思考，如果我們能提前讀遍經典、知曉無數道理，是否真的能避免失敗，直達成功的彼岸呢？</p>
+<p>然而，理論並非萬能。三國時期的就是個典型的例子。他飽讀兵書，深受諸葛亮的信任，在南征孟獲時還曾經提出「攻心為上」的方針。但是在街亭之戰中，卻因為過度拘泥於居高臨下的理論，不顧有豐富實戰經驗的副將王平勸阻，在山上佈陣，最終被張郃切斷水源所敗。他的失敗印證了劉備對其「言過其實」的評價，也給後人一種紙上談兵的印象。這樣看來，單純懂很多理論知識，似乎也沒辦法確保能在現實中取得好成果。</p>
+<p>其實在怎麼好的道理理論都有其適用的情境範圍。以馬謖前面的例子來說，居高臨下可能在大多數的情境都是好的決策，因此兵書也會這樣記載。然而，這樣的軍事指導也是有自己的水源不能被敵人所切斷的前提。他的副將可能書沒有馬謖讀得多，但是因為有豐富的經驗，所以知道這樣做會有問題。這時候經驗的價值就遠遠超過理論的指引了。</p>
+<p>然而我們也不能說理論就沒有任何價值了，它是一盞明燈，可以幫助我們明確前進方向，最大程度避開前人所踩的坑。只是路上遇到的問題並不能全靠理論來解決，因為理論本來就不可能把所有可能發生的問題都窮舉出來，唯有自己親身經歷過才會真正了解。用比較科學的方式來說，<strong>理論所能蘊含的資訊量也不過就文字而已，經驗則是來自我們的五官，提供給我們的訊息遠遠多過於理論</strong>。</p>
+<p>這個也是為什麼當人上了年紀，看事情的境界就不再相同。年輕時常常被告誡身體健康很重要，我們也都清楚並同意這件事，沒有人會說健康不重要，但是不到自己有了年紀、健康實際出了狀況，就不會下定決心要好好運動、保養身體。因此回到德國皇帝的故事，他會覺得感慨，並不只是孫子兵法是好兵書的關係，更多可能是因為它觸動了德國皇帝失敗的經驗，理論和經驗相互印證。假設同樣的兵書給年輕的威廉二世看，我相信他的感觸肯定不會那麼多，而且很大的機率仍然會重蹈覆轍。</p>
+<p>我想，聽很多名言、讀很多道理可能用途並沒有我們想像中的大，甚至可能有害。很多時候我們會誤以為自己已經理解某個理論，因為聽過好多次。然而聽過和實際上真正理解根本是兩回事，這也就是心理學中的「知識錯覺」。我們都知道拉鍊和腳踏車，因此自以為很清楚其運作原理，但當有人要我們嘗試說明時卻發現根本不懂細節。學會很多理論也同樣的意思，認為自己很了解了，反而忽視了從來沒有真正搞懂並落實在生活中。</p>
+<p>任何同樣的文字會受限於每個人的生活經驗、背景知識、人生閱歷而有不一樣的差別。就像是同樣是 <code>E=mc^2</code> 這個公式，對愛因斯坦、對物理系學生、又或者是對普通人來說，意義完全不相同。為了解決這個問題，很多書籍都是為了闡述某個用一句話就說完的理論，而撰寫了一大堆論述和範例。儘管如此，我們也無法說看完一本書後就得到作者對這個議題的完整知識。</p>
+<p>或許最好的方式是正視我們不可能完全理解名言和理論真正意思的現實。既然如此，應該要保持著開放謙虛的心態看待知識和理論，明白自己在不同年紀、更多經歷後可能會有不同的體會。</p>
+<p>對我而言，理論只有在真正改變實際行為才有用處。人類的天性是重視經驗、感性的，唯有實際嘗試才能真正理解。我們不可能只聽老師指導、觀看教學影片就能學會游泳，最終還是得下水嘗試體驗才行，因為身體每個動作細節很多是無法透過言語傳達的。<strong>我們透過理論得到一個大略的方向，然後親身體會後就能回過頭來修正對理論的理解</strong>。透過這樣方式才能基於前人的智慧幫助我們更加理解這個世界並創造出理想的成果。</p>
+<p>理論是燈塔，經驗是船，燈塔能指引方向，但船仍需要經歷風浪才能到達目的。我們需要的是不斷嘗試反思的學習過程，而不是沉溺於理論的海市蜃樓之中。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>《稀缺》：稀缺其實是一種陷阱</title>
+    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%EF%BC%9A%E6%88%91%E5%80%91%E6%98%AF%E5%A6%82%E4%BD%95%E9%99%B7%E5%85%A5%E8%B2%A7%E7%AA%AE%E8%88%87%E5%BF%99%E7%A2%8C%E7%9A%84/</url>
+    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「<a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a>」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
+<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
+<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
+<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
+<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
+<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
+<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>獲取資訊來源的方法</title>
     <url>/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。</p>
@@ -3396,42 +3432,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>理論與經驗：知識如何落地</title>
-    <url>/2024/12/15/%E7%90%86%E8%AB%96%E8%88%87%E7%B6%93%E9%A9%97%EF%BC%9A%E7%9F%A5%E8%AD%98%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/</url>
-    <content><![CDATA[<p>傳聞中，德國皇帝威廉二世在第一次世界大戰兵敗退位二十年後，讀到了德文版的孫子兵法，感慨自己若是能早點讀到這本書，也不至於落到如此境地。聽到這個故事不禁讓我思考，如果我們能提前讀遍經典、知曉無數道理，是否真的能避免失敗，直達成功的彼岸呢？</p>
-<p>然而，理論並非萬能。三國時期的就是個典型的例子。他飽讀兵書，深受諸葛亮的信任，在南征孟獲時還曾經提出「攻心為上」的方針。但是在街亭之戰中，卻因為過度拘泥於居高臨下的理論，不顧有豐富實戰經驗的副將王平勸阻，在山上佈陣，最終被張郃切斷水源所敗。他的失敗印證了劉備對其「言過其實」的評價，也給後人一種紙上談兵的印象。這樣看來，單純懂很多理論知識，似乎也沒辦法確保能在現實中取得好成果。</p>
-<p>其實在怎麼好的道理理論都有其適用的情境範圍。以馬謖前面的例子來說，居高臨下可能在大多數的情境都是好的決策，因此兵書也會這樣記載。然而，這樣的軍事指導也是有自己的水源不能被敵人所切斷的前提。他的副將可能書沒有馬謖讀得多，但是因為有豐富的經驗，所以知道這樣做會有問題。這時候經驗的價值就遠遠超過理論的指引了。</p>
-<p>然而我們也不能說理論就沒有任何價值了，它是一盞明燈，可以幫助我們明確前進方向，最大程度避開前人所踩的坑。只是路上遇到的問題並不能全靠理論來解決，因為理論本來就不可能把所有可能發生的問題都窮舉出來，唯有自己親身經歷過才會真正了解。用比較科學的方式來說，<strong>理論所能蘊含的資訊量也不過就文字而已，經驗則是來自我們的五官，提供給我們的訊息遠遠多過於理論</strong>。</p>
-<p>這個也是為什麼當人上了年紀，看事情的境界就不再相同。年輕時常常被告誡身體健康很重要，我們也都清楚並同意這件事，沒有人會說健康不重要，但是不到自己有了年紀、健康實際出了狀況，就不會下定決心要好好運動、保養身體。因此回到德國皇帝的故事，他會覺得感慨，並不只是孫子兵法是好兵書的關係，更多可能是因為它觸動了德國皇帝失敗的經驗，理論和經驗相互印證。假設同樣的兵書給年輕的威廉二世看，我相信他的感觸肯定不會那麼多，而且很大的機率仍然會重蹈覆轍。</p>
-<p>我想，聽很多名言、讀很多道理可能用途並沒有我們想像中的大，甚至可能有害。很多時候我們會誤以為自己已經理解某個理論，因為聽過好多次。然而聽過和實際上真正理解根本是兩回事，這也就是心理學中的「知識錯覺」。我們都知道拉鍊和腳踏車，因此自以為很清楚其運作原理，但當有人要我們嘗試說明時卻發現根本不懂細節。學會很多理論也同樣的意思，認為自己很了解了，反而忽視了從來沒有真正搞懂並落實在生活中。</p>
-<p>任何同樣的文字會受限於每個人的生活經驗、背景知識、人生閱歷而有不一樣的差別。就像是同樣是 <code>E=mc^2</code> 這個公式，對愛因斯坦、對物理系學生、又或者是對普通人來說，意義完全不相同。為了解決這個問題，很多書籍都是為了闡述某個用一句話就說完的理論，而撰寫了一大堆論述和範例。儘管如此，我們也無法說看完一本書後就得到作者對這個議題的完整知識。</p>
-<p>或許最好的方式是正視我們不可能完全理解名言和理論真正意思的現實。既然如此，應該要保持著開放謙虛的心態看待知識和理論，明白自己在不同年紀、更多經歷後可能會有不同的體會。</p>
-<p>對我而言，理論只有在真正改變實際行為才有用處。人類的天性是重視經驗、感性的，唯有實際嘗試才能真正理解。我們不可能只聽老師指導、觀看教學影片就能學會游泳，最終還是得下水嘗試體驗才行，因為身體每個動作細節很多是無法透過言語傳達的。<strong>我們透過理論得到一個大略的方向，然後親身體會後就能回過頭來修正對理論的理解</strong>。透過這樣方式才能基於前人的智慧幫助我們更加理解這個世界並創造出理想的成果。</p>
-<p>理論是燈塔，經驗是船，燈塔能指引方向，但船仍需要經歷風浪才能到達目的。我們需要的是不斷嘗試反思的學習過程，而不是沉溺於理論的海市蜃樓之中。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>《稀缺》：稀缺其實是一種陷阱</title>
-    <url>/2018/05/27/%E7%A8%80%E7%BC%BA%EF%BC%9A%E6%88%91%E5%80%91%E6%98%AF%E5%A6%82%E4%BD%95%E9%99%B7%E5%85%A5%E8%B2%A7%E7%AA%AE%E8%88%87%E5%BF%99%E7%A2%8C%E7%9A%84/</url>
-    <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「<a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a>」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
-<p>稀缺，也是代表了資源有限，所以我們大腦會告訴我們要節省，不要浪費，使用的時候就會再三權衡。這個也是我們演化的機制，像是老祖先可能缺乏食物，就必須要對食物存量極度小心，確保自己的生存。這樣最大好處當然就是我們可以確保稀有資源有被最大化使用。我們在日常生活中其實也有相關經驗，當我們在死線最後一刻，效率會非常高，因為這時時間是稀缺資源，會排除掉其他不重要的事情只專注在當前需要被完成的事，這也就是作者所提到的「專注紅利」。</p>
-<p>甚至，這樣的專注力也可以讓我們表現更好。我們知道經濟學總是假設人類是理性的，會跟著需求供給曲線走，但是現實生活卻不是如此，人常常會被感覺所誤導。舉個例子，如果有兩家店有一段距離，我們在A看到20塊錢的東西，但是知道B有賣10元的同樣商品，大多數人願意跑去B買。但是如果現在換成比較貴的就不一樣了，A賣3000，B賣2990，大部分的人寧可在A買一買就好。因為人類有這樣不合理性的行為，所以才有行為經濟學這門學科崛起。這些不合理的概念其實都來自我們對金錢比較沒有實感，我們很難估計省下的10元到底有什麼價值，這點就連經濟學家可能也會犯錯。但是貧窮的人在使用金錢上會更有概念，不會被誤導，因為他們很清楚省下的錢要用來做什麼。我們也可以這麼說，貧窮會讓人更加理性，更接近經濟學裡面理性個體的假設。</p>
-<p>儘管稀缺擁有專注的好處，但是它帶來的壞處更多。首先，我們可能會因為過度專注在稀缺資源，所以有了「管窺」現象，只看到自己所關注的，忽略掉其他事情。舉個例子，當我們在忙碌時，可能對其他外界的打擾就會很敏感，甚至脾氣會很差。除了管窺，我們用來處理事情的「帶寬」也變少了，因為心裡心心念念想著稀缺的資源，做其他事情時會很難專心，效率變差。而且因為資源稀少，我們也必須花更多精力去「權衡」怎麼使用資源，作者用行李箱的例子來具體描述這個部分。如果我們行李箱很大，我們可以什麼都不用想，把所有可能用到的東西一股腦塞進去，但是如果行李箱很小，那就必須要仔細思考到底什麼東西會用到，什麼應該用不到。這個「權衡」的行為也是消耗精力(或說帶寬)的主要來源。</p>
-<p>因為管窺、帶寬減少、權衡，我們會過度放大眼前的問題，無法好好的考慮未來並且做計畫。這時就很可能出現了「借用」的狀況。我們前面提到的會去借高利貸就是因為貧窮者為了解決眼前的問題，跟未來借錢(未來要還高利貸的利息)，而且因為沒辦法客觀評估未來，所以高估自己未來還錢的能力。不斷地跟未來借用，就會陷入稀缺陷阱中，因為現在的稀缺，導致未來的稀缺，讓人無法逃出這個輪迴。這個就像是我們一天的行事曆每項任務緊接下一項任務，假設第一個事情delay了，就會影響到後面的每個行程，陷入自己需要需要不斷趕下一個行程的輪迴中。</p>
-<p>很明顯的，要解決稀缺陷阱的問題，就是要保留餘裕。以前面趕行程的例子，如果我們有留一個緩衝時間，那就能利用緩衝的資源把拖延到的時間補上。但是這個緩衝機制絕對不是在問題發生時才做，<strong>我們需要在資源還充足的時候就做好這些規劃</strong>。想像你自己已經都很忙了，怎麼可能還能夠想到要留一個緩衝時間呢？除此之外，我們還有其他手段可以應付稀缺陷阱，像是我們可以用預設取代需要主動操作，一次性的任務不要分多次去做、減少自己需要權衡的機會、多個milestone取代單一deadline。這邊我就不細多提了，但是我認為這邊最主要的概念是當自己已經陷入「稀缺」中，我們要減少需要消耗精力去做的事，因為稀缺必然會導致自己去處理其他事情的精力減少，進而增加出錯的機會。一旦出錯，這個就可能會變成下個你要去救火的點。這個概念其實跟之前讀到 <a href="https://book.douban.com/subject/1019959/">精力管理</a> 還蠻像：我們該管理的不是時間，而是精力，因為能讓你把事情做好做滿的是你的精力。減少自己的精力消耗，就可以讓你更能夠專注於處理重要的事情。</p>
-<p>本書是2013所出，離現在已經有點時間。我原本也想說書中的概念大概早就過時了，但是沒想到卻出乎意料，讓我重新理解大家常掛在嘴上的「沒錢、沒時間」。了解了稀缺帶給我們的影響，才能知道要怎麼去面對它，避免落入稀缺陷阱，讓自己總是忙於救火。我想，人生在世大概都會遇到某項資源缺少的問題，所以了解「稀缺」應該是我們不得不去面對的課題。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
   </entry>
   <entry>
     <title>筆記：自己的外部大腦</title>
@@ -3559,6 +3559,24 @@
       </tags>
   </entry>
   <entry>
+    <title>《被討厭的勇氣》：擁有承擔責任的勇氣</title>
+    <url>/2018/10/21/%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇想要介紹的是「<a href="https://www.books.com.tw/products/0010653153">被討厭的勇氣</a>」這本書，書中用哲學家和年輕人用對話方式來闡述阿德勒心理學。由於阿德勒心理學跟較廣為人知的佛洛伊德心理學相比更冷門一點，所以很多想法都給現代人帶來啟發，也因此廣受歡迎。<br>這系列書分為兩集，上集是對阿德勒心理學有個綜觀認識，而下集則是因為讀者有回饋不少意見而針對這些疑問的回答。個人認為下集比較偏向怎麼去實踐方面，其中幾乎有八成是在講教育部分。雖然我覺得一般人如何去實踐部分較少有點可惜，但是對諮商師、教師來說可能極具價值吧！<br>其實書中討論的阿德勒心理學範圍還蠻廣的，原本我想嘗試用整體架構來分析，但是發現可能以目前所掌握的相關知識不足以做這樣的評論，所以我改成會針對幾點比較有收穫的概念來介紹。</p>
+<h2 id="目的論"><a href="#目的論" class="headerlink" title="目的論"></a>目的論</h2><p>目的論其實是這本書很重要的精華，反對了宿命論，強調了人類可以自我改變的能力。我們常常太過注重因果關係了，「因為過去發生怎樣怎樣，所以現在的我才變成這樣」或是「都是因為他先怎樣怎樣，我才會這樣」。雖然某種層面上可能是對的，但是更可能的是這些都只是藉口，因為我們並非受制過去原因而行動，而是朝向自己決定好的目的而行動。換句話說，<strong>自己之所以不幸，完全是自己親手所選擇的</strong>。<br>這個概念很重要，如果強調因果論，那代表的是現在的我是無法改變的，因為過去是無法改變的，這是宿命。然而將其想成是我們為了什麼目的才變成現在的自己，那隱含的意思是只要改變了目的，現在的自己也會跟著改變。不是因為過去的經驗形塑了現在的我，而是我去賦予過去經驗什麼意義來解釋自己的人生。由此可知，<strong>重要的不是經歷了什麼，而是如何去運用它</strong>。<br>我們在生活中常常會對現狀不滿，這時候就會去找理由，都是因為環境、過去等等什麼原因導致自己這樣的。但是如果用目的理論來看，我們可能是「不想去改變」而去找理由。雖然現狀令人不滿，但是改變更加痛苦，為了不去改變，我們必須要有可以歸罪的理由。說直白一點，我們是因為缺乏「<strong>改變的勇氣</strong>」，所以寧可選擇了不幸的現狀。<br>在目的論下，一切的理由都是藉口，當前現況完全是自己所選擇的。在下集有提到一個三角柱的概念，我們跟親人、朋友常常會抱怨誰誰誰很可惡，自己很可憐，這也就是三角柱其中兩面，「可惡的他」和「可憐的我」，但是更為重要的是第三面「<strong>今後該怎麼辦</strong>」。不斷地找理由不會改變現況，要專注於自己能改變的事情上面。<br>老實說，目的論真的蠻殘酷的，我們為了讓自己好過一點，感性上會想逃避自己的責任，去抱怨外在的環境，但是就現實與邏輯而言，如果真的要改變現狀，那就得承擔起自己應負的責任，並找出改變的方法。「責任」與「勇氣」說起來容易，但是當想到要用在自己身上時，才真正感受到其重量。</p>
+<h2 id="逃離競爭關係"><a href="#逃離競爭關係" class="headerlink" title="逃離競爭關係"></a>逃離競爭關係</h2><p>阿德勒説：「一切的煩惱都是人際關係的煩惱」。雖然有點極端，不過確實人類的煩惱大多數是來自人際關係。其中對我而言，最常見的煩惱是怕自己輸給別人。人類與身俱來就有「追求卓越」的慾望，想奮發向上，但是一旦理想無法達成時，就會有產生自己低劣無能的「自卑感」。<br>在當前社會上，其實都會有「競爭」的關係，在學校時是同學，在公司時是同事，會害怕自己輸給別人，擔心自己可能會輸，因此要不斷贏下去。儘管這種方式可以不斷促進自己進步，但也導致看到別人成功幸福時，會無法發自內心地去祝福，甚至更惡劣的，看到別人不幸會覺得可以證明自己的成功。<br>其實我從求學階段就或多或少發現自己也有這樣的心態，不斷去比較自己與同儕間。然而競爭是一個無限循環，我打敗了一群人，還有更厲害的人在等著，就算我打敗所有人站在巔峰，還是會時時擔心自己會輸，不斷去維持自己的地位，這也意味著永遠得不到幸福。如果我們真的想獲得幸福，必須要脫離競爭模式，放棄比較。<br>目前的我會把人生當做擁有一筆錢可以隨意去買自己想要的東西，如果去比較我買的東西跟別人比起來有沒有比較大、比較好，那並不會得到快樂。不如專心在選擇自己要買哪些東西，我想要買的東西組合肯定跟別人不一樣，也無從比較起，重點是買到的東西能不能帶給我快樂，而不是比別人還要好。</p>
+<h2 id="課題的切割"><a href="#課題的切割" class="headerlink" title="課題的切割"></a>課題的切割</h2><p>其實從上面提到的目的論可以看出，阿德勒心理學很重視可控制這件事，因為可控這件事對人類而言十分重要，甚至<a href="https://zhuanlan.zhihu.com/p/21918033">有研究指出會影響到健康</a>。如果用目的論來看，那代表人生是可控制的，我們能去改變。然而事實上人生還是有很多層面是不能控制的，特別是人與人關係，我沒辦法掌握別人怎麼想，如果不能控制，那就會造成自己的不安，對幸福人生來說是種破壞。<br>關於這點，阿德勒提出了「課題切割」，劃清界線，這件事從哪邊開始是自己的課題，哪邊是別人的，最簡單的區分方式是思考「因為這個決定而帶來的結果，最後會由誰來承受？」。切割課題後，不去介入他人課題，也不讓他人介入自己的課題。介入他人的課題會背負他人的人生，而讓他人介入自己的課題則會讓自己左右為難，就像父子騎驢的故事，不管自己怎麼做，都有人會不滿意的。<br>課題切割最高明的點在於確認了什麼是自己可控，什麼不是。我們只要專注在自己能改變的事情上，其他則不用太在意。按照書中的說法，這個就是人際關係的王牌，因為主動權在我手上，不用在意他人想法。<br>也許會有人認為這樣會很招人厭惡，不太能夠做到。然而不這麼做，將會讓自己的人生變得很被動，因為要不斷去迎合別人。這邊也帶出了本書的書名，為了行使自由，讓自己依照自己的生活方針過日子，必須要能接受別人的討厭，因此需要<strong>擁有被討厭的勇氣</strong>。</p>
+<h2 id="建立橫向關係"><a href="#建立橫向關係" class="headerlink" title="建立橫向關係"></a>建立橫向關係</h2><p>人際關係有分為橫向和縱向，阿德勒心理學否定一切的「縱向關係」，提倡所有的人際關係都應該是「橫向關係」。縱向關係帶來的是稱讚、責罵，然而橫向關係帶來的是尊敬、感謝。<br>我會特別把這點拿出來提的原因是書中有舉一個很有趣的例子：假設你遵從上司的指示，結果卻因此面臨工作上的挫敗，這應該是誰的責任？如果是縱向關係的人就會認為是上司的責任，因為是上司的指示，然而這個卻是隱含著自己逃避了責任、閃避複雜的人際關係，因為不用思考太過困難的事、不必為失敗負責，所以仰賴他人的指示過日子。對於橫向關係的人來說，應該要拒絕並提出更好的方案，工作成敗是自己要負責的，沒有任何理由推託。其實在工作上還蠻常遇到為了避免麻煩，把問題交給別人決定的情況，讓別人決定別人負責，但是真正負責任的做法也許是自己也提出想法，然後再與別人共同討論並共識出較好的做法。<br>除了對上關係外，對下也是「縱向關係」的一種，像是對孩童的讚賞或責罵。阿德勒很尖銳地指出，大人說對孩子好而去責罵通常不是真正為了小孩好，而是因為小孩犯錯隱含著大人有教育失敗的責任，而為了自己不要被批評，所以想要控制他照著自己的想法走。然而教育是為了讓孩子能夠自立，我們只能從旁提供協助，就算是失敗也是要由自己去負起責任。有點像是學習騎腳踏車，真正騎車的人是小孩自己，跌倒也必須是自己去承擔，但我們可以提供他建議和方法，如果怕小孩受傷而不放手，那他就永遠學不會騎車，只能不斷依賴我們。這跟教育有關的部分目前我大概只有這樣的了解，也許未來有小孩之後可能會有更多的體悟吧！</p>
+<h2 id="活在當下"><a href="#活在當下" class="headerlink" title="活在當下"></a>活在當下</h2><p>「活在當下」這句話大部分的人都聽膩了，幾乎都變成是一個政治正確的口號，不過這邊我想提提阿德勒對活在當下的看法。本書用旅遊來比喻人生，出去旅遊絕對不是到達目的才叫旅行，如果是這樣我們就用最快的方式飛到目的地，然後再快速返回不就達成目標了？從自己踏出家門的那一刻起，就已經稱作旅行，旅行的概念是在到達目的前的每個瞬間，認真享受每個瞬間才是旅行的目的。<br>同理人生也一樣，人生就像是登山攻頂的活動，有大半時間都在半路上，如果不能認真對待這個過程，只期待登頂的那個瞬間，那不就代表人生有一大半是沒有價值的？對我而言，常常也會期待未來會變得更好，希望「當下」趕快過去，只要我做完什麼事情人生就會不一樣了，像是學生時期要準備大考、工作時要面對大案子等等。可是再回過頭來想，面對困難挑戰永遠只想說熬過去人生會更好，好像完全沒有真正更好過，因為我只有完成挑戰那一瞬間獲得解脫的快樂，但很快又會有下一個挑戰。與其自己只能在這樣的痛苦中不斷輪迴，不如專心面對當下每個瞬間。<br>關於活在當下，其實也是呼應了前面目的論的看法。「人生是一連串的剎那，過去和未來都不存在，別想要藉著回顧過去、預見未來，給自己一個免除責任的藉口。」由於自己真正擁有的是現在，如果用過去當做藉口，就意味著放棄了現在所擁有的選擇權。當自己想把現在的不如意推給過去，或是期盼未來會更好時，都要注意是不是根本沒有活在現在，應該要認真做當下自己所能做改變的事情。</p>
+<h2 id="評價"><a href="#評價" class="headerlink" title="評價"></a>評價</h2><p>以書寫手法來說，兩本書的結尾基本上是年輕人被哲學家說服，受到感動想去嘗試阿德勒心理學，說實在這有點讓人覺得矯情，我覺得其實不用用這種傳教意味濃厚的結尾也不會讓書的價值打折扣，不太清楚為什麼用這種想煽動人心的結尾。<br>另外，很多觀念在對話中並沒辦法越辯越明，個人認為講不夠詳細、邏輯不夠清楚的地方還蠻多的。舉個例子，書中有提到要無條件相信別人，但下集又提到相信不是照單全收，對於對方的思想信念要持懷疑態度，如果我都對人產生懷疑了，還稱得上是信任嗎？這裡作者沒有做更詳細的解釋。當然這可能也是對話方式的書籍所受限之處，畢竟對話類型的書比起理論類型更能讓一般人接受，但對話勢必要省略比較細節的內容了。<br>看完上下兩集後，我認為如果是要把阿德勒心理學當作是自己的人生觀，還有太多需要釐清之處了，而且這也會有洗腦之嫌。然而不可否認，他在百年前提出的這些思想確實有其高明之處，簡而有力地戳破我們不敢面對的一面，這些部分可以再好好理解並且善用在生活中。我們可以利用前人的思想來形塑自己的人生觀，但是不要只是照本宣科去執行，這樣就跟下集一開始的年輕人一樣會陷入苦惱之中了。<br>如果認為完完全全照著某個理論做就可以得到幸福，那其實不也是逃避負責任，缺乏真正去面對自己人生的勇氣呢？</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>藝術是什麼</title>
     <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
     <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
@@ -3609,24 +3627,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>《被討厭的勇氣》：擁有承擔責任的勇氣</title>
-    <url>/2018/10/21/%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇想要介紹的是「<a href="https://www.books.com.tw/products/0010653153">被討厭的勇氣</a>」這本書，書中用哲學家和年輕人用對話方式來闡述阿德勒心理學。由於阿德勒心理學跟較廣為人知的佛洛伊德心理學相比更冷門一點，所以很多想法都給現代人帶來啟發，也因此廣受歡迎。<br>這系列書分為兩集，上集是對阿德勒心理學有個綜觀認識，而下集則是因為讀者有回饋不少意見而針對這些疑問的回答。個人認為下集比較偏向怎麼去實踐方面，其中幾乎有八成是在講教育部分。雖然我覺得一般人如何去實踐部分較少有點可惜，但是對諮商師、教師來說可能極具價值吧！<br>其實書中討論的阿德勒心理學範圍還蠻廣的，原本我想嘗試用整體架構來分析，但是發現可能以目前所掌握的相關知識不足以做這樣的評論，所以我改成會針對幾點比較有收穫的概念來介紹。</p>
-<h2 id="目的論"><a href="#目的論" class="headerlink" title="目的論"></a>目的論</h2><p>目的論其實是這本書很重要的精華，反對了宿命論，強調了人類可以自我改變的能力。我們常常太過注重因果關係了，「因為過去發生怎樣怎樣，所以現在的我才變成這樣」或是「都是因為他先怎樣怎樣，我才會這樣」。雖然某種層面上可能是對的，但是更可能的是這些都只是藉口，因為我們並非受制過去原因而行動，而是朝向自己決定好的目的而行動。換句話說，<strong>自己之所以不幸，完全是自己親手所選擇的</strong>。<br>這個概念很重要，如果強調因果論，那代表的是現在的我是無法改變的，因為過去是無法改變的，這是宿命。然而將其想成是我們為了什麼目的才變成現在的自己，那隱含的意思是只要改變了目的，現在的自己也會跟著改變。不是因為過去的經驗形塑了現在的我，而是我去賦予過去經驗什麼意義來解釋自己的人生。由此可知，<strong>重要的不是經歷了什麼，而是如何去運用它</strong>。<br>我們在生活中常常會對現狀不滿，這時候就會去找理由，都是因為環境、過去等等什麼原因導致自己這樣的。但是如果用目的理論來看，我們可能是「不想去改變」而去找理由。雖然現狀令人不滿，但是改變更加痛苦，為了不去改變，我們必須要有可以歸罪的理由。說直白一點，我們是因為缺乏「<strong>改變的勇氣</strong>」，所以寧可選擇了不幸的現狀。<br>在目的論下，一切的理由都是藉口，當前現況完全是自己所選擇的。在下集有提到一個三角柱的概念，我們跟親人、朋友常常會抱怨誰誰誰很可惡，自己很可憐，這也就是三角柱其中兩面，「可惡的他」和「可憐的我」，但是更為重要的是第三面「<strong>今後該怎麼辦</strong>」。不斷地找理由不會改變現況，要專注於自己能改變的事情上面。<br>老實說，目的論真的蠻殘酷的，我們為了讓自己好過一點，感性上會想逃避自己的責任，去抱怨外在的環境，但是就現實與邏輯而言，如果真的要改變現狀，那就得承擔起自己應負的責任，並找出改變的方法。「責任」與「勇氣」說起來容易，但是當想到要用在自己身上時，才真正感受到其重量。</p>
-<h2 id="逃離競爭關係"><a href="#逃離競爭關係" class="headerlink" title="逃離競爭關係"></a>逃離競爭關係</h2><p>阿德勒説：「一切的煩惱都是人際關係的煩惱」。雖然有點極端，不過確實人類的煩惱大多數是來自人際關係。其中對我而言，最常見的煩惱是怕自己輸給別人。人類與身俱來就有「追求卓越」的慾望，想奮發向上，但是一旦理想無法達成時，就會有產生自己低劣無能的「自卑感」。<br>在當前社會上，其實都會有「競爭」的關係，在學校時是同學，在公司時是同事，會害怕自己輸給別人，擔心自己可能會輸，因此要不斷贏下去。儘管這種方式可以不斷促進自己進步，但也導致看到別人成功幸福時，會無法發自內心地去祝福，甚至更惡劣的，看到別人不幸會覺得可以證明自己的成功。<br>其實我從求學階段就或多或少發現自己也有這樣的心態，不斷去比較自己與同儕間。然而競爭是一個無限循環，我打敗了一群人，還有更厲害的人在等著，就算我打敗所有人站在巔峰，還是會時時擔心自己會輸，不斷去維持自己的地位，這也意味著永遠得不到幸福。如果我們真的想獲得幸福，必須要脫離競爭模式，放棄比較。<br>目前的我會把人生當做擁有一筆錢可以隨意去買自己想要的東西，如果去比較我買的東西跟別人比起來有沒有比較大、比較好，那並不會得到快樂。不如專心在選擇自己要買哪些東西，我想要買的東西組合肯定跟別人不一樣，也無從比較起，重點是買到的東西能不能帶給我快樂，而不是比別人還要好。</p>
-<h2 id="課題的切割"><a href="#課題的切割" class="headerlink" title="課題的切割"></a>課題的切割</h2><p>其實從上面提到的目的論可以看出，阿德勒心理學很重視可控制這件事，因為可控這件事對人類而言十分重要，甚至<a href="https://zhuanlan.zhihu.com/p/21918033">有研究指出會影響到健康</a>。如果用目的論來看，那代表人生是可控制的，我們能去改變。然而事實上人生還是有很多層面是不能控制的，特別是人與人關係，我沒辦法掌握別人怎麼想，如果不能控制，那就會造成自己的不安，對幸福人生來說是種破壞。<br>關於這點，阿德勒提出了「課題切割」，劃清界線，這件事從哪邊開始是自己的課題，哪邊是別人的，最簡單的區分方式是思考「因為這個決定而帶來的結果，最後會由誰來承受？」。切割課題後，不去介入他人課題，也不讓他人介入自己的課題。介入他人的課題會背負他人的人生，而讓他人介入自己的課題則會讓自己左右為難，就像父子騎驢的故事，不管自己怎麼做，都有人會不滿意的。<br>課題切割最高明的點在於確認了什麼是自己可控，什麼不是。我們只要專注在自己能改變的事情上，其他則不用太在意。按照書中的說法，這個就是人際關係的王牌，因為主動權在我手上，不用在意他人想法。<br>也許會有人認為這樣會很招人厭惡，不太能夠做到。然而不這麼做，將會讓自己的人生變得很被動，因為要不斷去迎合別人。這邊也帶出了本書的書名，為了行使自由，讓自己依照自己的生活方針過日子，必須要能接受別人的討厭，因此需要<strong>擁有被討厭的勇氣</strong>。</p>
-<h2 id="建立橫向關係"><a href="#建立橫向關係" class="headerlink" title="建立橫向關係"></a>建立橫向關係</h2><p>人際關係有分為橫向和縱向，阿德勒心理學否定一切的「縱向關係」，提倡所有的人際關係都應該是「橫向關係」。縱向關係帶來的是稱讚、責罵，然而橫向關係帶來的是尊敬、感謝。<br>我會特別把這點拿出來提的原因是書中有舉一個很有趣的例子：假設你遵從上司的指示，結果卻因此面臨工作上的挫敗，這應該是誰的責任？如果是縱向關係的人就會認為是上司的責任，因為是上司的指示，然而這個卻是隱含著自己逃避了責任、閃避複雜的人際關係，因為不用思考太過困難的事、不必為失敗負責，所以仰賴他人的指示過日子。對於橫向關係的人來說，應該要拒絕並提出更好的方案，工作成敗是自己要負責的，沒有任何理由推託。其實在工作上還蠻常遇到為了避免麻煩，把問題交給別人決定的情況，讓別人決定別人負責，但是真正負責任的做法也許是自己也提出想法，然後再與別人共同討論並共識出較好的做法。<br>除了對上關係外，對下也是「縱向關係」的一種，像是對孩童的讚賞或責罵。阿德勒很尖銳地指出，大人說對孩子好而去責罵通常不是真正為了小孩好，而是因為小孩犯錯隱含著大人有教育失敗的責任，而為了自己不要被批評，所以想要控制他照著自己的想法走。然而教育是為了讓孩子能夠自立，我們只能從旁提供協助，就算是失敗也是要由自己去負起責任。有點像是學習騎腳踏車，真正騎車的人是小孩自己，跌倒也必須是自己去承擔，但我們可以提供他建議和方法，如果怕小孩受傷而不放手，那他就永遠學不會騎車，只能不斷依賴我們。這跟教育有關的部分目前我大概只有這樣的了解，也許未來有小孩之後可能會有更多的體悟吧！</p>
-<h2 id="活在當下"><a href="#活在當下" class="headerlink" title="活在當下"></a>活在當下</h2><p>「活在當下」這句話大部分的人都聽膩了，幾乎都變成是一個政治正確的口號，不過這邊我想提提阿德勒對活在當下的看法。本書用旅遊來比喻人生，出去旅遊絕對不是到達目的才叫旅行，如果是這樣我們就用最快的方式飛到目的地，然後再快速返回不就達成目標了？從自己踏出家門的那一刻起，就已經稱作旅行，旅行的概念是在到達目的前的每個瞬間，認真享受每個瞬間才是旅行的目的。<br>同理人生也一樣，人生就像是登山攻頂的活動，有大半時間都在半路上，如果不能認真對待這個過程，只期待登頂的那個瞬間，那不就代表人生有一大半是沒有價值的？對我而言，常常也會期待未來會變得更好，希望「當下」趕快過去，只要我做完什麼事情人生就會不一樣了，像是學生時期要準備大考、工作時要面對大案子等等。可是再回過頭來想，面對困難挑戰永遠只想說熬過去人生會更好，好像完全沒有真正更好過，因為我只有完成挑戰那一瞬間獲得解脫的快樂，但很快又會有下一個挑戰。與其自己只能在這樣的痛苦中不斷輪迴，不如專心面對當下每個瞬間。<br>關於活在當下，其實也是呼應了前面目的論的看法。「人生是一連串的剎那，過去和未來都不存在，別想要藉著回顧過去、預見未來，給自己一個免除責任的藉口。」由於自己真正擁有的是現在，如果用過去當做藉口，就意味著放棄了現在所擁有的選擇權。當自己想把現在的不如意推給過去，或是期盼未來會更好時，都要注意是不是根本沒有活在現在，應該要認真做當下自己所能做改變的事情。</p>
-<h2 id="評價"><a href="#評價" class="headerlink" title="評價"></a>評價</h2><p>以書寫手法來說，兩本書的結尾基本上是年輕人被哲學家說服，受到感動想去嘗試阿德勒心理學，說實在這有點讓人覺得矯情，我覺得其實不用用這種傳教意味濃厚的結尾也不會讓書的價值打折扣，不太清楚為什麼用這種想煽動人心的結尾。<br>另外，很多觀念在對話中並沒辦法越辯越明，個人認為講不夠詳細、邏輯不夠清楚的地方還蠻多的。舉個例子，書中有提到要無條件相信別人，但下集又提到相信不是照單全收，對於對方的思想信念要持懷疑態度，如果我都對人產生懷疑了，還稱得上是信任嗎？這裡作者沒有做更詳細的解釋。當然這可能也是對話方式的書籍所受限之處，畢竟對話類型的書比起理論類型更能讓一般人接受，但對話勢必要省略比較細節的內容了。<br>看完上下兩集後，我認為如果是要把阿德勒心理學當作是自己的人生觀，還有太多需要釐清之處了，而且這也會有洗腦之嫌。然而不可否認，他在百年前提出的這些思想確實有其高明之處，簡而有力地戳破我們不敢面對的一面，這些部分可以再好好理解並且善用在生活中。我們可以利用前人的思想來形塑自己的人生觀，但是不要只是照本宣科去執行，這樣就跟下集一開始的年輕人一樣會陷入苦惱之中了。<br>如果認為完完全全照著某個理論做就可以得到幸福，那其實不也是逃避負責任，缺乏真正去面對自己人生的勇氣呢？</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
   </entry>
   <entry>
     <title>《認知驅動》：輸出重於努力</title>
@@ -3723,38 +3723,6 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>閱讀是一種朋友間的對話</title>
-    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
-    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
-<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
-<ol>
-<li>為什麼我想要看這本書？我想從中得到什麼？</li>
-<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
-</ol>
-<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
-<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
-<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
-<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
-<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
-<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
-<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
-<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
-<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
-<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
-<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
-<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
-<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
-<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
-<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
   </entry>
   <entry>
     <title>開源軟體的商業策略</title>
@@ -3894,6 +3862,38 @@
       <tags>
         <tag>開源</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>閱讀是一種朋友間的對話</title>
+    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
+    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
+<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
+<ol>
+<li>為什麼我想要看這本書？我想從中得到什麼？</li>
+<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
+</ol>
+<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
+<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
+<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
+<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
+<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
+<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
+<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
+<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
+<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
+<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
+<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
+<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
+<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
+<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
+<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>雙重授權：兼顧開源和商業的模式</title>
