@@ -624,121 +624,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IPython Notebook - Jupyter教學</title>
-    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
-<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
-<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果要在別的port開啟</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
-
-<p>接下來在web上應該可以直接連線Jupyter。</p>
-<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
-<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
-<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
-<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
-<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
-<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
-<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
-<p>常用快速鍵如下所示：</p>
-<ul>
-<li><code>c</code>：複製當前的cell</li>
-<li><code>x</code>：剪下當前的cell</li>
-<li><code>v</code>：貼上剪貼簿的cell</li>
-<li><code>dd</code>：刪除當前cell</li>
-<li><code>a</code>：在上方插入新的cell</li>
-<li><code>b</code>：在下方插入新的cell</li>
-<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
-<li><code>ctrl+enter</code>：執行當前cell</li>
-<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
-</ul>
-<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
-<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
-<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
-<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux和程式的互動</title>
-    <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
-<h2 id="程式如何執行main"><a href="#程式如何執行main" class="headerlink" title="程式如何執行main"></a>程式如何執行main</h2><p>一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似<code>./a.out</code>的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。</p>
-<p>下面例子我們以Kernel v4.17為例</p>
-<ol>
-<li><p>首先 shell 會 fork 一個 process，然後再呼叫 exec 系列函數把該 process 置換成指定的程式</p>
-</li>
-<li><p>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs&#x2F;exec.c的1856行</a></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">do_execve</span><span class="params">(<span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__argv,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">  <span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接著do_execveat_common會讀取struct linux_binprm，並且根據檔案格式尋找適合的binary header</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">do_execveat_common</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr argv,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr envp,</span></span><br><span class="line"><span class="params">                              <span class="type">int</span> flags)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 重要的structure，保留執行檔的相關訊息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">linux_binprm</span> *<span class="title">bprm</span>;</span></span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 打開要執行的ELF檔</span></span><br><span class="line">    file = do_open_execat(fd, filename, flags);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 生成mm_struct，供執行檔使用</span></span><br><span class="line">    retval = bprm_mm_init(bprm);</span><br><span class="line">    <span class="keyword">if</span> (retval)</span><br><span class="line">        <span class="keyword">goto</span> out_unmark;</span><br><span class="line">    <span class="comment">// 計算帶入的參數</span></span><br><span class="line">    bprm-&gt;argc = count(argv, MAX_ARG_STRINGS);</span><br><span class="line">    <span class="keyword">if</span> ((retval = bprm-&gt;argc) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取 header</span></span><br><span class="line">    retval = prepare_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 裡面會呼叫 search_binary_handler，根據檔案格式呼叫適合的binary_handler</span></span><br><span class="line">    retval = exec_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ELF的binary handler位在<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs&#x2F;binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">load_elf_binary</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">    elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">    current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">    current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">    current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">    current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是&#x2F;lib&#x2F;ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc&#x2F;elf&#x2F;rtld.c</a>的_dl_start，針對環境變數做處理。</p>
-<ul>
-<li>我們常見的LD_PRELOAD也是在這邊進行處理的</li>
-</ul>
-</li>
-<li><p>當上述工作都做完後，就會進入 ELF binary 的<code>_start</code>，其中會呼叫 glibc 的<a href="https://code.woboq.org/userspace/glibc/csu/libc-start.c.html">__libc_start_main</a>進行初始設定，最後就會呼叫main()</p>
-</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">result = main (argc, argv, __environ MAIN_AUXVEC_PARAM);</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用-system-call"><a href="#使用-system-call" class="headerlink" title="使用 system call"></a>使用 system call</h2><p>通常AP在Linux要跟kernel層互動大概只能透過system call，然而system call的使用大多數已經被包裝起來，所以幾乎不會看到，這邊我們來探討一下要怎麼在Linux直接呼叫system call。以下範例皆來自<a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></p>
-<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>最簡單的呼叫system call方法是syscall。</p>
-<p>syscall.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    ret = syscall(__NR_getpid);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>執行結果如下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make syscall</span><br><span class="line">$ ./syscall</span><br><span class="line">ret=18 pid=18</span><br></pre></td></tr></table></figure>
-
-<p>看起來是很順利取得PID。我們可以把__NR_getpid換成其他的system call數字，也可以達到同樣效果。</p>
-<h3 id="int-0x80"><a href="#int-0x80" class="headerlink" title="int 0x80"></a>int 0x80</h3><p>當然我們也可以用<code>int 0x80</code>來做到同樣的事情，但是要注意的是這樣的效率不會比較好，可參考<a href="https://stackoverflow.com/questions/12806584/what-is-better-int-0x80-or-syscall">What is better “int 0x80” or “syscall”?</a></p>
-<p>另外這個做法在x64的架構是無法被使用的，可參考<a href="https://stackoverflow.com/questions/46087730/what-happens-if-you-use-the-32-bit-int-0x80-linux-abi-in-64-bit-code">What happens if you use the 32-bit int 0x80 Linux ABI in 64-bit code?</a></p>
-<p>syscall2.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;int $0x80&quot;</span>:<span class="string">&quot;=a&quot;</span>(ret):<span class="string">&quot;0&quot;</span>(__NR_getpid))</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="sysenter"><a href="#sysenter" class="headerlink" title="sysenter"></a>sysenter</h3><p>這部分也是只能在x86的平台上使用，會出現這個機制的理由是int 0x80的效率實在太差了。這邊的使用方式有點複雜，就不列出來了。</p>
-<h3 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h3><p>這三種方式的比較簡單統整一下</p>
-<p>syscall：現在主流，能在x64運行<br>int 0x80：只能在x86，效率差，已被捨棄<br>sysenter：只能在x86，用來替代int 0x80</p>
-<p>詳情可以參考<a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a>，寫得非常詳細。</p>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
-<li><a href="https://blog.csdn.net/eleven_xiy/article/details/77876702">Linux系统ELF程序的执行过程</a></li>
-<li><a href="https://blog.csdn.net/conansonic/article/details/54236335">_dl_start源码分析</a></li>
-<li><a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTTP header 安全設定</title>
     <url>/2018/01/03/HTTP-header-%E5%AE%89%E5%85%A8%E8%A8%AD%E5%AE%9A/</url>
     <content><![CDATA[<h2 id="總覽"><a href="#總覽" class="headerlink" title="總覽"></a>總覽</h2><p>根據<a href="https://devco.re/blog/2014/03/10/security-issues-of-http-headers-1/">DEVCORE</a>，相關HTTP header可以如下分類</p>
@@ -939,6 +824,121 @@
       </categories>
       <tags>
         <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IPython Notebook - Jupyter教學</title>
+    <url>/2018/12/02/IPython-Notebook-Jupyter%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p><a href="https://ipython.org/notebook.html">Jupyter Notebook</a>，過去被稱為ipython notebook，是ipython內的強大工具。</p>
+<p>Jupyter最常用在學習資料處理上面，因為輸入指令後就可以產生相對應的圖形結果，做到資料視覺化的功能。而且更重要的是我們可以將自己的結果輸出成html或上傳Github，分享給其他人進行討論。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果有安裝python-pip了，可以直接用如下指令安裝。要是遇到權限問題可以再加上sudo。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install <span class="string">&quot;ipython[notebook]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>創造一個資料夾，然後在裡面開啟jupyter notebook</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ipython_notebook &amp;&amp; <span class="built_in">cd</span> ipython_notebook</span><br><span class="line">jupyter notebook</span><br><span class="line"><span class="comment"># 原本是可以用ipython notebook，但是未來可能會被捨棄</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果要在別的port開啟</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>接下來在web上應該可以直接連線Jupyter。</p>
+<p>選擇New-&gt;python3後就可以在web新創一個notebook，值得注意的是這個notebook的副檔名是<code>.ipynb</code>，存放位置就是在我們當前的目錄，也就是<code>ipython_notebook</code></p>
+<h3 id="登入機制"><a href="#登入機制" class="headerlink" title="登入機制"></a>登入機制</h3><p>jupyter notebook其實是有登出機制的，在右上角logout後，就要用密碼或token才能登入。</p>
+<p>這時候其實可以直接重啟server，或是輸入<code>jupyter notebook list</code>來查看token，就可以再次登入了。</p>
+<h3 id="編輯方式"><a href="#編輯方式" class="headerlink" title="編輯方式"></a>編輯方式</h3><p>在Jupyter中，進入notebook後會看到一個可以輸入值的空間，這個叫做cell。cell上面輸入python語法後，按下shift+enter就會產生執行結果。而我們可以增加或減少這些cell。</p>
+<p>特別注意原本cell是藍色的，代表在command mode，但是如果點選cell後就會變成綠色，代表進入edit mode。從edit mode跳回command mode只要按下ESC即可。</p>
+<p>另外可以注意每個cell可以選擇不同屬性，最常用的還是Code和Markdown。Code就是python的部分，而Markdown則是可以寫上相關的文字敘述。</p>
+<h3 id="常用快捷鍵"><a href="#常用快捷鍵" class="headerlink" title="常用快捷鍵"></a>常用快捷鍵</h3><p>主要可以點選Help-&gt;Keyboard Shortcuts來看目前快速鍵怎麼使用(或是按ESC+h更快)</p>
+<p>常用快速鍵如下所示：</p>
+<ul>
+<li><code>c</code>：複製當前的cell</li>
+<li><code>x</code>：剪下當前的cell</li>
+<li><code>v</code>：貼上剪貼簿的cell</li>
+<li><code>dd</code>：刪除當前cell</li>
+<li><code>a</code>：在上方插入新的cell</li>
+<li><code>b</code>：在下方插入新的cell</li>
+<li><code>shift+enter</code>：執行當前cell並跳到下一個cell</li>
+<li><code>ctrl+enter</code>：執行當前cell</li>
+<li><code>shift+tab</code>：可以顯示當前函式的使用方法</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>我們除了可以把當前notebook下載成html外，也可以push到Github上並且利用<a href="https://nbviewer.jupyter.org/">nbviewer</a>這個網站來分享。</p>
+<p>舉個例子，<a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">A gallery of interesting Jupyter Notebooks</a>就收集了不少有趣的Juypter Notebook範例。</p>
+<p>只要有ipynb上傳到Github，我們就可以看到輸出結果，就像<a href="https://github.com/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">這個GitHub</a>的結果可以被<a href="http://nbviewer.jupyter.org/github/lrhgit/uqsa_tutorials/blob/master/preliminaries.ipynb">nbviewer</a>顯示出來。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://ericjhang.github.io/archives/e300480b.html">ipython notebook安裝教學</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192614">[Day02]Jupyter Notebook操作介紹！</a></li>
+<li><a href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC1-2%E8%AC%9B-jupyter-notebook%E4%BB%8B%E7%B4%B9-705f023e3720">[資料分析&amp;機器學習] 第1.2講：Jupyter Notebook介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux和程式的互動</title>
+    <url>/2018/06/12/Linux%E5%92%8C%E7%A8%8B%E5%BC%8F%E7%9A%84%E4%BA%92%E5%8B%95/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇我們想要來探討 Linux 是怎麼和程式互動的，這邊包括兩個部分：Linux 如何執行程式以及程式如何讓 Linux 做系統操作。</p>
+<h2 id="程式如何執行main"><a href="#程式如何執行main" class="headerlink" title="程式如何執行main"></a>程式如何執行main</h2><p>一般要呼叫程式來執行的，我們知道的是只要在 shell 下類似<code>./a.out</code>的指令，程式就會執行我們程式中的 main，但是這其中的原理是什麼呢？讓我們看看到執行 main 前做了哪些事。</p>
+<p>下面例子我們以Kernel v4.17為例</p>
+<ol>
+<li><p>首先 shell 會 fork 一個 process，然後再呼叫 exec 系列函數把該 process 置換成指定的程式</p>
+</li>
+<li><p>execve 會呼叫 do_execve ，然後再呼叫 do_execveat_common，可參考<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/exec.c#L1856">fs&#x2F;exec.c的1856行</a></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">do_execve</span><span class="params">(<span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__argv,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="type">char</span> __user *<span class="type">const</span> __user *__envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">argv</span> =</span> &#123; .ptr.native = __argv &#125;;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">user_arg_ptr</span> <span class="title">envp</span> =</span> &#123; .ptr.native = __envp &#125;;</span><br><span class="line">  <span class="keyword">return</span> do_execveat_common(AT_FDCWD, filename, argv, envp, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接著do_execveat_common會讀取struct linux_binprm，並且根據檔案格式尋找適合的binary header</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">do_execveat_common</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> filename *filename,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr argv,</span></span><br><span class="line"><span class="params">                              <span class="keyword">struct</span> user_arg_ptr envp,</span></span><br><span class="line"><span class="params">                              <span class="type">int</span> flags)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 重要的structure，保留執行檔的相關訊息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">linux_binprm</span> *<span class="title">bprm</span>;</span></span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 打開要執行的ELF檔</span></span><br><span class="line">    file = do_open_execat(fd, filename, flags);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 生成mm_struct，供執行檔使用</span></span><br><span class="line">    retval = bprm_mm_init(bprm);</span><br><span class="line">    <span class="keyword">if</span> (retval)</span><br><span class="line">        <span class="keyword">goto</span> out_unmark;</span><br><span class="line">    <span class="comment">// 計算帶入的參數</span></span><br><span class="line">    bprm-&gt;argc = count(argv, MAX_ARG_STRINGS);</span><br><span class="line">    <span class="keyword">if</span> ((retval = bprm-&gt;argc) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取 header</span></span><br><span class="line">    retval = prepare_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 裡面會呼叫 search_binary_handler，根據檔案格式呼叫適合的binary_handler</span></span><br><span class="line">    retval = exec_binprm(bprm);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ELF的binary handler位在<a href="https://elixir.bootlin.com/linux/v4.17/source/fs/binfmt_elf.c#L690">fs&#x2F;binfmt_elf.c的690行</a>，做了header確認後會load program header和設定並執行elf_interpreter</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">load_elf_binary</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm)</span></span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取program header</span></span><br><span class="line">    elf_phdata = load_elf_phdrs(&amp;loc-&gt;elf_ex, bprm-&gt;file);</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 讀取elf_interpreter</span></span><br><span class="line">    retval = kernel_read(bprm-&gt;file, elf_interpreter,</span><br><span class="line">                    elf_ppnt-&gt;p_filesz, &amp;pos);</span><br><span class="line">    <span class="comment">// 把當前程式資訊清除並換上新的程式</span></span><br><span class="line">    retval = flush_old_exec(bprm);</span><br><span class="line">...</span><br><span class="line">    current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">    current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">    current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">    current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">    current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line">...</span><br><span class="line">    <span class="comment">// 執行elf_interpreter</span></span><br><span class="line">    start_thread(regs, elf_entry, bprm-&gt;p);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>經過Context Switch後，應該會從elf_interpreter執行，通常應該會是&#x2F;lib&#x2F;ld-x.x.so。ld-x.x.so的進入點是_start，最後會連結到<a href="https://code.woboq.org/userspace/glibc/elf/rtld.c.html">glibc&#x2F;elf&#x2F;rtld.c</a>的_dl_start，針對環境變數做處理。</p>
+<ul>
+<li>我們常見的LD_PRELOAD也是在這邊進行處理的</li>
+</ul>
+</li>
+<li><p>當上述工作都做完後，就會進入 ELF binary 的<code>_start</code>，其中會呼叫 glibc 的<a href="https://code.woboq.org/userspace/glibc/csu/libc-start.c.html">__libc_start_main</a>進行初始設定，最後就會呼叫main()</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">result = main (argc, argv, __environ MAIN_AUXVEC_PARAM);</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-system-call"><a href="#使用-system-call" class="headerlink" title="使用 system call"></a>使用 system call</h2><p>通常AP在Linux要跟kernel層互動大概只能透過system call，然而system call的使用大多數已經被包裝起來，所以幾乎不會看到，這邊我們來探討一下要怎麼在Linux直接呼叫system call。以下範例皆來自<a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></p>
+<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>最簡單的呼叫system call方法是syscall。</p>
+<p>syscall.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    ret = syscall(__NR_getpid);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>執行結果如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make syscall</span><br><span class="line">$ ./syscall</span><br><span class="line">ret=18 pid=18</span><br></pre></td></tr></table></figure>
+
+<p>看起來是很順利取得PID。我們可以把__NR_getpid換成其他的system call數字，也可以達到同樣效果。</p>
+<h3 id="int-0x80"><a href="#int-0x80" class="headerlink" title="int 0x80"></a>int 0x80</h3><p>當然我們也可以用<code>int 0x80</code>來做到同樣的事情，但是要注意的是這樣的效率不會比較好，可參考<a href="https://stackoverflow.com/questions/12806584/what-is-better-int-0x80-or-syscall">What is better “int 0x80” or “syscall”?</a></p>
+<p>另外這個做法在x64的架構是無法被使用的，可參考<a href="https://stackoverflow.com/questions/46087730/what-happens-if-you-use-the-32-bit-int-0x80-linux-abi-in-64-bit-code">What happens if you use the 32-bit int 0x80 Linux ABI in 64-bit code?</a></p>
+<p>syscall2.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;int $0x80&quot;</span>:<span class="string">&quot;=a&quot;</span>(ret):<span class="string">&quot;0&quot;</span>(__NR_getpid))</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ret=%d pid=%d\n&quot;</span>, ret, getpid());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="sysenter"><a href="#sysenter" class="headerlink" title="sysenter"></a>sysenter</h3><p>這部分也是只能在x86的平台上使用，會出現這個機制的理由是int 0x80的效率實在太差了。這邊的使用方式有點複雜，就不列出來了。</p>
+<h3 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h3><p>這三種方式的比較簡單統整一下</p>
+<p>syscall：現在主流，能在x64運行<br>int 0x80：只能在x86，效率差，已被捨棄<br>sysenter：只能在x86，用來替代int 0x80</p>
+<p>詳情可以參考<a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a>，寫得非常詳細。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://www.books.com.tw/products/0010587783">BINARY HACKS：駭客秘傳技巧一百招</a></li>
+<li><a href="https://blog.csdn.net/eleven_xiy/article/details/77876702">Linux系统ELF程序的执行过程</a></li>
+<li><a href="https://blog.csdn.net/conansonic/article/details/54236335">_dl_start源码分析</a></li>
+<li><a href="https://www.jianshu.com/p/f4c04cf8e406">Linux系统调用机制int 0x80、sysenter&#x2F;sysexit、syscall&#x2F;sysret的原理与代码分析</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -2285,61 +2285,6 @@
       </tags>
   </entry>
   <entry>
-    <title>三年的工作省思</title>
-    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
-<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
-<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
-<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
-<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
-<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
-<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
-<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
-<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
-<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
-<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
-<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
-<ol>
-<li>發問前一定要再三思考<ul>
-<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
-<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
-</ul>
-</li>
-<li>定期反省，找出更有效率的做法<ul>
-<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
-<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
-</ul>
-</li>
-<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
-<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
-<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
-</ul>
-</li>
-<li>溝通的時候，站在對方的立場思考<ul>
-<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
-<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
-</ul>
-</li>
-<li>要定期盤點自己的能力<ul>
-<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
-</ul>
-</li>
-<li>負起責任<ul>
-<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
-<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
-</ul>
-</li>
-</ol>
-<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>一些減少code size的方法</title>
     <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
@@ -2401,6 +2346,61 @@
       </categories>
       <tags>
         <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>三年的工作省思</title>
+    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
+<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
+<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
+<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
+<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
+<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
+<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
+<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
+<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
+<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
+<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
+<ol>
+<li>發問前一定要再三思考<ul>
+<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
+<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
+</ul>
+</li>
+<li>定期反省，找出更有效率的做法<ul>
+<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
+<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
+</ul>
+</li>
+<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
+<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
+<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
+</ul>
+</li>
+<li>溝通的時候，站在對方的立場思考<ul>
+<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
+<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
+</ul>
+</li>
+<li>要定期盤點自己的能力<ul>
+<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
+</ul>
+</li>
+<li>負起責任<ul>
+<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
+<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
+</ul>
+</li>
+</ol>
+<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
       </tags>
   </entry>
   <entry>
@@ -3629,6 +3629,23 @@
       </tags>
   </entry>
   <entry>
+    <title>《請停止無效努力》：尋找適合自己的方向</title>
+    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
+<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
+<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
+<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
+<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
+<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《認知驅動》：輸出重於努力</title>
     <url>/2024/09/17/%E8%AA%8D%E7%9F%A5%E9%A9%85%E5%8B%95%EF%BC%9A%E5%81%9A%E6%88%90%E4%B8%80%E4%BB%B6%E5%B0%8D%E4%BB%96%E4%BA%BA%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E4%BA%8B/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/0010933681">認知驅動</a>」是周嶺「認知覺醒」的續作。如果要用一句話概括這本書，那就是不要過度關注內在的自我成長，要對外為他人產生創造價值，而外在的回饋將會回到自身。本書雖然零零散散引用很多其他人觀念或道理，但我覺得這些都圍繞在如何行動並對外創造價值上。</p>
@@ -3681,23 +3698,6 @@
 <li>反思自己可以為他人創造的獨特價值為何。當學習新事物的時候，可以想想有沒有什麼方式可以輸出價值。</li>
 <li>用較大的時間刻度看看自己過去的成就，可以用時間軸的方式來呈現。然後想想接下來的人生階段要以什麼事情為最大的優先目標。</li>
 </ol>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《請停止無效努力》：尋找適合自己的方向</title>
-    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
-    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
-<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
-<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
-<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
-<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
-<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
@@ -3864,31 +3864,6 @@
       </tags>
   </entry>
   <entry>
-    <title>雙重授權：兼顧開源和商業的模式</title>
-    <url>/2025/06/24/%E9%9B%99%E9%87%8D%E6%8E%88%E6%AC%8A%EF%BC%9A%E5%85%BC%E9%A1%A7%E9%96%8B%E6%BA%90%E5%92%8C%E5%95%86%E6%A5%AD%E7%9A%84%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<p>對於貢獻開源軟體專案的廠商來說，這一直是很兩難的議題：如何在提供免費服務給一般開發者的同時，又避免被其他商業公司搭便車。一方面希望維持開源社群的活躍而不限縮使用門檻；另一方面，為了維持公司營運，又需要避免他人直接拿來商業使用卻不回饋社群。</p>
-<p>一個常見的做法是使用<strong>雙重授權模式</strong>。第一種是類似 GPL 這種具有「感染性」的授權，規定只要使用了該專案的程式碼，衍生作品也必須開源。這些限制對於普通開發者影響不大，但對商業公司來說就不那麼方便了。第二種則是商業授權，使用者若不願受開源限制，可以付費取得，從而解除使用上的約束。</p>
-<p>最常見的例子是 Qt 和 MySQL。Qt 是非常熱門的桌面圖形化開發框架，針對開源部分提供了 GPL 和 LGPL 兩種 License。兩者最大的差異在於 LGPL 明確規範，即使程式與 LGPL 函式庫動態連結也不會被感染。儘管如此，整體來說其使用規範對商業應用仍較具限制，因此商業用戶常會直接向 Qt 購買授權以求一勞永逸，並可獲得商業工具、技術諮詢等服務。</p>
-<p>至於 MySQL 這個熱門的資料庫也是採取類似策略，針對開源版提供 GPL License。這邊要特別提一下 GPL 的感染性，並不是修改程式碼的行為才會被迫開源，只要有分發就會觸發感染性。所以如果軟體在賣給客戶的時候內部包含 MySQL 這個資料庫，就滿足分發的條件，整個軟體都必須要開源。因此很多使用者也因此轉向使用商業授權，而不是開源版本。</p>
-<p>這一切看起來很美好：開發者能獲得利潤，廠商有商業保證，而社群也能免費使用，似乎是三贏的局面。然而，當軟體部署到雲端時就不一樣了，這時多了一個雲端服務商的角色。</p>
-<p>一般來說，雲端服務商會拿這些開源的軟體提供給客戶，提供加值服務，然後自己的平台獲得更廣泛的使用。在原本的 GPL 和 LGPL 並沒有定義雲端服務的這個行為，因此後來又新增了 AGPL 來要求雲端服務商需要將提供雲服務的軟體也開源。</p>
-<p>但是，這時便開始有了利益衝突。從軟體開發商的角度來看，如 MongoDB、Redis、ElasticSearch，他們的軟體本來就是要賣給商業公司，付費客戶能獲得品質保證。然而，大部分公司會直接將軟體部署在雲端上，雲端服務商便順勢將這些開源專案納入其服務。這導致原本會付費的客戶，大多轉而直接使用雲端服務商的方案。沒錯，儘管雲端服務商也符合 AGPL，將其雲端軟體開源了，但這對他們影響不大，因為本來就只是加值服務，並不影響核心業務。</p>
-<p>為了限制雲端服務商，尤其是市場占有率最大的 AWS，軟體服務商紛紛採取了 SSPL 和商業授權的雙重模式。SSPL 授權最早由 MongoDB 提出，隨後 Redis 和 ElasticSearch 也分別調整為 SSPL 授權。SSPL 和 AGPL 最大的不同在於，前者不僅要求提供服務的軟體需開源，連雲端服務商的基礎設施軟體也必須開源，這對服務商來說是不可接受的。</p>
-<p>對於 OSI (Open Source Initiative) 來說，像 SSPL 這樣的授權不符合開源軟體的精神。因為其條款顯然旨在保護軟體開發商的商業利益，限制雲端服務商使用。OSI 不認定其為開放原始碼許可證，頂多只能算是原始碼可用。因此，大部分主流的 Linux 發行版都不會將 SSPL 軟體納入其公開軟體庫中。</p>
-<p>從雲端服務商的角度來看，他們認為自己一切都按照開源授權規範走，甚至也有投入開發者參與上游程式碼的開發，不能說沒有回饋社群。只能說問題點出在他們實在太大了，所得到的獲利和回饋不成正比，導致原始的開發者的利潤都被他們吸走。</p>
-<p>雲端服務商為了反制，也就採取了開源世界最常做的事情――分叉 (fork)。針對 MongoDB，AWS 有了 Amazon DocumentDB；針對 Redis，聯合其他人成立了 Valkey；針對 ElasticSearch 則是推出 OpenSearch。由於我們前面提到 OSI 不承認 SSPL 的因素，他們打著軟體開放的大旗，吸引了大量開發者轉向，反而倒逼著這些軟體廠商改成較為寬鬆的 AGPL。</p>
-<p>其實最大的問題在於這些公司所提供的軟體性質，它們都是資料庫的提供者，而資料庫實在太容易直接被包裝成服務。讓我們看看通訊協定 Kafka 則又是另一番狀況：Kafka 本身是 Apache 授權，符合開源精神，但是其公司 Confluent 另外推出的 Confluent Platform 則使用類似 SSPL 限制雲端服務商的 Confluent Community License (CCL)。通訊協定本身人人可用，但若要真正發揮其效用，仍需經大量的開發才能包裝成服務。因此，即使這部分有所限制，人們也比較不會反彈。當社群沒有反對聲浪時，雲端服務商就很難再另起爐灶。</p>
-<p>除了 SSPL，還有另一種相對來說比較溫和的 BSL 授權，最早由 MariaDB 提出。它和 SSPL 一樣會限制雲端使用，但是主要差異在於經過 3-4 年後會自動轉變成普通的開源授權，如 MIT。後來 CoakroachDB 和 HashiCorp 也都採用這種模式，希望能減輕社群反彈。當然以 HashiCorp 旗下的 Terraform 來說可能是失敗了，社群仍分叉出 OpenTofu 來抗衡。</p>
-<p>開源軟體的授權方式是非常有意思的話題，軟體廠商需要在商業和開源精神中取得很好的平衡。若是太過開放，很容易被其他人搭便車，但如果限制太過嚴格，反而會讓社群分裂，進而失去開源軟體最大的價值――廣大的使用者和開發者。過去因為雲端的興起，出現了 AGPL、SSPL、BSL 等等相對應的授權。未來隨著 AI 的發展，是不是也會有類似的問題出現呢？這很值得觀察。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>開源</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>閱讀是一種朋友間的對話</title>
     <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
     <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
@@ -3919,5 +3894,30 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>雙重授權：兼顧開源和商業的模式</title>
+    <url>/2025/06/24/%E9%9B%99%E9%87%8D%E6%8E%88%E6%AC%8A%EF%BC%9A%E5%85%BC%E9%A1%A7%E9%96%8B%E6%BA%90%E5%92%8C%E5%95%86%E6%A5%AD%E7%9A%84%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>對於貢獻開源軟體專案的廠商來說，這一直是很兩難的議題：如何在提供免費服務給一般開發者的同時，又避免被其他商業公司搭便車。一方面希望維持開源社群的活躍而不限縮使用門檻；另一方面，為了維持公司營運，又需要避免他人直接拿來商業使用卻不回饋社群。</p>
+<p>一個常見的做法是使用<strong>雙重授權模式</strong>。第一種是類似 GPL 這種具有「感染性」的授權，規定只要使用了該專案的程式碼，衍生作品也必須開源。這些限制對於普通開發者影響不大，但對商業公司來說就不那麼方便了。第二種則是商業授權，使用者若不願受開源限制，可以付費取得，從而解除使用上的約束。</p>
+<p>最常見的例子是 Qt 和 MySQL。Qt 是非常熱門的桌面圖形化開發框架，針對開源部分提供了 GPL 和 LGPL 兩種 License。兩者最大的差異在於 LGPL 明確規範，即使程式與 LGPL 函式庫動態連結也不會被感染。儘管如此，整體來說其使用規範對商業應用仍較具限制，因此商業用戶常會直接向 Qt 購買授權以求一勞永逸，並可獲得商業工具、技術諮詢等服務。</p>
+<p>至於 MySQL 這個熱門的資料庫也是採取類似策略，針對開源版提供 GPL License。這邊要特別提一下 GPL 的感染性，並不是修改程式碼的行為才會被迫開源，只要有分發就會觸發感染性。所以如果軟體在賣給客戶的時候內部包含 MySQL 這個資料庫，就滿足分發的條件，整個軟體都必須要開源。因此很多使用者也因此轉向使用商業授權，而不是開源版本。</p>
+<p>這一切看起來很美好：開發者能獲得利潤，廠商有商業保證，而社群也能免費使用，似乎是三贏的局面。然而，當軟體部署到雲端時就不一樣了，這時多了一個雲端服務商的角色。</p>
+<p>一般來說，雲端服務商會拿這些開源的軟體提供給客戶，提供加值服務，然後自己的平台獲得更廣泛的使用。在原本的 GPL 和 LGPL 並沒有定義雲端服務的這個行為，因此後來又新增了 AGPL 來要求雲端服務商需要將提供雲服務的軟體也開源。</p>
+<p>但是，這時便開始有了利益衝突。從軟體開發商的角度來看，如 MongoDB、Redis、ElasticSearch，他們的軟體本來就是要賣給商業公司，付費客戶能獲得品質保證。然而，大部分公司會直接將軟體部署在雲端上，雲端服務商便順勢將這些開源專案納入其服務。這導致原本會付費的客戶，大多轉而直接使用雲端服務商的方案。沒錯，儘管雲端服務商也符合 AGPL，將其雲端軟體開源了，但這對他們影響不大，因為本來就只是加值服務，並不影響核心業務。</p>
+<p>為了限制雲端服務商，尤其是市場占有率最大的 AWS，軟體服務商紛紛採取了 SSPL 和商業授權的雙重模式。SSPL 授權最早由 MongoDB 提出，隨後 Redis 和 ElasticSearch 也分別調整為 SSPL 授權。SSPL 和 AGPL 最大的不同在於，前者不僅要求提供服務的軟體需開源，連雲端服務商的基礎設施軟體也必須開源，這對服務商來說是不可接受的。</p>
+<p>對於 OSI (Open Source Initiative) 來說，像 SSPL 這樣的授權不符合開源軟體的精神。因為其條款顯然旨在保護軟體開發商的商業利益，限制雲端服務商使用。OSI 不認定其為開放原始碼許可證，頂多只能算是原始碼可用。因此，大部分主流的 Linux 發行版都不會將 SSPL 軟體納入其公開軟體庫中。</p>
+<p>從雲端服務商的角度來看，他們認為自己一切都按照開源授權規範走，甚至也有投入開發者參與上游程式碼的開發，不能說沒有回饋社群。只能說問題點出在他們實在太大了，所得到的獲利和回饋不成正比，導致原始的開發者的利潤都被他們吸走。</p>
+<p>雲端服務商為了反制，也就採取了開源世界最常做的事情――分叉 (fork)。針對 MongoDB，AWS 有了 Amazon DocumentDB；針對 Redis，聯合其他人成立了 Valkey；針對 ElasticSearch 則是推出 OpenSearch。由於我們前面提到 OSI 不承認 SSPL 的因素，他們打著軟體開放的大旗，吸引了大量開發者轉向，反而倒逼著這些軟體廠商改成較為寬鬆的 AGPL。</p>
+<p>其實最大的問題在於這些公司所提供的軟體性質，它們都是資料庫的提供者，而資料庫實在太容易直接被包裝成服務。讓我們看看通訊協定 Kafka 則又是另一番狀況：Kafka 本身是 Apache 授權，符合開源精神，但是其公司 Confluent 另外推出的 Confluent Platform 則使用類似 SSPL 限制雲端服務商的 Confluent Community License (CCL)。通訊協定本身人人可用，但若要真正發揮其效用，仍需經大量的開發才能包裝成服務。因此，即使這部分有所限制，人們也比較不會反彈。當社群沒有反對聲浪時，雲端服務商就很難再另起爐灶。</p>
+<p>除了 SSPL，還有另一種相對來說比較溫和的 BSL 授權，最早由 MariaDB 提出。它和 SSPL 一樣會限制雲端使用，但是主要差異在於經過 3-4 年後會自動轉變成普通的開源授權，如 MIT。後來 CoakroachDB 和 HashiCorp 也都採用這種模式，希望能減輕社群反彈。當然以 HashiCorp 旗下的 Terraform 來說可能是失敗了，社群仍分叉出 OpenTofu 來抗衡。</p>
+<p>開源軟體的授權方式是非常有意思的話題，軟體廠商需要在商業和開源精神中取得很好的平衡。若是太過開放，很容易被其他人搭便車，但如果限制太過嚴格，反而會讓社群分裂，進而失去開源軟體最大的價值――廣大的使用者和開發者。過去因為雲端的興起，出現了 AGPL、SSPL、BSL 等等相對應的授權。未來隨著 AI 的發展，是不是也會有類似的問題出現呢？這很值得觀察。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>開源</tag>
+      </tags>
   </entry>
 </search>
