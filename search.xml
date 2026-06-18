@@ -1430,6 +1430,88 @@
       </tags>
   </entry>
   <entry>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
+
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放音樂</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker 簡易教學</title>
     <url>/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><ul>
@@ -1554,88 +1636,6 @@
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
 <li><a href="https://peihsinsu.gitbooks.io/docker-note-book/content/">Docker學習筆記</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2154,43 +2154,6 @@
       </tags>
   </entry>
   <entry>
-    <title>port knocking</title>
-    <url>/2017/08/27/port-knocking/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>我這邊server是用Ubuntu, client是MAC環境。</p>
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install knockd</span><br></pre></td></tr></table></figure>
-
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
-
-<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[options]</span></span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line"><span class="section">[openSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">3389</span>:udp,<span class="number">80</span>:tcp,<span class="number">21</span>:udp,<span class="number">53</span>:tcp,<span class="number">23</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -I INPUT <span class="number">1</span> -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br><span class="line"></span><br><span class="line"><span class="section">[closeSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">443</span>:tcp,<span class="number">80</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br></pre></td></tr></table></figure>
-
-<p>功能大概看名字也可以猜出來</p>
-<ul>
-<li>sequence: 敲port的順序</li>
-<li>seq_timeout: 間隔時間</li>
-<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
-<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
-</ul>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service knockd start</span><br></pre></td></tr></table></figure>
-
-<p>記得防火牆要先設定不讓外面的人進入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
-
-<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><p>須先安裝knock</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
-
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>youtube-dl網路影片下載器</title>
     <url>/2018/11/25/youtube-dl%E7%B6%B2%E8%B7%AF%E5%BD%B1%E7%89%87%E4%B8%8B%E8%BC%89%E5%99%A8/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要下載網路影片時，通常會去使用browser上的套件來下載，其實除了browser套件外，我們也可以使用command-line的方式，也就是這篇要介紹的youtube-dl。</p>
@@ -2276,6 +2239,43 @@
 <li><a href="https://blog.gtwang.org/useful-tools/youtube-dl/">youtube-dl：下載 YouTube 影片的指令工具（支援 Windows、Linux 與 Mac OS X）</a></li>
 <li><a href="https://yogapan.github.io/2017/08/16/Youtube-dl%E6%BF%83%E7%B8%AE%E6%95%99%E5%AD%B8%E7%AD%86%E8%A8%98/">Youtube-dl濃縮教學筆記</a></li>
 </ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>port knocking</title>
+    <url>/2017/08/27/port-knocking/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>我這邊server是用Ubuntu, client是MAC環境。</p>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install knockd</span><br></pre></td></tr></table></figure>
+
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
+
+<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[options]</span></span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line"><span class="section">[openSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">3389</span>:udp,<span class="number">80</span>:tcp,<span class="number">21</span>:udp,<span class="number">53</span>:tcp,<span class="number">23</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -I INPUT <span class="number">1</span> -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br><span class="line"></span><br><span class="line"><span class="section">[closeSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">443</span>:tcp,<span class="number">80</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br></pre></td></tr></table></figure>
+
+<p>功能大概看名字也可以猜出來</p>
+<ul>
+<li>sequence: 敲port的順序</li>
+<li>seq_timeout: 間隔時間</li>
+<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
+<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service knockd start</span><br></pre></td></tr></table></figure>
+
+<p>記得防火牆要先設定不讓外面的人進入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><p>須先安裝knock</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
 ]]></content>
       <categories>
         <category>技術</category>
@@ -2495,6 +2495,22 @@
       </categories>
   </entry>
   <entry>
+    <title>川普當選後對世界格局分析</title>
+    <url>/2024/11/17/%E5%B7%9D%E6%99%AE%E7%95%B6%E9%81%B8%E5%BE%8C%E5%B0%8D%E4%B8%96%E7%95%8C%E6%A0%BC%E5%B1%80%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<p>最近最熱門的事情莫過於川普當選後人們紛紛嘗試預測未來世界格局會怎麼變化、該如何進行投資。我自己也很喜歡讀國際政治、財經相關的文章。在閱讀那麼多資訊後也來嘗試整理一下自己的分析和觀點，幫助未來更好地修正自己的系統判斷。</p>
+<p>川普是屬於典型的強人，很重視個人魅力，而不是傳統上的政治妥協。因此比起其他的總統，他的個性就特別的重要。川普畢竟是商人出身，比起價值來說更重視利益，彼此之間的關係能不能帶來商業價值，所以不會用價值體系來強化盟友關係，而是更多用雙邊談判取代多邊談判。他很喜歡強調和其他獨裁強人的關係很好，因為他認為可以只要搞定獨裁者就可以省去其他談判上的麻煩，儘管這並不是事實(想想他第一任北韓的例子)。川普也很好大喜功、愛面子，更重要的是著迷於權力，要求部屬對其完全的忠誠。</p>
+<p>在美國內政上，我們先不考慮金融海嘯或是疫情等無法預測的黑天鵝。川普的民調沒太多意外的話上任一陣子後應該會快速滑落，主要原因在於他任用的官員幾乎都是對其忠心的人為主，很多私德或能力上面有很多問題(至少從目前公布的名單來看)。一旦團隊出了包，肯定會被對其不是那麼友好的媒體放大檢視，創造出很多爭議的話題出來。另外馬斯克所提出的改善政府效率部門也會因為得罪很多政府單位的人而造成爭議，可以想想當初 X 是怎麼被人批評的。然而這也是有好處的，當政府效率提升、管制變少，再加上川普很重視股市，可以想像經濟會繼續向上提升，至於通膨是否會更嚴重那就真的不好說了，至少目前市場是這麼認為的。我對川普 2026 的期中選舉並不會很樂觀，就如同他的第一任一樣。在民調下滑時，強人通常會採取對外強硬的態度，接下來就看看外交部分。</p>
+<p>先看看烏克蘭，我的看法是戰線會開始緩和下來，最終形成如南北韓的格局。川普有很大的可能性會直接和普丁碰面，如同他和金正恩碰面一樣，想展現他解決問題的能力。然而因為俄烏問題實在太過複雜，他不太可能逼迫哪方讓步，最終就是看在美國壓力上維持現狀。烏克蘭需要美國武器，俄羅斯不希望美國解禁長程武器的限制和提供更多先進裝備，雙方只能妥協。烏克蘭要不回烏東領土、俄羅斯也無法將烏克蘭去軍事化，納入其大斯拉夫主義下的緩衝區。這對烏克蘭是短空長多，至少他有時間重建經濟，接受歐盟援助。對俄羅斯則是短多長空，雖然取得大片烏東領土，但因為兩年的戰爭已轉為戰時經濟，再加上歐美制裁可能不會那麼簡單解除，經濟會大受影響，更別說石油價格可能會因為川普的政策大幅下滑，進而影響其出口。我猜測到時俄羅斯目前多餘的軍工產能會轉移到其他地方，特別是非洲，造成當地局勢升溫。</p>
+<p>中東部分按照川普第一任做法應該會持續對以色列友好，畢竟以色列不需要過多的軍援，且可以牽制伊朗，達成美國的戰略目標。在現在伊朗的代理人哈馬斯、真主黨等等都遭受大量打擊的情況下，巴勒斯坦人的聲音會逐漸消失於媒體之中。沙烏地阿拉伯不見得會和以色列建交，但是關係的改善是可預見的。至於伊朗和沙烏地阿拉伯的關係雖然之前有所緩和，但是應該不會近一步升溫。不過由於土耳其前陣子才斷絕與以色列的關係，他的態度如何值得繼續觀察。</p>
+<p>另一個熱點東亞從川普目前內閣名單來看對中會持續強硬，再加上他討厭為他國提供保護的角度來看，應該會放手讓日韓自己強化軍備，特別日本新首相石破茂也希望戰略自主的情況下。對台灣方面，由於選前不斷放話要保護費，可預見的是軍售項目會增加，另外也會將此視為對中國施壓的籌碼。至於北韓部分，川金會面的機率應該不大，北韓不太可能放棄核武，而現在又有俄羅斯撐腰，更沒有意願和美國對話。對俄羅斯而言，北韓不只是提供炮彈和兵力的盟友，更可以當成撬動對美國東亞布局的槓桿，可預見兩國關係會持續深化。中國對川普上台應該會很難受，特別是中國是美國最大的戰略對手，他會更加強化與東南亞和拉丁美洲的關係，至少在兩國對抗中不會站隊到美國陣營去，另外也期望能多少彌補失去的美國市場。至於俄中關係不大可能會結成同盟，但會持續彼此利用，美國是否能像過去聯中抗蘇一樣做到聯俄抗中，我是不太看好，畢竟其歐洲盟友對此會非常敏感。</p>
+<p>至於投資上，我對股票市場前景算是看好，川普討厭貿易逆差，因此討厭匯率高，他應該會逼迫 FED 主席鮑威爾降息 (FED 願不願意做是另一回事)。如果再加上管制放寬，可預見新創企業會有很多新機會，特別是跟 AI 相關的。在政府減少監管下，手握大量現金的科技巨頭也會開始併購企業。軍工行業部分，雖然川普不愛戰爭，但是他喜歡做生意，再加上美國縮手在全世界的軍事存在感，各國對國防需求會大增，我想軍工企業生意應該會變好。至於石化能源，川普對其友善，並且會取消綠能補助，但是如果大量生產石油反而會造成石油價格下降，而石油下降又會對純電動車造成壓力，因此我對石化產業和綠能、電動車產業沒那麼看好。區塊鏈相關企業應該會放寬管制，但我總覺得區塊鏈會對美元霸權造成威脅，所以需要多些研究才行。以地域方面來看，美國的關稅會迫使企業從中國轉移到第三方，如印度、東南亞、南美，而中國為了爭取支持也會大量投資他們，這些地方應該會持續受惠。</p>
+<p>以上是目前我所看到的趨勢，但是實際上並不一定會這樣走，畢竟川普的不可預測性真的有點高，大家都是邊看邊調整。對於專家來說預測失準非常正常，更別說是我這樣業餘興趣的人了。總之先提出想法，再根據世界變化來修正認知，找出跟當初想像不吻合之處，這樣才能逐漸提高自己的眼光。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>學習之道</title>
     <url>/2025/01/26/%E5%AD%B8%E7%BF%92%E4%B9%8B%E9%81%93/</url>
     <content><![CDATA[<p>學習並非是一件容易的事情，但在變化迅速的現代社會中，學習新技能卻又是不可避免的事情。以前人們可以靠一門手藝就能成家立業，然而現在隨著電腦、手機、AI 等科技不斷演化，任何一門行業也都必須要不斷與時俱進才行。不會使用新的科技，競爭力就會弱於精通的同行，舉例來說，會使用 Uber 的店家比起傳統餐廳會多了新的客源。「活到老，學到老」或許不再是勵志的鼓勵，而是未來社會生存所需遵守的殘酷法則。</p>
@@ -2512,22 +2528,6 @@
 <p>另外一種動機可能是好奇心，其實某種程度上也是要解決問題，只是這個問題是來自我們心中的疑惑。解決心中的疑惑並不必要把某門知識從頭學起。也許我們對物理的相對論感興趣，但是比起從大學的普通物理開始讀起，更好的方式是去看點科普讀物，當有更多疑惑時再一個個去理解就好。</p>
 <p>總而言之，學習的動機應該要具體而微，而非大又廣泛。</p>
 <h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>市面上教導如何學習的書千百種，各式各樣的方法都有，例如刻意練習、沉浸式學習、間隔學習等等，而上面所分享的是個人經驗中對我特別有用的方法。不過，比起討論什麼學習方法才正確，更重要的是找出適合自己的方法。現代社會中最需要學習的不是某門特定的學問和知識，而是學會「元學習」，也就是學習如何學習這回事！</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>川普當選後對世界格局分析</title>
-    <url>/2024/11/17/%E5%B7%9D%E6%99%AE%E7%95%B6%E9%81%B8%E5%BE%8C%E5%B0%8D%E4%B8%96%E7%95%8C%E6%A0%BC%E5%B1%80%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p>最近最熱門的事情莫過於川普當選後人們紛紛嘗試預測未來世界格局會怎麼變化、該如何進行投資。我自己也很喜歡讀國際政治、財經相關的文章。在閱讀那麼多資訊後也來嘗試整理一下自己的分析和觀點，幫助未來更好地修正自己的系統判斷。</p>
-<p>川普是屬於典型的強人，很重視個人魅力，而不是傳統上的政治妥協。因此比起其他的總統，他的個性就特別的重要。川普畢竟是商人出身，比起價值來說更重視利益，彼此之間的關係能不能帶來商業價值，所以不會用價值體系來強化盟友關係，而是更多用雙邊談判取代多邊談判。他很喜歡強調和其他獨裁強人的關係很好，因為他認為可以只要搞定獨裁者就可以省去其他談判上的麻煩，儘管這並不是事實(想想他第一任北韓的例子)。川普也很好大喜功、愛面子，更重要的是著迷於權力，要求部屬對其完全的忠誠。</p>
-<p>在美國內政上，我們先不考慮金融海嘯或是疫情等無法預測的黑天鵝。川普的民調沒太多意外的話上任一陣子後應該會快速滑落，主要原因在於他任用的官員幾乎都是對其忠心的人為主，很多私德或能力上面有很多問題(至少從目前公布的名單來看)。一旦團隊出了包，肯定會被對其不是那麼友好的媒體放大檢視，創造出很多爭議的話題出來。另外馬斯克所提出的改善政府效率部門也會因為得罪很多政府單位的人而造成爭議，可以想想當初 X 是怎麼被人批評的。然而這也是有好處的，當政府效率提升、管制變少，再加上川普很重視股市，可以想像經濟會繼續向上提升，至於通膨是否會更嚴重那就真的不好說了，至少目前市場是這麼認為的。我對川普 2026 的期中選舉並不會很樂觀，就如同他的第一任一樣。在民調下滑時，強人通常會採取對外強硬的態度，接下來就看看外交部分。</p>
-<p>先看看烏克蘭，我的看法是戰線會開始緩和下來，最終形成如南北韓的格局。川普有很大的可能性會直接和普丁碰面，如同他和金正恩碰面一樣，想展現他解決問題的能力。然而因為俄烏問題實在太過複雜，他不太可能逼迫哪方讓步，最終就是看在美國壓力上維持現狀。烏克蘭需要美國武器，俄羅斯不希望美國解禁長程武器的限制和提供更多先進裝備，雙方只能妥協。烏克蘭要不回烏東領土、俄羅斯也無法將烏克蘭去軍事化，納入其大斯拉夫主義下的緩衝區。這對烏克蘭是短空長多，至少他有時間重建經濟，接受歐盟援助。對俄羅斯則是短多長空，雖然取得大片烏東領土，但因為兩年的戰爭已轉為戰時經濟，再加上歐美制裁可能不會那麼簡單解除，經濟會大受影響，更別說石油價格可能會因為川普的政策大幅下滑，進而影響其出口。我猜測到時俄羅斯目前多餘的軍工產能會轉移到其他地方，特別是非洲，造成當地局勢升溫。</p>
-<p>中東部分按照川普第一任做法應該會持續對以色列友好，畢竟以色列不需要過多的軍援，且可以牽制伊朗，達成美國的戰略目標。在現在伊朗的代理人哈馬斯、真主黨等等都遭受大量打擊的情況下，巴勒斯坦人的聲音會逐漸消失於媒體之中。沙烏地阿拉伯不見得會和以色列建交，但是關係的改善是可預見的。至於伊朗和沙烏地阿拉伯的關係雖然之前有所緩和，但是應該不會近一步升溫。不過由於土耳其前陣子才斷絕與以色列的關係，他的態度如何值得繼續觀察。</p>
-<p>另一個熱點東亞從川普目前內閣名單來看對中會持續強硬，再加上他討厭為他國提供保護的角度來看，應該會放手讓日韓自己強化軍備，特別日本新首相石破茂也希望戰略自主的情況下。對台灣方面，由於選前不斷放話要保護費，可預見的是軍售項目會增加，另外也會將此視為對中國施壓的籌碼。至於北韓部分，川金會面的機率應該不大，北韓不太可能放棄核武，而現在又有俄羅斯撐腰，更沒有意願和美國對話。對俄羅斯而言，北韓不只是提供炮彈和兵力的盟友，更可以當成撬動對美國東亞布局的槓桿，可預見兩國關係會持續深化。中國對川普上台應該會很難受，特別是中國是美國最大的戰略對手，他會更加強化與東南亞和拉丁美洲的關係，至少在兩國對抗中不會站隊到美國陣營去，另外也期望能多少彌補失去的美國市場。至於俄中關係不大可能會結成同盟，但會持續彼此利用，美國是否能像過去聯中抗蘇一樣做到聯俄抗中，我是不太看好，畢竟其歐洲盟友對此會非常敏感。</p>
-<p>至於投資上，我對股票市場前景算是看好，川普討厭貿易逆差，因此討厭匯率高，他應該會逼迫 FED 主席鮑威爾降息 (FED 願不願意做是另一回事)。如果再加上管制放寬，可預見新創企業會有很多新機會，特別是跟 AI 相關的。在政府減少監管下，手握大量現金的科技巨頭也會開始併購企業。軍工行業部分，雖然川普不愛戰爭，但是他喜歡做生意，再加上美國縮手在全世界的軍事存在感，各國對國防需求會大增，我想軍工企業生意應該會變好。至於石化能源，川普對其友善，並且會取消綠能補助，但是如果大量生產石油反而會造成石油價格下降，而石油下降又會對純電動車造成壓力，因此我對石化產業和綠能、電動車產業沒那麼看好。區塊鏈相關企業應該會放寬管制，但我總覺得區塊鏈會對美元霸權造成威脅，所以需要多些研究才行。以地域方面來看，美國的關稅會迫使企業從中國轉移到第三方，如印度、東南亞、南美，而中國為了爭取支持也會大量投資他們，這些地方應該會持續受惠。</p>
-<p>以上是目前我所看到的趨勢，但是實際上並不一定會這樣走，畢竟川普的不可預測性真的有點高，大家都是邊看邊調整。對於專家來說預測失準非常正常，更別說是我這樣業餘興趣的人了。總之先提出想法，再根據世界變化來修正認知，找出跟當初想像不吻合之處，這樣才能逐漸提高自己的眼光。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -3496,6 +3496,58 @@
       </categories>
   </entry>
   <entry>
+    <title>藝術是什麼</title>
+    <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
+    <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
+<center>法國史前時代拉斯科洞窟壁畫，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%94%BB">維基百科</a></center>
+
+<p><img src="/images/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%95%AB.jpg" alt="拉斯科洞窟壁畫"></p>
+<p>對於理工人來說，想要學習一件事情，必然要先從定義開始。那麼藝術的定義是什麼呢？</p>
+<p>藝術是透過創造性活動運用各種媒介，如文字、聲音、形象等等，來表達情感、思想或觀念，最重要的是要追求審美愉悅和精神昇華。</p>
+<p>為了追求美感，藝術並不直接傳達明確的訊息，而是建立一種感受空間。可以說，如果一個事物是被設計來觸動觀賞者的感官，這就是廣義上的藝術定義。</p>
+<p>為何不應該要有明確訊息呢？因為那會造成扁平化。人類是經驗的生物，我們透過生活上的各種經驗總結出自己的感受。當別人直接告訴我們結論，我們無法感同身受，但是當這個訊息是用間接的方式傳達給我們，反而可以能激發思考、直達我們內心。</p>
+<p>舉個例子，我們描述一個人的好心情，如果只是用「愉悅」來描述，很難讓我們有更深入的想像。但如果是說「嘴裡哼著歌，踏著輕快的腳步」，整個形象就立體起來了。完全沒提到心情好，讀者卻能從字裡行間中讀出來。</p>
+<p>日本的近代文學大師夏目漱石曾說過，「我愛你」對日本人來說太過直白，可以委婉地說「今晚月色真美」。這某種程度上也是用間接的方式來傳遞訊息，對於聽者來說，由於需要自行做訊息的轉譯，心裡上會更有親近感，更加能夠接受。</p>
+<p>因此，比起用總結方式傳達明確訊息，間接傳達經驗空間才是藝術的本質。</p>
+<p>這也是為何我們不喜歡教科書、電器說明書等直接了當的文字，但是卻喜歡閱讀小說，並可以從其中的故事來領悟作者想傳遞的訊息。</p>
+<p>從詩集小說，到繪畫音樂，不同的藝術表現形式都是在提供觀賞者一種獨特的體驗。我們可以從杜甫的詩集讀出他憂國憂民的理想，梵谷的畫作感受到他創作時的內心衝突與扭曲。這些體驗無法完全用文字清楚描述，只能透過藝術來傳達給他人。</p>
+<center>梵谷自畫像，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%96%87%E6%A3%AE%E7%89%B9%C2%B7%E6%A2%B5%E9%AB%98">維基百科</a></center>
+
+<p><img src="/images/%E6%A2%B5%E8%B0%B7%E8%87%AA%E7%95%AB%E5%83%8F.jpg" alt="梵谷自畫像"></p>
+<p>既然藝術不是要傳達明確資訊，所以就沒有所謂什麼傳播媒介最好、最有效率這件事。</p>
+<p>如果我們只是要比較資訊量的話，歌曲本身攜帶的資訊已經包含文字和聲音，比起純粹的詩還要豐富，理論上可以直接取代詩。然而，從體驗的角度來說，有時候缺失的訊息本身也有重要性，由於可以激發我們的想像，反而獲得截然不同的經驗。正因為詩沒有既定的旋律，所以讀者可以用屬於自己的節奏來決定欣賞其中字句的快慢。</p>
+<p>由此我們可以看出一般溝通和欣賞藝術兩者的不同。</p>
+<p>一般人與人的溝通是要把資訊有效從一個人的大腦傳到另一個人的大腦，因此我們需要組織語言，甚至用圖表輔助，才能確保這個資訊傳輸過程沒有遺失。</p>
+<p>藝術並不是如此，本質上創作者不是在傳達訊息，而是要透過某種形式刺激觀賞者的感官，創造出獨特的體驗。觀賞者接收到的訊息和創作者最一開始傳達的可能是兩回事，但這也沒關係，因為觀眾的感受才是最重要的事情。</p>
+<p>很多作品在經過大眾媒體廣泛傳播以後，人們對他的印象早就不是作者最初的設定，而是包含了作品本身的歷史、群體對他的記憶。</p>
+<p>最明顯的例子是貝多芬的「給愛麗絲」。對台灣人來說，比起貝多芬創作這首曲目的原意（據傳是要給自己暗戀的女性），我們第一時間會想到的是垃圾車要來了，也許還會進而聯想到自己過去跟家人一起出去丟垃圾的回憶。</p>
+<p>同樣的道理也可以套用到大家朗朗上口的民謠上，例如「望春風」。這首歌最早是日治時代創作的台語流行音樂，因為廣受喜愛，所以在國民政府來台以後仍然被多個歌手不斷改編成國語傳唱，到現在國外樂團來台灣演奏幾乎都會準備這首歌曲來拉近與聽眾的關係。不同時代的台灣人對「望春風」的印象都有所不同，但唯一相同的是它確實承載了每一代人的回憶。當我們聽到望春風，自然而然就會想到故鄉台灣，這也是這個作品最有價值的地方。</p>
+<p>有時候我們會以為作品的名氣和它的藝術性掛勾，越有名氣的作品，代表藝術價值越高，人們也越容易被其感動。其實因果關係可能是倒過來的，很多時候是因為這個作品在機緣巧合下出了名，商人藉此進行商業傳播，又更加擴展它的名氣。我們對這個作品有感覺是因為它的高名氣，而不是藝術價值本身。</p>
+<p>大家耳熟能詳的達文西「蒙娜麗莎的微笑」就是最好的案例。雖然同樣是達文西所創作的優秀作品，「蒙娜麗莎的微笑」的名氣明顯就是高過一截。這個其實是起源自 1911 年的一起竊盜案。</p>
+<p>當初羅浮宮的「蒙娜麗莎的微笑」被竊取，引發了法國的轟動，甚至很多人特別跑去展廳朝聖空白的牆面。兩年後後才發現竊賊是義大利一名工匠，他聲稱是因為愛國心想把這幅畫帶回義大利，同樣也感動義大利人民。就這樣這幅畫的知名度不只在法國和義大利，也開始在全世界廣為傳播。人人都知道有這幅畫的存在，到羅浮宮也是想去看看這幅畫。</p>
+<p>另外補充一下，這幅畫真實尺寸其實不大，但是因為保安緣故所以人們只能遠遠看，基本上是看不清楚。在現場與其說是欣賞畫作，不如說是欣賞看畫的人，這反而更加有意思。</p>
+<center>羅浮宮觀賞蒙娜麗莎的人群</center>
+
+<p><img src="/images/%E7%BE%85%E6%B5%AE%E5%AE%AE%E8%A7%80%E8%B3%9E%E8%92%99%E5%A8%9C%E9%BA%97%E8%8E%8E%E7%9A%84%E4%BA%BA%E7%BE%A4.jpg" alt="羅浮宮觀賞蒙娜麗莎的人群"></p>
+<p>既然藝術欣賞很依賴於個人感受，那為何我們需要有導覽、需要聽別人的賞評呢？獨自欣賞不就好了？</p>
+<p>首先要了解的一點，藝術沒有正確答案，並沒有一個權威的人或機構能決定我們要怎麼看待任何作品。導覽本身不過是提供我們欣賞作品的另一個角度罷了，不論是技巧、創作背景、作品本身的故事。</p>
+<p>我們完全可以不認同他們的看法，不過聽聽其他人的欣賞方式也許能拓展我們的視野，找到另一種觸動我們內心的路徑。</p>
+<p>就如同喝茶一樣，在沒有任何訓練下，會覺得茶可能微微苦澀。但是若是更細緻去體會，就會發現原來其中還有一些不一樣的元素，鮮度、回甘等等。藝術賞析的價值正是幫助我們發現沒有注意到的元素，提高感受層次。</p>
+<p>然而藝術到了當前，越來越多人會抱怨無法看懂現代的藝術。以前的藝術，不論是繪畫還是雕刻，我們都可以看出作者在上面花費的心血，也許是宏偉壯觀，也許是精緻細膩。但是現今的藝術常常脫離這個範疇，我們看不出作品的創作難度，甚至也搞不懂為何要叫作這個名字。看了作品的簡介，並沒有得到解答，反而更一頭霧水。</p>
+<center>之前上新聞的香蕉藝術品「喜劇演員」，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1_(%E8%97%9D%E8%A1%93%E5%93%81)">維基百科</a></center>
+
+<p><img src="/images/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1.jpg" alt="喜劇演員"></p>
+<p>我想這可能跟技術的進步有關係。當相機出現了，過去寫實主義的繪畫風格就慢慢沒落，因為沒有什麼會比相片還要寫實。因此新技術會逼著藝術家探索不一樣的可能性，用更抽象的方式來表現。這也是為何現代藝術越來越難懂的原因。</p>
+<p>AI 的出現更是挑戰了藝術的價值。以往要畫一幅畫或寫一首詩，都需要人們經過長時間訓練，才能培養出相對應的技巧和敏感度。然而，當現在這些都可以輕易用 AI 創作，那我們該怎麼評判人類還是 AI 創作的作品價值呢？</p>
+<p>我們已經無法再用創作的技術難度來評估一個作品了，因為這些都能夠用 AI 輕易複製。然而 AI 並沒有真實的人生體驗，本質上它只是一種機率性的產物，能利用大量已有資料來產生出類似的作品。不論是歷史上各個著名的藝術流派，AI 都能快速模仿，產生出讓人驚豔的作品。</p>
+<p>因此，現在更重要的是創作者本身的獨特性，他想傳達什麼訊息、他個人的視角以及隱含的背後人生故事。這些獨一無二的性質是包含 AI 在內，世界上任何其他人都無法取代，也正因為如此才能為觀眾建立出特別的感受空間，直擊他們的內心。</p>
+<p>只要人類還有表達情緒的需求，藝術家就有存在的意義。而真正偉大的藝術，則是能觸碰隱藏在我們內心那個說不清楚的部份，搔到我們心中的癢處。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>《納瓦爾寶典》：如何有智慧地獲得財富與快樂</title>
     <url>/2024/10/20/%E7%B4%8D%E7%93%A6%E7%88%BE%E5%AF%B6%E5%85%B8/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/0010977461">納瓦爾寶典</a>」是 Eric 整理 Naval Ravikant 過去 X 上的推文、部落格和 podcast 上的想法所集結而成，前一版的名字叫做「快樂實現自主富有」。Naval 是一位知名的矽谷天使投資人，創辦了 AngelList。這本書的內容主要是 Naval 對於人生的各種看法，包括金錢、創業、努力、快樂等等。</p>
@@ -3559,58 +3611,6 @@
       </tags>
   </entry>
   <entry>
-    <title>藝術是什麼</title>
-    <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
-    <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
-<center>法國史前時代拉斯科洞窟壁畫，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%94%BB">維基百科</a></center>
-
-<p><img src="/images/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%95%AB.jpg" alt="拉斯科洞窟壁畫"></p>
-<p>對於理工人來說，想要學習一件事情，必然要先從定義開始。那麼藝術的定義是什麼呢？</p>
-<p>藝術是透過創造性活動運用各種媒介，如文字、聲音、形象等等，來表達情感、思想或觀念，最重要的是要追求審美愉悅和精神昇華。</p>
-<p>為了追求美感，藝術並不直接傳達明確的訊息，而是建立一種感受空間。可以說，如果一個事物是被設計來觸動觀賞者的感官，這就是廣義上的藝術定義。</p>
-<p>為何不應該要有明確訊息呢？因為那會造成扁平化。人類是經驗的生物，我們透過生活上的各種經驗總結出自己的感受。當別人直接告訴我們結論，我們無法感同身受，但是當這個訊息是用間接的方式傳達給我們，反而可以能激發思考、直達我們內心。</p>
-<p>舉個例子，我們描述一個人的好心情，如果只是用「愉悅」來描述，很難讓我們有更深入的想像。但如果是說「嘴裡哼著歌，踏著輕快的腳步」，整個形象就立體起來了。完全沒提到心情好，讀者卻能從字裡行間中讀出來。</p>
-<p>日本的近代文學大師夏目漱石曾說過，「我愛你」對日本人來說太過直白，可以委婉地說「今晚月色真美」。這某種程度上也是用間接的方式來傳遞訊息，對於聽者來說，由於需要自行做訊息的轉譯，心裡上會更有親近感，更加能夠接受。</p>
-<p>因此，比起用總結方式傳達明確訊息，間接傳達經驗空間才是藝術的本質。</p>
-<p>這也是為何我們不喜歡教科書、電器說明書等直接了當的文字，但是卻喜歡閱讀小說，並可以從其中的故事來領悟作者想傳遞的訊息。</p>
-<p>從詩集小說，到繪畫音樂，不同的藝術表現形式都是在提供觀賞者一種獨特的體驗。我們可以從杜甫的詩集讀出他憂國憂民的理想，梵谷的畫作感受到他創作時的內心衝突與扭曲。這些體驗無法完全用文字清楚描述，只能透過藝術來傳達給他人。</p>
-<center>梵谷自畫像，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%96%87%E6%A3%AE%E7%89%B9%C2%B7%E6%A2%B5%E9%AB%98">維基百科</a></center>
-
-<p><img src="/images/%E6%A2%B5%E8%B0%B7%E8%87%AA%E7%95%AB%E5%83%8F.jpg" alt="梵谷自畫像"></p>
-<p>既然藝術不是要傳達明確資訊，所以就沒有所謂什麼傳播媒介最好、最有效率這件事。</p>
-<p>如果我們只是要比較資訊量的話，歌曲本身攜帶的資訊已經包含文字和聲音，比起純粹的詩還要豐富，理論上可以直接取代詩。然而，從體驗的角度來說，有時候缺失的訊息本身也有重要性，由於可以激發我們的想像，反而獲得截然不同的經驗。正因為詩沒有既定的旋律，所以讀者可以用屬於自己的節奏來決定欣賞其中字句的快慢。</p>
-<p>由此我們可以看出一般溝通和欣賞藝術兩者的不同。</p>
-<p>一般人與人的溝通是要把資訊有效從一個人的大腦傳到另一個人的大腦，因此我們需要組織語言，甚至用圖表輔助，才能確保這個資訊傳輸過程沒有遺失。</p>
-<p>藝術並不是如此，本質上創作者不是在傳達訊息，而是要透過某種形式刺激觀賞者的感官，創造出獨特的體驗。觀賞者接收到的訊息和創作者最一開始傳達的可能是兩回事，但這也沒關係，因為觀眾的感受才是最重要的事情。</p>
-<p>很多作品在經過大眾媒體廣泛傳播以後，人們對他的印象早就不是作者最初的設定，而是包含了作品本身的歷史、群體對他的記憶。</p>
-<p>最明顯的例子是貝多芬的「給愛麗絲」。對台灣人來說，比起貝多芬創作這首曲目的原意（據傳是要給自己暗戀的女性），我們第一時間會想到的是垃圾車要來了，也許還會進而聯想到自己過去跟家人一起出去丟垃圾的回憶。</p>
-<p>同樣的道理也可以套用到大家朗朗上口的民謠上，例如「望春風」。這首歌最早是日治時代創作的台語流行音樂，因為廣受喜愛，所以在國民政府來台以後仍然被多個歌手不斷改編成國語傳唱，到現在國外樂團來台灣演奏幾乎都會準備這首歌曲來拉近與聽眾的關係。不同時代的台灣人對「望春風」的印象都有所不同，但唯一相同的是它確實承載了每一代人的回憶。當我們聽到望春風，自然而然就會想到故鄉台灣，這也是這個作品最有價值的地方。</p>
-<p>有時候我們會以為作品的名氣和它的藝術性掛勾，越有名氣的作品，代表藝術價值越高，人們也越容易被其感動。其實因果關係可能是倒過來的，很多時候是因為這個作品在機緣巧合下出了名，商人藉此進行商業傳播，又更加擴展它的名氣。我們對這個作品有感覺是因為它的高名氣，而不是藝術價值本身。</p>
-<p>大家耳熟能詳的達文西「蒙娜麗莎的微笑」就是最好的案例。雖然同樣是達文西所創作的優秀作品，「蒙娜麗莎的微笑」的名氣明顯就是高過一截。這個其實是起源自 1911 年的一起竊盜案。</p>
-<p>當初羅浮宮的「蒙娜麗莎的微笑」被竊取，引發了法國的轟動，甚至很多人特別跑去展廳朝聖空白的牆面。兩年後後才發現竊賊是義大利一名工匠，他聲稱是因為愛國心想把這幅畫帶回義大利，同樣也感動義大利人民。就這樣這幅畫的知名度不只在法國和義大利，也開始在全世界廣為傳播。人人都知道有這幅畫的存在，到羅浮宮也是想去看看這幅畫。</p>
-<p>另外補充一下，這幅畫真實尺寸其實不大，但是因為保安緣故所以人們只能遠遠看，基本上是看不清楚。在現場與其說是欣賞畫作，不如說是欣賞看畫的人，這反而更加有意思。</p>
-<center>羅浮宮觀賞蒙娜麗莎的人群</center>
-
-<p><img src="/images/%E7%BE%85%E6%B5%AE%E5%AE%AE%E8%A7%80%E8%B3%9E%E8%92%99%E5%A8%9C%E9%BA%97%E8%8E%8E%E7%9A%84%E4%BA%BA%E7%BE%A4.jpg" alt="羅浮宮觀賞蒙娜麗莎的人群"></p>
-<p>既然藝術欣賞很依賴於個人感受，那為何我們需要有導覽、需要聽別人的賞評呢？獨自欣賞不就好了？</p>
-<p>首先要了解的一點，藝術沒有正確答案，並沒有一個權威的人或機構能決定我們要怎麼看待任何作品。導覽本身不過是提供我們欣賞作品的另一個角度罷了，不論是技巧、創作背景、作品本身的故事。</p>
-<p>我們完全可以不認同他們的看法，不過聽聽其他人的欣賞方式也許能拓展我們的視野，找到另一種觸動我們內心的路徑。</p>
-<p>就如同喝茶一樣，在沒有任何訓練下，會覺得茶可能微微苦澀。但是若是更細緻去體會，就會發現原來其中還有一些不一樣的元素，鮮度、回甘等等。藝術賞析的價值正是幫助我們發現沒有注意到的元素，提高感受層次。</p>
-<p>然而藝術到了當前，越來越多人會抱怨無法看懂現代的藝術。以前的藝術，不論是繪畫還是雕刻，我們都可以看出作者在上面花費的心血，也許是宏偉壯觀，也許是精緻細膩。但是現今的藝術常常脫離這個範疇，我們看不出作品的創作難度，甚至也搞不懂為何要叫作這個名字。看了作品的簡介，並沒有得到解答，反而更一頭霧水。</p>
-<center>之前上新聞的香蕉藝術品「喜劇演員」，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1_(%E8%97%9D%E8%A1%93%E5%93%81)">維基百科</a></center>
-
-<p><img src="/images/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1.jpg" alt="喜劇演員"></p>
-<p>我想這可能跟技術的進步有關係。當相機出現了，過去寫實主義的繪畫風格就慢慢沒落，因為沒有什麼會比相片還要寫實。因此新技術會逼著藝術家探索不一樣的可能性，用更抽象的方式來表現。這也是為何現代藝術越來越難懂的原因。</p>
-<p>AI 的出現更是挑戰了藝術的價值。以往要畫一幅畫或寫一首詩，都需要人們經過長時間訓練，才能培養出相對應的技巧和敏感度。然而，當現在這些都可以輕易用 AI 創作，那我們該怎麼評判人類還是 AI 創作的作品價值呢？</p>
-<p>我們已經無法再用創作的技術難度來評估一個作品了，因為這些都能夠用 AI 輕易複製。然而 AI 並沒有真實的人生體驗，本質上它只是一種機率性的產物，能利用大量已有資料來產生出類似的作品。不論是歷史上各個著名的藝術流派，AI 都能快速模仿，產生出讓人驚豔的作品。</p>
-<p>因此，現在更重要的是創作者本身的獨特性，他想傳達什麼訊息、他個人的視角以及隱含的背後人生故事。這些獨一無二的性質是包含 AI 在內，世界上任何其他人都無法取代，也正因為如此才能為觀眾建立出特別的感受空間，直擊他們的內心。</p>
-<p>只要人類還有表達情緒的需求，藝術家就有存在的意義。而真正偉大的藝術，則是能觸碰隱藏在我們內心那個說不清楚的部份，搔到我們心中的癢處。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>《被討厭的勇氣》：擁有承擔責任的勇氣</title>
     <url>/2018/10/21/%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇想要介紹的是「<a href="https://www.books.com.tw/products/0010653153">被討厭的勇氣</a>」這本書，書中用哲學家和年輕人用對話方式來闡述阿德勒心理學。由於阿德勒心理學跟較廣為人知的佛洛伊德心理學相比更冷門一點，所以很多想法都給現代人帶來啟發，也因此廣受歡迎。<br>這系列書分為兩集，上集是對阿德勒心理學有個綜觀認識，而下集則是因為讀者有回饋不少意見而針對這些疑問的回答。個人認為下集比較偏向怎麼去實踐方面，其中幾乎有八成是在講教育部分。雖然我覺得一般人如何去實踐部分較少有點可惜，但是對諮商師、教師來說可能極具價值吧！<br>其實書中討論的阿德勒心理學範圍還蠻廣的，原本我想嘗試用整體架構來分析，但是發現可能以目前所掌握的相關知識不足以做這樣的評論，所以我改成會針對幾點比較有收穫的概念來介紹。</p>
@@ -3620,23 +3620,6 @@
 <h2 id="建立橫向關係"><a href="#建立橫向關係" class="headerlink" title="建立橫向關係"></a>建立橫向關係</h2><p>人際關係有分為橫向和縱向，阿德勒心理學否定一切的「縱向關係」，提倡所有的人際關係都應該是「橫向關係」。縱向關係帶來的是稱讚、責罵，然而橫向關係帶來的是尊敬、感謝。<br>我會特別把這點拿出來提的原因是書中有舉一個很有趣的例子：假設你遵從上司的指示，結果卻因此面臨工作上的挫敗，這應該是誰的責任？如果是縱向關係的人就會認為是上司的責任，因為是上司的指示，然而這個卻是隱含著自己逃避了責任、閃避複雜的人際關係，因為不用思考太過困難的事、不必為失敗負責，所以仰賴他人的指示過日子。對於橫向關係的人來說，應該要拒絕並提出更好的方案，工作成敗是自己要負責的，沒有任何理由推託。其實在工作上還蠻常遇到為了避免麻煩，把問題交給別人決定的情況，讓別人決定別人負責，但是真正負責任的做法也許是自己也提出想法，然後再與別人共同討論並共識出較好的做法。<br>除了對上關係外，對下也是「縱向關係」的一種，像是對孩童的讚賞或責罵。阿德勒很尖銳地指出，大人說對孩子好而去責罵通常不是真正為了小孩好，而是因為小孩犯錯隱含著大人有教育失敗的責任，而為了自己不要被批評，所以想要控制他照著自己的想法走。然而教育是為了讓孩子能夠自立，我們只能從旁提供協助，就算是失敗也是要由自己去負起責任。有點像是學習騎腳踏車，真正騎車的人是小孩自己，跌倒也必須是自己去承擔，但我們可以提供他建議和方法，如果怕小孩受傷而不放手，那他就永遠學不會騎車，只能不斷依賴我們。這跟教育有關的部分目前我大概只有這樣的了解，也許未來有小孩之後可能會有更多的體悟吧！</p>
 <h2 id="活在當下"><a href="#活在當下" class="headerlink" title="活在當下"></a>活在當下</h2><p>「活在當下」這句話大部分的人都聽膩了，幾乎都變成是一個政治正確的口號，不過這邊我想提提阿德勒對活在當下的看法。本書用旅遊來比喻人生，出去旅遊絕對不是到達目的才叫旅行，如果是這樣我們就用最快的方式飛到目的地，然後再快速返回不就達成目標了？從自己踏出家門的那一刻起，就已經稱作旅行，旅行的概念是在到達目的前的每個瞬間，認真享受每個瞬間才是旅行的目的。<br>同理人生也一樣，人生就像是登山攻頂的活動，有大半時間都在半路上，如果不能認真對待這個過程，只期待登頂的那個瞬間，那不就代表人生有一大半是沒有價值的？對我而言，常常也會期待未來會變得更好，希望「當下」趕快過去，只要我做完什麼事情人生就會不一樣了，像是學生時期要準備大考、工作時要面對大案子等等。可是再回過頭來想，面對困難挑戰永遠只想說熬過去人生會更好，好像完全沒有真正更好過，因為我只有完成挑戰那一瞬間獲得解脫的快樂，但很快又會有下一個挑戰。與其自己只能在這樣的痛苦中不斷輪迴，不如專心面對當下每個瞬間。<br>關於活在當下，其實也是呼應了前面目的論的看法。「人生是一連串的剎那，過去和未來都不存在，別想要藉著回顧過去、預見未來，給自己一個免除責任的藉口。」由於自己真正擁有的是現在，如果用過去當做藉口，就意味著放棄了現在所擁有的選擇權。當自己想把現在的不如意推給過去，或是期盼未來會更好時，都要注意是不是根本沒有活在現在，應該要認真做當下自己所能做改變的事情。</p>
 <h2 id="評價"><a href="#評價" class="headerlink" title="評價"></a>評價</h2><p>以書寫手法來說，兩本書的結尾基本上是年輕人被哲學家說服，受到感動想去嘗試阿德勒心理學，說實在這有點讓人覺得矯情，我覺得其實不用用這種傳教意味濃厚的結尾也不會讓書的價值打折扣，不太清楚為什麼用這種想煽動人心的結尾。<br>另外，很多觀念在對話中並沒辦法越辯越明，個人認為講不夠詳細、邏輯不夠清楚的地方還蠻多的。舉個例子，書中有提到要無條件相信別人，但下集又提到相信不是照單全收，對於對方的思想信念要持懷疑態度，如果我都對人產生懷疑了，還稱得上是信任嗎？這裡作者沒有做更詳細的解釋。當然這可能也是對話方式的書籍所受限之處，畢竟對話類型的書比起理論類型更能讓一般人接受，但對話勢必要省略比較細節的內容了。<br>看完上下兩集後，我認為如果是要把阿德勒心理學當作是自己的人生觀，還有太多需要釐清之處了，而且這也會有洗腦之嫌。然而不可否認，他在百年前提出的這些思想確實有其高明之處，簡而有力地戳破我們不敢面對的一面，這些部分可以再好好理解並且善用在生活中。我們可以利用前人的思想來形塑自己的人生觀，但是不要只是照本宣科去執行，這樣就跟下集一開始的年輕人一樣會陷入苦惱之中了。<br>如果認為完完全全照著某個理論做就可以得到幸福，那其實不也是逃避負責任，缺乏真正去面對自己人生的勇氣呢？</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《請停止無效努力》：尋找適合自己的方向</title>
-    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
-    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
-<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
-<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
-<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
-<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
-<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
@@ -3698,6 +3681,23 @@
 <li>反思自己可以為他人創造的獨特價值為何。當學習新事物的時候，可以想想有沒有什麼方式可以輸出價值。</li>
 <li>用較大的時間刻度看看自己過去的成就，可以用時間軸的方式來呈現。然後想想接下來的人生階段要以什麼事情為最大的優先目標。</li>
 </ol>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《請停止無效努力》：尋找適合自己的方向</title>
+    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
+<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
+<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
+<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
+<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
+<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
