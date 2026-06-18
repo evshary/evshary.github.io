@@ -187,6 +187,32 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker 開源的歷史</title>
+    <url>/2025/04/27/Docker%E9%96%8B%E6%BA%90%E7%9A%84%E6%AD%B7%E5%8F%B2/</url>
+    <content><![CDATA[<p>目前服務的公司主打開源軟體為核心，透過公開程式碼來吸引使用者、創造社群的聲量以及獲得回饋。我們相信軟體必須要有更多人使用才能創造更高的價值。然而開源軟體的精神雖然很好，但是公司為了生存還是得有生財之道，我們總是為了如何制定商業策略、如何營利所困擾。因此，我開始研究市場上到底其他以開源軟體為主體的公司是如何生存的。</p>
+<p>開源軟體的概念存在已久，一開始是理想主義者希望擁有自由修改軟體的基本權力，到現在已經更多成為一種商業手段。大部分的開源專案沒有商業公司在背後支持都無法長久，而公司在商場這個殘酷的叢林中依然需要遵循適者生存的法則。</p>
+<p>因此，<strong>生存是目的，開放是手段</strong>。這完全體現在著名軟體公司 Docker 的成長背景中。</p>
+<p>Docker 這家公司最一開始的名字是 DotCloud，在那時雲端概念如日中天時，主打提供平台即服務 (PaaS) 的業務。然而這個產業競爭十分激烈，因此他們決定在 2013 年開源內部所使用的容器技術 Docker 來吸引社群的目光。這種方式也是一個為何要開源的常見理由，開源的專案相對於閉源比較能吸引開發者注意，而有了流量就類似於打廣告，開發者們更有可能採用他們的 PaaS 解決方案。</p>
+<p>沒有想到的是，這個技術比想像中更受歡迎。儘管人們都可以在 Linux 上採用 cgroup 和 namespace 等來做到類似容器化的功能，但是設定實在太複雜了。Docker 的出現能夠隱藏 Linux 上複雜的設定，用簡單的映像檔打包了容器，讓使用者可以輕易使用容器。</p>
+<p>這時 DotCloud 也順應趨勢把重心改放到 Docker 上面，推動其生態成長，並且改名為 Docker Inc.。Docker 為了統一生態系，在 2015 年成立了 OCI (Open Container Initiative) 這個組織來定義容器的規範。在那時 Docker 可以說是容器的等義詞，就像 Google 與網路搜尋的關係一樣。不過也因為這樣，當 Docker 限制這個名稱的商標使用時，社群也有反彈聲浪，認為他們利用開源捧紅了 Docker 卻又將其納為商標。</p>
+<p>事情並非一帆風順，Docker 很快就面臨了一系列的挑戰者，其中最著名的就是 Google 提出鼎鼎大名的 Kubernetes。</p>
+<p>Kubernetes 是為了企業容器部屬與管理所產生的開源專案，功能完整且擴充性高。儘管 Docker 也有提出類似的解決方案 Docker Swarm，但是開發速度太慢，而且它比較偏向給開發者入門簡單的管理功能，因此眾多企業紛紛選擇使用 Kubernetes。由於 Docker 的商業產品 Docker Enterprise 深度綁定 Docker Swarm，而沒有在發現社群轉向時趕緊與 Kubernetes 整合，也因此慢慢喪失了競爭力。</p>
+<p>我們可以看出在開源的世界裡，為了維持頭部玩家的地位必須不斷推陳出新，不然隨時會被其他競爭者超越。當社群的目光不再集中在自己身上時，就開始失去開源的種種好處，例如使用者的回饋、開發者的貢獻以及生態系的活躍（各種圍繞自己的套件與工具）。我也曾經親眼見證這段歷史，當初 Kubernetes 崛起時，我正在讀研究所，實驗室討論的熱門雲端關鍵字從 Docker 轉移到 Kubernetes，大家都在想怎麼有效利用這個新技術。</p>
+<p>當在開源領域的品牌逐漸遭受侵蝕，Docker 不再是唯一呼風喚雨的公司了。它意識到不能繼續把核心的底層技術握在手裡，不然市場上的玩家遲早會開發出另外一套技術。因此，Docker 捐贈了它容器技術的核心 containerd 到 CNCF (Cloud Native Computing Foundation) 這個第三方機構，讓其他依賴這個技術的人更安心，Kubernetes 也能持續使用 containerd 作為其核心。</p>
+<p>在 2019 年時，Docker 判斷自己再也無法與 Kubernetes 競爭，因為後者更加受如 Google、Redhat 等大型公司所青睞。於是便把自己的商業解決方案 (Docker Enterprise) 出售給 Mirantis。瘦身之後的 Docker 則是專注於工具以及平台服務上。</p>
+<p>目前 Docker 有兩個主要產品：</p>
+<p>• Docker Desktop: 在 Windows 和 MAC 下的圖形化工具，一定規模以上的企業要付費。這也是目前的最大宗收入來源。<br>• Docker Hub: 提供雲端託管平台，可以存放 Docker Image，一般使用者可以免費使用，但也提供企業更好的加值服務。這與 GitHub 的策略相似。</p>
+<p>從 Docker 的歷史可以看出，他每一次的轉變和開放都與商業考量息息相關。最一開始為了推廣自家 PaaS 而開源 Docker，再來因為受競爭對手的壓力而放棄 containerd 的所有權，最終放棄商業方案並專心提供工具和平台給開發者。儘管開源可以吸引大量使用者，但當發現某項技術有用的時候，其實也沒有足夠的護城河防止其他競爭者的進入。先行者仍必須要持續進步，維持在社群中的話語權。一旦不再是舞台的中心了，其價值也就大幅度滑落。</p>
+<p>Docker 是一家曾經站在時代巨浪上的公司，乘著雲端和開源浪潮而起，卻也因開源的激烈競爭而落。這讓人不禁懷疑開源專案的最佳策略是否是納為大型企業的其中一部分。大型企業不缺養活這些專案的錢，但是這些專案卻能為其提供新的增長點，就像是 Google 的 Kubernetes 為其雲端方案 GCP (Google Cloud Platform) 帶來好處一樣。聽說微軟曾經出價 40 億美元要買下 Docker，或許當初接受了，如今的容器化的戰場又是另一種不同的格局吧！</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>開源</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C語言的行內組譯</title>
     <url>/2018/05/20/C-Inline-Assembly/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候我們會在C的程式碼內看到<code>asm&#123;...&#125;</code>的結構，這代表的是行內組譯的概念，也就是在C語言中為了效率等目的直接要求compiler加入我們所指定組合語言。</p>
@@ -297,29 +323,105 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker 開源的歷史</title>
-    <url>/2025/04/27/Docker%E9%96%8B%E6%BA%90%E7%9A%84%E6%AD%B7%E5%8F%B2/</url>
-    <content><![CDATA[<p>目前服務的公司主打開源軟體為核心，透過公開程式碼來吸引使用者、創造社群的聲量以及獲得回饋。我們相信軟體必須要有更多人使用才能創造更高的價值。然而開源軟體的精神雖然很好，但是公司為了生存還是得有生財之道，我們總是為了如何制定商業策略、如何營利所困擾。因此，我開始研究市場上到底其他以開源軟體為主體的公司是如何生存的。</p>
-<p>開源軟體的概念存在已久，一開始是理想主義者希望擁有自由修改軟體的基本權力，到現在已經更多成為一種商業手段。大部分的開源專案沒有商業公司在背後支持都無法長久，而公司在商場這個殘酷的叢林中依然需要遵循適者生存的法則。</p>
-<p>因此，<strong>生存是目的，開放是手段</strong>。這完全體現在著名軟體公司 Docker 的成長背景中。</p>
-<p>Docker 這家公司最一開始的名字是 DotCloud，在那時雲端概念如日中天時，主打提供平台即服務 (PaaS) 的業務。然而這個產業競爭十分激烈，因此他們決定在 2013 年開源內部所使用的容器技術 Docker 來吸引社群的目光。這種方式也是一個為何要開源的常見理由，開源的專案相對於閉源比較能吸引開發者注意，而有了流量就類似於打廣告，開發者們更有可能採用他們的 PaaS 解決方案。</p>
-<p>沒有想到的是，這個技術比想像中更受歡迎。儘管人們都可以在 Linux 上採用 cgroup 和 namespace 等來做到類似容器化的功能，但是設定實在太複雜了。Docker 的出現能夠隱藏 Linux 上複雜的設定，用簡單的映像檔打包了容器，讓使用者可以輕易使用容器。</p>
-<p>這時 DotCloud 也順應趨勢把重心改放到 Docker 上面，推動其生態成長，並且改名為 Docker Inc.。Docker 為了統一生態系，在 2015 年成立了 OCI (Open Container Initiative) 這個組織來定義容器的規範。在那時 Docker 可以說是容器的等義詞，就像 Google 與網路搜尋的關係一樣。不過也因為這樣，當 Docker 限制這個名稱的商標使用時，社群也有反彈聲浪，認為他們利用開源捧紅了 Docker 卻又將其納為商標。</p>
-<p>事情並非一帆風順，Docker 很快就面臨了一系列的挑戰者，其中最著名的就是 Google 提出鼎鼎大名的 Kubernetes。</p>
-<p>Kubernetes 是為了企業容器部屬與管理所產生的開源專案，功能完整且擴充性高。儘管 Docker 也有提出類似的解決方案 Docker Swarm，但是開發速度太慢，而且它比較偏向給開發者入門簡單的管理功能，因此眾多企業紛紛選擇使用 Kubernetes。由於 Docker 的商業產品 Docker Enterprise 深度綁定 Docker Swarm，而沒有在發現社群轉向時趕緊與 Kubernetes 整合，也因此慢慢喪失了競爭力。</p>
-<p>我們可以看出在開源的世界裡，為了維持頭部玩家的地位必須不斷推陳出新，不然隨時會被其他競爭者超越。當社群的目光不再集中在自己身上時，就開始失去開源的種種好處，例如使用者的回饋、開發者的貢獻以及生態系的活躍（各種圍繞自己的套件與工具）。我也曾經親眼見證這段歷史，當初 Kubernetes 崛起時，我正在讀研究所，實驗室討論的熱門雲端關鍵字從 Docker 轉移到 Kubernetes，大家都在想怎麼有效利用這個新技術。</p>
-<p>當在開源領域的品牌逐漸遭受侵蝕，Docker 不再是唯一呼風喚雨的公司了。它意識到不能繼續把核心的底層技術握在手裡，不然市場上的玩家遲早會開發出另外一套技術。因此，Docker 捐贈了它容器技術的核心 containerd 到 CNCF (Cloud Native Computing Foundation) 這個第三方機構，讓其他依賴這個技術的人更安心，Kubernetes 也能持續使用 containerd 作為其核心。</p>
-<p>在 2019 年時，Docker 判斷自己再也無法與 Kubernetes 競爭，因為後者更加受如 Google、Redhat 等大型公司所青睞。於是便把自己的商業解決方案 (Docker Enterprise) 出售給 Mirantis。瘦身之後的 Docker 則是專注於工具以及平台服務上。</p>
-<p>目前 Docker 有兩個主要產品：</p>
-<p>• Docker Desktop: 在 Windows 和 MAC 下的圖形化工具，一定規模以上的企業要付費。這也是目前的最大宗收入來源。<br>• Docker Hub: 提供雲端託管平台，可以存放 Docker Image，一般使用者可以免費使用，但也提供企業更好的加值服務。這與 GitHub 的策略相似。</p>
-<p>從 Docker 的歷史可以看出，他每一次的轉變和開放都與商業考量息息相關。最一開始為了推廣自家 PaaS 而開源 Docker，再來因為受競爭對手的壓力而放棄 containerd 的所有權，最終放棄商業方案並專心提供工具和平台給開發者。儘管開源可以吸引大量使用者，但當發現某項技術有用的時候，其實也沒有足夠的護城河防止其他競爭者的進入。先行者仍必須要持續進步，維持在社群中的話語權。一旦不再是舞台的中心了，其價值也就大幅度滑落。</p>
-<p>Docker 是一家曾經站在時代巨浪上的公司，乘著雲端和開源浪潮而起，卻也因開源的激烈競爭而落。這讓人不禁懷疑開源專案的最佳策略是否是納為大型企業的其中一部分。大型企業不缺養活這些專案的錢，但是這些專案卻能為其提供新的增長點，就像是 Google 的 Kubernetes 為其雲端方案 GCP (Google Cloud Platform) 帶來好處一樣。聽說微軟曾經出價 40 億美元要買下 Docker，或許當初接受了，如今的容器化的戰場又是另一種不同的格局吧！</p>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
+<li>指令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+</ul>
+</li>
+</ul>
+<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
+<li><p>先產生key</p>
+<ul>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
+<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
+<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
+<li><p>查看目前的鑰匙</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>編輯key(對key簽名也是用同樣的方法)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
+<li><p>首先先搜尋對象的public key</p>
+<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看與更新朋友的public key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
+<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>import&#x2F;export自己的金鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
+<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果要確認發信人身份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>技術</category>
       </categories>
       <tags>
-        <tag>開源</tag>
+        <tag>GNU tool</tag>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -519,108 +621,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
-<li>指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
-</ul>
-</li>
-</ul>
-<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
-<li><p>先產生key</p>
-<ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
-<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
-<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
-<li><p>查看目前的鑰匙</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>編輯key(對key簽名也是用同樣的方法)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
-<li><p>首先先搜尋對象的public key</p>
-<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看與更新朋友的public key</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
-<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>import&#x2F;export自己的金鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
-<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果要確認發信人身份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1430,88 +1430,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>docker 簡易教學</title>
     <url>/2018/05/12/docker-%E7%B0%A1%E6%98%93%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><ul>
@@ -1636,6 +1554,88 @@
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
 <li><a href="https://philipzheng.gitbooks.io/docker_practice/content/">Docker —— 從入門到實踐</a></li>
 <li><a href="https://peihsinsu.gitbooks.io/docker-note-book/content/">Docker學習筆記</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
+
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放音樂</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2091,6 +2091,43 @@
       </tags>
   </entry>
   <entry>
+    <title>port knocking</title>
+    <url>/2017/08/27/port-knocking/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>我這邊server是用Ubuntu, client是MAC環境。</p>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install knockd</span><br></pre></td></tr></table></figure>
+
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
+
+<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[options]</span></span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line"><span class="section">[openSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">3389</span>:udp,<span class="number">80</span>:tcp,<span class="number">21</span>:udp,<span class="number">53</span>:tcp,<span class="number">23</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -I INPUT <span class="number">1</span> -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br><span class="line"></span><br><span class="line"><span class="section">[closeSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">443</span>:tcp,<span class="number">80</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br></pre></td></tr></table></figure>
+
+<p>功能大概看名字也可以猜出來</p>
+<ul>
+<li>sequence: 敲port的順序</li>
+<li>seq_timeout: 間隔時間</li>
+<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
+<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service knockd start</span><br></pre></td></tr></table></figure>
+
+<p>記得防火牆要先設定不讓外面的人進入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><p>須先安裝knock</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用 openssl 工具與函式庫</title>
     <url>/2018/05/13/openssl-library-example/</url>
     <content><![CDATA[<h2 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install openssl</span><br></pre></td></tr></table></figure>
@@ -2248,43 +2285,6 @@
       </tags>
   </entry>
   <entry>
-    <title>port knocking</title>
-    <url>/2017/08/27/port-knocking/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>port knocking就像是敲門的暗號一樣，以特定順序碰觸port，server就會執行特定指令<br>我們可以把這個功能用來開port，就像阿里巴巴要用咒語才可以開門一樣。<br>詳情可參考<a href="http://www.portknocking.org/view/about/summary">port knocking的定義</a></p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>我這邊server是用Ubuntu, client是MAC環境。</p>
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install knockd</span><br></pre></td></tr></table></figure>
-
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew insrall knock</span><br></pre></td></tr></table></figure>
-
-<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>通常在位置在<code>/etc/knockd.conf</code><br>最初的設定檔，可參考<a href="http://linux.die.net/man/1/knockd">manual</a><br>這邊是客製化的設定，目的是可以開關port 22，防止有人亂連。</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[options]</span></span><br><span class="line">        UseSyslog</span><br><span class="line"></span><br><span class="line"><span class="section">[openSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">3389</span>:udp,<span class="number">80</span>:tcp,<span class="number">21</span>:udp,<span class="number">53</span>:tcp,<span class="number">23</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -I INPUT <span class="number">1</span> -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br><span class="line"></span><br><span class="line"><span class="section">[closeSSH]</span></span><br><span class="line">        <span class="attr">sequence</span>    = <span class="number">443</span>:tcp,<span class="number">80</span>:udp</span><br><span class="line">        <span class="attr">seq_timeout</span> = <span class="number">5</span></span><br><span class="line">        <span class="attr">command</span>     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport <span class="number">22</span> -j ACCEPT</span><br><span class="line">        <span class="attr">tcpflags</span>    = syn</span><br></pre></td></tr></table></figure>
-
-<p>功能大概看名字也可以猜出來</p>
-<ul>
-<li>sequence: 敲port的順序</li>
-<li>seq_timeout: 間隔時間</li>
-<li>command: 如果成功敲完，要執行什麼命令，這邊是用開ssh來當示範</li>
-<li>tcpflags: 如果是TCP連線，需要有什麼flag</li>
-</ul>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>把<code>/etc/default/knockd</code>中的<code>START_KNOCKD</code>改成1<br>然後啟動</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service knockd start</span><br></pre></td></tr></table></figure>
-
-<p>記得防火牆要先設定不讓外面的人進入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/sbin/iptables -A INPUT --dport 8888 -j DROP</span><br></pre></td></tr></table></figure>
-
-<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><p>須先安裝knock</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 開啓</span></span><br><span class="line">knock -v 192.168.0.1 3389:udp 80:tcp 21:udp 53:tcp 23:udp</span><br><span class="line"><span class="comment"># 關閉</span></span><br><span class="line">knock -v 192.168.0.1 443:tcp 80:udp</span><br></pre></td></tr></table></figure>
-
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>knock不一定要完全正確<br>例如說如果順序是7000,8000,9000<br>那麼我們用7000-9000依序敲過去仍然是可以打開<br>但是如果是分兩次knock就沒有用了</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>一些減少code size的方法</title>
     <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
@@ -2404,32 +2404,6 @@
       </tags>
   </entry>
   <entry>
-    <title>不要被政治所操弄</title>
-    <url>/2026/03/22/%E4%B8%8D%E8%A6%81%E8%A2%AB%E6%94%BF%E6%B2%BB%E6%89%80%E6%93%8D%E5%BC%84/</url>
-    <content><![CDATA[<p>最近，因為台灣的行政權和立法權分屬不同政黨，所以國家政治弄得紛紛擾擾的。常常看到很多人在臉書、YouTube、LINE、PTT 等平台上面各種大肆批評對方立場，而且言語常常都是非理性辱罵，這讓我的心情也常常會被影響到。</p>
-<p>當其中一方看似說的有道理時，我也會跟著憤慨為什麼另一方不這樣做，他們是不是想賣國、是不是有腐敗。好像所有問題都來自敵對政黨，只要他們消失，一切都會好轉，從此國家就會走上正軌。</p>
-<p>不過如果仔細思考一下就會發現其中邏輯根本就不通順，不論是哪個政黨都有曾經完全執政過，但是那段時間難道國家就完全沒問題嗎？不，一樣有貪污腐敗，一樣有政策錯誤，認為某個政黨更為優秀的想法根本就太天真了。</p>
-<p>政黨是由人所組成，而人本來就有形形色色，各種不同樣貌，其中一定都會有害群之馬。時間一久，這些人自然就會出現在國家某些要位上，影響國家運行。這是系統性問題，不會因為有哪位天縱英明的領導人出現就能改變，這也是為何民主國家都會有定期選舉、監督制衡的機制。</p>
-<p>對於政治人物來說，想要持續獲得權利，就必須獲得選民的支持，因此不論對手的政見是否真的是對國家有利，他們一定要將其抹黑，營造出一種氛圍───現在人民有任何不滿都是來自對方的錯。透過放大負面情緒，他們就能從中獲益。</p>
-<p>政客操弄選民情緒是民主國家必然會出現的現象，因為不這麼做，他們就無法上位。這就如同網紅們透過追時事熱點來獲得流量、新聞媒體用聳動標題來搏人眼球一樣自然。這時候如果我們的情緒也跟著被這些政客們所操弄，那不就是正中他們的下懷了嗎？</p>
-<p>有些人會說，我們不能看著國家被一群賣國賊帶往錯誤的道路，他們為了自己的私利煽動無知的支持者，瓦解國家的力量，破壞我們的體制。</p>
-<p>我們要相信我們制度的力量，台灣已經經過多次政黨輪替，我們的體制有糾錯的機制，如果做不好，下次選舉就會被趕下台。沒有任何一個人或是一個黨，有那麼大的力量去破壞這套運行的規則。我們現在所擔心的檯面上議題，放到四年後來看，有時甚至根本不用那麼久，都不過是小事而已，根本沒有那麼大的破壞力。只是政客們希望你相信，並且站在他們那側，這樣他們就更容易從對手那邊奪得權力而已。</p>
-<p>在網路上看到很多政治口水的發言，各個黨派的支持者彼此互嗆，嘲笑對方。當我們站在其中一派的立場時，就會覺得怎麼會有那麼不講理的人出現，明明事實就是這樣，為何他們不要接受。任何一個政治事件發生的時候，就會開始轉發相同理念的人的文章，並與立場相悖的人辯論，藉由這樣的動作來滿足內心的需求。</p>
-<p>但是，任何網路上的爭論永遠都是平行線。沒有任何人會因為辯論而轉變立場，想像一下如果你在一場辯論中輸了，你就會相信對方是對的嗎？更有可能的是認為自己只是一時表現不好，所以才會在爭論中落入下風而已。人的思想是最難改變的事物，當遭受到挑戰時，反而會因為感覺受到侵犯，更加進入防禦姿態。</p>
-<p>不論是政壇上政客的各種政治操弄，又或者是網路上的政治口水戰，仔細想想，我們個人的意見根本不會改變現況。不會因為我們個體的支持或反對，態度就會急轉彎，網友就會改變立場，這些都不是在我們能控制的範圍中。</p>
-<p>人生是由一個個當下所組成，而我們當下的注意力在哪邊，也就意味我們生命在哪邊。如果把注意力放在一個我們無法控制的事情上面，那就是在浪費我們的生命。因此，過度關注政治對於人生是百害而無一利的。</p>
-<p>那麼身為普通人，我們要如何避免變成政客的棋子，被其操弄呢？</p>
-<p>首先，不要把某個政黨或是某個政治人物當成自我認同。一般來說，防禦性的心態都來自我們的自我被他人侵犯，為了保護自己，就會開始奮起抵抗。任何政黨或是政治人物都會犯錯，若是我們把自我跟他們綁在一起，當他們被抨擊時，就好像自己被攻擊，下意識就會反擊。然而，何必呢？他們的行為不是我們能控制的，我們如同被綁在一個大石頭上不斷往水裡沉，雖然無法控制石頭的重量，但是我們可以選擇切斷繩索，讓自己自由。</p>
-<p>再來，雖然就像公民課本所說，我們必須要參與政治，可是這並不代表我們需要支持某一個政黨。政治是一個資源分配的過程，政黨不過是扮演反饋民意的角色而已。我們需要的是針對自己重視的議題發聲，不需要多，只要看最看重的那個就好。有可能是高房價，有可能是國防安全，也有可能是科技發展。針對這個議題，選擇要支持的政黨或候選人，這樣我們就不會被政治所綁架了。</p>
-<p>第三，我們要尊重世界的複雜性。當我們批評當權者為何不去做一個看似理所當然的事情，往往背後都是有反作用力在牽扯，一定是有一群跟我們持不同意見的人存在，才導致政治人物不願意去積極處理。例如當我們批評高房價時，也有一大群人畢生資產就在自己好不容易存錢買的房子上，他們肯定不願意看到房價下跌，政府也會因為這個原因不敢下重手。</p>
-<p>最後，政治雖然很重要，但真正重要的還是我們自己的生活過得好不好。我們關心政治，是因為要讓自己生活過得更好，而不是被政治口號牽著跑。政客們很喜歡用宏大的敘事來吸引人民，讓他們好像吃了毒品一樣上癮，相信只要票投給自己，充滿希望的未來就在眼前。任何政策或是國際事件，我們要想的是這會怎麼影響我的生活，我要怎麼應對，而不是去大肆批評，藉機多踩自己不喜歡的政黨幾腳。</p>
-<p>我們的時間、思想、情緒等等，都是屬於自己生命中很重要的一部分，別讓它們被政治所操弄了。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>人形機器人與自動化的趨勢</title>
     <url>/2025/06/08/%E4%BA%BA%E5%BD%A2%E6%A9%9F%E5%99%A8%E4%BA%BA%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E7%9A%84%E8%B6%A8%E5%8B%A2/</url>
     <content><![CDATA[<p>最近，人形機器人的概念越來越熱門，從在 NVIDIA GTC 2025 跟黃仁勳一起登場的可愛機器人 BLUE，到 Elon Musk 的人形機器人 Optimus 能夠輕易跳舞，就連中國各家的機器人公司也紛紛提出相應的競品。這顯示人們對於機器人的關注不斷提升，也預示著人工智慧將會從虛擬的網路世界推展到實體的現實生活中。</p>
@@ -2457,6 +2431,32 @@
       <tags>
         <tag>機器人</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>不要被政治所操弄</title>
+    <url>/2026/03/22/%E4%B8%8D%E8%A6%81%E8%A2%AB%E6%94%BF%E6%B2%BB%E6%89%80%E6%93%8D%E5%BC%84/</url>
+    <content><![CDATA[<p>最近，因為台灣的行政權和立法權分屬不同政黨，所以國家政治弄得紛紛擾擾的。常常看到很多人在臉書、YouTube、LINE、PTT 等平台上面各種大肆批評對方立場，而且言語常常都是非理性辱罵，這讓我的心情也常常會被影響到。</p>
+<p>當其中一方看似說的有道理時，我也會跟著憤慨為什麼另一方不這樣做，他們是不是想賣國、是不是有腐敗。好像所有問題都來自敵對政黨，只要他們消失，一切都會好轉，從此國家就會走上正軌。</p>
+<p>不過如果仔細思考一下就會發現其中邏輯根本就不通順，不論是哪個政黨都有曾經完全執政過，但是那段時間難道國家就完全沒問題嗎？不，一樣有貪污腐敗，一樣有政策錯誤，認為某個政黨更為優秀的想法根本就太天真了。</p>
+<p>政黨是由人所組成，而人本來就有形形色色，各種不同樣貌，其中一定都會有害群之馬。時間一久，這些人自然就會出現在國家某些要位上，影響國家運行。這是系統性問題，不會因為有哪位天縱英明的領導人出現就能改變，這也是為何民主國家都會有定期選舉、監督制衡的機制。</p>
+<p>對於政治人物來說，想要持續獲得權利，就必須獲得選民的支持，因此不論對手的政見是否真的是對國家有利，他們一定要將其抹黑，營造出一種氛圍───現在人民有任何不滿都是來自對方的錯。透過放大負面情緒，他們就能從中獲益。</p>
+<p>政客操弄選民情緒是民主國家必然會出現的現象，因為不這麼做，他們就無法上位。這就如同網紅們透過追時事熱點來獲得流量、新聞媒體用聳動標題來搏人眼球一樣自然。這時候如果我們的情緒也跟著被這些政客們所操弄，那不就是正中他們的下懷了嗎？</p>
+<p>有些人會說，我們不能看著國家被一群賣國賊帶往錯誤的道路，他們為了自己的私利煽動無知的支持者，瓦解國家的力量，破壞我們的體制。</p>
+<p>我們要相信我們制度的力量，台灣已經經過多次政黨輪替，我們的體制有糾錯的機制，如果做不好，下次選舉就會被趕下台。沒有任何一個人或是一個黨，有那麼大的力量去破壞這套運行的規則。我們現在所擔心的檯面上議題，放到四年後來看，有時甚至根本不用那麼久，都不過是小事而已，根本沒有那麼大的破壞力。只是政客們希望你相信，並且站在他們那側，這樣他們就更容易從對手那邊奪得權力而已。</p>
+<p>在網路上看到很多政治口水的發言，各個黨派的支持者彼此互嗆，嘲笑對方。當我們站在其中一派的立場時，就會覺得怎麼會有那麼不講理的人出現，明明事實就是這樣，為何他們不要接受。任何一個政治事件發生的時候，就會開始轉發相同理念的人的文章，並與立場相悖的人辯論，藉由這樣的動作來滿足內心的需求。</p>
+<p>但是，任何網路上的爭論永遠都是平行線。沒有任何人會因為辯論而轉變立場，想像一下如果你在一場辯論中輸了，你就會相信對方是對的嗎？更有可能的是認為自己只是一時表現不好，所以才會在爭論中落入下風而已。人的思想是最難改變的事物，當遭受到挑戰時，反而會因為感覺受到侵犯，更加進入防禦姿態。</p>
+<p>不論是政壇上政客的各種政治操弄，又或者是網路上的政治口水戰，仔細想想，我們個人的意見根本不會改變現況。不會因為我們個體的支持或反對，態度就會急轉彎，網友就會改變立場，這些都不是在我們能控制的範圍中。</p>
+<p>人生是由一個個當下所組成，而我們當下的注意力在哪邊，也就意味我們生命在哪邊。如果把注意力放在一個我們無法控制的事情上面，那就是在浪費我們的生命。因此，過度關注政治對於人生是百害而無一利的。</p>
+<p>那麼身為普通人，我們要如何避免變成政客的棋子，被其操弄呢？</p>
+<p>首先，不要把某個政黨或是某個政治人物當成自我認同。一般來說，防禦性的心態都來自我們的自我被他人侵犯，為了保護自己，就會開始奮起抵抗。任何政黨或是政治人物都會犯錯，若是我們把自我跟他們綁在一起，當他們被抨擊時，就好像自己被攻擊，下意識就會反擊。然而，何必呢？他們的行為不是我們能控制的，我們如同被綁在一個大石頭上不斷往水裡沉，雖然無法控制石頭的重量，但是我們可以選擇切斷繩索，讓自己自由。</p>
+<p>再來，雖然就像公民課本所說，我們必須要參與政治，可是這並不代表我們需要支持某一個政黨。政治是一個資源分配的過程，政黨不過是扮演反饋民意的角色而已。我們需要的是針對自己重視的議題發聲，不需要多，只要看最看重的那個就好。有可能是高房價，有可能是國防安全，也有可能是科技發展。針對這個議題，選擇要支持的政黨或候選人，這樣我們就不會被政治所綁架了。</p>
+<p>第三，我們要尊重世界的複雜性。當我們批評當權者為何不去做一個看似理所當然的事情，往往背後都是有反作用力在牽扯，一定是有一群跟我們持不同意見的人存在，才導致政治人物不願意去積極處理。例如當我們批評高房價時，也有一大群人畢生資產就在自己好不容易存錢買的房子上，他們肯定不願意看到房價下跌，政府也會因為這個原因不敢下重手。</p>
+<p>最後，政治雖然很重要，但真正重要的還是我們自己的生活過得好不好。我們關心政治，是因為要讓自己生活過得更好，而不是被政治口號牽著跑。政客們很喜歡用宏大的敘事來吸引人民，讓他們好像吃了毒品一樣上癮，相信只要票投給自己，充滿希望的未來就在眼前。任何政策或是國際事件，我們要想的是這會怎麼影響我的生活，我要怎麼應對，而不是去大肆批評，藉機多踩自己不喜歡的政黨幾腳。</p>
+<p>我們的時間、思想、情緒等等，都是屬於自己生命中很重要的一部分，別讓它們被政治所操弄了。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>在非標準的道路上</title>
@@ -2495,22 +2495,6 @@
       </categories>
   </entry>
   <entry>
-    <title>川普當選後對世界格局分析</title>
-    <url>/2024/11/17/%E5%B7%9D%E6%99%AE%E7%95%B6%E9%81%B8%E5%BE%8C%E5%B0%8D%E4%B8%96%E7%95%8C%E6%A0%BC%E5%B1%80%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p>最近最熱門的事情莫過於川普當選後人們紛紛嘗試預測未來世界格局會怎麼變化、該如何進行投資。我自己也很喜歡讀國際政治、財經相關的文章。在閱讀那麼多資訊後也來嘗試整理一下自己的分析和觀點，幫助未來更好地修正自己的系統判斷。</p>
-<p>川普是屬於典型的強人，很重視個人魅力，而不是傳統上的政治妥協。因此比起其他的總統，他的個性就特別的重要。川普畢竟是商人出身，比起價值來說更重視利益，彼此之間的關係能不能帶來商業價值，所以不會用價值體系來強化盟友關係，而是更多用雙邊談判取代多邊談判。他很喜歡強調和其他獨裁強人的關係很好，因為他認為可以只要搞定獨裁者就可以省去其他談判上的麻煩，儘管這並不是事實(想想他第一任北韓的例子)。川普也很好大喜功、愛面子，更重要的是著迷於權力，要求部屬對其完全的忠誠。</p>
-<p>在美國內政上，我們先不考慮金融海嘯或是疫情等無法預測的黑天鵝。川普的民調沒太多意外的話上任一陣子後應該會快速滑落，主要原因在於他任用的官員幾乎都是對其忠心的人為主，很多私德或能力上面有很多問題(至少從目前公布的名單來看)。一旦團隊出了包，肯定會被對其不是那麼友好的媒體放大檢視，創造出很多爭議的話題出來。另外馬斯克所提出的改善政府效率部門也會因為得罪很多政府單位的人而造成爭議，可以想想當初 X 是怎麼被人批評的。然而這也是有好處的，當政府效率提升、管制變少，再加上川普很重視股市，可以想像經濟會繼續向上提升，至於通膨是否會更嚴重那就真的不好說了，至少目前市場是這麼認為的。我對川普 2026 的期中選舉並不會很樂觀，就如同他的第一任一樣。在民調下滑時，強人通常會採取對外強硬的態度，接下來就看看外交部分。</p>
-<p>先看看烏克蘭，我的看法是戰線會開始緩和下來，最終形成如南北韓的格局。川普有很大的可能性會直接和普丁碰面，如同他和金正恩碰面一樣，想展現他解決問題的能力。然而因為俄烏問題實在太過複雜，他不太可能逼迫哪方讓步，最終就是看在美國壓力上維持現狀。烏克蘭需要美國武器，俄羅斯不希望美國解禁長程武器的限制和提供更多先進裝備，雙方只能妥協。烏克蘭要不回烏東領土、俄羅斯也無法將烏克蘭去軍事化，納入其大斯拉夫主義下的緩衝區。這對烏克蘭是短空長多，至少他有時間重建經濟，接受歐盟援助。對俄羅斯則是短多長空，雖然取得大片烏東領土，但因為兩年的戰爭已轉為戰時經濟，再加上歐美制裁可能不會那麼簡單解除，經濟會大受影響，更別說石油價格可能會因為川普的政策大幅下滑，進而影響其出口。我猜測到時俄羅斯目前多餘的軍工產能會轉移到其他地方，特別是非洲，造成當地局勢升溫。</p>
-<p>中東部分按照川普第一任做法應該會持續對以色列友好，畢竟以色列不需要過多的軍援，且可以牽制伊朗，達成美國的戰略目標。在現在伊朗的代理人哈馬斯、真主黨等等都遭受大量打擊的情況下，巴勒斯坦人的聲音會逐漸消失於媒體之中。沙烏地阿拉伯不見得會和以色列建交，但是關係的改善是可預見的。至於伊朗和沙烏地阿拉伯的關係雖然之前有所緩和，但是應該不會近一步升溫。不過由於土耳其前陣子才斷絕與以色列的關係，他的態度如何值得繼續觀察。</p>
-<p>另一個熱點東亞從川普目前內閣名單來看對中會持續強硬，再加上他討厭為他國提供保護的角度來看，應該會放手讓日韓自己強化軍備，特別日本新首相石破茂也希望戰略自主的情況下。對台灣方面，由於選前不斷放話要保護費，可預見的是軍售項目會增加，另外也會將此視為對中國施壓的籌碼。至於北韓部分，川金會面的機率應該不大，北韓不太可能放棄核武，而現在又有俄羅斯撐腰，更沒有意願和美國對話。對俄羅斯而言，北韓不只是提供炮彈和兵力的盟友，更可以當成撬動對美國東亞布局的槓桿，可預見兩國關係會持續深化。中國對川普上台應該會很難受，特別是中國是美國最大的戰略對手，他會更加強化與東南亞和拉丁美洲的關係，至少在兩國對抗中不會站隊到美國陣營去，另外也期望能多少彌補失去的美國市場。至於俄中關係不大可能會結成同盟，但會持續彼此利用，美國是否能像過去聯中抗蘇一樣做到聯俄抗中，我是不太看好，畢竟其歐洲盟友對此會非常敏感。</p>
-<p>至於投資上，我對股票市場前景算是看好，川普討厭貿易逆差，因此討厭匯率高，他應該會逼迫 FED 主席鮑威爾降息 (FED 願不願意做是另一回事)。如果再加上管制放寬，可預見新創企業會有很多新機會，特別是跟 AI 相關的。在政府減少監管下，手握大量現金的科技巨頭也會開始併購企業。軍工行業部分，雖然川普不愛戰爭，但是他喜歡做生意，再加上美國縮手在全世界的軍事存在感，各國對國防需求會大增，我想軍工企業生意應該會變好。至於石化能源，川普對其友善，並且會取消綠能補助，但是如果大量生產石油反而會造成石油價格下降，而石油下降又會對純電動車造成壓力，因此我對石化產業和綠能、電動車產業沒那麼看好。區塊鏈相關企業應該會放寬管制，但我總覺得區塊鏈會對美元霸權造成威脅，所以需要多些研究才行。以地域方面來看，美國的關稅會迫使企業從中國轉移到第三方，如印度、東南亞、南美，而中國為了爭取支持也會大量投資他們，這些地方應該會持續受惠。</p>
-<p>以上是目前我所看到的趨勢，但是實際上並不一定會這樣走，畢竟川普的不可預測性真的有點高，大家都是邊看邊調整。對於專家來說預測失準非常正常，更別說是我這樣業餘興趣的人了。總之先提出想法，再根據世界變化來修正認知，找出跟當初想像不吻合之處，這樣才能逐漸提高自己的眼光。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>學習之道</title>
     <url>/2025/01/26/%E5%AD%B8%E7%BF%92%E4%B9%8B%E9%81%93/</url>
     <content><![CDATA[<p>學習並非是一件容易的事情，但在變化迅速的現代社會中，學習新技能卻又是不可避免的事情。以前人們可以靠一門手藝就能成家立業，然而現在隨著電腦、手機、AI 等科技不斷演化，任何一門行業也都必須要不斷與時俱進才行。不會使用新的科技，競爭力就會弱於精通的同行，舉例來說，會使用 Uber 的店家比起傳統餐廳會多了新的客源。「活到老，學到老」或許不再是勵志的鼓勵，而是未來社會生存所需遵守的殘酷法則。</p>
@@ -2528,6 +2512,22 @@
 <p>另外一種動機可能是好奇心，其實某種程度上也是要解決問題，只是這個問題是來自我們心中的疑惑。解決心中的疑惑並不必要把某門知識從頭學起。也許我們對物理的相對論感興趣，但是比起從大學的普通物理開始讀起，更好的方式是去看點科普讀物，當有更多疑惑時再一個個去理解就好。</p>
 <p>總而言之，學習的動機應該要具體而微，而非大又廣泛。</p>
 <h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>市面上教導如何學習的書千百種，各式各樣的方法都有，例如刻意練習、沉浸式學習、間隔學習等等，而上面所分享的是個人經驗中對我特別有用的方法。不過，比起討論什麼學習方法才正確，更重要的是找出適合自己的方法。現代社會中最需要學習的不是某門特定的學問和知識，而是學會「元學習」，也就是學習如何學習這回事！</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>川普當選後對世界格局分析</title>
+    <url>/2024/11/17/%E5%B7%9D%E6%99%AE%E7%95%B6%E9%81%B8%E5%BE%8C%E5%B0%8D%E4%B8%96%E7%95%8C%E6%A0%BC%E5%B1%80%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<p>最近最熱門的事情莫過於川普當選後人們紛紛嘗試預測未來世界格局會怎麼變化、該如何進行投資。我自己也很喜歡讀國際政治、財經相關的文章。在閱讀那麼多資訊後也來嘗試整理一下自己的分析和觀點，幫助未來更好地修正自己的系統判斷。</p>
+<p>川普是屬於典型的強人，很重視個人魅力，而不是傳統上的政治妥協。因此比起其他的總統，他的個性就特別的重要。川普畢竟是商人出身，比起價值來說更重視利益，彼此之間的關係能不能帶來商業價值，所以不會用價值體系來強化盟友關係，而是更多用雙邊談判取代多邊談判。他很喜歡強調和其他獨裁強人的關係很好，因為他認為可以只要搞定獨裁者就可以省去其他談判上的麻煩，儘管這並不是事實(想想他第一任北韓的例子)。川普也很好大喜功、愛面子，更重要的是著迷於權力，要求部屬對其完全的忠誠。</p>
+<p>在美國內政上，我們先不考慮金融海嘯或是疫情等無法預測的黑天鵝。川普的民調沒太多意外的話上任一陣子後應該會快速滑落，主要原因在於他任用的官員幾乎都是對其忠心的人為主，很多私德或能力上面有很多問題(至少從目前公布的名單來看)。一旦團隊出了包，肯定會被對其不是那麼友好的媒體放大檢視，創造出很多爭議的話題出來。另外馬斯克所提出的改善政府效率部門也會因為得罪很多政府單位的人而造成爭議，可以想想當初 X 是怎麼被人批評的。然而這也是有好處的，當政府效率提升、管制變少，再加上川普很重視股市，可以想像經濟會繼續向上提升，至於通膨是否會更嚴重那就真的不好說了，至少目前市場是這麼認為的。我對川普 2026 的期中選舉並不會很樂觀，就如同他的第一任一樣。在民調下滑時，強人通常會採取對外強硬的態度，接下來就看看外交部分。</p>
+<p>先看看烏克蘭，我的看法是戰線會開始緩和下來，最終形成如南北韓的格局。川普有很大的可能性會直接和普丁碰面，如同他和金正恩碰面一樣，想展現他解決問題的能力。然而因為俄烏問題實在太過複雜，他不太可能逼迫哪方讓步，最終就是看在美國壓力上維持現狀。烏克蘭需要美國武器，俄羅斯不希望美國解禁長程武器的限制和提供更多先進裝備，雙方只能妥協。烏克蘭要不回烏東領土、俄羅斯也無法將烏克蘭去軍事化，納入其大斯拉夫主義下的緩衝區。這對烏克蘭是短空長多，至少他有時間重建經濟，接受歐盟援助。對俄羅斯則是短多長空，雖然取得大片烏東領土，但因為兩年的戰爭已轉為戰時經濟，再加上歐美制裁可能不會那麼簡單解除，經濟會大受影響，更別說石油價格可能會因為川普的政策大幅下滑，進而影響其出口。我猜測到時俄羅斯目前多餘的軍工產能會轉移到其他地方，特別是非洲，造成當地局勢升溫。</p>
+<p>中東部分按照川普第一任做法應該會持續對以色列友好，畢竟以色列不需要過多的軍援，且可以牽制伊朗，達成美國的戰略目標。在現在伊朗的代理人哈馬斯、真主黨等等都遭受大量打擊的情況下，巴勒斯坦人的聲音會逐漸消失於媒體之中。沙烏地阿拉伯不見得會和以色列建交，但是關係的改善是可預見的。至於伊朗和沙烏地阿拉伯的關係雖然之前有所緩和，但是應該不會近一步升溫。不過由於土耳其前陣子才斷絕與以色列的關係，他的態度如何值得繼續觀察。</p>
+<p>另一個熱點東亞從川普目前內閣名單來看對中會持續強硬，再加上他討厭為他國提供保護的角度來看，應該會放手讓日韓自己強化軍備，特別日本新首相石破茂也希望戰略自主的情況下。對台灣方面，由於選前不斷放話要保護費，可預見的是軍售項目會增加，另外也會將此視為對中國施壓的籌碼。至於北韓部分，川金會面的機率應該不大，北韓不太可能放棄核武，而現在又有俄羅斯撐腰，更沒有意願和美國對話。對俄羅斯而言，北韓不只是提供炮彈和兵力的盟友，更可以當成撬動對美國東亞布局的槓桿，可預見兩國關係會持續深化。中國對川普上台應該會很難受，特別是中國是美國最大的戰略對手，他會更加強化與東南亞和拉丁美洲的關係，至少在兩國對抗中不會站隊到美國陣營去，另外也期望能多少彌補失去的美國市場。至於俄中關係不大可能會結成同盟，但會持續彼此利用，美國是否能像過去聯中抗蘇一樣做到聯俄抗中，我是不太看好，畢竟其歐洲盟友對此會非常敏感。</p>
+<p>至於投資上，我對股票市場前景算是看好，川普討厭貿易逆差，因此討厭匯率高，他應該會逼迫 FED 主席鮑威爾降息 (FED 願不願意做是另一回事)。如果再加上管制放寬，可預見新創企業會有很多新機會，特別是跟 AI 相關的。在政府減少監管下，手握大量現金的科技巨頭也會開始併購企業。軍工行業部分，雖然川普不愛戰爭，但是他喜歡做生意，再加上美國縮手在全世界的軍事存在感，各國對國防需求會大增，我想軍工企業生意應該會變好。至於石化能源，川普對其友善，並且會取消綠能補助，但是如果大量生產石油反而會造成石油價格下降，而石油下降又會對純電動車造成壓力，因此我對石化產業和綠能、電動車產業沒那麼看好。區塊鏈相關企業應該會放寬管制，但我總覺得區塊鏈會對美元霸權造成威脅，所以需要多些研究才行。以地域方面來看，美國的關稅會迫使企業從中國轉移到第三方，如印度、東南亞、南美，而中國為了爭取支持也會大量投資他們，這些地方應該會持續受惠。</p>
+<p>以上是目前我所看到的趨勢，但是實際上並不一定會這樣走，畢竟川普的不可預測性真的有點高，大家都是邊看邊調整。對於專家來說預測失準非常正常，更別說是我這樣業餘興趣的人了。總之先提出想法，再根據世界變化來修正認知，找出跟當初想像不吻合之處，這樣才能逐漸提高自己的眼光。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -2749,6 +2749,39 @@
       </tags>
   </entry>
   <entry>
+    <title>探討區塊鏈的價值</title>
+    <url>/2025/03/09/%E6%8E%A2%E8%A8%8E%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E5%83%B9%E5%80%BC/</url>
+    <content><![CDATA[<p>加密貨幣這個詞越來越常出現在人們生活中，不論是新聞媒體還是朋友圈中。可惜的是，大家探討的通常是「比特幣又突破新高」、「某國總統發行了迷因幣」、「某個名人投資虛擬貨幣被詐騙」，很少真正觸及加密貨幣背後——也就是區塊鏈——的本質。</p>
+<p>區塊鏈是什麼？究竟解決什麼問題？如果無法理解它的價值就去投資加密貨幣，那內心就會隨著幣圈中各種消息而起伏，心裡不踏實。</p>
+<p>這篇文章會先探討區塊鏈想解決什麼問題，然後再簡單描述其運作原理。</p>
+<h2 id="公開帳本的價值"><a href="#公開帳本的價值" class="headerlink" title="公開帳本的價值"></a>公開帳本的價值</h2><p>讓我們先把區塊鏈放一邊。想像一個跟我們一樣的世界，但唯一的差別是<strong>這個世界有一個公開的公佈欄，任何人都能在上面記錄資訊，而且這些記錄無法抹除或竄改</strong>。請問我們可以怎麼使用這個公佈欄呢？</p>
+<p>我想你一定可以想到很多應用，其中最重要的應用跟錢脫離不了關係——也就是「帳本」。過去人們交易要怎麼證明自己有付錢呢？我們可能是一手交錢一手交貨，也可能是透過銀行轉帳，對方確認帳戶有收到錢。一般來說這樣並沒有什麼問題，然而這是在人們可以直接接觸，又或者是都在同一個銀行體系的情況下。如果我們想把錢轉給地球上另一個人，這個過程會經過層層不效率的銀行體系，最後才到對方的手裡。</p>
+<p>若是使用這個公佈欄，那會有什麼改變呢？我們只需要在公佈欄上記錄 A 轉 100 元給 B，這樣就行了。這之間完全不需要涉及第三方（如銀行），而且價值轉移是立即完成，對方也可以馬上從公佈欄上確認。最重要的是，我們不需要使用實體的錢，完全依靠公佈欄上的記錄就可以。舉例來說，A 收到了 500 元，轉了 100 元出去，計算後知道 A 剩下 400 元。只要對方能相信公佈欄上的記錄，A 就可以用剩餘的 400 元來進行其他交易。<strong>本質上，對公佈欄的信任就是這個流程最重要的基礎</strong>。</p>
+<p><img src="/images/%E5%85%AC%E9%96%8B%E5%85%AC%E4%BD%88%E6%AC%84.drawio.svg" alt="公開公佈欄"></p>
+<h2 id="區塊鏈的原理"><a href="#區塊鏈的原理" class="headerlink" title="區塊鏈的原理"></a>區塊鏈的原理</h2><p>然而，我們現實世界並沒有這樣的公開公佈欄。因此，中本聰發明了「區塊鏈」來確保公佈欄公開並且可以隨時存取的特性。</p>
+<p>區塊鏈這個系統讓多個人<strong>分散持有</strong>這個公佈欄，並且有<strong>經濟誘因</strong>一起記錄各種交易。由於多人持有，所以不會因為任何人離開而無法存取這個公佈欄。而為了讓人願意參與這個系統，則需要提供足夠的經濟動機。</p>
+<p>下面我們針對這兩點來分別說明：</p>
+<h3 id="分散持有"><a href="#分散持有" class="headerlink" title="分散持有"></a>分散持有</h3><p>分散持有聽起來很美好，但分散也就意味著彼此同步的困難。以區塊鏈來說，需要透過所有人的共識來確保公開紀錄的一致性。</p>
+<p>在區塊鏈上，我們會把交易紀錄記在一個個區塊上面，而每個區塊都可以產生出某個特殊的特徵值。這個特徵值會被包含在下一個區塊上，並依此產生出新的特徵值。因此，區塊和區塊之間就有了關係，形成了一條鍊，也就是「區塊鏈」的名稱由來。</p>
+<p><img src="/images/%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E6%A6%82%E5%BF%B5.drawio.svg" alt="區塊鏈的概念"></p>
+<p>透過一些加密演算法，這些特徵的產生很困難，需要大量的計算。越多人參與計算，又或者說算力越強，就越有可能找出特徵，形成鏈上的新區塊。</p>
+<p>然而，由於分散持有，我的計算結果和你的計算結果可能會有差異，這條鏈就分叉了。這時就要引入共識機制：所有人只會接受最長的鏈，較短的鏈會被捨去。越長的鏈代表著越多的參與者，所以某種程度上也算是多數決，由多數的那方決定哪個分岔要留下來。</p>
+<p><img src="/images/%E4%BF%9D%E7%95%99%E6%9C%80%E9%95%B7%E7%9A%84%E9%8F%88.drawio.svg" alt="保留最長的鏈"></p>
+<p>透過這樣的方式，我們就能在分散的情況下，確保紀錄的公開一致性了。</p>
+<h3 id="經濟誘因"><a href="#經濟誘因" class="headerlink" title="經濟誘因"></a>經濟誘因</h3><p>解決了公開一致的問題後，我們還需要確保有足夠多的參與者，畢竟沒有人會想白白提供自己的計算能力給別人。因此，還必須提供一些經濟動機給參與者。</p>
+<p>前面提到區塊的產生需要找出獨特的特徵值，區塊鏈會透過獎勵找到特徵值的人一些收益，來增加人們參與系統的意願。當你的計算力越強，產生出的區塊越多，就能有越多收益。這樣從無到有產生出價值的行為，類似於礦工從礦石中挖出黃金的形象，所以人們又稱之為「挖礦」。</p>
+<p>區塊鏈設計巧妙之處在於，<strong>明明參與者只是為了自己的利益而行動，但是他行動的副產品，卻又協助紀錄各種交易，維持公開帳本的存在</strong>。隨著人們越來越信任公開帳本，參與者收益的價值會不斷向上提昇，進而吸引更多人參與其中。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>除了最基本的公開帳本功能，後來的區塊鏈技術衍生出更多的應用，例如自動執行程式的智能合約、確認所有權的 NFT 等等。雖然這些複雜的應用擁有更多潛在的經濟價值，但也提昇了一般人進入的門檻。我們需要回歸區塊鏈最基礎的本質來思考。</p>
+<p>此外，人們對區塊鏈的認知過度強調加密貨幣的價格波動，而非它能解決什麼問題上，這並非是好事。<strong>一項技術的成功必須基於其本身的價值，唯有了解其價值，才能真正客觀看待未來的發展性</strong>。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>區塊鏈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>我對 AI 的應用與反思</title>
     <url>/2025/02/23/%E6%88%91%E5%B0%8D%20AI%20%E7%9A%84%E6%87%89%E7%94%A8%E8%88%87%E5%8F%8D%E6%80%9D/</url>
     <content><![CDATA[<p>隨著 AI 的普及，我在日常生活中使用 AI 的機會也越來越多。AI 的能力不斷提升，每年都有質的飛躍，使得許多事務都可以依賴這個新工具。因此，了解 AI 能為我提供哪些幫助，以及它的極限在哪裡，就變得至關重要。</p>
@@ -2791,57 +2824,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>探討區塊鏈的價值</title>
-    <url>/2025/03/09/%E6%8E%A2%E8%A8%8E%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E5%83%B9%E5%80%BC/</url>
-    <content><![CDATA[<p>加密貨幣這個詞越來越常出現在人們生活中，不論是新聞媒體還是朋友圈中。可惜的是，大家探討的通常是「比特幣又突破新高」、「某國總統發行了迷因幣」、「某個名人投資虛擬貨幣被詐騙」，很少真正觸及加密貨幣背後——也就是區塊鏈——的本質。</p>
-<p>區塊鏈是什麼？究竟解決什麼問題？如果無法理解它的價值就去投資加密貨幣，那內心就會隨著幣圈中各種消息而起伏，心裡不踏實。</p>
-<p>這篇文章會先探討區塊鏈想解決什麼問題，然後再簡單描述其運作原理。</p>
-<h2 id="公開帳本的價值"><a href="#公開帳本的價值" class="headerlink" title="公開帳本的價值"></a>公開帳本的價值</h2><p>讓我們先把區塊鏈放一邊。想像一個跟我們一樣的世界，但唯一的差別是<strong>這個世界有一個公開的公佈欄，任何人都能在上面記錄資訊，而且這些記錄無法抹除或竄改</strong>。請問我們可以怎麼使用這個公佈欄呢？</p>
-<p>我想你一定可以想到很多應用，其中最重要的應用跟錢脫離不了關係——也就是「帳本」。過去人們交易要怎麼證明自己有付錢呢？我們可能是一手交錢一手交貨，也可能是透過銀行轉帳，對方確認帳戶有收到錢。一般來說這樣並沒有什麼問題，然而這是在人們可以直接接觸，又或者是都在同一個銀行體系的情況下。如果我們想把錢轉給地球上另一個人，這個過程會經過層層不效率的銀行體系，最後才到對方的手裡。</p>
-<p>若是使用這個公佈欄，那會有什麼改變呢？我們只需要在公佈欄上記錄 A 轉 100 元給 B，這樣就行了。這之間完全不需要涉及第三方（如銀行），而且價值轉移是立即完成，對方也可以馬上從公佈欄上確認。最重要的是，我們不需要使用實體的錢，完全依靠公佈欄上的記錄就可以。舉例來說，A 收到了 500 元，轉了 100 元出去，計算後知道 A 剩下 400 元。只要對方能相信公佈欄上的記錄，A 就可以用剩餘的 400 元來進行其他交易。<strong>本質上，對公佈欄的信任就是這個流程最重要的基礎</strong>。</p>
-<p><img src="/images/%E5%85%AC%E9%96%8B%E5%85%AC%E4%BD%88%E6%AC%84.drawio.svg" alt="公開公佈欄"></p>
-<h2 id="區塊鏈的原理"><a href="#區塊鏈的原理" class="headerlink" title="區塊鏈的原理"></a>區塊鏈的原理</h2><p>然而，我們現實世界並沒有這樣的公開公佈欄。因此，中本聰發明了「區塊鏈」來確保公佈欄公開並且可以隨時存取的特性。</p>
-<p>區塊鏈這個系統讓多個人<strong>分散持有</strong>這個公佈欄，並且有<strong>經濟誘因</strong>一起記錄各種交易。由於多人持有，所以不會因為任何人離開而無法存取這個公佈欄。而為了讓人願意參與這個系統，則需要提供足夠的經濟動機。</p>
-<p>下面我們針對這兩點來分別說明：</p>
-<h3 id="分散持有"><a href="#分散持有" class="headerlink" title="分散持有"></a>分散持有</h3><p>分散持有聽起來很美好，但分散也就意味著彼此同步的困難。以區塊鏈來說，需要透過所有人的共識來確保公開紀錄的一致性。</p>
-<p>在區塊鏈上，我們會把交易紀錄記在一個個區塊上面，而每個區塊都可以產生出某個特殊的特徵值。這個特徵值會被包含在下一個區塊上，並依此產生出新的特徵值。因此，區塊和區塊之間就有了關係，形成了一條鍊，也就是「區塊鏈」的名稱由來。</p>
-<p><img src="/images/%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E6%A6%82%E5%BF%B5.drawio.svg" alt="區塊鏈的概念"></p>
-<p>透過一些加密演算法，這些特徵的產生很困難，需要大量的計算。越多人參與計算，又或者說算力越強，就越有可能找出特徵，形成鏈上的新區塊。</p>
-<p>然而，由於分散持有，我的計算結果和你的計算結果可能會有差異，這條鏈就分叉了。這時就要引入共識機制：所有人只會接受最長的鏈，較短的鏈會被捨去。越長的鏈代表著越多的參與者，所以某種程度上也算是多數決，由多數的那方決定哪個分岔要留下來。</p>
-<p><img src="/images/%E4%BF%9D%E7%95%99%E6%9C%80%E9%95%B7%E7%9A%84%E9%8F%88.drawio.svg" alt="保留最長的鏈"></p>
-<p>透過這樣的方式，我們就能在分散的情況下，確保紀錄的公開一致性了。</p>
-<h3 id="經濟誘因"><a href="#經濟誘因" class="headerlink" title="經濟誘因"></a>經濟誘因</h3><p>解決了公開一致的問題後，我們還需要確保有足夠多的參與者，畢竟沒有人會想白白提供自己的計算能力給別人。因此，還必須提供一些經濟動機給參與者。</p>
-<p>前面提到區塊的產生需要找出獨特的特徵值，區塊鏈會透過獎勵找到特徵值的人一些收益，來增加人們參與系統的意願。當你的計算力越強，產生出的區塊越多，就能有越多收益。這樣從無到有產生出價值的行為，類似於礦工從礦石中挖出黃金的形象，所以人們又稱之為「挖礦」。</p>
-<p>區塊鏈設計巧妙之處在於，<strong>明明參與者只是為了自己的利益而行動，但是他行動的副產品，卻又協助紀錄各種交易，維持公開帳本的存在</strong>。隨著人們越來越信任公開帳本，參與者收益的價值會不斷向上提昇，進而吸引更多人參與其中。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>除了最基本的公開帳本功能，後來的區塊鏈技術衍生出更多的應用，例如自動執行程式的智能合約、確認所有權的 NFT 等等。雖然這些複雜的應用擁有更多潛在的經濟價值，但也提昇了一般人進入的門檻。我們需要回歸區塊鏈最基礎的本質來思考。</p>
-<p>此外，人們對區塊鏈的認知過度強調加密貨幣的價格波動，而非它能解決什麼問題上，這並非是好事。<strong>一項技術的成功必須基於其本身的價值，唯有了解其價值，才能真正客觀看待未來的發展性</strong>。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>區塊鏈</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《深度學習的技術》：一種學習的框架</title>
-    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
-    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
-<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
-<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
-<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
-<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
-<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
-<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
   </entry>
   <entry>
     <title>淺談函式庫</title>
@@ -3068,6 +3050,24 @@
       </tags>
   </entry>
   <entry>
+    <title>《深度學習的技術》：一種學習的框架</title>
+    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
+    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
+<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
+<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
+<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
+<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
+<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
+<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
     <url>/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/CN11869057">為什麼偉大不能被計劃</a>」是由兩位作者 Kenneth Stanley 和 Joel Lehman 所著。他們是機器學習和人工智慧研究學者，其團隊做了一個圖片孵化網站，意外發現要從亂數中產生出好的圖片並不能透過事先的計劃，而是只能透過不斷嘗試，發掘夠新奇有趣的圖片，然後以此為踏腳石繼續往下探索。這樣的發現也可以套用到其他人類偉大的發現和發明之中。這些偉大的成就，大多都不是透過設定目標和安排計畫來達成，反而都是因為在興趣探索時意外發現。</p>
@@ -3179,6 +3179,41 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>為何比特幣是加密貨幣中的定海神針</title>
+    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
+    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
+<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
+<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
+<center>比特幣市值佔比圖，資料來源：coingecko</center>
+
+<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
+<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
+<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
+<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
+<ul>
+<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
+<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
+<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
+</ul>
+<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
+<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
+<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
+<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
+<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
+<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
+<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
+<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
+<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>區塊鏈</tag>
+      </tags>
   </entry>
   <entry>
     <title>為何我選擇定期定額投入市值型 ETF</title>
@@ -3308,41 +3343,6 @@
       </categories>
   </entry>
   <entry>
-    <title>為何比特幣是加密貨幣中的定海神針</title>
-    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
-    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
-<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
-<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
-<center>比特幣市值佔比圖，資料來源：coingecko</center>
-
-<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
-<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
-<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
-<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
-<ul>
-<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
-<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
-<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
-</ul>
-<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
-<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
-<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
-<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
-<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
-<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
-<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
-<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
-<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>區塊鏈</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>獲取資訊來源的方法</title>
     <url>/2024/09/22/%E7%8D%B2%E5%8F%96%E8%B3%87%E8%A8%8A%E4%BE%86%E6%BA%90%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>在現代社會大家獲得資訊的管道已經不侷限於新聞媒體或報章雜誌了，像是 YouTube、Podcast、短影音或部落格等等都是常見的方式。最讓人苦惱的不是有沒有資訊，而是優質的資訊源。太多的訊息反而讓自己的注意力被分散，而無法專注在真正帶來價值的事物上。不過話又說回來，適當地更新資訊也是保持我們對世界變化維持敏銳關注的必要一環，維持一個巧妙的平衡很重要。</p>
@@ -3434,6 +3434,26 @@
       </tags>
   </entry>
   <entry>
+    <title>系統演化：穩定中間態的關鍵角色</title>
+    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
+    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
+<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
+<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
+<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
+<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
+<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
+<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
+<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
+<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
+<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
+<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
+<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>筆記：自己的外部大腦</title>
     <url>/2024/11/03/%E7%AD%86%E8%A8%98%EF%BC%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A4%96%E9%83%A8%E5%A4%A7%E8%85%A6/</url>
     <content><![CDATA[<p>對人類來說，紀錄筆記可能真的是不得不做的必要之惡。我們的大腦天生就不善於記憶東西，而為了讓自己更容易找出過去某個時間點的知識，我們需要有個外部系統來輔助，這也就是所謂的筆記。</p>
@@ -3470,78 +3490,6 @@
 </li>
 </ul>
 <h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>筆記只是輔助，但是卻也不可或缺。找出適合自己的筆記方法是非常值得的投資，會幫助思考並且讓生活更容易被掌握。以我的經驗來說，筆記確實讓我感到生活工作各個方面都更加可控，不過也要記得過猶不及，花太多時間在筆記上反而會阻礙了我們發揮創意並思考。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>系統演化：穩定中間態的關鍵角色</title>
-    <url>/2024/12/29/%E7%B3%BB%E7%B5%B1%E6%BC%94%E5%8C%96%EF%BC%9A%E7%A9%A9%E5%AE%9A%E4%B8%AD%E9%96%93%E6%85%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E8%A7%92%E8%89%B2/</url>
-    <content><![CDATA[<p>系統演化是一個非常有意思的主題。不論是生物界的物競天擇、企業間的激烈競爭，還是科技的不斷革新，都是可以視為系統在不同層面的競爭與演化。透過對這些現象的觀察與總結，我們或許能找出某些規律，進而更準確地預測未來的發展趨勢。</p>
-<h2 id="生物演化的穩定中間態"><a href="#生物演化的穩定中間態" class="headerlink" title="生物演化的穩定中間態"></a>生物演化的穩定中間態</h2><p>生物演化的起點，是在機緣巧合下誕生的 DNA&#x2F;RNA 分子組合。這些分子因其有效攜帶遺傳訊息並能複製的特性，被自然界篩選為穩定的媒介。隨後，蛋白質的誕生和細胞的形成為生物演化提供了更高層次的結構基礎。細胞進一步組成組織和器官，構建出複雜的生物體系。這些穩定的生物特徵能夠在世代間傳遞，並成為下一代演化的基石。</p>
-<p>在這裡，我們將這些穩定結構稱為「穩定的中間態」。它們有兩種特性：<strong>一方面，可以它們能長期穩定存在，另一方面，它們又具備重新排列組合的潛力</strong>。例如所有生命體都是由 DNA&#x2F;RNA 所組成，而大多數的生物(病毒除外)則是以細胞為基本單位，這些特徵是生物演化中不可或缺的穩定支柱。因此我們可以知道在自然界演化中，複雜生命結構不會是憑空出現，而是大自然慢慢摸索，發現某種中間態可以穩定存在，然後再基於這個中間態繼續往下探索，組合出更複雜的形式。</p>
-<h2 id="工具與思想：另一種系統演化"><a href="#工具與思想：另一種系統演化" class="headerlink" title="工具與思想：另一種系統演化"></a>工具與思想：另一種系統演化</h2><p>人類和生物的差別也是這種演化的延續，原本生物需要靠基因演化來慢慢增加複雜性、彼此競爭。但人類超脫出了基因的競賽，靠著工具的使用，主宰了這個生態系。工具的發明與改良比起單純基因演化能夠有更快的迭代。我們會用火、會用石矛、發明了銅器與鐵器，這些器物的出現速度遠遠快於生物物種間的變化。工具的使用是另一個新的系統競爭賽道，這個賽道上也有很多穩定的中間態，就像是懂得冶鐵後，我們才能製造更堅固的武器、農具。</p>
-<p>除了工具的使用，人類的思想更是另外一種系統演化。我們的祖先學會了用文字來紀錄，文字的出現堪比 DNA 這種遺傳物質。人的思想不僅僅是能夠跨空間交流，現在更能夠跨時間交流。前人所學的事物能夠透夠文字留給後人，讓後人基於此往下繼續延伸發展。不論是哲學思想、數學、科學，都透過書籍的形式讓後人可以站在前人的肩膀上。文字是一種很重要的中間態，各個學科的基本知識和定律也是穩定的中間態，後人可以藉由它們來創造出前所未有的理論知識。</p>
-<p>由此可知，<strong>任何系統的演化都會產生出一個穩定的中間狀態，後繼者會基於這樣的中間態往下演化，增加其複雜性。更重要的是，這樣演化速度越來越快</strong>。</p>
-<h2 id="以科技演化為例：穩定中間態能加速演化"><a href="#以科技演化為例：穩定中間態能加速演化" class="headerlink" title="以科技演化為例：穩定中間態能加速演化"></a>以科技演化為例：穩定中間態能加速演化</h2><p>比起基因的緩慢演化，工具與思想的進步快上千萬倍。看看人類大約在 4000 年前進入到農業社會，但是 400 年左右就進入了工業社會，而最近 40 年又因為電腦的出現而有翻天覆地的變化。<strong>過去需要數代人才會出現的變化，在未來只要一代就會出了好幾輪</strong>。</p>
-<p>我們特別能夠從資訊行業中看到這樣的改變：在早期，工程師需要透過電路設計來完成各種功能，每次的功能改動都需要重新設計電路圖。然而隨著 CPU 的誕生，功能的實現被轉移到軟體層面，只要改動軟體就可以讓同樣的硬體來實現多種用途。軟體的改動比起硬體更加快速容易，因此加速了科技的迭代速度。在這裡，CPU 和軟體的概念就是穩定的中間態。</p>
-<p>然而隨著軟體的複雜度上升，不可能每位程式設計師都從頭撰寫跑在硬體上的軟體，最好是能夠把共同功能抽出來，程式設計師只需要關注最重要的軟體功能就好，因此有了作業系統的概念出現。有了 Windows、Linux 等等作業系統，開發者關注上層的應用程式，底層和硬體相關的細節都交由作業系統處理就好，大大增加開發的效率。作業系統和應用程式的分割在這邊就是穩定的中間態。</p>
-<p>在現在軟體已經遠遠複雜於硬體的情況下，我們可以發現有更多的穩定中間態出現。不管是網路協定中的 TCP&#x2F;IP、容器化的技術等等都是支撐現在軟體的穩定結構。特別是現在 AI 的出現，更多人在探討能不能用 AI 的方式降低我們開發軟體的成本，若是能實現，可能未來軟體的演化又會是更加快速了。</p>
-<h2 id="小結：演化邏輯的啟示"><a href="#小結：演化邏輯的啟示" class="headerlink" title="小結：演化邏輯的啟示"></a>小結：演化邏輯的啟示</h2><p>無論是生物演化、人類社會的發展，還是科技的進步，我們都可以發現一個共同的規律：<strong>系統的複雜度越高，越是會出現穩定的中間態，加速整體系統的演化</strong>。這些中間態不僅是現有系統的基石，更是後人未來的創新平台。</p>
-<p>若我們所處的行業或工作能夠創造穩定的中間態，並成為他人建構更複雜事物的平台，那麼成功的機率將大大提升。理解並運用這樣的演化邏輯，或許正是掌握未來趨勢的關鍵。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>藝術是什麼</title>
-    <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
-    <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
-<center>法國史前時代拉斯科洞窟壁畫，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%94%BB">維基百科</a></center>
-
-<p><img src="/images/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%95%AB.jpg" alt="拉斯科洞窟壁畫"></p>
-<p>對於理工人來說，想要學習一件事情，必然要先從定義開始。那麼藝術的定義是什麼呢？</p>
-<p>藝術是透過創造性活動運用各種媒介，如文字、聲音、形象等等，來表達情感、思想或觀念，最重要的是要追求審美愉悅和精神昇華。</p>
-<p>為了追求美感，藝術並不直接傳達明確的訊息，而是建立一種感受空間。可以說，如果一個事物是被設計來觸動觀賞者的感官，這就是廣義上的藝術定義。</p>
-<p>為何不應該要有明確訊息呢？因為那會造成扁平化。人類是經驗的生物，我們透過生活上的各種經驗總結出自己的感受。當別人直接告訴我們結論，我們無法感同身受，但是當這個訊息是用間接的方式傳達給我們，反而可以能激發思考、直達我們內心。</p>
-<p>舉個例子，我們描述一個人的好心情，如果只是用「愉悅」來描述，很難讓我們有更深入的想像。但如果是說「嘴裡哼著歌，踏著輕快的腳步」，整個形象就立體起來了。完全沒提到心情好，讀者卻能從字裡行間中讀出來。</p>
-<p>日本的近代文學大師夏目漱石曾說過，「我愛你」對日本人來說太過直白，可以委婉地說「今晚月色真美」。這某種程度上也是用間接的方式來傳遞訊息，對於聽者來說，由於需要自行做訊息的轉譯，心裡上會更有親近感，更加能夠接受。</p>
-<p>因此，比起用總結方式傳達明確訊息，間接傳達經驗空間才是藝術的本質。</p>
-<p>這也是為何我們不喜歡教科書、電器說明書等直接了當的文字，但是卻喜歡閱讀小說，並可以從其中的故事來領悟作者想傳遞的訊息。</p>
-<p>從詩集小說，到繪畫音樂，不同的藝術表現形式都是在提供觀賞者一種獨特的體驗。我們可以從杜甫的詩集讀出他憂國憂民的理想，梵谷的畫作感受到他創作時的內心衝突與扭曲。這些體驗無法完全用文字清楚描述，只能透過藝術來傳達給他人。</p>
-<center>梵谷自畫像，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%96%87%E6%A3%AE%E7%89%B9%C2%B7%E6%A2%B5%E9%AB%98">維基百科</a></center>
-
-<p><img src="/images/%E6%A2%B5%E8%B0%B7%E8%87%AA%E7%95%AB%E5%83%8F.jpg" alt="梵谷自畫像"></p>
-<p>既然藝術不是要傳達明確資訊，所以就沒有所謂什麼傳播媒介最好、最有效率這件事。</p>
-<p>如果我們只是要比較資訊量的話，歌曲本身攜帶的資訊已經包含文字和聲音，比起純粹的詩還要豐富，理論上可以直接取代詩。然而，從體驗的角度來說，有時候缺失的訊息本身也有重要性，由於可以激發我們的想像，反而獲得截然不同的經驗。正因為詩沒有既定的旋律，所以讀者可以用屬於自己的節奏來決定欣賞其中字句的快慢。</p>
-<p>由此我們可以看出一般溝通和欣賞藝術兩者的不同。</p>
-<p>一般人與人的溝通是要把資訊有效從一個人的大腦傳到另一個人的大腦，因此我們需要組織語言，甚至用圖表輔助，才能確保這個資訊傳輸過程沒有遺失。</p>
-<p>藝術並不是如此，本質上創作者不是在傳達訊息，而是要透過某種形式刺激觀賞者的感官，創造出獨特的體驗。觀賞者接收到的訊息和創作者最一開始傳達的可能是兩回事，但這也沒關係，因為觀眾的感受才是最重要的事情。</p>
-<p>很多作品在經過大眾媒體廣泛傳播以後，人們對他的印象早就不是作者最初的設定，而是包含了作品本身的歷史、群體對他的記憶。</p>
-<p>最明顯的例子是貝多芬的「給愛麗絲」。對台灣人來說，比起貝多芬創作這首曲目的原意（據傳是要給自己暗戀的女性），我們第一時間會想到的是垃圾車要來了，也許還會進而聯想到自己過去跟家人一起出去丟垃圾的回憶。</p>
-<p>同樣的道理也可以套用到大家朗朗上口的民謠上，例如「望春風」。這首歌最早是日治時代創作的台語流行音樂，因為廣受喜愛，所以在國民政府來台以後仍然被多個歌手不斷改編成國語傳唱，到現在國外樂團來台灣演奏幾乎都會準備這首歌曲來拉近與聽眾的關係。不同時代的台灣人對「望春風」的印象都有所不同，但唯一相同的是它確實承載了每一代人的回憶。當我們聽到望春風，自然而然就會想到故鄉台灣，這也是這個作品最有價值的地方。</p>
-<p>有時候我們會以為作品的名氣和它的藝術性掛勾，越有名氣的作品，代表藝術價值越高，人們也越容易被其感動。其實因果關係可能是倒過來的，很多時候是因為這個作品在機緣巧合下出了名，商人藉此進行商業傳播，又更加擴展它的名氣。我們對這個作品有感覺是因為它的高名氣，而不是藝術價值本身。</p>
-<p>大家耳熟能詳的達文西「蒙娜麗莎的微笑」就是最好的案例。雖然同樣是達文西所創作的優秀作品，「蒙娜麗莎的微笑」的名氣明顯就是高過一截。這個其實是起源自 1911 年的一起竊盜案。</p>
-<p>當初羅浮宮的「蒙娜麗莎的微笑」被竊取，引發了法國的轟動，甚至很多人特別跑去展廳朝聖空白的牆面。兩年後後才發現竊賊是義大利一名工匠，他聲稱是因為愛國心想把這幅畫帶回義大利，同樣也感動義大利人民。就這樣這幅畫的知名度不只在法國和義大利，也開始在全世界廣為傳播。人人都知道有這幅畫的存在，到羅浮宮也是想去看看這幅畫。</p>
-<p>另外補充一下，這幅畫真實尺寸其實不大，但是因為保安緣故所以人們只能遠遠看，基本上是看不清楚。在現場與其說是欣賞畫作，不如說是欣賞看畫的人，這反而更加有意思。</p>
-<center>羅浮宮觀賞蒙娜麗莎的人群</center>
-
-<p><img src="/images/%E7%BE%85%E6%B5%AE%E5%AE%AE%E8%A7%80%E8%B3%9E%E8%92%99%E5%A8%9C%E9%BA%97%E8%8E%8E%E7%9A%84%E4%BA%BA%E7%BE%A4.jpg" alt="羅浮宮觀賞蒙娜麗莎的人群"></p>
-<p>既然藝術欣賞很依賴於個人感受，那為何我們需要有導覽、需要聽別人的賞評呢？獨自欣賞不就好了？</p>
-<p>首先要了解的一點，藝術沒有正確答案，並沒有一個權威的人或機構能決定我們要怎麼看待任何作品。導覽本身不過是提供我們欣賞作品的另一個角度罷了，不論是技巧、創作背景、作品本身的故事。</p>
-<p>我們完全可以不認同他們的看法，不過聽聽其他人的欣賞方式也許能拓展我們的視野，找到另一種觸動我們內心的路徑。</p>
-<p>就如同喝茶一樣，在沒有任何訓練下，會覺得茶可能微微苦澀。但是若是更細緻去體會，就會發現原來其中還有一些不一樣的元素，鮮度、回甘等等。藝術賞析的價值正是幫助我們發現沒有注意到的元素，提高感受層次。</p>
-<p>然而藝術到了當前，越來越多人會抱怨無法看懂現代的藝術。以前的藝術，不論是繪畫還是雕刻，我們都可以看出作者在上面花費的心血，也許是宏偉壯觀，也許是精緻細膩。但是現今的藝術常常脫離這個範疇，我們看不出作品的創作難度，甚至也搞不懂為何要叫作這個名字。看了作品的簡介，並沒有得到解答，反而更一頭霧水。</p>
-<center>之前上新聞的香蕉藝術品「喜劇演員」，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1_(%E8%97%9D%E8%A1%93%E5%93%81)">維基百科</a></center>
-
-<p><img src="/images/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1.jpg" alt="喜劇演員"></p>
-<p>我想這可能跟技術的進步有關係。當相機出現了，過去寫實主義的繪畫風格就慢慢沒落，因為沒有什麼會比相片還要寫實。因此新技術會逼著藝術家探索不一樣的可能性，用更抽象的方式來表現。這也是為何現代藝術越來越難懂的原因。</p>
-<p>AI 的出現更是挑戰了藝術的價值。以往要畫一幅畫或寫一首詩，都需要人們經過長時間訓練，才能培養出相對應的技巧和敏感度。然而，當現在這些都可以輕易用 AI 創作，那我們該怎麼評判人類還是 AI 創作的作品價值呢？</p>
-<p>我們已經無法再用創作的技術難度來評估一個作品了，因為這些都能夠用 AI 輕易複製。然而 AI 並沒有真實的人生體驗，本質上它只是一種機率性的產物，能利用大量已有資料來產生出類似的作品。不論是歷史上各個著名的藝術流派，AI 都能快速模仿，產生出讓人驚豔的作品。</p>
-<p>因此，現在更重要的是創作者本身的獨特性，他想傳達什麼訊息、他個人的視角以及隱含的背後人生故事。這些獨一無二的性質是包含 AI 在內，世界上任何其他人都無法取代，也正因為如此才能為觀眾建立出特別的感受空間，直擊他們的內心。</p>
-<p>只要人類還有表達情緒的需求，藝術家就有存在的意義。而真正偉大的藝術，則是能觸碰隱藏在我們內心那個說不清楚的部份，搔到我們心中的癢處。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -3611,6 +3559,58 @@
       </tags>
   </entry>
   <entry>
+    <title>藝術是什麼</title>
+    <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
+    <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
+<center>法國史前時代拉斯科洞窟壁畫，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%94%BB">維基百科</a></center>
+
+<p><img src="/images/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%95%AB.jpg" alt="拉斯科洞窟壁畫"></p>
+<p>對於理工人來說，想要學習一件事情，必然要先從定義開始。那麼藝術的定義是什麼呢？</p>
+<p>藝術是透過創造性活動運用各種媒介，如文字、聲音、形象等等，來表達情感、思想或觀念，最重要的是要追求審美愉悅和精神昇華。</p>
+<p>為了追求美感，藝術並不直接傳達明確的訊息，而是建立一種感受空間。可以說，如果一個事物是被設計來觸動觀賞者的感官，這就是廣義上的藝術定義。</p>
+<p>為何不應該要有明確訊息呢？因為那會造成扁平化。人類是經驗的生物，我們透過生活上的各種經驗總結出自己的感受。當別人直接告訴我們結論，我們無法感同身受，但是當這個訊息是用間接的方式傳達給我們，反而可以能激發思考、直達我們內心。</p>
+<p>舉個例子，我們描述一個人的好心情，如果只是用「愉悅」來描述，很難讓我們有更深入的想像。但如果是說「嘴裡哼著歌，踏著輕快的腳步」，整個形象就立體起來了。完全沒提到心情好，讀者卻能從字裡行間中讀出來。</p>
+<p>日本的近代文學大師夏目漱石曾說過，「我愛你」對日本人來說太過直白，可以委婉地說「今晚月色真美」。這某種程度上也是用間接的方式來傳遞訊息，對於聽者來說，由於需要自行做訊息的轉譯，心裡上會更有親近感，更加能夠接受。</p>
+<p>因此，比起用總結方式傳達明確訊息，間接傳達經驗空間才是藝術的本質。</p>
+<p>這也是為何我們不喜歡教科書、電器說明書等直接了當的文字，但是卻喜歡閱讀小說，並可以從其中的故事來領悟作者想傳遞的訊息。</p>
+<p>從詩集小說，到繪畫音樂，不同的藝術表現形式都是在提供觀賞者一種獨特的體驗。我們可以從杜甫的詩集讀出他憂國憂民的理想，梵谷的畫作感受到他創作時的內心衝突與扭曲。這些體驗無法完全用文字清楚描述，只能透過藝術來傳達給他人。</p>
+<center>梵谷自畫像，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%96%87%E6%A3%AE%E7%89%B9%C2%B7%E6%A2%B5%E9%AB%98">維基百科</a></center>
+
+<p><img src="/images/%E6%A2%B5%E8%B0%B7%E8%87%AA%E7%95%AB%E5%83%8F.jpg" alt="梵谷自畫像"></p>
+<p>既然藝術不是要傳達明確資訊，所以就沒有所謂什麼傳播媒介最好、最有效率這件事。</p>
+<p>如果我們只是要比較資訊量的話，歌曲本身攜帶的資訊已經包含文字和聲音，比起純粹的詩還要豐富，理論上可以直接取代詩。然而，從體驗的角度來說，有時候缺失的訊息本身也有重要性，由於可以激發我們的想像，反而獲得截然不同的經驗。正因為詩沒有既定的旋律，所以讀者可以用屬於自己的節奏來決定欣賞其中字句的快慢。</p>
+<p>由此我們可以看出一般溝通和欣賞藝術兩者的不同。</p>
+<p>一般人與人的溝通是要把資訊有效從一個人的大腦傳到另一個人的大腦，因此我們需要組織語言，甚至用圖表輔助，才能確保這個資訊傳輸過程沒有遺失。</p>
+<p>藝術並不是如此，本質上創作者不是在傳達訊息，而是要透過某種形式刺激觀賞者的感官，創造出獨特的體驗。觀賞者接收到的訊息和創作者最一開始傳達的可能是兩回事，但這也沒關係，因為觀眾的感受才是最重要的事情。</p>
+<p>很多作品在經過大眾媒體廣泛傳播以後，人們對他的印象早就不是作者最初的設定，而是包含了作品本身的歷史、群體對他的記憶。</p>
+<p>最明顯的例子是貝多芬的「給愛麗絲」。對台灣人來說，比起貝多芬創作這首曲目的原意（據傳是要給自己暗戀的女性），我們第一時間會想到的是垃圾車要來了，也許還會進而聯想到自己過去跟家人一起出去丟垃圾的回憶。</p>
+<p>同樣的道理也可以套用到大家朗朗上口的民謠上，例如「望春風」。這首歌最早是日治時代創作的台語流行音樂，因為廣受喜愛，所以在國民政府來台以後仍然被多個歌手不斷改編成國語傳唱，到現在國外樂團來台灣演奏幾乎都會準備這首歌曲來拉近與聽眾的關係。不同時代的台灣人對「望春風」的印象都有所不同，但唯一相同的是它確實承載了每一代人的回憶。當我們聽到望春風，自然而然就會想到故鄉台灣，這也是這個作品最有價值的地方。</p>
+<p>有時候我們會以為作品的名氣和它的藝術性掛勾，越有名氣的作品，代表藝術價值越高，人們也越容易被其感動。其實因果關係可能是倒過來的，很多時候是因為這個作品在機緣巧合下出了名，商人藉此進行商業傳播，又更加擴展它的名氣。我們對這個作品有感覺是因為它的高名氣，而不是藝術價值本身。</p>
+<p>大家耳熟能詳的達文西「蒙娜麗莎的微笑」就是最好的案例。雖然同樣是達文西所創作的優秀作品，「蒙娜麗莎的微笑」的名氣明顯就是高過一截。這個其實是起源自 1911 年的一起竊盜案。</p>
+<p>當初羅浮宮的「蒙娜麗莎的微笑」被竊取，引發了法國的轟動，甚至很多人特別跑去展廳朝聖空白的牆面。兩年後後才發現竊賊是義大利一名工匠，他聲稱是因為愛國心想把這幅畫帶回義大利，同樣也感動義大利人民。就這樣這幅畫的知名度不只在法國和義大利，也開始在全世界廣為傳播。人人都知道有這幅畫的存在，到羅浮宮也是想去看看這幅畫。</p>
+<p>另外補充一下，這幅畫真實尺寸其實不大，但是因為保安緣故所以人們只能遠遠看，基本上是看不清楚。在現場與其說是欣賞畫作，不如說是欣賞看畫的人，這反而更加有意思。</p>
+<center>羅浮宮觀賞蒙娜麗莎的人群</center>
+
+<p><img src="/images/%E7%BE%85%E6%B5%AE%E5%AE%AE%E8%A7%80%E8%B3%9E%E8%92%99%E5%A8%9C%E9%BA%97%E8%8E%8E%E7%9A%84%E4%BA%BA%E7%BE%A4.jpg" alt="羅浮宮觀賞蒙娜麗莎的人群"></p>
+<p>既然藝術欣賞很依賴於個人感受，那為何我們需要有導覽、需要聽別人的賞評呢？獨自欣賞不就好了？</p>
+<p>首先要了解的一點，藝術沒有正確答案，並沒有一個權威的人或機構能決定我們要怎麼看待任何作品。導覽本身不過是提供我們欣賞作品的另一個角度罷了，不論是技巧、創作背景、作品本身的故事。</p>
+<p>我們完全可以不認同他們的看法，不過聽聽其他人的欣賞方式也許能拓展我們的視野，找到另一種觸動我們內心的路徑。</p>
+<p>就如同喝茶一樣，在沒有任何訓練下，會覺得茶可能微微苦澀。但是若是更細緻去體會，就會發現原來其中還有一些不一樣的元素，鮮度、回甘等等。藝術賞析的價值正是幫助我們發現沒有注意到的元素，提高感受層次。</p>
+<p>然而藝術到了當前，越來越多人會抱怨無法看懂現代的藝術。以前的藝術，不論是繪畫還是雕刻，我們都可以看出作者在上面花費的心血，也許是宏偉壯觀，也許是精緻細膩。但是現今的藝術常常脫離這個範疇，我們看不出作品的創作難度，甚至也搞不懂為何要叫作這個名字。看了作品的簡介，並沒有得到解答，反而更一頭霧水。</p>
+<center>之前上新聞的香蕉藝術品「喜劇演員」，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1_(%E8%97%9D%E8%A1%93%E5%93%81)">維基百科</a></center>
+
+<p><img src="/images/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1.jpg" alt="喜劇演員"></p>
+<p>我想這可能跟技術的進步有關係。當相機出現了，過去寫實主義的繪畫風格就慢慢沒落，因為沒有什麼會比相片還要寫實。因此新技術會逼著藝術家探索不一樣的可能性，用更抽象的方式來表現。這也是為何現代藝術越來越難懂的原因。</p>
+<p>AI 的出現更是挑戰了藝術的價值。以往要畫一幅畫或寫一首詩，都需要人們經過長時間訓練，才能培養出相對應的技巧和敏感度。然而，當現在這些都可以輕易用 AI 創作，那我們該怎麼評判人類還是 AI 創作的作品價值呢？</p>
+<p>我們已經無法再用創作的技術難度來評估一個作品了，因為這些都能夠用 AI 輕易複製。然而 AI 並沒有真實的人生體驗，本質上它只是一種機率性的產物，能利用大量已有資料來產生出類似的作品。不論是歷史上各個著名的藝術流派，AI 都能快速模仿，產生出讓人驚豔的作品。</p>
+<p>因此，現在更重要的是創作者本身的獨特性，他想傳達什麼訊息、他個人的視角以及隱含的背後人生故事。這些獨一無二的性質是包含 AI 在內，世界上任何其他人都無法取代，也正因為如此才能為觀眾建立出特別的感受空間，直擊他們的內心。</p>
+<p>只要人類還有表達情緒的需求，藝術家就有存在的意義。而真正偉大的藝術，則是能觸碰隱藏在我們內心那個說不清楚的部份，搔到我們心中的癢處。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>《被討厭的勇氣》：擁有承擔責任的勇氣</title>
     <url>/2018/10/21/%E8%A2%AB%E8%A8%8E%E5%8E%AD%E7%9A%84%E5%8B%87%E6%B0%A3/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>這篇想要介紹的是「<a href="https://www.books.com.tw/products/0010653153">被討厭的勇氣</a>」這本書，書中用哲學家和年輕人用對話方式來闡述阿德勒心理學。由於阿德勒心理學跟較廣為人知的佛洛伊德心理學相比更冷門一點，所以很多想法都給現代人帶來啟發，也因此廣受歡迎。<br>這系列書分為兩集，上集是對阿德勒心理學有個綜觀認識，而下集則是因為讀者有回饋不少意見而針對這些疑問的回答。個人認為下集比較偏向怎麼去實踐方面，其中幾乎有八成是在講教育部分。雖然我覺得一般人如何去實踐部分較少有點可惜，但是對諮商師、教師來說可能極具價值吧！<br>其實書中討論的阿德勒心理學範圍還蠻廣的，原本我想嘗試用整體架構來分析，但是發現可能以目前所掌握的相關知識不足以做這樣的評論，所以我改成會針對幾點比較有收穫的概念來介紹。</p>
@@ -3620,6 +3620,23 @@
 <h2 id="建立橫向關係"><a href="#建立橫向關係" class="headerlink" title="建立橫向關係"></a>建立橫向關係</h2><p>人際關係有分為橫向和縱向，阿德勒心理學否定一切的「縱向關係」，提倡所有的人際關係都應該是「橫向關係」。縱向關係帶來的是稱讚、責罵，然而橫向關係帶來的是尊敬、感謝。<br>我會特別把這點拿出來提的原因是書中有舉一個很有趣的例子：假設你遵從上司的指示，結果卻因此面臨工作上的挫敗，這應該是誰的責任？如果是縱向關係的人就會認為是上司的責任，因為是上司的指示，然而這個卻是隱含著自己逃避了責任、閃避複雜的人際關係，因為不用思考太過困難的事、不必為失敗負責，所以仰賴他人的指示過日子。對於橫向關係的人來說，應該要拒絕並提出更好的方案，工作成敗是自己要負責的，沒有任何理由推託。其實在工作上還蠻常遇到為了避免麻煩，把問題交給別人決定的情況，讓別人決定別人負責，但是真正負責任的做法也許是自己也提出想法，然後再與別人共同討論並共識出較好的做法。<br>除了對上關係外，對下也是「縱向關係」的一種，像是對孩童的讚賞或責罵。阿德勒很尖銳地指出，大人說對孩子好而去責罵通常不是真正為了小孩好，而是因為小孩犯錯隱含著大人有教育失敗的責任，而為了自己不要被批評，所以想要控制他照著自己的想法走。然而教育是為了讓孩子能夠自立，我們只能從旁提供協助，就算是失敗也是要由自己去負起責任。有點像是學習騎腳踏車，真正騎車的人是小孩自己，跌倒也必須是自己去承擔，但我們可以提供他建議和方法，如果怕小孩受傷而不放手，那他就永遠學不會騎車，只能不斷依賴我們。這跟教育有關的部分目前我大概只有這樣的了解，也許未來有小孩之後可能會有更多的體悟吧！</p>
 <h2 id="活在當下"><a href="#活在當下" class="headerlink" title="活在當下"></a>活在當下</h2><p>「活在當下」這句話大部分的人都聽膩了，幾乎都變成是一個政治正確的口號，不過這邊我想提提阿德勒對活在當下的看法。本書用旅遊來比喻人生，出去旅遊絕對不是到達目的才叫旅行，如果是這樣我們就用最快的方式飛到目的地，然後再快速返回不就達成目標了？從自己踏出家門的那一刻起，就已經稱作旅行，旅行的概念是在到達目的前的每個瞬間，認真享受每個瞬間才是旅行的目的。<br>同理人生也一樣，人生就像是登山攻頂的活動，有大半時間都在半路上，如果不能認真對待這個過程，只期待登頂的那個瞬間，那不就代表人生有一大半是沒有價值的？對我而言，常常也會期待未來會變得更好，希望「當下」趕快過去，只要我做完什麼事情人生就會不一樣了，像是學生時期要準備大考、工作時要面對大案子等等。可是再回過頭來想，面對困難挑戰永遠只想說熬過去人生會更好，好像完全沒有真正更好過，因為我只有完成挑戰那一瞬間獲得解脫的快樂，但很快又會有下一個挑戰。與其自己只能在這樣的痛苦中不斷輪迴，不如專心面對當下每個瞬間。<br>關於活在當下，其實也是呼應了前面目的論的看法。「人生是一連串的剎那，過去和未來都不存在，別想要藉著回顧過去、預見未來，給自己一個免除責任的藉口。」由於自己真正擁有的是現在，如果用過去當做藉口，就意味著放棄了現在所擁有的選擇權。當自己想把現在的不如意推給過去，或是期盼未來會更好時，都要注意是不是根本沒有活在現在，應該要認真做當下自己所能做改變的事情。</p>
 <h2 id="評價"><a href="#評價" class="headerlink" title="評價"></a>評價</h2><p>以書寫手法來說，兩本書的結尾基本上是年輕人被哲學家說服，受到感動想去嘗試阿德勒心理學，說實在這有點讓人覺得矯情，我覺得其實不用用這種傳教意味濃厚的結尾也不會讓書的價值打折扣，不太清楚為什麼用這種想煽動人心的結尾。<br>另外，很多觀念在對話中並沒辦法越辯越明，個人認為講不夠詳細、邏輯不夠清楚的地方還蠻多的。舉個例子，書中有提到要無條件相信別人，但下集又提到相信不是照單全收，對於對方的思想信念要持懷疑態度，如果我都對人產生懷疑了，還稱得上是信任嗎？這裡作者沒有做更詳細的解釋。當然這可能也是對話方式的書籍所受限之處，畢竟對話類型的書比起理論類型更能讓一般人接受，但對話勢必要省略比較細節的內容了。<br>看完上下兩集後，我認為如果是要把阿德勒心理學當作是自己的人生觀，還有太多需要釐清之處了，而且這也會有洗腦之嫌。然而不可否認，他在百年前提出的這些思想確實有其高明之處，簡而有力地戳破我們不敢面對的一面，這些部分可以再好好理解並且善用在生活中。我們可以利用前人的思想來形塑自己的人生觀，但是不要只是照本宣科去執行，這樣就跟下集一開始的年輕人一樣會陷入苦惱之中了。<br>如果認為完完全全照著某個理論做就可以得到幸福，那其實不也是逃避負責任，缺乏真正去面對自己人生的勇氣呢？</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《請停止無效努力》：尋找適合自己的方向</title>
+    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
+<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
+<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
+<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
+<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
+<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
@@ -3681,23 +3698,6 @@
 <li>反思自己可以為他人創造的獨特價值為何。當學習新事物的時候，可以想想有沒有什麼方式可以輸出價值。</li>
 <li>用較大的時間刻度看看自己過去的成就，可以用時間軸的方式來呈現。然後想想接下來的人生階段要以什麼事情為最大的優先目標。</li>
 </ol>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《請停止無效努力》：尋找適合自己的方向</title>
-    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
-    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
-<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
-<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
-<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
-<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
-<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
 ]]></content>
       <categories>
         <category>讀書心得</category>
