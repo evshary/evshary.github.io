@@ -323,6 +323,108 @@
       </tags>
   </entry>
   <entry>
+    <title>GnuPG教學</title>
+    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
+<li>指令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>GUI<ul>
+<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
+<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
+</ul>
+</li>
+</ul>
+<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
+<li><p>先產生key</p>
+<ul>
+<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
+<li>真實姓名就填自己的英文名字，備註可填中文</li>
+<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
+<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
+<li>最後會產生出user ID的hash(UID)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
+<ul>
+<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
+<ul>
+<li>-a：代表匯出明碼</li>
+<li>-o：代表輸出檔名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
+<li><p>查看目前的鑰匙</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>編輯key(對key簽名也是用同樣的方法)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
+<li><p>首先先搜尋對象的public key</p>
+<ul>
+<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看與更新朋友的public key</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
+<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>import&#x2F;export自己的金鑰</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
+<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果要確認發信人身份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
+<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
+<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>GNU tool</tag>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>關於ELF的兩三事</title>
     <url>/2018/05/06/ELF-format/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>程式設計師很大的機率是脫離不了Linux，而如果我們要在Linux上compile，大概一定會接觸到ELF這個格式。底下來簡單介紹一下ELF的格式是什麼，我們要怎麼從它獲得資訊。</p>
@@ -519,108 +621,6 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GnuPG教學</title>
-    <url>/2018/10/14/GnuPG%E6%95%99%E5%AD%B8/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GPG全名為Gnu Privacy Guard(GnuPG) ，最初的目的是為了加密通訊的加密軟體，是為了替代PGP並符合GPL而產生的。目前很多自由軟體社群要驗證身份也都會需要用到這套工具。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><ul>
-<li>指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install gnupg</span><br><span class="line"><span class="comment"># MAX</span></span><br><span class="line">brew install gnupg</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>GUI<ul>
-<li>其實現在GUI介面都做得很好看了，而且也很容易上手，建議可以用GUI的tools。</li>
-<li>MAC的GUI tools可從<a href="https://gpgtools.org/gpgsuite.html">gpgtools.org</a>安裝</li>
-</ul>
-</li>
-</ul>
-<h3 id="建立key"><a href="#建立key" class="headerlink" title="建立key"></a>建立key</h3><ol>
-<li><p>先產生key</p>
-<ul>
-<li>可選擇”RSA &amp; RSA”，key長度為4096</li>
-<li>真實姓名就填自己的英文名字，備註可填中文</li>
-<li>產生的key會放在<code>~/.gnupg</code>這個目錄下</li>
-<li>記得要輸入密碼，防止別人入侵系統時可以直接拿到私鑰</li>
-<li>最後會產生出user ID的hash(UID)</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --full-generate-key</span><br><span class="line"><span class="comment"># 如果gen key發生問題，可用如下指令後再一次</span></span><br><span class="line">gpgconf --<span class="built_in">kill</span> gpg-agent</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>接下來就是產生撤銷憑證，未來忘記密碼可以用來撤銷，因此要小心保管</p>
-<ul>
-<li>注意如果key有填utf-8，這步在MAC可能會出問題，不過如果是用GUI卻沒問題，原因並不清楚。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -o revocation.crt --gen-revoke [UID]</span><br><span class="line"><span class="comment"># 也可以直接放到.gnupg內</span></span><br><span class="line">gpg --gen-revoke [UID] &gt; ~/.gnupg/revocation-[UID].crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>釋出公鑰，這個公鑰可以傳給朋友，或是上傳到server</p>
-<ul>
-<li>-a：代表匯出明碼</li>
-<li>-o：代表輸出檔名</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ao mypublic.asc --<span class="built_in">export</span> [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果是要把朋友的公鑰放入已知道人的清單</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import friends.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以用fingerprint顯示自已的公鑰後，弄到pdf上印出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -v --fingerprint [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="管理key"><a href="#管理key" class="headerlink" title="管理key"></a>管理key</h3><h4 id="查看、編輯與刪除key"><a href="#查看、編輯與刪除key" class="headerlink" title="查看、編輯與刪除key"></a>查看、編輯與刪除key</h4><ol>
-<li><p>查看目前的鑰匙</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有公鑰</span></span><br><span class="line">gpg --list-keys</span><br><span class="line"><span class="comment"># 同時看簽名</span></span><br><span class="line">gpg --list-sigs</span><br><span class="line"><span class="comment"># 列出所有私鑰</span></span><br><span class="line">gpg --list-secret-keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>編輯key(對key簽名也是用同樣的方法)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --edit-key [UID]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>刪除已存入key的方式，如果有私鑰要先刪除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先刪除私鑰</span></span><br><span class="line">gpg --delete-secret-key [UID]</span><br><span class="line"><span class="comment"># 刪除公鑰</span></span><br><span class="line">gpg --delete-key [UID]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="搜尋"><a href="#搜尋" class="headerlink" title="搜尋"></a>搜尋</h4><ol>
-<li><p>首先先搜尋對象的public key</p>
-<ul>
-<li>這裡指定的key server是用MIT的，可以找其他也有公信力的Server，可參考<a href="https://en.wikipedia.org/wiki/Key_server_(cryptographic)">wiki</a></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --search-keys <span class="string">&#x27;Linus Torvalds&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>得到對方的public key後，將其存入<code>~/.gnupg/pubring.gpg</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --keyserver hkp://pgp.mit.edu --recv-keys 79BE3E4300411886</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看與更新朋友的public key</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --list-keys</span><br><span class="line">gpg --refresh-keys</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="import-export"><a href="#import-export" class="headerlink" title="import&#x2F;export"></a>import&#x2F;export</h4><ol>
-<li><p>除了搜尋以外，也可以用import&#x2F;export的方式管理朋友的公鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --import public_keys_list.txt</span><br><span class="line">gpg --<span class="built_in">export</span> -ao public_keys_list.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>import&#x2F;export自己的金鑰</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># export 公鑰</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> [UID]</span><br><span class="line"><span class="comment"># export 私鑰</span></span><br><span class="line">gpg --armor --output private-key.asc --export-secret-keys [UID]</span><br><span class="line"><span class="comment"># import</span></span><br><span class="line">gpg --import [金鑰]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="用key傳送接收信件"><a href="#用key傳送接收信件" class="headerlink" title="用key傳送接收信件"></a>用key傳送接收信件</h3><ol>
-<li><p>假設我們要傳送secret.tgz給朋友，可以先進行加密</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -ear 朋友 &lt; secret.tgz &gt; secret.tgz.asc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>朋友收到secret.tgz.asc後可用如下指令變回secret.tgz</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg -d &lt; secret.tgz.asc &gt; secret.tgz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果要確認發信人身份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先對檔案簽名</span></span><br><span class="line">gpg --clearsign file.txt</span><br><span class="line"><span class="comment"># 驗證檔案身份</span></span><br><span class="line">gpg --verify &lt; file.txt.asc</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://newtoypia.blogspot.com/2013/12/gnupg-pgp.html">使用 GnuPG 建立你的 PGP 金鑰， 讓別人能夠私密寄信給你</a></li>
-<li><a href="https://wiki.debian.org/Keysigning">Debian關於Keysigning的教學</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/GnuPG_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)">GnuPG (正體中文)-GnuPG</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程-阮一峰</a></li>
-<li><a href="http://egret-bunjinw.blogspot.com/2013/08/gpg.html">gpg 數位簽章</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>GNU tool</tag>
-        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1564,88 +1564,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ffmpeg影音處理工具</title>
-    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
-<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<p>有哪些格式可選可用如下指令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
-
-<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
-<ul>
-<li>hflip：水平翻轉</li>
-<li>vflip：垂直翻轉</li>
-<li>transpose&#x3D;1：順時針轉90度</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
-
-<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
-<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放音樂</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果只想要播放影片</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>重複循環，0代表無限次</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li><p>影片轉音樂</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>轉換成mp4</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>裁減影片</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓截圖</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>聲音調整</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>手機拍攝如果是反的情況</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
-<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
-<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
-<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>gcc常用擴充功能</title>
     <url>/2018/06/09/gcc%E5%B8%B8%E7%94%A8%E6%93%B4%E5%85%85%E5%8A%9F%E8%83%BD/</url>
     <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>GNU gcc其實在編譯時也可以帶許多特殊功能，讓程式更佳的彈性，並帶來優化或更好debug的效益。這邊我們主要介紹兩個功能，內建函式和屬性<code>__attribute__</code>。</p>
@@ -1745,65 +1663,78 @@
       </tags>
   </entry>
   <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+    <title>ffmpeg影音處理工具</title>
+    <url>/2018/12/01/ffmpeg%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>有時候需要對影片、音樂做各種處理，例如轉檔、切割等等，這時候可以使用很強大的影音處理神器ffmpeg來做這些操作。</p>
+<p>這邊不會細談調整編碼等細節，只是記錄日常常用到的操作指令而已。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg</span><br></pre></td></tr></table></figure>
 
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="轉檔"><a href="#轉檔" class="headerlink" title="轉檔"></a>轉檔</h3><p>-f代表format</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f [目標格式] [輸出檔名]</span><br></pre></td></tr></table></figure>
 
-<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+<p>有哪些格式可選可用如下指令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -formats</span><br></pre></td></tr></table></figure>
 
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="裁減影片"><a href="#裁減影片" class="headerlink" title="裁減影片"></a>裁減影片</h3><p>-ss代表從何時開始，-t代表維持時間，-to代表停止的時間</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 從5秒開始後的30秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -t 00:00:30 [輸出檔名]</span><br><span class="line"><span class="comment"># 從5秒到25秒</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -ss 00:00:05 -to 00:00:25 [輸出檔名]</span><br></pre></td></tr></table></figure>
 
-<p>如果要開啟多個檔案</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
-
-<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
+<h3 id="顛倒影像"><a href="#顛倒影像" class="headerlink" title="顛倒影像"></a>顛倒影像</h3><p>-vf代表vedio filter，可以讓影片經過處理，轉換影片角度有下面三種常用</p>
+<ul>
+<li>hflip：水平翻轉</li>
+<li>vflip：垂直翻轉</li>
+<li>transpose&#x3D;1：順時針轉90度</li>
 </ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 水平翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf hflip [輸出檔名]</span><br><span class="line"><span class="comment"># 垂直翻轉</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf vflip [輸出檔名]</span><br><span class="line"><span class="comment"># 順時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針轉90度</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="影片截圖"><a href="#影片截圖" class="headerlink" title="影片截圖"></a>影片截圖</h3><p>-an代表不需要聲音，-vframes代表要抓幾張圖，-r代表每秒抓幾張圖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss [抓取時間] -vframes [幾張圖] -r [幾張圖] [輸出圖檔]</span><br><span class="line"><span class="comment"># 在開始的時間抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br><span class="line"><span class="comment"># 從頭開始，每10秒抓一張圖</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 -r 0.1 tmp-%d.jpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="調整音量大小"><a href="#調整音量大小" class="headerlink" title="調整音量大小"></a>調整音量大小</h3><p>-vol代表聲音大小，256是正常</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -n [聲音大小] [輸出檔名]</span><br></pre></td></tr></table></figure>
+
+<h3 id="播放影音"><a href="#播放影音" class="headerlink" title="播放影音"></a>播放影音</h3><p>在ffmpeg內有一個tool是ffplay，可以簡單用來播放影音</p>
+<p>雖然沒有進度條，但是如果按著右鍵左右移動也會有進度條的效果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay [影片名稱]</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
+<li>如果只想要播放音樂</li>
 </ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -vn [影片名稱]</span><br></pre></td></tr></table></figure>
 
+<ul>
+<li>如果只想要播放影片</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -an [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重複循環，0代表無限次</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffplay -loop [次數] [影片名稱]</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li><p>影片轉音樂</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp3 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>轉換成mp4</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -f mp4 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>裁減影片</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -ss [開始時間] -to [結束時間] [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓截圖</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffmpeg -i [要轉的檔案] -an -ss 00:00:00 -vframes 1 cover.jpg</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>聲音調整</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 調大聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 300 [輸出檔名]</span><br><span class="line"><span class="comment"># 調小聲音</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vol 200 [輸出檔名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手機拍攝如果是反的情況</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 順時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=1 [輸出檔名]</span><br><span class="line"><span class="comment"># 逆時針</span></span><br><span class="line">ffmpeg -i [要轉的檔案] -vf transpose=2 [輸出檔名]</span><br></pre></td></tr></table></figure></li>
+</ul>
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
+<li><a href="https://medium.com/@NorthBei/ffmepg-%E9%96%8B%E6%BA%90%E4%B8%94%E5%8A%9F%E8%83%BD%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%BD%B1%E9%9F%B3%E8%99%95%E7%90%86%E6%A1%86%E6%9E%B6-568f19388103">FFmepg — 開源且功能強大的影音處理框架</a> - 針對ffmepg的架構進行介紹</li>
+<li><a href="https://www.mobile01.com/topicdetail.php?f=510&t=4487488">FFmpeg 常用選項功能說明</a></li>
+<li><a href="https://hk.saowen.com/a/ef089cf4a8cf6dab94c276a8ee0fb38c13e25d9549c8d3cc89f0c4a9e7bf0b9b">ffplay常用命令</a></li>
+<li><a href="http://wilsbur.pixnet.net/blog/post/146836324-ffmpeg%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%B4%B9">ffmpeg常用指令介紹</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -1955,6 +1886,75 @@
 </ol>
 <p>可參考 <a href="https://bearbeargo.com/posts/how-to-play-with-live2d-on-hexo/">用Live2D让看板喵入住你的Hexo博客吧(^o^)&#x2F;~</a></p>
 <p>不過這邊提一下，<a href="https://github.com/EYHN/hexo-helper-live2d">EYHN&#x2F;hexo-helper-live2d</a> 已經沒有再更新了，如果上到 GitHub，可能會有些套件安全疑慮，以後可能需要找些替代套件了。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要開啟多個檔案</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
+
+<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>技術</category>
@@ -2459,6 +2459,22 @@
       </tags>
   </entry>
   <entry>
+    <title>天性與熱情</title>
+    <url>/2024/12/01/%E5%A4%A9%E6%80%A7%E8%88%87%E7%86%B1%E6%83%85/</url>
+    <content><![CDATA[<p>長久以來，專長與興趣一直是人們爭論的焦點。往往我們所擅長的事情和感興趣的事情不會完全一致，所以這也被大家一直拿出來討論，到底要順著自己能力走，還是應該要順著自己喜愛的方向去。長輩或老師們很常給出的建議是，用自己擅長的能力來為生，然後多餘的時間再來發展自己的興趣。這個可以說是最穩健的做法了。</p>
+<p>最常拿出來的例子就是愛因斯坦。他是人類歷史上最偉大也是最知名的物理學家之一，能與他相比的大概也只有牛頓而已。然而在成為物理學家之前，他是想成為帕格尼尼一樣出色的小提琴演奏家。最終，他還是選擇了物理當他的工作，小提琴當成是興趣。根據一位音樂評論家所說，愛因斯坦的演奏很棒，但是世界上還有很多跟他一樣優秀的演奏家。因此可以合理判斷他如果轉職去當小提琴演奏家，可能並不會有像他在物理學界中這樣偉大的地位。</p>
+<p>不過我最近讀了「<a href="https://www.books.com.tw/products/0010914870">別做熱愛的事，要做真實的自己</a>」，對於所謂的專長與興趣的爭論有了不一樣的觀點。其實書中的核心概念是就算做你有熱情的事情，但是偏離自己的核心價值觀和核心能力，一樣不會感到快樂。我原來的想像是如果能做自己感到興趣的事情，就算沒有其他人優秀，應該也會很開心才對。然而事情並不是這樣的。</p>
+<p>比起過去所謂的專長與興趣，天性和熱情或許是更適合拿來討論的框架。所謂的天性並不只是關於你擅長什麼，更多的是你在什麼樣的狀態會最舒適，能發揮出潛力。至於熱情則是更加和自我理想相關，期望能夠在某個領域有所成就，產生出影響力。這兩者並不必然會一致。我們可能會因為社會期待、過去經歷等等原因，希望得到像心目中典範人物的成就，但是因為生長背景的關係，欠缺達到這樣成就的個性和能力。這時就算我們非常有熱情，也會因為和自己天性不合，而不斷消耗精力，過得很不快樂。</p>
+<p>用實際一點的例子來說，一個人可能因為過去受到老師的啟發，希望未來也能成為像恩師一樣幫助更多小孩。但是如果他本身並不善於與人溝通打交道，更別說年紀差距很大對象，這時就算他對教育很有熱情，也會不斷被現實所消磨，不再那麼快樂。又或者說，我們看到名人非凡的成就，如 Elon Musk 創造了對人類未來影響巨大的多間公司，內心感到彭湃衝動，覺得大丈夫當如是也。然而回歸到現實層面，姑且不論金錢或是運氣成分，有多少人可以像是 Musk 一樣不斷去賭身家冒險，一次失敗可能就跌落谷底，更別說他敢於得罪人，一旦覺得成本不划算就大幅裁員。他能夠為了達到目標不擇手段，因此可以有如此偉大的成就，這是他的天性，所以做起來沒太大壓力，而想要模仿他的人，光是這些事情的內在消耗就足以讓人精疲力竭了。</p>
+<p>由上述例子可以知道，專長和興趣比較集中在技能上面的討論，但是天性和熱情則是更廣泛，更加注重我們內在的價值觀和動機。因此，我們更有可能找出兩者的交集，也正是<strong>在具有熱情的領域中做符合自己天性的事情</strong>。同樣用上面的例子，對教育有熱忱但卻又相對內向的人或許不適合當直接面對孩子的老師，他也許可以鎖定在家長身上，又或者是撰寫兒童教育相關的文章教學，提供給家長們參考。對崇拜 Elon Musk 的人來說，更重要的是了解為何自己會對他的成就所感染，也許是享受被人關注、又或者是對人類未來科技發展非常關注，找出動機，然後試著搭配符合天性的能力，這或許才是自己真正所想要的。</p>
+<p>如何找到適合自己天性與熱情的工作一直都不是容易的事情，<strong>重點在於要認識自己的天性以及尋找自己的熱情</strong>。到底自己擅長做什麼，什麼環境讓自己舒適能發揮能力，更重要的是什麼是內心不可退讓的核心價值觀。這些是很多人都無法明確回答的問題。另一方面，我們也要尋找什麼事情能夠感染自己，這唯一能做的只有多加嘗試和閱讀。嘗試去經歷不同的事情，多加與不一樣的人交流，都是很好的方式知道適不適合。其中成本最低的方式莫過於閱讀了，透過閱讀可以非常輕易地了解與自己完全不一樣的人的經驗與觀點。我非常相信這個世界上一定有一個最適合自己並且能產生無可取代價值的位置，只是現在我們還沒遇到而已。</p>
+<p>不用過於著急，畢竟宏觀來說，人生的目的不過就是一趟尋找自己天性與熱情交會之處的旅程而已。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>在非標準的道路上</title>
     <url>/2025/01/12/%E5%9C%A8%E9%9D%9E%E6%A8%99%E6%BA%96%E7%9A%84%E9%81%93%E8%B7%AF%E4%B8%8A/</url>
     <content><![CDATA[<p>或多或少，小時候總是會幻想著自己能成就一番大事，或許是引領人類技術的企業家、創造偉大作品的藝術家、又或者是發現新理論的科學家。然而，學校和社會所給予的教育大多數是讓我們走向標準化的的道路。它們使用了共同的評量指標來衡量人的成就，學生時期是成績和排名、出社會後是金錢和地位。這樣的系統並非沒有價值，它能夠訓練人們成為社會運作所需要的小齒輪。儘管齒輪是有功用的，但是也可以輕易被其他齒輪替代。</p>
@@ -2473,22 +2489,6 @@
 <p>和自己佩服的人共事也是一個很好的方法。根據我的經驗，很多我很欽佩的技術大神，實際接觸後才會發現他們都是只是凡人。大多數時候，我們會遇到的困難，他們也會遇到，差別只是在他們肯花時間堅持下去，遵循內心對解決問題的渴望。這個認知會帶給自己極大的信心，<strong>人與人的差距在天份之前，更多是差在看待問題的態度上</strong>。</p>
 <p>最後，<strong>不要有只要某個事情達成了，一切都會變好的想法</strong>。這個事情可能是某個工作變化、學會某個技能、看完某本書。就我的經驗來說，任何事情的完成，個人本身並不會有什麼劇烈的變化。我還是我，我還是繼續期望著下個事情的完成能帶來改變。與其用著功利心投入目前做的事情，不如享受在當下。投入某個專案不是為了虛榮心，而是發自內心對這個專案有興趣。學習某個技術不是為了方便面試找工作，而是可以用這個它解決想解決的問題。雖然只是些微的動機差異，但是對最後成果的影響可以說是非常的巨大。</p>
 <p>如果把人生比喻成一種開放式遊戲，那為什麼一定要按照被定義好的攻略來玩呢？或許有些人會追求能最快速地破關，但對大多數人來說，找出遊戲中能讓自己投入的元素才能帶來最大的娛樂價值吧！</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>天性與熱情</title>
-    <url>/2024/12/01/%E5%A4%A9%E6%80%A7%E8%88%87%E7%86%B1%E6%83%85/</url>
-    <content><![CDATA[<p>長久以來，專長與興趣一直是人們爭論的焦點。往往我們所擅長的事情和感興趣的事情不會完全一致，所以這也被大家一直拿出來討論，到底要順著自己能力走，還是應該要順著自己喜愛的方向去。長輩或老師們很常給出的建議是，用自己擅長的能力來為生，然後多餘的時間再來發展自己的興趣。這個可以說是最穩健的做法了。</p>
-<p>最常拿出來的例子就是愛因斯坦。他是人類歷史上最偉大也是最知名的物理學家之一，能與他相比的大概也只有牛頓而已。然而在成為物理學家之前，他是想成為帕格尼尼一樣出色的小提琴演奏家。最終，他還是選擇了物理當他的工作，小提琴當成是興趣。根據一位音樂評論家所說，愛因斯坦的演奏很棒，但是世界上還有很多跟他一樣優秀的演奏家。因此可以合理判斷他如果轉職去當小提琴演奏家，可能並不會有像他在物理學界中這樣偉大的地位。</p>
-<p>不過我最近讀了「<a href="https://www.books.com.tw/products/0010914870">別做熱愛的事，要做真實的自己</a>」，對於所謂的專長與興趣的爭論有了不一樣的觀點。其實書中的核心概念是就算做你有熱情的事情，但是偏離自己的核心價值觀和核心能力，一樣不會感到快樂。我原來的想像是如果能做自己感到興趣的事情，就算沒有其他人優秀，應該也會很開心才對。然而事情並不是這樣的。</p>
-<p>比起過去所謂的專長與興趣，天性和熱情或許是更適合拿來討論的框架。所謂的天性並不只是關於你擅長什麼，更多的是你在什麼樣的狀態會最舒適，能發揮出潛力。至於熱情則是更加和自我理想相關，期望能夠在某個領域有所成就，產生出影響力。這兩者並不必然會一致。我們可能會因為社會期待、過去經歷等等原因，希望得到像心目中典範人物的成就，但是因為生長背景的關係，欠缺達到這樣成就的個性和能力。這時就算我們非常有熱情，也會因為和自己天性不合，而不斷消耗精力，過得很不快樂。</p>
-<p>用實際一點的例子來說，一個人可能因為過去受到老師的啟發，希望未來也能成為像恩師一樣幫助更多小孩。但是如果他本身並不善於與人溝通打交道，更別說年紀差距很大對象，這時就算他對教育很有熱情，也會不斷被現實所消磨，不再那麼快樂。又或者說，我們看到名人非凡的成就，如 Elon Musk 創造了對人類未來影響巨大的多間公司，內心感到彭湃衝動，覺得大丈夫當如是也。然而回歸到現實層面，姑且不論金錢或是運氣成分，有多少人可以像是 Musk 一樣不斷去賭身家冒險，一次失敗可能就跌落谷底，更別說他敢於得罪人，一旦覺得成本不划算就大幅裁員。他能夠為了達到目標不擇手段，因此可以有如此偉大的成就，這是他的天性，所以做起來沒太大壓力，而想要模仿他的人，光是這些事情的內在消耗就足以讓人精疲力竭了。</p>
-<p>由上述例子可以知道，專長和興趣比較集中在技能上面的討論，但是天性和熱情則是更廣泛，更加注重我們內在的價值觀和動機。因此，我們更有可能找出兩者的交集，也正是<strong>在具有熱情的領域中做符合自己天性的事情</strong>。同樣用上面的例子，對教育有熱忱但卻又相對內向的人或許不適合當直接面對孩子的老師，他也許可以鎖定在家長身上，又或者是撰寫兒童教育相關的文章教學，提供給家長們參考。對崇拜 Elon Musk 的人來說，更重要的是了解為何自己會對他的成就所感染，也許是享受被人關注、又或者是對人類未來科技發展非常關注，找出動機，然後試著搭配符合天性的能力，這或許才是自己真正所想要的。</p>
-<p>如何找到適合自己天性與熱情的工作一直都不是容易的事情，<strong>重點在於要認識自己的天性以及尋找自己的熱情</strong>。到底自己擅長做什麼，什麼環境讓自己舒適能發揮能力，更重要的是什麼是內心不可退讓的核心價值觀。這些是很多人都無法明確回答的問題。另一方面，我們也要尋找什麼事情能夠感染自己，這唯一能做的只有多加嘗試和閱讀。嘗試去經歷不同的事情，多加與不一樣的人交流，都是很好的方式知道適不適合。其中成本最低的方式莫過於閱讀了，透過閱讀可以非常輕易地了解與自己完全不一樣的人的經驗與觀點。我非常相信這個世界上一定有一個最適合自己並且能產生無可取代價值的位置，只是現在我們還沒遇到而已。</p>
-<p>不用過於著急，畢竟宏觀來說，人生的目的不過就是一趟尋找自己天性與熱情交會之處的旅程而已。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
@@ -2532,6 +2532,26 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>《心流》：最佳體驗的專注</title>
+    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
+    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
+<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
+<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
+<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
+<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
+<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
+<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
+<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
+<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
   </entry>
   <entry>
     <title>常用軟體工具統整</title>
@@ -2729,26 +2749,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《心流》：最佳體驗的專注</title>
-    <url>/2018/04/28/%E5%BF%83%E6%B5%81%EF%BC%9A%E6%9C%80%E5%84%AA%E9%AB%94%E9%A9%97%E5%BF%83%E7%90%86%E5%AD%B8/</url>
-    <content><![CDATA[<p>人生的意義到底是什麼呢？這個問題應該每個人或多或少在成長過程都有想過吧？特別是在青春期的時候，心裡因為不知道未來的方向，而有陷入迷惘中，會覺得人生好像是沒有意義的。在我高中時期就是在這樣的狀態中，為了符合外在的要求(拿到好成績)而努力，但是卻不知道自己心裡真正是為何而努力。這樣的心情雖然隨著年齡的增長而慢慢減緩，但是若是問到自己的人生有什麼意義這回事，我想我還是回答不出來。</p>
-<p>但是，人生的意義其實根本就只是個偽命題。我們通常期望很輕鬆地得到一個目標，然後再去努力，但是常常人生的意義是先去努力，然後才會得到。最近看了「<a href="http://www.books.com.tw/products/CN11489806">心流：最優體驗心理學</a>」 ，裡面提到了「<strong>最終目標只要能為一生的精神能量建立秩序，它本身是什麽並不重要。人生的意義就在於“尋求意義”：不論它的本質，不論它來自何處，只要找到一個統一的大方向，人生就會有意義。</strong>」，這時才隱隱約約明白，原來我根本不缺乏人生意義，我想要的是內心的平靜、內心的秩序，也就是作者所講的心流狀態。意義本身並不重要，每個人都可能有屬於自己的意義，但是在追求意義本身就會為自己生命賦予價值。</p>
-<p>「心流」這個概念其實我很久以前就聽過了，一開始是從強者我朋友那裡得知，我原本以為這是一個用在學習的工具罷了，並不是很在意。最近因為有些我看的書籍有再次提到這個概念，才想說來看看當初提出這個概念的作者米哈里的原書。這本書最早是在1990出版，台灣也有出自己的翻譯本，應該是叫<a href="http://www.books.com.tw/products/0010036164">快樂.從心開始</a> ，但也已經絕版了，而最近中國才重出了這本書。的確，如果 google 心流這個詞，十之八九是講我們在面對有一定挑戰性的事情時，進入了聚精會神的狀態，忘了時間的流動，只專注在當下。進入心流會創造最佳的體驗，會讓自己想要一再體驗，這也是很多學習的書籍鼓吹的學習方式。</p>
-<p>如果把進入心流的條件和刻意練習相比，會發現兩著有很高的相似性。兩者都一樣需要有個明確的目標、有即時的反饋、需要全神貫注地投入、需要有適當的挑戰性(跨出舒適圈)。但是在本書的介紹序也有提到，兩者的動機是完全不同的，刻意練習是為了讓自己的能力獲得提升，是一種行為，而心流則是一種體驗，讓人沈醉且上癮。儘管如此，我個人的經驗是有意識進行刻意練習時，有時候也會有種進入心流的狀態，忘記時間，想要繼續做下去。雖然本質不同，但是兩者是可以相輔相成的。</p>
-<p>為什麼進入心流會讓我們愉悅呢？書中有提到一個概念叫做精神熵，熵在物理的意義是亂度，越高代表越混亂。如果我們的精神熵越高，就代表我們的意識失去了秩序，受到了威脅，我們必須要去防衛，自然就會感到不快樂。心流的意義我會解釋成<strong>心靈的秩序</strong>，就像磁鐵要有磁性一定要被磁化，讓內部分子的南北極都同向，對外才會產生出一股磁力。當我們進入心流狀態也就是在內心建立起了秩序，不會被外界可能讓心靈混亂的事物打擾，因此才會有忘記自我，忘記時間的感覺。</p>
-<p>以秩序來解釋為什麼會快不快樂似乎有其道理。米哈里提到了享樂和樂趣的差別：享樂是恢復均衡的體驗，主要是維持意識的秩序，但無法創造新秩序，樂趣需要高度注意力，完成意料之外的事情。因為樂趣的高複雜度、有挑戰性，所以不斷提供大腦新鮮感，這也是樂趣可以維持比較長久的快樂。另外值得一提的是，如果我們是為了什麼目的才做某件事情，可能就不有趣，就像我們不是為了得到勝利而玩遊戲，而是享受在玩遊戲的過程。因為如果有目的的話，我們就不是專心在當下遊戲規則所帶來的秩序了。遊戲規則主導了我們的心流，讓我們內心維持了秩序，所以有些人在使用外掛後很快就會對遊戲失去興趣的原因也是在秩序已經被破壞了，規則無法再帶給我們心靈秩序了。</p>
-<p>米哈里不只是用心流來解釋我們進入專心的狀態，書中他更是嘗試用心流來解釋人類的社會、文化、甚至是遇到困境時要怎麼克服。這也是讓我眼界大開的一部份，原來心流也是可以用來解釋更高層次的現象。社會與文化說穿了其實也就是一種規則，一種秩序，在過去社會文化上的規範會規定我們的外在行為應該要怎麼做，有很多的限制，但是大多數人在成長過程中接受了這樣的限制，然後久而久之自己也成為要求他人遵守這些規則的人。然而在現在的世界，國際間的文化交流、網際網路的發達，拓展了每個人的視野，追求個人自由的風氣中屏棄掉了傳統文化，因此人們有更多選擇。但是更多選擇不代表會更快樂，因為會陷入了不知道要選什麼才好的狀態。這就跟我們父母一輩不會有用興趣選職業這件事，而是找個穩定收入的工作或繼承家業，沒有什麼其他選擇，而我們這代則會迷惘進大學時到底要選擇什麼樣的科系，未來要找什麼工作，到底自己對什麼有興趣。這個選擇越多越不快樂的現象正呼應了人失去了秩序後會不快樂的概念。</p>
-<p>但是我個人覺得，這不代表我們要走回頭路，的確規範可以帶給大多數人秩序，但是並沒有道理要求所有人都遵守這樣的規範，自由與民主已經深入人心，難以逆轉。我們能做的是知道這個現象，然後清楚自己的迷惘是來自心靈的失序，接著透過不斷與外界的互動來重新建立自己的秩序，最後就會形塑出屬於個人的價值觀，也就是個人的生命意義。米哈里也建議，我們可以從宗教、歷史、文學等等過去前人所建立的秩序中吸取經驗，建立起屬於自己內心不被擾亂的模式，用前人的力量賦予自己生命新的意義。</p>
-<p>本書帶給我很多新的觀念，特別是讓我重新認識了「心流」。在閱讀時，我得承認作者的敘述、排版方式有點冗長，比較沒有架構性，不過不妨礙本書的價值。另外我會推薦大家要看一下推薦序的部分，雖然我從來沒看過那麼長的推薦序，但是卻是一個很好的總結，書中大多數的精華都有被整理出來了。我們不只是要追求在學習上全神貫注的心流，更是要追求人生的心流，真正內心的秩序必須要上從人生觀下到自己的行為都達成一致，並且能心無旁騖專注在其中。如果要用一句話解釋我從這本書得到的觀念，我會這麼說：<strong>快樂與幸福來自我們內心的和諧，建立一個可以應付外界干擾的秩序，讓自己的外在行為與內心秩序一致，那就是在人生的心流之中了</strong>。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>我對 AI 的應用與反思</title>
     <url>/2025/02/23/%E6%88%91%E5%B0%8D%20AI%20%E7%9A%84%E6%87%89%E7%94%A8%E8%88%87%E5%8F%8D%E6%80%9D/</url>
     <content><![CDATA[<p>隨著 AI 的普及，我在日常生活中使用 AI 的機會也越來越多。AI 的能力不斷提升，每年都有質的飛躍，使得許多事務都可以依賴這個新工具。因此，了解 AI 能為我提供哪些幫助，以及它的極限在哪裡，就變得至關重要。</p>
@@ -2793,6 +2793,24 @@
       </categories>
   </entry>
   <entry>
+    <title>《深度學習的技術》：一種學習的框架</title>
+    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
+    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
+<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
+<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
+<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
+<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
+<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
+<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>探討區塊鏈的價值</title>
     <url>/2025/03/09/%E6%8E%A2%E8%A8%8E%E5%8D%80%E5%A1%8A%E9%8F%88%E7%9A%84%E5%83%B9%E5%80%BC/</url>
     <content><![CDATA[<p>加密貨幣這個詞越來越常出現在人們生活中，不論是新聞媒體還是朋友圈中。可惜的是，大家探討的通常是「比特幣又突破新高」、「某國總統發行了迷因幣」、「某個名人投資虛擬貨幣被詐騙」，很少真正觸及加密貨幣背後——也就是區塊鏈——的本質。</p>
@@ -2823,24 +2841,6 @@
       </categories>
       <tags>
         <tag>區塊鏈</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《深度學習的技術》：一種學習的框架</title>
-    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
-    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
-<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
-<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
-<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
-<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
-<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
-<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
       </tags>
   </entry>
   <entry>
@@ -3398,24 +3398,6 @@
       </categories>
   </entry>
   <entry>
-    <title>理論與經驗：知識如何落地</title>
-    <url>/2024/12/15/%E7%90%86%E8%AB%96%E8%88%87%E7%B6%93%E9%A9%97%EF%BC%9A%E7%9F%A5%E8%AD%98%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/</url>
-    <content><![CDATA[<p>傳聞中，德國皇帝威廉二世在第一次世界大戰兵敗退位二十年後，讀到了德文版的孫子兵法，感慨自己若是能早點讀到這本書，也不至於落到如此境地。聽到這個故事不禁讓我思考，如果我們能提前讀遍經典、知曉無數道理，是否真的能避免失敗，直達成功的彼岸呢？</p>
-<p>然而，理論並非萬能。三國時期的就是個典型的例子。他飽讀兵書，深受諸葛亮的信任，在南征孟獲時還曾經提出「攻心為上」的方針。但是在街亭之戰中，卻因為過度拘泥於居高臨下的理論，不顧有豐富實戰經驗的副將王平勸阻，在山上佈陣，最終被張郃切斷水源所敗。他的失敗印證了劉備對其「言過其實」的評價，也給後人一種紙上談兵的印象。這樣看來，單純懂很多理論知識，似乎也沒辦法確保能在現實中取得好成果。</p>
-<p>其實在怎麼好的道理理論都有其適用的情境範圍。以馬謖前面的例子來說，居高臨下可能在大多數的情境都是好的決策，因此兵書也會這樣記載。然而，這樣的軍事指導也是有自己的水源不能被敵人所切斷的前提。他的副將可能書沒有馬謖讀得多，但是因為有豐富的經驗，所以知道這樣做會有問題。這時候經驗的價值就遠遠超過理論的指引了。</p>
-<p>然而我們也不能說理論就沒有任何價值了，它是一盞明燈，可以幫助我們明確前進方向，最大程度避開前人所踩的坑。只是路上遇到的問題並不能全靠理論來解決，因為理論本來就不可能把所有可能發生的問題都窮舉出來，唯有自己親身經歷過才會真正了解。用比較科學的方式來說，<strong>理論所能蘊含的資訊量也不過就文字而已，經驗則是來自我們的五官，提供給我們的訊息遠遠多過於理論</strong>。</p>
-<p>這個也是為什麼當人上了年紀，看事情的境界就不再相同。年輕時常常被告誡身體健康很重要，我們也都清楚並同意這件事，沒有人會說健康不重要，但是不到自己有了年紀、健康實際出了狀況，就不會下定決心要好好運動、保養身體。因此回到德國皇帝的故事，他會覺得感慨，並不只是孫子兵法是好兵書的關係，更多可能是因為它觸動了德國皇帝失敗的經驗，理論和經驗相互印證。假設同樣的兵書給年輕的威廉二世看，我相信他的感觸肯定不會那麼多，而且很大的機率仍然會重蹈覆轍。</p>
-<p>我想，聽很多名言、讀很多道理可能用途並沒有我們想像中的大，甚至可能有害。很多時候我們會誤以為自己已經理解某個理論，因為聽過好多次。然而聽過和實際上真正理解根本是兩回事，這也就是心理學中的「知識錯覺」。我們都知道拉鍊和腳踏車，因此自以為很清楚其運作原理，但當有人要我們嘗試說明時卻發現根本不懂細節。學會很多理論也同樣的意思，認為自己很了解了，反而忽視了從來沒有真正搞懂並落實在生活中。</p>
-<p>任何同樣的文字會受限於每個人的生活經驗、背景知識、人生閱歷而有不一樣的差別。就像是同樣是 <code>E=mc^2</code> 這個公式，對愛因斯坦、對物理系學生、又或者是對普通人來說，意義完全不相同。為了解決這個問題，很多書籍都是為了闡述某個用一句話就說完的理論，而撰寫了一大堆論述和範例。儘管如此，我們也無法說看完一本書後就得到作者對這個議題的完整知識。</p>
-<p>或許最好的方式是正視我們不可能完全理解名言和理論真正意思的現實。既然如此，應該要保持著開放謙虛的心態看待知識和理論，明白自己在不同年紀、更多經歷後可能會有不同的體會。</p>
-<p>對我而言，理論只有在真正改變實際行為才有用處。人類的天性是重視經驗、感性的，唯有實際嘗試才能真正理解。我們不可能只聽老師指導、觀看教學影片就能學會游泳，最終還是得下水嘗試體驗才行，因為身體每個動作細節很多是無法透過言語傳達的。<strong>我們透過理論得到一個大略的方向，然後親身體會後就能回過頭來修正對理論的理解</strong>。透過這樣方式才能基於前人的智慧幫助我們更加理解這個世界並創造出理想的成果。</p>
-<p>理論是燈塔，經驗是船，燈塔能指引方向，但船仍需要經歷風浪才能到達目的。我們需要的是不斷嘗試反思的學習過程，而不是沉溺於理論的海市蜃樓之中。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>《稀缺》：稀缺其實是一種陷阱</title>
     <url>/2018/05/27/%E7%A8%80%E7%BC%BA%EF%BC%9A%E6%88%91%E5%80%91%E6%98%AF%E5%A6%82%E4%BD%95%E9%99%B7%E5%85%A5%E8%B2%A7%E7%AA%AE%E8%88%87%E5%BF%99%E7%A2%8C%E7%9A%84/</url>
     <content><![CDATA[<p>我們很常聽到這些例子：有人會因為缺錢去借高利貸，結果不得翻身。有些人因為太忙於事業，忽略了家人，到了後來才後悔。雖然很常聽到，但是我們都很難想像這些人為什麼會去做這樣的決策，畢竟理智上告訴我們高利貸是不能去碰觸的，因為利息很可怕、家人比起事業更為重要，要多陪家人。「<a href="http://www.books.com.tw/products/CN11194292">稀缺：我們是如何陷入貧窮與忙碌的</a>」這本書為我們做了解答，故事中的主角都是因為稀缺導致了無法做長遠思考。</p>
@@ -3432,6 +3414,24 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>理論與經驗：知識如何落地</title>
+    <url>/2024/12/15/%E7%90%86%E8%AB%96%E8%88%87%E7%B6%93%E9%A9%97%EF%BC%9A%E7%9F%A5%E8%AD%98%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/</url>
+    <content><![CDATA[<p>傳聞中，德國皇帝威廉二世在第一次世界大戰兵敗退位二十年後，讀到了德文版的孫子兵法，感慨自己若是能早點讀到這本書，也不至於落到如此境地。聽到這個故事不禁讓我思考，如果我們能提前讀遍經典、知曉無數道理，是否真的能避免失敗，直達成功的彼岸呢？</p>
+<p>然而，理論並非萬能。三國時期的就是個典型的例子。他飽讀兵書，深受諸葛亮的信任，在南征孟獲時還曾經提出「攻心為上」的方針。但是在街亭之戰中，卻因為過度拘泥於居高臨下的理論，不顧有豐富實戰經驗的副將王平勸阻，在山上佈陣，最終被張郃切斷水源所敗。他的失敗印證了劉備對其「言過其實」的評價，也給後人一種紙上談兵的印象。這樣看來，單純懂很多理論知識，似乎也沒辦法確保能在現實中取得好成果。</p>
+<p>其實在怎麼好的道理理論都有其適用的情境範圍。以馬謖前面的例子來說，居高臨下可能在大多數的情境都是好的決策，因此兵書也會這樣記載。然而，這樣的軍事指導也是有自己的水源不能被敵人所切斷的前提。他的副將可能書沒有馬謖讀得多，但是因為有豐富的經驗，所以知道這樣做會有問題。這時候經驗的價值就遠遠超過理論的指引了。</p>
+<p>然而我們也不能說理論就沒有任何價值了，它是一盞明燈，可以幫助我們明確前進方向，最大程度避開前人所踩的坑。只是路上遇到的問題並不能全靠理論來解決，因為理論本來就不可能把所有可能發生的問題都窮舉出來，唯有自己親身經歷過才會真正了解。用比較科學的方式來說，<strong>理論所能蘊含的資訊量也不過就文字而已，經驗則是來自我們的五官，提供給我們的訊息遠遠多過於理論</strong>。</p>
+<p>這個也是為什麼當人上了年紀，看事情的境界就不再相同。年輕時常常被告誡身體健康很重要，我們也都清楚並同意這件事，沒有人會說健康不重要，但是不到自己有了年紀、健康實際出了狀況，就不會下定決心要好好運動、保養身體。因此回到德國皇帝的故事，他會覺得感慨，並不只是孫子兵法是好兵書的關係，更多可能是因為它觸動了德國皇帝失敗的經驗，理論和經驗相互印證。假設同樣的兵書給年輕的威廉二世看，我相信他的感觸肯定不會那麼多，而且很大的機率仍然會重蹈覆轍。</p>
+<p>我想，聽很多名言、讀很多道理可能用途並沒有我們想像中的大，甚至可能有害。很多時候我們會誤以為自己已經理解某個理論，因為聽過好多次。然而聽過和實際上真正理解根本是兩回事，這也就是心理學中的「知識錯覺」。我們都知道拉鍊和腳踏車，因此自以為很清楚其運作原理，但當有人要我們嘗試說明時卻發現根本不懂細節。學會很多理論也同樣的意思，認為自己很了解了，反而忽視了從來沒有真正搞懂並落實在生活中。</p>
+<p>任何同樣的文字會受限於每個人的生活經驗、背景知識、人生閱歷而有不一樣的差別。就像是同樣是 <code>E=mc^2</code> 這個公式，對愛因斯坦、對物理系學生、又或者是對普通人來說，意義完全不相同。為了解決這個問題，很多書籍都是為了闡述某個用一句話就說完的理論，而撰寫了一大堆論述和範例。儘管如此，我們也無法說看完一本書後就得到作者對這個議題的完整知識。</p>
+<p>或許最好的方式是正視我們不可能完全理解名言和理論真正意思的現實。既然如此，應該要保持著開放謙虛的心態看待知識和理論，明白自己在不同年紀、更多經歷後可能會有不同的體會。</p>
+<p>對我而言，理論只有在真正改變實際行為才有用處。人類的天性是重視經驗、感性的，唯有實際嘗試才能真正理解。我們不可能只聽老師指導、觀看教學影片就能學會游泳，最終還是得下水嘗試體驗才行，因為身體每個動作細節很多是無法透過言語傳達的。<strong>我們透過理論得到一個大略的方向，然後親身體會後就能回過頭來修正對理論的理解</strong>。透過這樣方式才能基於前人的智慧幫助我們更加理解這個世界並創造出理想的成果。</p>
+<p>理論是燈塔，經驗是船，燈塔能指引方向，但船仍需要經歷風浪才能到達目的。我們需要的是不斷嘗試反思的學習過程，而不是沉溺於理論的海市蜃樓之中。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>筆記：自己的外部大腦</title>
