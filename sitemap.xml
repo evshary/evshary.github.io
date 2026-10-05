@@ -488,7 +488,7 @@
   </url>
   
   <url>
-    <loc>https://evshary.com/categories/index.html</loc>
+    <loc>https://evshary.com/index.html</loc>
     
     <lastmod>2026-10-05</lastmod>
     
@@ -506,7 +506,7 @@
   </url>
   
   <url>
-    <loc>https://evshary.com/index.html</loc>
+    <loc>https://evshary.com/categories/index.html</loc>
     
     <lastmod>2026-10-05</lastmod>
     
@@ -559,14 +559,14 @@
   </url>
   
   <url>
-    <loc>https://evshary.com/tags/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/</loc>
+    <loc>https://evshary.com/tags/tools/</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://evshary.com/tags/tools/</loc>
+    <loc>https://evshary.com/tags/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
