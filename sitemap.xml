@@ -488,15 +488,6 @@
   </url>
   
   <url>
-    <loc>https://evshary.com/index.html</loc>
-    
-    <lastmod>2026-10-05</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://evshary.com/categories/index.html</loc>
     
     <lastmod>2026-10-05</lastmod>
@@ -507,6 +498,15 @@
   
   <url>
     <loc>https://evshary.com/tags/index.html</loc>
+    
+    <lastmod>2026-10-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://evshary.com/index.html</loc>
     
     <lastmod>2026-10-05</lastmod>
     
