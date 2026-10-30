@@ -942,6 +942,136 @@
       </tags>
   </entry>
   <entry>
+    <title>code review</title>
+    <url>/2017/08/27/code-review/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
+<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
+<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
+<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
+<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
+<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
+<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
+<li>備份功能：確保至少有兩個人知道code的意思。</li>
+</ol>
+<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
+<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
+<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
+</ul>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
+<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
+<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
+<li>相互尊重：<ul>
+<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
+<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
+</ul>
+</li>
+<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
+<li>說明code review規則，以及建立正確的心態</li>
+<li>事先訂定公司開發的文化，如coding style，命名規則</li>
+<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
+</ul>
+<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
+<li>開發時間需要預估code review的時間</li>
+<li>先規劃如何將大功能切成小部分：<ul>
+<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
+<li>如果功能出了大問題，也可以把風險控制在最小</li>
+</ul>
+</li>
+</ul>
+<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
+<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
+<li>如果有使用分析工具，先使用工具產生報表<ul>
+<li>review時可以針對上面的重點討論</li>
+<li>減少review的effort</li>
+</ul>
+</li>
+</ul>
+<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
+<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
+<li>code review時間不要超過半小時</li>
+<li>利用checklist來檢查<ul>
+<li>功能需求是什麼？設計方式是否有達到目的？</li>
+<li>是否可以做未來擴充？</li>
+<li>是否足夠安全？有沒有邏輯漏洞？</li>
+<li>Error handling和corner case是否都有處理好？</li>
+<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
+<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
+<li>效能是否可以再提升？</li>
+</ul>
+</li>
+<li>review過程不改code，用todo list先記錄</li>
+</ul>
+<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
+<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
+<li>review後要留下紀錄提供學習使用</li>
+<li>定期開會評估code review流程和效用<ul>
+<li>review的方式要不要調整？</li>
+<li>工具是否要調整？</li>
+<li>checklist是否要更新？</li>
+</ul>
+</li>
+</ul>
+<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
+<ul>
+<li>統一Glossary：<ul>
+<li>可以使用wiki等文件建立</li>
+</ul>
+</li>
+<li>找重複程式碼：<ul>
+<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
+</ul>
+</li>
+<li>判斷複雜度：<ul>
+<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
+<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
+</ul>
+</li>
+<li>分析綜合品質：<ul>
+<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
+<li>Adlint：Open source，但似乎很久沒更新了</li>
+<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
+</ul>
+</li>
+<li>程式法風格：<ul>
+<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
+<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
+<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
+<ul>
+<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
+<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
+<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
+</ul>
+<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
+<ol>
+<li>執行前後，bug減少的數量(這是品質部分)</li>
+<li>執行前後，團隊多花費的時間(這是成本部分)</li>
+<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
+<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
+<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
+<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
+<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
+<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
+<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
+<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>軟體開發</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>clean code</title>
     <url>/2017/09/03/clean-code/</url>
     <content><![CDATA[<p>這邊記錄一下我看clean code的筆記整理。不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種。在C要這樣實踐很有難度，而且我看很多open source的project也都沒有遵循這樣的規範。但是這本書還是很有參考價值的，至少會讓自己反省寫code時有沒有犯了這些問題。</p>
@@ -1149,136 +1279,6 @@
 <li>不要跳過簡單的測試</li>
 <li>對程式錯誤處進行詳細測試</li>
 <li>測試要夠快速</li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>軟體開發</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>code review</title>
-    <url>/2017/08/27/code-review/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
-<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
-<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
-<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
-<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
-<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
-<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
-<li>備份功能：確保至少有兩個人知道code的意思。</li>
-</ol>
-<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
-<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
-<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
-</ul>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
-<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
-<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
-<li>相互尊重：<ul>
-<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
-<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
-</ul>
-</li>
-<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
-</ul>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
-<li>說明code review規則，以及建立正確的心態</li>
-<li>事先訂定公司開發的文化，如coding style，命名規則</li>
-<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
-</ul>
-<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
-<li>開發時間需要預估code review的時間</li>
-<li>先規劃如何將大功能切成小部分：<ul>
-<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
-<li>如果功能出了大問題，也可以把風險控制在最小</li>
-</ul>
-</li>
-</ul>
-<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
-<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
-<li>如果有使用分析工具，先使用工具產生報表<ul>
-<li>review時可以針對上面的重點討論</li>
-<li>減少review的effort</li>
-</ul>
-</li>
-</ul>
-<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
-<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
-<li>code review時間不要超過半小時</li>
-<li>利用checklist來檢查<ul>
-<li>功能需求是什麼？設計方式是否有達到目的？</li>
-<li>是否可以做未來擴充？</li>
-<li>是否足夠安全？有沒有邏輯漏洞？</li>
-<li>Error handling和corner case是否都有處理好？</li>
-<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
-<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
-<li>效能是否可以再提升？</li>
-</ul>
-</li>
-<li>review過程不改code，用todo list先記錄</li>
-</ul>
-<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
-<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
-<li>review後要留下紀錄提供學習使用</li>
-<li>定期開會評估code review流程和效用<ul>
-<li>review的方式要不要調整？</li>
-<li>工具是否要調整？</li>
-<li>checklist是否要更新？</li>
-</ul>
-</li>
-</ul>
-<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
-<ul>
-<li>統一Glossary：<ul>
-<li>可以使用wiki等文件建立</li>
-</ul>
-</li>
-<li>找重複程式碼：<ul>
-<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
-</ul>
-</li>
-<li>判斷複雜度：<ul>
-<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
-<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
-</ul>
-</li>
-<li>分析綜合品質：<ul>
-<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
-<li>Adlint：Open source，但似乎很久沒更新了</li>
-<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
-</ul>
-</li>
-<li>程式法風格：<ul>
-<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
-<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
-</ul>
-</li>
-</ul>
-<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
-<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
-<ul>
-<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
-<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
-<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
-</ul>
-<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
-<ol>
-<li>執行前後，bug減少的數量(這是品質部分)</li>
-<li>執行前後，團隊多花費的時間(這是成本部分)</li>
-<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
-<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
-<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
-<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
-<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
-<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
-<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
-<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
 </ul>
 ]]></content>
       <categories>
@@ -1745,75 +1745,6 @@
       </tags>
   </entry>
   <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
-
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>如果要開啟多個檔案</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
-
-<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo 教學</title>
     <url>/2017/09/09/hexo%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<p>我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩。另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇。Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介面，而且還可以用 markdown 來寫 blog。</p>
@@ -1964,58 +1895,65 @@
       </tags>
   </entry>
   <entry>
-    <title>使用 openssl 工具與函式庫</title>
-    <url>/2018/05/13/openssl-library-example/</url>
-    <content><![CDATA[<h2 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install openssl</span><br></pre></td></tr></table></figure>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
 
-<p>MAC上如果要使用library有點麻煩，需要先找到對應的路徑</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;libssl.*&quot;</span>  <span class="comment"># 找到library的路徑</span></span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/pkgconfig/libssl.pc</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/libssl.dylib</span><br><span class="line">...</span><br><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;ssl.h&quot;</span>  <span class="comment"># 找到header的路徑</span></span><br><span class="line">/usr/local/Cellar//node/8.4.0/include/node/openssl/ssl.h</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/include/openssl/ssl.h</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
 
-<p>看起來路徑是在<code>/usr/local/Cellar/openssl/1.0.2o_1/</code>我們先記起來，後面編譯時會用到。</p>
-<h2 id="創造憑證"><a href="#創造憑證" class="headerlink" title="創造憑證"></a>創造憑證</h2><p>openssl本身就有提供很多好用的工具，我們最常用到的大概就是用來產生憑證吧！</p>
-<p>這邊介紹產生兩種常見憑證(RSA,ECC)的方法。</p>
-<h3 id="產生RSA憑證"><a href="#產生RSA憑證" class="headerlink" title="產生RSA憑證"></a>產生RSA憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生2048長度的key</span></span><br><span class="line">openssl genrsa -out server.key 2048</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key server.key -out server.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey server.key -<span class="keyword">in</span> server.csr -out server.crt</span><br></pre></td></tr></table></figure>
+<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
 
-<h3 id="產生ECC憑證"><a href="#產生ECC憑證" class="headerlink" title="產生ECC憑證"></a>產生ECC憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生ECC key</span></span><br><span class="line">openssl ecparam -genkey -name secp384r1 -out ecc.key</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key ecc.key -out ecc.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey ecc.key -<span class="keyword">in</span> ecc.csr -out ecc.crt</span><br></pre></td></tr></table></figure>
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="使用openssl內建的連線工具"><a href="#使用openssl內建的連線工具" class="headerlink" title="使用openssl內建的連線工具"></a>使用openssl內建的連線工具</h2><p>有時候我們只是想要測試ssl連線而已，還要自己寫程式有點麻煩，還好我們可以使用openssl提供的連線工具</p>
-<p>client和server都有提供，非常方便的！</p>
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><ul>
-<li><code>-msg</code>：看細節(hex格式)</li>
-<li><code>-cipher</code>：決定要用哪種cipher連線</li>
-<li><code>-showcerts</code>：把cert的chain也列出來</li>
-<li><code>-curves</code>：指定要用的橢圓算法，client hello的extension中的elliptic_curves</li>
-<li><code>-sigalgs</code>：指定交換key要用的簽名方式，client hello的extension中的signature_algorithms</li>
-<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了</li>
+<p>如果要開啟多個檔案</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
+
+<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 最基本連線</span></span><br><span class="line">openssl s_client -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 看連線細節</span></span><br><span class="line">openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 指定連線方式</span></span><br><span class="line">openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"><span class="comment"># 限制只能用TLS1.2連線</span></span><br><span class="line">openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># server開啟5678 port並且用server.key當private key，cert用server.pem</span></span><br><span class="line">openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
+<ul>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果要看有哪些連線方式，可使用如下指令</span></span><br><span class="line">openssl ciphers ALL</span><br></pre></td></tr></table></figure>
-
-<h2 id="函式庫使用"><a href="#函式庫使用" class="headerlink" title="函式庫使用"></a>函式庫使用</h2><p>我們來介紹openssl的函式庫最基本的使用方式。</p>
-<h3 id="基本範例-client-server"><a href="#基本範例-client-server" class="headerlink" title="基本範例 - client &amp; server"></a>基本範例 - client &amp; server</h3><p>這邊寫了兩個client和server的基本範例當作參考，大家可以基於這兩者來拓展自己的程式。</p>
-<h4 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h4><p>ssl_client.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RECV_SIZE 256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_client_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">char</span> *ip, <span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// New socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// TCP connect to server</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = inet_addr(ip);</span><br><span class="line">    <span class="keyword">if</span> (connect(fd, (<span class="keyword">struct</span> sockaddr *)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_client.out [IP] [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="type">char</span> buf[RECV_SIZE];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Parse parameter</span></span><br><span class="line">    port = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Connect to %s:%d\n&quot;</span>, argv[<span class="number">1</span>], port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = create_socket(argv[<span class="number">1</span>], port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Start to build ssl connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_connect(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL write/read</span></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Write data to server (q for quit): &quot;</span>);</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        gets(buf);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">&quot;q&quot;</span>, buf) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf)) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, RECV_SIZE);</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Recv %d bytes: %s\n&quot;</span>, len, buf);</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// SSL close</span></span><br><span class="line">    SSL_shutdown(ssl);</span><br><span class="line">    <span class="comment">// Free resource</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>ssl_server.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_CERT <span class="string">&quot;server.crt&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_KEY  <span class="string">&quot;server.key&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUF_LEN  256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_server_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">configure_sslcertkey_file</span><span class="params">(SSL_CTX *ctx)</span></span><br><span class="line">&#123;</span><br><span class="line">    SSL_CTX_set_ecdh_auto(ctx, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// Load certificate file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_certificate_file(ctx, SSL_CERT, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Load private key file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_PrivateKey_file(ctx, SSL_KEY, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (bind(fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (listen(fd, <span class="number">1</span>) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_server.out [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> server_fd, client_fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line">    uint len = <span class="keyword">sizeof</span>(addr);</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">char</span> buf[BUF_LEN];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    port = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Listen port: %d\n&quot;</span>, port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Configure cert and key</span></span><br><span class="line">    <span class="keyword">if</span> (configure_sslcertkey_file(ctx) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((server_fd = create_socket(port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Accept connection</span></span><br><span class="line">    <span class="keyword">if</span> ((client_fd = accept(server_fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, &amp;len)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Build SSL connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, client_fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_accept(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL read/write</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, BUF_LEN);</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Close client</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(client_fd);</span><br><span class="line">    <span class="comment">// Close server and relase resource</span></span><br><span class="line">    close(server_fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="編譯與執行"><a href="#編譯與執行" class="headerlink" title="編譯與執行"></a>編譯與執行</h4><p>接下來寫個簡單的Makefile，這時候就要用到前面所找到的路徑了。</p>
-<figure class="highlight mak"><table><tr><td class="code"><pre><span class="line">SSL_PATH=/usr/local/Cellar/openssl/1.0.2o_1/</span><br><span class="line">CFLAGS=-I<span class="variable">$(SSL_PATH)</span><span class="keyword">include</span> -L<span class="variable">$(SSL_PATH)</span>lib/ -lcrypto -lssl</span><br><span class="line">CC=gcc</span><br><span class="line">BIN=ssl_server ssl_client</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(BIN)</span></span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_server: ssl_server.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_client: ssl_client.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        -rm *.o</span><br><span class="line">        -rm *.out</span><br></pre></td></tr></table></figure>
-
-<p><strong>這邊要特別記住<code>-lcrypto -lssl</code>要放最後面，不然有些平台會有error</strong></p>
-<p>然後就可以執行看看了</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ ./ssl_server 2222</span><br><span class="line">Listen port: 2222</span><br></pre></td></tr></table></figure>
-
-<p>這時候另一邊再來執行client</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./ssl_client.out 127.0.0.1 2222</span><br><span class="line">Connect to 127.0.0.1:2222</span><br><span class="line">Write data to server (q <span class="keyword">for</span> quit): abcd</span><br><span class="line">Recv 4 bytes: abcd</span><br></pre></td></tr></table></figure>
-
-<p>可以順利收送資料了！</p>
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://unix.stackexchange.com/questions/346864/how-to-link-openssl-library-in-macos-using-gcc">How to link OpenSSL library in macOS using gcc?</a></li>
-<li><a href="https://wiki.openssl.org/index.php/Simple_TLS_Server">Simple TLS Server</a></li>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2023,7 +1961,6 @@
       </categories>
       <tags>
         <tag>tools</tag>
-        <tag>protocol</tag>
       </tags>
   </entry>
   <entry>
@@ -2151,6 +2088,69 @@
       <tags>
         <tag>GNU tool</tag>
         <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 openssl 工具與函式庫</title>
+    <url>/2018/05/13/openssl-library-example/</url>
+    <content><![CDATA[<h2 id="安裝openssl"><a href="#安裝openssl" class="headerlink" title="安裝openssl"></a>安裝openssl</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install openssl</span><br></pre></td></tr></table></figure>
+
+<p>MAC上如果要使用library有點麻煩，需要先找到對應的路徑</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;libssl.*&quot;</span>  <span class="comment"># 找到library的路徑</span></span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/pkgconfig/libssl.pc</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/lib/libssl.dylib</span><br><span class="line">...</span><br><span class="line">$ find /usr/local/Cellar/ -name <span class="string">&quot;ssl.h&quot;</span>  <span class="comment"># 找到header的路徑</span></span><br><span class="line">/usr/local/Cellar//node/8.4.0/include/node/openssl/ssl.h</span><br><span class="line">/usr/local/Cellar//openssl/1.0.2o_1/include/openssl/ssl.h</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>看起來路徑是在<code>/usr/local/Cellar/openssl/1.0.2o_1/</code>我們先記起來，後面編譯時會用到。</p>
+<h2 id="創造憑證"><a href="#創造憑證" class="headerlink" title="創造憑證"></a>創造憑證</h2><p>openssl本身就有提供很多好用的工具，我們最常用到的大概就是用來產生憑證吧！</p>
+<p>這邊介紹產生兩種常見憑證(RSA,ECC)的方法。</p>
+<h3 id="產生RSA憑證"><a href="#產生RSA憑證" class="headerlink" title="產生RSA憑證"></a>產生RSA憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生2048長度的key</span></span><br><span class="line">openssl genrsa -out server.key 2048</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key server.key -out server.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey server.key -<span class="keyword">in</span> server.csr -out server.crt</span><br></pre></td></tr></table></figure>
+
+<h3 id="產生ECC憑證"><a href="#產生ECC憑證" class="headerlink" title="產生ECC憑證"></a>產生ECC憑證</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 產生ECC key</span></span><br><span class="line">openssl ecparam -genkey -name secp384r1 -out ecc.key</span><br><span class="line"><span class="comment"># 用key產生CSR，指定用sha384簽CSR</span></span><br><span class="line">openssl req -new -sha384 -key ecc.key -out ecc.csr</span><br><span class="line"><span class="comment"># 產生自簽名證書</span></span><br><span class="line">openssl x509 -req -sha1 -days 3650 -signkey ecc.key -<span class="keyword">in</span> ecc.csr -out ecc.crt</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用openssl內建的連線工具"><a href="#使用openssl內建的連線工具" class="headerlink" title="使用openssl內建的連線工具"></a>使用openssl內建的連線工具</h2><p>有時候我們只是想要測試ssl連線而已，還要自己寫程式有點麻煩，還好我們可以使用openssl提供的連線工具</p>
+<p>client和server都有提供，非常方便的！</p>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><ul>
+<li><code>-msg</code>：看細節(hex格式)</li>
+<li><code>-cipher</code>：決定要用哪種cipher連線</li>
+<li><code>-showcerts</code>：把cert的chain也列出來</li>
+<li><code>-curves</code>：指定要用的橢圓算法，client hello的extension中的elliptic_curves</li>
+<li><code>-sigalgs</code>：指定交換key要用的簽名方式，client hello的extension中的signature_algorithms</li>
+<li><code>-no_tls1 -no_ssl3</code>：加上後就可以只用tls1.2連線了</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 最基本連線</span></span><br><span class="line">openssl s_client -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 看連線細節</span></span><br><span class="line">openssl s_client -msg -connect [IP]:[port]</span><br><span class="line"><span class="comment"># 指定連線方式</span></span><br><span class="line">openssl s_client -connect sslanalyzer.comodoca.com:443 -cipher ECDHE-RSA-AES128-GCM-SHA256 -curves secp384r1 -sigals RSA+SHA512</span><br><span class="line"><span class="comment"># 限制只能用TLS1.2連線</span></span><br><span class="line">openssl s_client -no_tls1 -no_ssl3 -connect [IP]:[port]</span><br></pre></td></tr></table></figure>
+
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># server開啟5678 port並且用server.key當private key，cert用server.pem</span></span><br><span class="line">openssl s_server -accept 5678 -key server.key -cert server.pem</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果要看有哪些連線方式，可使用如下指令</span></span><br><span class="line">openssl ciphers ALL</span><br></pre></td></tr></table></figure>
+
+<h2 id="函式庫使用"><a href="#函式庫使用" class="headerlink" title="函式庫使用"></a>函式庫使用</h2><p>我們來介紹openssl的函式庫最基本的使用方式。</p>
+<h3 id="基本範例-client-server"><a href="#基本範例-client-server" class="headerlink" title="基本範例 - client &amp; server"></a>基本範例 - client &amp; server</h3><p>這邊寫了兩個client和server的基本範例當作參考，大家可以基於這兩者來拓展自己的程式。</p>
+<h4 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h4><p>ssl_client.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RECV_SIZE 256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_client_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">char</span> *ip, <span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// New socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// TCP connect to server</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = inet_addr(ip);</span><br><span class="line">    <span class="keyword">if</span> (connect(fd, (<span class="keyword">struct</span> sockaddr *)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_client.out [IP] [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="type">char</span> buf[RECV_SIZE];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Parse parameter</span></span><br><span class="line">    port = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Connect to %s:%d\n&quot;</span>, argv[<span class="number">1</span>], port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = create_socket(argv[<span class="number">1</span>], port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Start to build ssl connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_connect(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL write/read</span></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Write data to server (q for quit): &quot;</span>);</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        gets(buf);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">&quot;q&quot;</span>, buf) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf)) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, RECV_SIZE);</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Recv %d bytes: %s\n&quot;</span>, len, buf);</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// SSL close</span></span><br><span class="line">    SSL_shutdown(ssl);</span><br><span class="line">    <span class="comment">// Free resource</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ssl_server.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;openssl/ssl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_CERT <span class="string">&quot;server.crt&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SSL_KEY  <span class="string">&quot;server.key&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUF_LEN  256</span></span><br><span class="line"></span><br><span class="line">SSL_CTX *<span class="title function_">create_sslcontext</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> SSL_METHOD *method;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    <span class="comment">// Support only TLSv1.2</span></span><br><span class="line">    method = TLSv1_2_server_method();</span><br><span class="line">    <span class="comment">// Create context</span></span><br><span class="line">    ctx = SSL_CTX_new(method);</span><br><span class="line">    <span class="keyword">if</span> (!ctx)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">configure_sslcertkey_file</span><span class="params">(SSL_CTX *ctx)</span></span><br><span class="line">&#123;</span><br><span class="line">    SSL_CTX_set_ecdh_auto(ctx, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// Load certificate file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_certificate_file(ctx, SSL_CERT, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Load private key file</span></span><br><span class="line">    <span class="keyword">if</span> (SSL_CTX_use_PrivateKey_file(ctx, SSL_KEY, SSL_FILETYPE_PEM) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">create_socket</span><span class="params">(<span class="type">int</span> port)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line"></span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>)) &lt; <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (bind(fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, <span class="keyword">sizeof</span>(addr)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (listen(fd, <span class="number">1</span>) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: ./ssl_server.out [port]</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> server_fd, client_fd;</span><br><span class="line">    SSL_CTX *ctx;</span><br><span class="line">    SSL *ssl;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line">    uint len = <span class="keyword">sizeof</span>(addr);</span><br><span class="line">    <span class="type">int</span> port;</span><br><span class="line">    <span class="type">char</span> buf[BUF_LEN];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    port = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Listen port: %d\n&quot;</span>, port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// SSL init</span></span><br><span class="line">    OpenSSL_add_ssl_algorithms();</span><br><span class="line">    <span class="comment">// Create SSL_CTX</span></span><br><span class="line">    <span class="keyword">if</span> ((ctx = create_sslcontext()) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Configure cert and key</span></span><br><span class="line">    <span class="keyword">if</span> (configure_sslcertkey_file(ctx) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Create socket</span></span><br><span class="line">    <span class="keyword">if</span> ((server_fd = create_socket(port)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Accept connection</span></span><br><span class="line">    <span class="keyword">if</span> ((client_fd = accept(server_fd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, &amp;len)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// Build SSL connection</span></span><br><span class="line">    ssl = SSL_new(ctx);</span><br><span class="line">    SSL_set_fd(ssl, client_fd);</span><br><span class="line">    <span class="keyword">if</span> (SSL_accept(ssl) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// SSL read/write</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        len = SSL_read(ssl, buf, BUF_LEN);</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            SSL_write(ssl, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Close client</span></span><br><span class="line">    SSL_free(ssl);</span><br><span class="line">    close(client_fd);</span><br><span class="line">    <span class="comment">// Close server and relase resource</span></span><br><span class="line">    close(server_fd);</span><br><span class="line">    SSL_CTX_free(ctx);</span><br><span class="line">    EVP_cleanup();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="編譯與執行"><a href="#編譯與執行" class="headerlink" title="編譯與執行"></a>編譯與執行</h4><p>接下來寫個簡單的Makefile，這時候就要用到前面所找到的路徑了。</p>
+<figure class="highlight mak"><table><tr><td class="code"><pre><span class="line">SSL_PATH=/usr/local/Cellar/openssl/1.0.2o_1/</span><br><span class="line">CFLAGS=-I<span class="variable">$(SSL_PATH)</span><span class="keyword">include</span> -L<span class="variable">$(SSL_PATH)</span>lib/ -lcrypto -lssl</span><br><span class="line">CC=gcc</span><br><span class="line">BIN=ssl_server ssl_client</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(BIN)</span></span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_server: ssl_server.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">ssl_client: ssl_client.c</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span>.out <span class="variable">$(CFLAGS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        -rm *.o</span><br><span class="line">        -rm *.out</span><br></pre></td></tr></table></figure>
+
+<p><strong>這邊要特別記住<code>-lcrypto -lssl</code>要放最後面，不然有些平台會有error</strong></p>
+<p>然後就可以執行看看了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ ./ssl_server 2222</span><br><span class="line">Listen port: 2222</span><br></pre></td></tr></table></figure>
+
+<p>這時候另一邊再來執行client</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./ssl_client.out 127.0.0.1 2222</span><br><span class="line">Connect to 127.0.0.1:2222</span><br><span class="line">Write data to server (q <span class="keyword">for</span> quit): abcd</span><br><span class="line">Recv 4 bytes: abcd</span><br></pre></td></tr></table></figure>
+
+<p>可以順利收送資料了！</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://unix.stackexchange.com/questions/346864/how-to-link-openssl-library-in-macos-using-gcc">How to link OpenSSL library in macOS using gcc?</a></li>
+<li><a href="https://wiki.openssl.org/index.php/Simple_TLS_Server">Simple TLS Server</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+        <tag>protocol</tag>
       </tags>
   </entry>
   <entry>
@@ -2285,6 +2285,61 @@
       </tags>
   </entry>
   <entry>
+    <title>三年的工作省思</title>
+    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
+<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
+<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
+<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
+<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
+<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
+<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
+<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
+<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
+<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
+<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
+<ol>
+<li>發問前一定要再三思考<ul>
+<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
+<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
+</ul>
+</li>
+<li>定期反省，找出更有效率的做法<ul>
+<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
+<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
+</ul>
+</li>
+<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
+<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
+<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
+</ul>
+</li>
+<li>溝通的時候，站在對方的立場思考<ul>
+<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
+<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
+</ul>
+</li>
+<li>要定期盤點自己的能力<ul>
+<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
+</ul>
+</li>
+<li>負起責任<ul>
+<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
+<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
+</ul>
+</li>
+</ol>
+<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>一些減少code size的方法</title>
     <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
@@ -2349,59 +2404,30 @@
       </tags>
   </entry>
   <entry>
-    <title>三年的工作省思</title>
-    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
-<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
-<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
-<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
-<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
-<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
-<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
-<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
-<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
-<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
-<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
-<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
-<ol>
-<li>發問前一定要再三思考<ul>
-<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
-<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
-</ul>
-</li>
-<li>定期反省，找出更有效率的做法<ul>
-<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
-<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
-</ul>
-</li>
-<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
-<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
-<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
-</ul>
-</li>
-<li>溝通的時候，站在對方的立場思考<ul>
-<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
-<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
-</ul>
-</li>
-<li>要定期盤點自己的能力<ul>
-<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
-</ul>
-</li>
-<li>負起責任<ul>
-<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
-<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
-</ul>
-</li>
-</ol>
-<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
+    <title>不要被政治所操弄</title>
+    <url>/2026/03/22/%E4%B8%8D%E8%A6%81%E8%A2%AB%E6%94%BF%E6%B2%BB%E6%89%80%E6%93%8D%E5%BC%84/</url>
+    <content><![CDATA[<p>最近，因為台灣的行政權和立法權分屬不同政黨，所以國家政治弄得紛紛擾擾的。常常看到很多人在臉書、YouTube、LINE、PTT 等平台上面各種大肆批評對方立場，而且言語常常都是非理性辱罵，這讓我的心情也常常會被影響到。</p>
+<p>當其中一方看似說的有道理時，我也會跟著憤慨為什麼另一方不這樣做，他們是不是想賣國、是不是有腐敗。好像所有問題都來自敵對政黨，只要他們消失，一切都會好轉，從此國家就會走上正軌。</p>
+<p>不過如果仔細思考一下就會發現其中邏輯根本就不通順，不論是哪個政黨都有曾經完全執政過，但是那段時間難道國家就完全沒問題嗎？不，一樣有貪污腐敗，一樣有政策錯誤，認為某個政黨更為優秀的想法根本就太天真了。</p>
+<p>政黨是由人所組成，而人本來就有形形色色，各種不同樣貌，其中一定都會有害群之馬。時間一久，這些人自然就會出現在國家某些要位上，影響國家運行。這是系統性問題，不會因為有哪位天縱英明的領導人出現就能改變，這也是為何民主國家都會有定期選舉、監督制衡的機制。</p>
+<p>對於政治人物來說，想要持續獲得權利，就必須獲得選民的支持，因此不論對手的政見是否真的是對國家有利，他們一定要將其抹黑，營造出一種氛圍───現在人民有任何不滿都是來自對方的錯。透過放大負面情緒，他們就能從中獲益。</p>
+<p>政客操弄選民情緒是民主國家必然會出現的現象，因為不這麼做，他們就無法上位。這就如同網紅們透過追時事熱點來獲得流量、新聞媒體用聳動標題來搏人眼球一樣自然。這時候如果我們的情緒也跟著被這些政客們所操弄，那不就是正中他們的下懷了嗎？</p>
+<p>有些人會說，我們不能看著國家被一群賣國賊帶往錯誤的道路，他們為了自己的私利煽動無知的支持者，瓦解國家的力量，破壞我們的體制。</p>
+<p>我們要相信我們制度的力量，台灣已經經過多次政黨輪替，我們的體制有糾錯的機制，如果做不好，下次選舉就會被趕下台。沒有任何一個人或是一個黨，有那麼大的力量去破壞這套運行的規則。我們現在所擔心的檯面上議題，放到四年後來看，有時甚至根本不用那麼久，都不過是小事而已，根本沒有那麼大的破壞力。只是政客們希望你相信，並且站在他們那側，這樣他們就更容易從對手那邊奪得權力而已。</p>
+<p>在網路上看到很多政治口水的發言，各個黨派的支持者彼此互嗆，嘲笑對方。當我們站在其中一派的立場時，就會覺得怎麼會有那麼不講理的人出現，明明事實就是這樣，為何他們不要接受。任何一個政治事件發生的時候，就會開始轉發相同理念的人的文章，並與立場相悖的人辯論，藉由這樣的動作來滿足內心的需求。</p>
+<p>但是，任何網路上的爭論永遠都是平行線。沒有任何人會因為辯論而轉變立場，想像一下如果你在一場辯論中輸了，你就會相信對方是對的嗎？更有可能的是認為自己只是一時表現不好，所以才會在爭論中落入下風而已。人的思想是最難改變的事物，當遭受到挑戰時，反而會因為感覺受到侵犯，更加進入防禦姿態。</p>
+<p>不論是政壇上政客的各種政治操弄，又或者是網路上的政治口水戰，仔細想想，我們個人的意見根本不會改變現況。不會因為我們個體的支持或反對，態度就會急轉彎，網友就會改變立場，這些都不是在我們能控制的範圍中。</p>
+<p>人生是由一個個當下所組成，而我們當下的注意力在哪邊，也就意味我們生命在哪邊。如果把注意力放在一個我們無法控制的事情上面，那就是在浪費我們的生命。因此，過度關注政治對於人生是百害而無一利的。</p>
+<p>那麼身為普通人，我們要如何避免變成政客的棋子，被其操弄呢？</p>
+<p>首先，不要把某個政黨或是某個政治人物當成自我認同。一般來說，防禦性的心態都來自我們的自我被他人侵犯，為了保護自己，就會開始奮起抵抗。任何政黨或是政治人物都會犯錯，若是我們把自我跟他們綁在一起，當他們被抨擊時，就好像自己被攻擊，下意識就會反擊。然而，何必呢？他們的行為不是我們能控制的，我們如同被綁在一個大石頭上不斷往水裡沉，雖然無法控制石頭的重量，但是我們可以選擇切斷繩索，讓自己自由。</p>
+<p>再來，雖然就像公民課本所說，我們必須要參與政治，可是這並不代表我們需要支持某一個政黨。政治是一個資源分配的過程，政黨不過是扮演反饋民意的角色而已。我們需要的是針對自己重視的議題發聲，不需要多，只要看最看重的那個就好。有可能是高房價，有可能是國防安全，也有可能是科技發展。針對這個議題，選擇要支持的政黨或候選人，這樣我們就不會被政治所綁架了。</p>
+<p>第三，我們要尊重世界的複雜性。當我們批評當權者為何不去做一個看似理所當然的事情，往往背後都是有反作用力在牽扯，一定是有一群跟我們持不同意見的人存在，才導致政治人物不願意去積極處理。例如當我們批評高房價時，也有一大群人畢生資產就在自己好不容易存錢買的房子上，他們肯定不願意看到房價下跌，政府也會因為這個原因不敢下重手。</p>
+<p>最後，政治雖然很重要，但真正重要的還是我們自己的生活過得好不好。我們關心政治，是因為要讓自己生活過得更好，而不是被政治口號牽著跑。政客們很喜歡用宏大的敘事來吸引人民，讓他們好像吃了毒品一樣上癮，相信只要票投給自己，充滿希望的未來就在眼前。任何政策或是國際事件，我們要想的是這會怎麼影響我的生活，我要怎麼應對，而不是去大肆批評，藉機多踩自己不喜歡的政黨幾腳。</p>
+<p>我們的時間、思想、情緒等等，都是屬於自己生命中很重要的一部分，別讓它們被政治所操弄了。</p>
 ]]></content>
       <categories>
         <category>雜七雜八</category>
       </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
   </entry>
   <entry>
     <title>人形機器人與自動化的趨勢</title>
@@ -2431,32 +2457,6 @@
       <tags>
         <tag>機器人</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>不要被政治所操弄</title>
-    <url>/2026/03/22/%E4%B8%8D%E8%A6%81%E8%A2%AB%E6%94%BF%E6%B2%BB%E6%89%80%E6%93%8D%E5%BC%84/</url>
-    <content><![CDATA[<p>最近，因為台灣的行政權和立法權分屬不同政黨，所以國家政治弄得紛紛擾擾的。常常看到很多人在臉書、YouTube、LINE、PTT 等平台上面各種大肆批評對方立場，而且言語常常都是非理性辱罵，這讓我的心情也常常會被影響到。</p>
-<p>當其中一方看似說的有道理時，我也會跟著憤慨為什麼另一方不這樣做，他們是不是想賣國、是不是有腐敗。好像所有問題都來自敵對政黨，只要他們消失，一切都會好轉，從此國家就會走上正軌。</p>
-<p>不過如果仔細思考一下就會發現其中邏輯根本就不通順，不論是哪個政黨都有曾經完全執政過，但是那段時間難道國家就完全沒問題嗎？不，一樣有貪污腐敗，一樣有政策錯誤，認為某個政黨更為優秀的想法根本就太天真了。</p>
-<p>政黨是由人所組成，而人本來就有形形色色，各種不同樣貌，其中一定都會有害群之馬。時間一久，這些人自然就會出現在國家某些要位上，影響國家運行。這是系統性問題，不會因為有哪位天縱英明的領導人出現就能改變，這也是為何民主國家都會有定期選舉、監督制衡的機制。</p>
-<p>對於政治人物來說，想要持續獲得權利，就必須獲得選民的支持，因此不論對手的政見是否真的是對國家有利，他們一定要將其抹黑，營造出一種氛圍───現在人民有任何不滿都是來自對方的錯。透過放大負面情緒，他們就能從中獲益。</p>
-<p>政客操弄選民情緒是民主國家必然會出現的現象，因為不這麼做，他們就無法上位。這就如同網紅們透過追時事熱點來獲得流量、新聞媒體用聳動標題來搏人眼球一樣自然。這時候如果我們的情緒也跟著被這些政客們所操弄，那不就是正中他們的下懷了嗎？</p>
-<p>有些人會說，我們不能看著國家被一群賣國賊帶往錯誤的道路，他們為了自己的私利煽動無知的支持者，瓦解國家的力量，破壞我們的體制。</p>
-<p>我們要相信我們制度的力量，台灣已經經過多次政黨輪替，我們的體制有糾錯的機制，如果做不好，下次選舉就會被趕下台。沒有任何一個人或是一個黨，有那麼大的力量去破壞這套運行的規則。我們現在所擔心的檯面上議題，放到四年後來看，有時甚至根本不用那麼久，都不過是小事而已，根本沒有那麼大的破壞力。只是政客們希望你相信，並且站在他們那側，這樣他們就更容易從對手那邊奪得權力而已。</p>
-<p>在網路上看到很多政治口水的發言，各個黨派的支持者彼此互嗆，嘲笑對方。當我們站在其中一派的立場時，就會覺得怎麼會有那麼不講理的人出現，明明事實就是這樣，為何他們不要接受。任何一個政治事件發生的時候，就會開始轉發相同理念的人的文章，並與立場相悖的人辯論，藉由這樣的動作來滿足內心的需求。</p>
-<p>但是，任何網路上的爭論永遠都是平行線。沒有任何人會因為辯論而轉變立場，想像一下如果你在一場辯論中輸了，你就會相信對方是對的嗎？更有可能的是認為自己只是一時表現不好，所以才會在爭論中落入下風而已。人的思想是最難改變的事物，當遭受到挑戰時，反而會因為感覺受到侵犯，更加進入防禦姿態。</p>
-<p>不論是政壇上政客的各種政治操弄，又或者是網路上的政治口水戰，仔細想想，我們個人的意見根本不會改變現況。不會因為我們個體的支持或反對，態度就會急轉彎，網友就會改變立場，這些都不是在我們能控制的範圍中。</p>
-<p>人生是由一個個當下所組成，而我們當下的注意力在哪邊，也就意味我們生命在哪邊。如果把注意力放在一個我們無法控制的事情上面，那就是在浪費我們的生命。因此，過度關注政治對於人生是百害而無一利的。</p>
-<p>那麼身為普通人，我們要如何避免變成政客的棋子，被其操弄呢？</p>
-<p>首先，不要把某個政黨或是某個政治人物當成自我認同。一般來說，防禦性的心態都來自我們的自我被他人侵犯，為了保護自己，就會開始奮起抵抗。任何政黨或是政治人物都會犯錯，若是我們把自我跟他們綁在一起，當他們被抨擊時，就好像自己被攻擊，下意識就會反擊。然而，何必呢？他們的行為不是我們能控制的，我們如同被綁在一個大石頭上不斷往水裡沉，雖然無法控制石頭的重量，但是我們可以選擇切斷繩索，讓自己自由。</p>
-<p>再來，雖然就像公民課本所說，我們必須要參與政治，可是這並不代表我們需要支持某一個政黨。政治是一個資源分配的過程，政黨不過是扮演反饋民意的角色而已。我們需要的是針對自己重視的議題發聲，不需要多，只要看最看重的那個就好。有可能是高房價，有可能是國防安全，也有可能是科技發展。針對這個議題，選擇要支持的政黨或候選人，這樣我們就不會被政治所綁架了。</p>
-<p>第三，我們要尊重世界的複雜性。當我們批評當權者為何不去做一個看似理所當然的事情，往往背後都是有反作用力在牽扯，一定是有一群跟我們持不同意見的人存在，才導致政治人物不願意去積極處理。例如當我們批評高房價時，也有一大群人畢生資產就在自己好不容易存錢買的房子上，他們肯定不願意看到房價下跌，政府也會因為這個原因不敢下重手。</p>
-<p>最後，政治雖然很重要，但真正重要的還是我們自己的生活過得好不好。我們關心政治，是因為要讓自己生活過得更好，而不是被政治口號牽著跑。政客們很喜歡用宏大的敘事來吸引人民，讓他們好像吃了毒品一樣上癮，相信只要票投給自己，充滿希望的未來就在眼前。任何政策或是國際事件，我們要想的是這會怎麼影響我的生活，我要怎麼應對，而不是去大肆批評，藉機多踩自己不喜歡的政黨幾腳。</p>
-<p>我們的時間、思想、情緒等等，都是屬於自己生命中很重要的一部分，別讓它們被政治所操弄了。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
   </entry>
   <entry>
     <title>在非標準的道路上</title>
@@ -2826,6 +2826,24 @@
       </tags>
   </entry>
   <entry>
+    <title>《深度學習的技術》：一種學習的框架</title>
+    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
+    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
+<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
+<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
+<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
+<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
+<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
+<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>淺談函式庫</title>
     <url>/2018/05/12/%E6%B7%BA%E8%AB%87%E5%87%BD%E5%BC%8F%E5%BA%AB/</url>
     <content><![CDATA[<h2 id="比較shared-static-library"><a href="#比較shared-static-library" class="headerlink" title="比較shared&#x2F;static library"></a>比較shared&#x2F;static library</h2><p>程式在執行的時候，大部分都會需要引用函式庫(library)，library有分shared和static，兩者代表不同的引用方式。</p>
@@ -3050,24 +3068,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《深度學習的技術》：一種學習的框架</title>
-    <url>/2018/03/11/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93/</url>
-    <content><![CDATA[<p>會知道這本書是因為之前有在追蹤該作者的<a href="https://4think.net/">部落格</a>，該部落格是分享作者看完書後的讀後心得，他看的書品質都算是很高，有時候我也都會參考他的書單、心得來決定是否要看這本書。後來作者把他看的書做一個總結，寫成一本關於學習的書，也就是這本「<a href="https://4think.net/%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%8A%80%E8%A1%93%E3%80%8B/">深度學習的技術</a>」。原本是有點懶得買，因為並不是實體而且感覺轉帳什麼的很麻煩，不過在同事的勸誘下還是買了。從結論來說我覺得這本真的值得這個價錢，畢竟作者的論述很清晰、有條理，而且都有引用其他著名書籍內容，某種程度上也是集大成了，可以從作者的方法再進一步學習、研究出屬於自己的學習方式。</p>
-<p>作者把整個學習過程分成五個階段：<strong>記、懂、網、拓、活</strong>。記是記憶的意思，講了幾個科學上實驗研究很有用的記憶方法，包括「提取練習效應」、「間隔效應」、「交錯效應」、「生產效應」、「變動效應」等等。但我從中學到的是<strong>記不是要強調記憶本身，而是要練習「提取記憶」這件事</strong>，所以這些方法都是訓練自己在不同情況下都能夠順利提取記憶，確保自己真的有記憶牢靠，所以也難怪背誦時只是不斷重複閱讀是效率極差，而透過各種提取，如講出來、寫出來、測驗等等記憶的效率會再高一點。這點我應該可以拿來在學習單字上試試做些驗證。</p>
-<p>懂的部分就是要讓自己記憶力最大化，有幾個方式：相鄰可能(複利效應)、發散模式(利用散步等時間思考事情)、自然頻率(找適合人類的學習方式，如故事、思想實驗)、透徹程度(以教為學)、工作記憶(善用紙筆)。內容就不一一多提，但是我想最重要的是人類在演化上、構造上還是屬於生物，所以學習上還是有一定生理限制，這些就是讓我們可以用比較輕鬆的方式理解知識。</p>
-<p>網則是強調知識的排列重要性，作者強調了碎片化學習不是不好，畢竟很多時候都只能利用零散的時間來學習，但是最重要的是我們需要把知識進行排列，因為往往知識的排列本身比起知識點是更為重要的。要構成知識網有兩個支柱，分別為知識排列以及刻意練習，知識排列算是我們對外顯知識(例如物理學、經濟學等理論)的人工佈線，透過佈線構成自己的知識架構，而刻意練習則是用在學習內隱知識(如開車、游泳等等難用文字描述的領域)，強化我們網狀架構的廣度、強度和密度。這邊不得不提<a href="http://www.books.com.tw/products/0010752714">刻意練習</a>真的自從出版後就被各種提到，而且都是我覺得值得一看的好書，好的方法果然是會被其他好書不斷重複提起，這也驗證了重要知識是很容易在生活中重複出現的。</p>
-<p>前面都在講怎麼學習，但是學習什麼也是很重要的。拓的部分在講知識是有品質的差別的，要如何辨別知識對自己的價值有三個方面：正確性(過濾機制)、多樣性(跨領域學習)、創造性(思想孵化器)。我認為正確性講的是人類總是有心理學上的弱點，而透過第二層思考就可以盡可能避免被錯誤的知識誤導。多樣性則提到了蒙格的多元思維模型，透過學習多個學科最重要的模型，破除學問間的壁壘，可以解決更多困難的問題。順帶一提，蒙格的<a href="http://www.books.com.tw/products/0010643983">窮查理的普通常識</a>也是被各種推廣的好書，雖然內容並不是很有條理的方法論(比較多是演講形式)，但背後的思想可是備受推崇，之後可能也會想收藏一本當傳教用(誤)。最後的創造性則是強調透過寫作讓自己的思維可視化，並且促進更進一步的思考。</p>
-<p>最後的「活」先提到了要時時注意一石多鳥，學習要用最有效率的方式學習，不論是閱讀還是做筆記都是，找到好的方法，並且使用它。而更重要的是學了知識就是要用，我很喜歡書中的這句話**「知識就像是金錢一樣，不花就等於不曾有過」**，作者建議使用知識的方法是開始屬於自己的個人項目，並且給了一些找到與實踐個人項目的方法和原則。我是很認同他的想法，畢竟我也常覺得看完書後好像就只是這樣，沒有真正改變了什麼。也許我也該從一個個人項目開始發揮我所學到的內容。</p>
-<p>這本書原則上我非常地推薦，是值得一讀的好書。先不論書中方法對錯，光是作者把各個書的精華統整出自己的知識架構就已經值回票價了。當然，我不是完全認同書中的方法，但是我覺得書中的統整確確實實是改變我一些學習的方法。所以我的建議是<strong>不要完全照抄書中的方法，而是要善用作者的統整，建構出屬於自己的學習習慣</strong>，這樣才算是最大化利用這本書。</p>
-]]></content>
-      <categories>
-        <category>讀書心得</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>《為什麼偉大不能被計畫》：人類如何成就偉大</title>
     <url>/2024/10/06/%E7%82%BA%E4%BB%80%E9%BA%BC%E5%81%89%E5%A4%A7%E4%B8%8D%E8%83%BD%E8%A2%AB%E8%A8%88%E7%95%AB/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/CN11869057">為什麼偉大不能被計劃</a>」是由兩位作者 Kenneth Stanley 和 Joel Lehman 所著。他們是機器學習和人工智慧研究學者，其團隊做了一個圖片孵化網站，意外發現要從亂數中產生出好的圖片並不能透過事先的計劃，而是只能透過不斷嘗試，發掘夠新奇有趣的圖片，然後以此為踏腳石繼續往下探索。這樣的發現也可以套用到其他人類偉大的發現和發明之中。這些偉大的成就，大多都不是透過設定目標和安排計畫來達成，反而都是因為在興趣探索時意外發現。</p>
@@ -3179,41 +3179,6 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>為何比特幣是加密貨幣中的定海神針</title>
-    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
-    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
-<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
-<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
-<center>比特幣市值佔比圖，資料來源：coingecko</center>
-
-<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
-<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
-<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
-<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
-<ul>
-<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
-<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
-<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
-</ul>
-<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
-<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
-<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
-<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
-<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
-<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
-<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
-<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
-<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>區塊鏈</tag>
-      </tags>
   </entry>
   <entry>
     <title>為何我選擇定期定額投入市值型 ETF</title>
@@ -3341,6 +3306,41 @@
       <categories>
         <category>雜七雜八</category>
       </categories>
+  </entry>
+  <entry>
+    <title>為何比特幣是加密貨幣中的定海神針</title>
+    <url>/2025/04/13/%E7%82%BA%E4%BD%95%E6%AF%94%E7%89%B9%E5%B9%A3%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%87%9D/</url>
+    <content><![CDATA[<p>從初次接觸加密貨幣領域以來，這個圈子不論是誰都倡導比特幣是風險最低的投資方式，這讓我感到非常不解。</p>
+<p>在科技領域中，後進者取代先驅的例子屢見不鮮。往往是有用取代無用，效能好替換效能差，就如同當初智慧型手機取代傳統手機、Google 的搜尋引擎替換 Yahoo 的入口網站一樣。長江後浪推前浪是科技產品的宿命，同時也增進了人類社會的進步。</p>
+<p>然而，同樣是科技最前沿的加密貨幣領域，情況卻又有所不同。作為加密貨幣的最早先驅比特幣，從 2008 年發明至今，鮮少有大型更新，至今依然缺乏智能合約或是 NFT 等等後進加密貨幣的必備功能。儘管如此，它卻擁有不可撼動的最高地位，市值穩定佔整個加密貨幣市場的 40% 以上。</p>
+<center>比特幣市值佔比圖，資料來源：coingecko</center>
+
+<p><img src="/images/%E6%AF%94%E7%89%B9%E5%B9%A3%E5%B8%82%E5%80%BC%E4%BD%94%E6%AF%94%E5%9C%96.png" alt="比特幣市值佔比圖"></p>
+<p>這是為何呢？經過研究後，我總結了兩個原因：</p>
+<h2 id="穩定"><a href="#穩定" class="headerlink" title="穩定"></a>穩定</h2><p>身為所有加密貨幣的祖先，比特幣可以說是整個行業的信仰支撐。認可其他數位資產的大多數人，普遍也認可比特幣。從發明至今，比特幣遭受無數的攻擊，卻依然屹立不搖，其存在證明了加密貨幣價值儲藏以及傳遞的可靠性。</p>
+<p>在這個情況下，人們自然期望它越穩定越好。一旦出現重大問題，對整個行業來說就是地動山搖。這也解釋為什麼比特幣大多是漸進的調整，很少做出巨大的變化。為了維持這種可靠性，比特幣在多個方面做出取捨：</p>
+<ul>
+<li>為什麼要使用大量的電力來維持共識演算法呢？因為要維持穩定。</li>
+<li>為什麼不要引入智能合約、NFT 等等功能呢？因為要維持穩定。</li>
+<li>為什麼不更積極地改善交易的效率呢？因為要維持穩定。</li>
+</ul>
+<p>穩定高於一切。<strong>人們並不希望比特幣成為萬能的解決方案，而是希望當加密貨幣領域出現任何風險時，比特幣可以是永遠可靠的避風港。</strong></p>
+<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>跟其他加密貨幣不同，比特幣並沒有一個明確的領導者或是組織，甚至其發明者中本聰身份也一直是謎。基於這個原因，比特幣無法被任何個體或組織所控制，需要靠集體的共識來決定方向。換句話說，比特幣本身和其生態系統都呈現高度去中心化。</p>
+<p><strong>去中心化雖然會導致運作效率不高，但也同樣帶來了重要的優點：信任</strong>。有中心化的組織就可能有腐敗、可能被政治控制、可能因為領導人的言行而造成不必要的波動。一旦其運作足夠去中心化，比特幣的發展就無法被單方面掌控，例如某個國家或公司，持有人也會更加放心。</p>
+<p>以 2022 年爆發的俄烏戰爭為例，俄羅斯被美國為首的西方國家制裁，無法使用美元進行交易，因此俄羅斯就使用比特幣來處理部分交易，而這正是比特幣無法被單一國家勢力控制的最好證明。另一方面，烏克蘭開放了比特幣的捐款方式，而避難的群眾在法幣被凍結情況下，也可以輕易攜帶比特幣離境。在兩國勢如水火的對抗下，比特幣依然可以得到雙方的承認和使用。</p>
+<h2 id="比特幣就是數位黃金"><a href="#比特幣就是數位黃金" class="headerlink" title="比特幣就是數位黃金"></a>比特幣就是數位黃金</h2><p>基於上述理由，雖然比特幣和當前加密貨幣主流技術應用關聯不大，人們依然認可其價值。就如同我們日常交易都是使用像是台幣、美元等法幣，但是黃金還是被視為很有價值的商品。其實，從黃金身上我們也會看到類似的兩種特性。</p>
+<p>從穩定性來說，沒有任何一種金屬比黃金還穩定了：在地球上的數量稀少、不容易起化學反應、還很難偽造。因為這些特性，當發生天災人禍時，人們傾向持有黃金避難。在國民政府當初從中國大陸撤退到台灣的時候，也是攜帶大量的黃金，用來穩定混亂的時局。</p>
+<p>從去中心化來說，黃金的價值是被普遍世界承認的，到任何國家都可以交易，甚至沒有一個國家有絕對掌控權。有趣的是，在人類歷史中被用來當成貨幣的物品各式各樣，有貝殼、駱駝、各種金屬，但是只有黃金是所有人都能接受的。就算兩個國家發生戰爭，彼此還是能用黃金做交易。</p>
+<p>黃金雖然已較少用於日常生活中，但人類用黃金當貨幣的歷史記憶依然留存至今。同樣地，比特幣作為加密貨幣的先行者，人們依然相信其價值。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>台灣前央行總裁彭淮南早在 2013 年時就說過：「比特幣是一種貴金屬」。真不愧是專業經濟學者，這個類比可說是一針見血。</p>
+<p>比特幣並不是普遍使用的貨幣，也不是功能強大的科技產品，人們從不期望它好用或是功能複雜。<strong>正是這種對特定功能的克制，才造就了比特幣本身的獨特優勢</strong>。</p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>區塊鏈</tag>
+      </tags>
   </entry>
   <entry>
     <title>獲取資訊來源的方法</title>
@@ -3496,58 +3496,6 @@
       </categories>
   </entry>
   <entry>
-    <title>藝術是什麼</title>
-    <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
-    <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
-<center>法國史前時代拉斯科洞窟壁畫，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%94%BB">維基百科</a></center>
-
-<p><img src="/images/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%95%AB.jpg" alt="拉斯科洞窟壁畫"></p>
-<p>對於理工人來說，想要學習一件事情，必然要先從定義開始。那麼藝術的定義是什麼呢？</p>
-<p>藝術是透過創造性活動運用各種媒介，如文字、聲音、形象等等，來表達情感、思想或觀念，最重要的是要追求審美愉悅和精神昇華。</p>
-<p>為了追求美感，藝術並不直接傳達明確的訊息，而是建立一種感受空間。可以說，如果一個事物是被設計來觸動觀賞者的感官，這就是廣義上的藝術定義。</p>
-<p>為何不應該要有明確訊息呢？因為那會造成扁平化。人類是經驗的生物，我們透過生活上的各種經驗總結出自己的感受。當別人直接告訴我們結論，我們無法感同身受，但是當這個訊息是用間接的方式傳達給我們，反而可以能激發思考、直達我們內心。</p>
-<p>舉個例子，我們描述一個人的好心情，如果只是用「愉悅」來描述，很難讓我們有更深入的想像。但如果是說「嘴裡哼著歌，踏著輕快的腳步」，整個形象就立體起來了。完全沒提到心情好，讀者卻能從字裡行間中讀出來。</p>
-<p>日本的近代文學大師夏目漱石曾說過，「我愛你」對日本人來說太過直白，可以委婉地說「今晚月色真美」。這某種程度上也是用間接的方式來傳遞訊息，對於聽者來說，由於需要自行做訊息的轉譯，心裡上會更有親近感，更加能夠接受。</p>
-<p>因此，比起用總結方式傳達明確訊息，間接傳達經驗空間才是藝術的本質。</p>
-<p>這也是為何我們不喜歡教科書、電器說明書等直接了當的文字，但是卻喜歡閱讀小說，並可以從其中的故事來領悟作者想傳遞的訊息。</p>
-<p>從詩集小說，到繪畫音樂，不同的藝術表現形式都是在提供觀賞者一種獨特的體驗。我們可以從杜甫的詩集讀出他憂國憂民的理想，梵谷的畫作感受到他創作時的內心衝突與扭曲。這些體驗無法完全用文字清楚描述，只能透過藝術來傳達給他人。</p>
-<center>梵谷自畫像，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%96%87%E6%A3%AE%E7%89%B9%C2%B7%E6%A2%B5%E9%AB%98">維基百科</a></center>
-
-<p><img src="/images/%E6%A2%B5%E8%B0%B7%E8%87%AA%E7%95%AB%E5%83%8F.jpg" alt="梵谷自畫像"></p>
-<p>既然藝術不是要傳達明確資訊，所以就沒有所謂什麼傳播媒介最好、最有效率這件事。</p>
-<p>如果我們只是要比較資訊量的話，歌曲本身攜帶的資訊已經包含文字和聲音，比起純粹的詩還要豐富，理論上可以直接取代詩。然而，從體驗的角度來說，有時候缺失的訊息本身也有重要性，由於可以激發我們的想像，反而獲得截然不同的經驗。正因為詩沒有既定的旋律，所以讀者可以用屬於自己的節奏來決定欣賞其中字句的快慢。</p>
-<p>由此我們可以看出一般溝通和欣賞藝術兩者的不同。</p>
-<p>一般人與人的溝通是要把資訊有效從一個人的大腦傳到另一個人的大腦，因此我們需要組織語言，甚至用圖表輔助，才能確保這個資訊傳輸過程沒有遺失。</p>
-<p>藝術並不是如此，本質上創作者不是在傳達訊息，而是要透過某種形式刺激觀賞者的感官，創造出獨特的體驗。觀賞者接收到的訊息和創作者最一開始傳達的可能是兩回事，但這也沒關係，因為觀眾的感受才是最重要的事情。</p>
-<p>很多作品在經過大眾媒體廣泛傳播以後，人們對他的印象早就不是作者最初的設定，而是包含了作品本身的歷史、群體對他的記憶。</p>
-<p>最明顯的例子是貝多芬的「給愛麗絲」。對台灣人來說，比起貝多芬創作這首曲目的原意（據傳是要給自己暗戀的女性），我們第一時間會想到的是垃圾車要來了，也許還會進而聯想到自己過去跟家人一起出去丟垃圾的回憶。</p>
-<p>同樣的道理也可以套用到大家朗朗上口的民謠上，例如「望春風」。這首歌最早是日治時代創作的台語流行音樂，因為廣受喜愛，所以在國民政府來台以後仍然被多個歌手不斷改編成國語傳唱，到現在國外樂團來台灣演奏幾乎都會準備這首歌曲來拉近與聽眾的關係。不同時代的台灣人對「望春風」的印象都有所不同，但唯一相同的是它確實承載了每一代人的回憶。當我們聽到望春風，自然而然就會想到故鄉台灣，這也是這個作品最有價值的地方。</p>
-<p>有時候我們會以為作品的名氣和它的藝術性掛勾，越有名氣的作品，代表藝術價值越高，人們也越容易被其感動。其實因果關係可能是倒過來的，很多時候是因為這個作品在機緣巧合下出了名，商人藉此進行商業傳播，又更加擴展它的名氣。我們對這個作品有感覺是因為它的高名氣，而不是藝術價值本身。</p>
-<p>大家耳熟能詳的達文西「蒙娜麗莎的微笑」就是最好的案例。雖然同樣是達文西所創作的優秀作品，「蒙娜麗莎的微笑」的名氣明顯就是高過一截。這個其實是起源自 1911 年的一起竊盜案。</p>
-<p>當初羅浮宮的「蒙娜麗莎的微笑」被竊取，引發了法國的轟動，甚至很多人特別跑去展廳朝聖空白的牆面。兩年後後才發現竊賊是義大利一名工匠，他聲稱是因為愛國心想把這幅畫帶回義大利，同樣也感動義大利人民。就這樣這幅畫的知名度不只在法國和義大利，也開始在全世界廣為傳播。人人都知道有這幅畫的存在，到羅浮宮也是想去看看這幅畫。</p>
-<p>另外補充一下，這幅畫真實尺寸其實不大，但是因為保安緣故所以人們只能遠遠看，基本上是看不清楚。在現場與其說是欣賞畫作，不如說是欣賞看畫的人，這反而更加有意思。</p>
-<center>羅浮宮觀賞蒙娜麗莎的人群</center>
-
-<p><img src="/images/%E7%BE%85%E6%B5%AE%E5%AE%AE%E8%A7%80%E8%B3%9E%E8%92%99%E5%A8%9C%E9%BA%97%E8%8E%8E%E7%9A%84%E4%BA%BA%E7%BE%A4.jpg" alt="羅浮宮觀賞蒙娜麗莎的人群"></p>
-<p>既然藝術欣賞很依賴於個人感受，那為何我們需要有導覽、需要聽別人的賞評呢？獨自欣賞不就好了？</p>
-<p>首先要了解的一點，藝術沒有正確答案，並沒有一個權威的人或機構能決定我們要怎麼看待任何作品。導覽本身不過是提供我們欣賞作品的另一個角度罷了，不論是技巧、創作背景、作品本身的故事。</p>
-<p>我們完全可以不認同他們的看法，不過聽聽其他人的欣賞方式也許能拓展我們的視野，找到另一種觸動我們內心的路徑。</p>
-<p>就如同喝茶一樣，在沒有任何訓練下，會覺得茶可能微微苦澀。但是若是更細緻去體會，就會發現原來其中還有一些不一樣的元素，鮮度、回甘等等。藝術賞析的價值正是幫助我們發現沒有注意到的元素，提高感受層次。</p>
-<p>然而藝術到了當前，越來越多人會抱怨無法看懂現代的藝術。以前的藝術，不論是繪畫還是雕刻，我們都可以看出作者在上面花費的心血，也許是宏偉壯觀，也許是精緻細膩。但是現今的藝術常常脫離這個範疇，我們看不出作品的創作難度，甚至也搞不懂為何要叫作這個名字。看了作品的簡介，並沒有得到解答，反而更一頭霧水。</p>
-<center>之前上新聞的香蕉藝術品「喜劇演員」，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1_(%E8%97%9D%E8%A1%93%E5%93%81)">維基百科</a></center>
-
-<p><img src="/images/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1.jpg" alt="喜劇演員"></p>
-<p>我想這可能跟技術的進步有關係。當相機出現了，過去寫實主義的繪畫風格就慢慢沒落，因為沒有什麼會比相片還要寫實。因此新技術會逼著藝術家探索不一樣的可能性，用更抽象的方式來表現。這也是為何現代藝術越來越難懂的原因。</p>
-<p>AI 的出現更是挑戰了藝術的價值。以往要畫一幅畫或寫一首詩，都需要人們經過長時間訓練，才能培養出相對應的技巧和敏感度。然而，當現在這些都可以輕易用 AI 創作，那我們該怎麼評判人類還是 AI 創作的作品價值呢？</p>
-<p>我們已經無法再用創作的技術難度來評估一個作品了，因為這些都能夠用 AI 輕易複製。然而 AI 並沒有真實的人生體驗，本質上它只是一種機率性的產物，能利用大量已有資料來產生出類似的作品。不論是歷史上各個著名的藝術流派，AI 都能快速模仿，產生出讓人驚豔的作品。</p>
-<p>因此，現在更重要的是創作者本身的獨特性，他想傳達什麼訊息、他個人的視角以及隱含的背後人生故事。這些獨一無二的性質是包含 AI 在內，世界上任何其他人都無法取代，也正因為如此才能為觀眾建立出特別的感受空間，直擊他們的內心。</p>
-<p>只要人類還有表達情緒的需求，藝術家就有存在的意義。而真正偉大的藝術，則是能觸碰隱藏在我們內心那個說不清楚的部份，搔到我們心中的癢處。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>《納瓦爾寶典》：如何有智慧地獲得財富與快樂</title>
     <url>/2024/10/20/%E7%B4%8D%E7%93%A6%E7%88%BE%E5%AF%B6%E5%85%B8/</url>
     <content><![CDATA[<h2 id="這本書在說什麼-適合的人"><a href="#這本書在說什麼-適合的人" class="headerlink" title="這本書在說什麼 &amp; 適合的人"></a>這本書在說什麼 &amp; 適合的人</h2><p>「<a href="https://www.books.com.tw/products/0010977461">納瓦爾寶典</a>」是 Eric 整理 Naval Ravikant 過去 X 上的推文、部落格和 podcast 上的想法所集結而成，前一版的名字叫做「快樂實現自主富有」。Naval 是一位知名的矽谷天使投資人，創辦了 AngelList。這本書的內容主要是 Naval 對於人生的各種看法，包括金錢、創業、努力、快樂等等。</p>
@@ -3609,6 +3557,58 @@
       <tags>
         <tag>自我成長</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>藝術是什麼</title>
+    <url>/2026/01/25/%E8%97%9D%E8%A1%93%E6%98%AF%E4%BB%80%E9%BA%BC/</url>
+    <content><![CDATA[<p>藝術並不是生存必需品，但是從上古時代人類還在洞窟生活時就開始有藝術的存在，在世界彼此不相連的不同地區文化也都各自培育出獨特的藝術風格。這讓我不禁好奇人類創作藝術是否是個必然，更想瞭解人類為何對藝術有需求。</p>
+<center>法國史前時代拉斯科洞窟壁畫，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%94%BB">維基百科</a></center>
+
+<p><img src="/images/%E6%8B%89%E6%96%AF%E7%A7%91%E6%B4%9E%E7%AA%9F%E5%A3%81%E7%95%AB.jpg" alt="拉斯科洞窟壁畫"></p>
+<p>對於理工人來說，想要學習一件事情，必然要先從定義開始。那麼藝術的定義是什麼呢？</p>
+<p>藝術是透過創造性活動運用各種媒介，如文字、聲音、形象等等，來表達情感、思想或觀念，最重要的是要追求審美愉悅和精神昇華。</p>
+<p>為了追求美感，藝術並不直接傳達明確的訊息，而是建立一種感受空間。可以說，如果一個事物是被設計來觸動觀賞者的感官，這就是廣義上的藝術定義。</p>
+<p>為何不應該要有明確訊息呢？因為那會造成扁平化。人類是經驗的生物，我們透過生活上的各種經驗總結出自己的感受。當別人直接告訴我們結論，我們無法感同身受，但是當這個訊息是用間接的方式傳達給我們，反而可以能激發思考、直達我們內心。</p>
+<p>舉個例子，我們描述一個人的好心情，如果只是用「愉悅」來描述，很難讓我們有更深入的想像。但如果是說「嘴裡哼著歌，踏著輕快的腳步」，整個形象就立體起來了。完全沒提到心情好，讀者卻能從字裡行間中讀出來。</p>
+<p>日本的近代文學大師夏目漱石曾說過，「我愛你」對日本人來說太過直白，可以委婉地說「今晚月色真美」。這某種程度上也是用間接的方式來傳遞訊息，對於聽者來說，由於需要自行做訊息的轉譯，心裡上會更有親近感，更加能夠接受。</p>
+<p>因此，比起用總結方式傳達明確訊息，間接傳達經驗空間才是藝術的本質。</p>
+<p>這也是為何我們不喜歡教科書、電器說明書等直接了當的文字，但是卻喜歡閱讀小說，並可以從其中的故事來領悟作者想傳遞的訊息。</p>
+<p>從詩集小說，到繪畫音樂，不同的藝術表現形式都是在提供觀賞者一種獨特的體驗。我們可以從杜甫的詩集讀出他憂國憂民的理想，梵谷的畫作感受到他創作時的內心衝突與扭曲。這些體驗無法完全用文字清楚描述，只能透過藝術來傳達給他人。</p>
+<center>梵谷自畫像，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E6%96%87%E6%A3%AE%E7%89%B9%C2%B7%E6%A2%B5%E9%AB%98">維基百科</a></center>
+
+<p><img src="/images/%E6%A2%B5%E8%B0%B7%E8%87%AA%E7%95%AB%E5%83%8F.jpg" alt="梵谷自畫像"></p>
+<p>既然藝術不是要傳達明確資訊，所以就沒有所謂什麼傳播媒介最好、最有效率這件事。</p>
+<p>如果我們只是要比較資訊量的話，歌曲本身攜帶的資訊已經包含文字和聲音，比起純粹的詩還要豐富，理論上可以直接取代詩。然而，從體驗的角度來說，有時候缺失的訊息本身也有重要性，由於可以激發我們的想像，反而獲得截然不同的經驗。正因為詩沒有既定的旋律，所以讀者可以用屬於自己的節奏來決定欣賞其中字句的快慢。</p>
+<p>由此我們可以看出一般溝通和欣賞藝術兩者的不同。</p>
+<p>一般人與人的溝通是要把資訊有效從一個人的大腦傳到另一個人的大腦，因此我們需要組織語言，甚至用圖表輔助，才能確保這個資訊傳輸過程沒有遺失。</p>
+<p>藝術並不是如此，本質上創作者不是在傳達訊息，而是要透過某種形式刺激觀賞者的感官，創造出獨特的體驗。觀賞者接收到的訊息和創作者最一開始傳達的可能是兩回事，但這也沒關係，因為觀眾的感受才是最重要的事情。</p>
+<p>很多作品在經過大眾媒體廣泛傳播以後，人們對他的印象早就不是作者最初的設定，而是包含了作品本身的歷史、群體對他的記憶。</p>
+<p>最明顯的例子是貝多芬的「給愛麗絲」。對台灣人來說，比起貝多芬創作這首曲目的原意（據傳是要給自己暗戀的女性），我們第一時間會想到的是垃圾車要來了，也許還會進而聯想到自己過去跟家人一起出去丟垃圾的回憶。</p>
+<p>同樣的道理也可以套用到大家朗朗上口的民謠上，例如「望春風」。這首歌最早是日治時代創作的台語流行音樂，因為廣受喜愛，所以在國民政府來台以後仍然被多個歌手不斷改編成國語傳唱，到現在國外樂團來台灣演奏幾乎都會準備這首歌曲來拉近與聽眾的關係。不同時代的台灣人對「望春風」的印象都有所不同，但唯一相同的是它確實承載了每一代人的回憶。當我們聽到望春風，自然而然就會想到故鄉台灣，這也是這個作品最有價值的地方。</p>
+<p>有時候我們會以為作品的名氣和它的藝術性掛勾，越有名氣的作品，代表藝術價值越高，人們也越容易被其感動。其實因果關係可能是倒過來的，很多時候是因為這個作品在機緣巧合下出了名，商人藉此進行商業傳播，又更加擴展它的名氣。我們對這個作品有感覺是因為它的高名氣，而不是藝術價值本身。</p>
+<p>大家耳熟能詳的達文西「蒙娜麗莎的微笑」就是最好的案例。雖然同樣是達文西所創作的優秀作品，「蒙娜麗莎的微笑」的名氣明顯就是高過一截。這個其實是起源自 1911 年的一起竊盜案。</p>
+<p>當初羅浮宮的「蒙娜麗莎的微笑」被竊取，引發了法國的轟動，甚至很多人特別跑去展廳朝聖空白的牆面。兩年後後才發現竊賊是義大利一名工匠，他聲稱是因為愛國心想把這幅畫帶回義大利，同樣也感動義大利人民。就這樣這幅畫的知名度不只在法國和義大利，也開始在全世界廣為傳播。人人都知道有這幅畫的存在，到羅浮宮也是想去看看這幅畫。</p>
+<p>另外補充一下，這幅畫真實尺寸其實不大，但是因為保安緣故所以人們只能遠遠看，基本上是看不清楚。在現場與其說是欣賞畫作，不如說是欣賞看畫的人，這反而更加有意思。</p>
+<center>羅浮宮觀賞蒙娜麗莎的人群</center>
+
+<p><img src="/images/%E7%BE%85%E6%B5%AE%E5%AE%AE%E8%A7%80%E8%B3%9E%E8%92%99%E5%A8%9C%E9%BA%97%E8%8E%8E%E7%9A%84%E4%BA%BA%E7%BE%A4.jpg" alt="羅浮宮觀賞蒙娜麗莎的人群"></p>
+<p>既然藝術欣賞很依賴於個人感受，那為何我們需要有導覽、需要聽別人的賞評呢？獨自欣賞不就好了？</p>
+<p>首先要了解的一點，藝術沒有正確答案，並沒有一個權威的人或機構能決定我們要怎麼看待任何作品。導覽本身不過是提供我們欣賞作品的另一個角度罷了，不論是技巧、創作背景、作品本身的故事。</p>
+<p>我們完全可以不認同他們的看法，不過聽聽其他人的欣賞方式也許能拓展我們的視野，找到另一種觸動我們內心的路徑。</p>
+<p>就如同喝茶一樣，在沒有任何訓練下，會覺得茶可能微微苦澀。但是若是更細緻去體會，就會發現原來其中還有一些不一樣的元素，鮮度、回甘等等。藝術賞析的價值正是幫助我們發現沒有注意到的元素，提高感受層次。</p>
+<p>然而藝術到了當前，越來越多人會抱怨無法看懂現代的藝術。以前的藝術，不論是繪畫還是雕刻，我們都可以看出作者在上面花費的心血，也許是宏偉壯觀，也許是精緻細膩。但是現今的藝術常常脫離這個範疇，我們看不出作品的創作難度，甚至也搞不懂為何要叫作這個名字。看了作品的簡介，並沒有得到解答，反而更一頭霧水。</p>
+<center>之前上新聞的香蕉藝術品「喜劇演員」，資料來源：<a href="https://zh.wikipedia.org/zh-tw/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1_(%E8%97%9D%E8%A1%93%E5%93%81)">維基百科</a></center>
+
+<p><img src="/images/%E5%96%9C%E5%8A%87%E6%BC%94%E5%93%A1.jpg" alt="喜劇演員"></p>
+<p>我想這可能跟技術的進步有關係。當相機出現了，過去寫實主義的繪畫風格就慢慢沒落，因為沒有什麼會比相片還要寫實。因此新技術會逼著藝術家探索不一樣的可能性，用更抽象的方式來表現。這也是為何現代藝術越來越難懂的原因。</p>
+<p>AI 的出現更是挑戰了藝術的價值。以往要畫一幅畫或寫一首詩，都需要人們經過長時間訓練，才能培養出相對應的技巧和敏感度。然而，當現在這些都可以輕易用 AI 創作，那我們該怎麼評判人類還是 AI 創作的作品價值呢？</p>
+<p>我們已經無法再用創作的技術難度來評估一個作品了，因為這些都能夠用 AI 輕易複製。然而 AI 並沒有真實的人生體驗，本質上它只是一種機率性的產物，能利用大量已有資料來產生出類似的作品。不論是歷史上各個著名的藝術流派，AI 都能快速模仿，產生出讓人驚豔的作品。</p>
+<p>因此，現在更重要的是創作者本身的獨特性，他想傳達什麼訊息、他個人的視角以及隱含的背後人生故事。這些獨一無二的性質是包含 AI 在內，世界上任何其他人都無法取代，也正因為如此才能為觀眾建立出特別的感受空間，直擊他們的內心。</p>
+<p>只要人類還有表達情緒的需求，藝術家就有存在的意義。而真正偉大的藝術，則是能觸碰隱藏在我們內心那個說不清楚的部份，搔到我們心中的癢處。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>《被討厭的勇氣》：擁有承擔責任的勇氣</title>
@@ -3690,6 +3690,23 @@
       </tags>
   </entry>
   <entry>
+    <title>《請停止無效努力》：尋找適合自己的方向</title>
+    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
+    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
+<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
+<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
+<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
+<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
+<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
+]]></content>
+      <categories>
+        <category>讀書心得</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《軟技能》：軟體界的「原則」</title>
     <url>/2018/07/04/%E8%BB%9F%E6%8A%80%E8%83%BD%EF%BC%9A%E4%BB%A3%E7%A2%BC%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<p>今天想要來介紹一本對軟體工程師來說很棒的書，叫做<a href="https://www.tenlong.com.tw/products/9787115429476">軟技能：代碼之外的生存指南 (Soft Skills : The software developer’s life manual)</a>。最一開始會關注到這本書是因為有人介紹說這本書堪稱是軟體界的「<a href="http://www.books.com.tw/products/0010782941">原則</a>」。由於對「原則」有還不錯的評價，所以就有了閱讀的興趣。這本書號稱是給軟體工程師看的書，但是裡面卻沒有任何一行程式碼，作者希望告訴讀者的是要成好的軟體工程師，不能只專注在專業上，要把重點放在「整個人」上。書中分享了如何找工作、自我營銷、自我學習等等，甚至還有理財、健身和愛情。同樣身為軟體工程師，我認為可以從前人身上觀察和學習他的經驗應該是蠻有幫助的，因此下面會分享幾個從書中學到比較重要的概念。</p>
@@ -3708,21 +3725,36 @@
       </tags>
   </entry>
   <entry>
-    <title>《請停止無效努力》：尋找適合自己的方向</title>
-    <url>/2018/04/15/%E8%AB%8B%E5%81%9C%E6%AD%A2%E7%84%A1%E6%95%88%E5%8A%AA%E5%8A%9B/</url>
-    <content><![CDATA[<p>第一次知道「<a href="https://www.books.com.tw/products/CN11406545">請停止無效努力</a>」這本書是跟朋友在逛書展時發現的，原本對書名並沒有什麼興趣，但是忽然瞄到作者是孫圈圈，馬上就有興致了。之前都會在她的公眾號發現不錯的文章，內容有條理，而且不會流於口號，都有如何實行的方法論。而這本書看完後的確是不負所望，內容很紮實，有把她做諮詢累積的經驗分享出來，我覺得非常適合初入職場的人閱讀。</p>
-<p>本書大致上分為好幾個部分：挖掘天賦、如何學習、思維、溝通、職涯規劃、情緒等等，每個都有寫出作者的見解和方法論，這本書編排很好的地方是在每篇文章最後面都會有總結，以及可以怎麼做讀後練習，就像書中一開始所說，現在「道」和「器」的書太多了，但很多都沒有實作方法，所以她想要寫一篇關於「術」的文章。</p>
-<p>簡單分享一下我在書中特別有感觸的觀念。挖掘天賦這塊作者列舉了各種職業定位並做簡單分析，並且合理推出天賦型的定位比較適合我們，然後再給出了挖掘自己天賦的方法。雖然我不認同作者說的每個人天生上就有各自的天賦，因為我覺得只要是硬體沒差很多(人的身體)，基本上差異都是後天學習造成的，但是作者在這邊有擴大天賦的定義，她認為意願也是種天賦，有些人可能因為家庭等後天學習因素而喜歡做什麼事、不喜歡做什麼事，這也算天賦的優勢。這個觀念我以前並沒有想過，不過想想也是很合理，理論上人透過一定正確的訓練應該能力不會差太多，但是如果有些人本身就不喜歡該領域，就更不可能去做正確的訓練了，因此能力上就會出現落差。</p>
-<p>學習的部分並沒有提到什麼新東西，大概還是離不開刻意練習的概念，然而在思維和溝通的部分就有很多可以參考的點了。畢竟作者是做諮商的，所以這兩個領域都算是她的專業吧！思維的話可以分為結構化思維和創造性的思維，而這其中是有些方法論可以運用來思考的。像是結構化思維可以用常用的架構來輔助思考，或是透過歸納法從資訊找出有意義的內容等等。除了思維，定義問題也是其中一個很重要的因素，我們要清楚自己要解決什麼問題，而且不是所有問題都值得被解決。我以前常常都會想說每個遇到的事情都要全力去做，不這樣做的話就好像是沒有負責任，但是作者反駁這樣的想法，應該是要看CP值，高的才需要全力找最佳解，一般的就只要能處理掉即可。溝通部分則是描述有條理發表言論、與人找話題聊天的方法，這邊是我的弱項，應該可以再好好地吸收消化一下。</p>
-<p>職涯規劃的部分有提到可以使用個人商業模式畫布，這個概念我在「<a href="https://read.douban.com/ebook/7611058/">程序員跳槽全攻略</a>」看過，不過當初自己做職涯規劃只有幾年後要達到什麼目標，學到什麼能力之類，結果列完後還是沒有去做到，應該說連去回顧都沒有了。作者強調說我們做職涯規劃不該強調目標，而是要強調過程、實現的路徑是什麼，這樣的概念相對來說也比較踏實，不會只是空中畫大餅而已。書中最後情緒的部分有個概念讓我非常受用：<strong>面對所謂的性格缺陷，最佳策略不是對抗，而是找應對方式</strong>。我很清楚自己的弱點，包括不擅長社交、不喜歡在人多的地方、不喜歡引人注目，但是有時還是會想說要克服自己的缺陷，努力去改變。然而作者的說法是性格是我們的天性，需要花很多資源去改變，因此與其去改變，不如想想如何提高其他的能力來彌補這個缺陷。例如社交要做得好有很多因素，性格只是其中一項，我們可以強化其他因素來達到同樣結果。這個概念在前面的天賦也有提過，不要想著要彌補自己的弱點，而是將彌補劣勢的時間拿來強化自己的天賦，發揮他並且用其他能力彌補弱勢的部分。這個概念就如同巴菲特的<a href="https://jamesclear.com/buffett-focus">雙目標清單系統(Two-List System)</a>一樣，集中資源在自己的目標、強項，不會變成樣樣通樣樣鬆。</p>
-<p>本書的內容從我的角度來看，雖然還是有些自己並不是很認同或是覺得有邏輯不清的地方，但是這本書提供給我們一個可以去嘗試的方法，利用這個方法來嘗試改變自己，而我們可以基於這些方法開始思考要怎麼建立屬於自己的方法論，而不會遇到職業、人生的問題時總是滿頭霧水，不斷窮緊張。透過不斷參考、試錯，就可以找到更適合的方法來面對自己的人生。</p>
+    <title>閱讀是一種朋友間的對話</title>
+    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
+    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
+<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
+<ol>
+<li>為什麼我想要看這本書？我想從中得到什麼？</li>
+<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
+</ol>
+<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
+<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
+<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
+<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
+<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
+<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
+<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
+<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
+<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
+<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
+<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
+<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
+<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
+<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
+<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
 ]]></content>
       <categories>
-        <category>讀書心得</category>
+        <category>雜七雜八</category>
       </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
   </entry>
   <entry>
     <title>開源軟體的商業策略</title>
@@ -3862,38 +3894,6 @@
       <tags>
         <tag>開源</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>閱讀是一種朋友間的對話</title>
-    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
-    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
-<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
-<ol>
-<li>為什麼我想要看這本書？我想從中得到什麼？</li>
-<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
-</ol>
-<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
-<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
-<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
-<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
-<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
-<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
-<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
-<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
-<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
-<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
-<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
-<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
-<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
-<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
-<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
   </entry>
   <entry>
     <title>雙重授權：兼顧開源和商業的模式</title>
