@@ -942,136 +942,6 @@
       </tags>
   </entry>
   <entry>
-    <title>code review</title>
-    <url>/2017/08/27/code-review/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
-<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
-<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
-<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
-<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
-<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
-<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
-<li>備份功能：確保至少有兩個人知道code的意思。</li>
-</ol>
-<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
-<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
-<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
-</ul>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
-<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
-<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
-<li>相互尊重：<ul>
-<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
-<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
-</ul>
-</li>
-<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
-</ul>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
-<li>說明code review規則，以及建立正確的心態</li>
-<li>事先訂定公司開發的文化，如coding style，命名規則</li>
-<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
-</ul>
-<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
-<li>開發時間需要預估code review的時間</li>
-<li>先規劃如何將大功能切成小部分：<ul>
-<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
-<li>如果功能出了大問題，也可以把風險控制在最小</li>
-</ul>
-</li>
-</ul>
-<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
-<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
-<li>如果有使用分析工具，先使用工具產生報表<ul>
-<li>review時可以針對上面的重點討論</li>
-<li>減少review的effort</li>
-</ul>
-</li>
-</ul>
-<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
-<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
-<li>code review時間不要超過半小時</li>
-<li>利用checklist來檢查<ul>
-<li>功能需求是什麼？設計方式是否有達到目的？</li>
-<li>是否可以做未來擴充？</li>
-<li>是否足夠安全？有沒有邏輯漏洞？</li>
-<li>Error handling和corner case是否都有處理好？</li>
-<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
-<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
-<li>效能是否可以再提升？</li>
-</ul>
-</li>
-<li>review過程不改code，用todo list先記錄</li>
-</ul>
-<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
-<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
-<li>review後要留下紀錄提供學習使用</li>
-<li>定期開會評估code review流程和效用<ul>
-<li>review的方式要不要調整？</li>
-<li>工具是否要調整？</li>
-<li>checklist是否要更新？</li>
-</ul>
-</li>
-</ul>
-<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
-<ul>
-<li>統一Glossary：<ul>
-<li>可以使用wiki等文件建立</li>
-</ul>
-</li>
-<li>找重複程式碼：<ul>
-<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
-</ul>
-</li>
-<li>判斷複雜度：<ul>
-<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
-<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
-</ul>
-</li>
-<li>分析綜合品質：<ul>
-<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
-<li>Adlint：Open source，但似乎很久沒更新了</li>
-<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
-</ul>
-</li>
-<li>程式法風格：<ul>
-<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
-<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
-</ul>
-</li>
-</ul>
-<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
-<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
-<ul>
-<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
-<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
-<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
-</ul>
-<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
-<ol>
-<li>執行前後，bug減少的數量(這是品質部分)</li>
-<li>執行前後，團隊多花費的時間(這是成本部分)</li>
-<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
-<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
-<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
-</ol>
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
-<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
-<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
-<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
-<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
-<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>軟體開發</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>clean code</title>
     <url>/2017/09/03/clean-code/</url>
     <content><![CDATA[<p>這邊記錄一下我看clean code的筆記整理。不過我得承認其實書裡很多做法我是不太贊同的，例如function要壓在20行以內這種。在C要這樣實踐很有難度，而且我看很多open source的project也都沒有遵循這樣的規範。但是這本書還是很有參考價值的，至少會讓自己反省寫code時有沒有犯了這些問題。</p>
@@ -1279,6 +1149,136 @@
 <li>不要跳過簡單的測試</li>
 <li>對程式錯誤處進行詳細測試</li>
 <li>測試要夠快速</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>軟體開發</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>code review</title>
+    <url>/2017/08/27/code-review/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實我一直對code review有點好奇，到底有什麼樣的好處。<br>所以統整了些資料，研究看看實行的好處以及如何實行code review。</p>
+<p><strong>重要</strong>：這篇只是我想理解code review方式而整理出來的文章，不一定真的實用，之後會隨著我經驗增加而更新內容</p>
+<h2 id="好處"><a href="#好處" class="headerlink" title="好處"></a>好處</h2><ol>
+<li>品質提升：開發者太熟悉流程了，可能會有盲點，其他人可能可以幫忙找到邏輯問題。</li>
+<li>更容易維護：其他人幫忙看code可以確保程式的可讀性，不會只有開發者才看得懂，開發者開發時也因為會有人來看，所以會思考我這樣是否可以讓review的人看懂邏輯。</li>
+<li>同步文化、設計理念：確保程式有符合團隊開發的風格、coding style、API使用習慣等等，也比較不會有開發了功能跟原來架構設計理念有落差的情況。</li>
+<li>經驗傳承和相互學習：資深員工把經驗傳給新進員工，或是大家彼此間可以學到寫程式的小技巧。</li>
+<li>備份功能：確保至少有兩個人知道code的意思。</li>
+</ol>
+<h2 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h2><ul>
+<li>開發時需要多花費時間在上面code review上，但長遠來說會減少maintain時間</li>
+<li>要有正確的心態來review，不然會造成團隊氣氛不佳</li>
+</ul>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><ul>
+<li>code和人是分開的：我們是針對code做討論，而不是質疑人的能力。</li>
+<li>相互信任：信任團隊沒人會故意寫爛code，有問題是可能只是沒想到而已。</li>
+<li>相互尊重：<ul>
+<li>討論過程中是相互學習的關係，而不是監視和監視的關係。</li>
+<li>review者討論態度語氣不能太尖銳，被review者也要能接受合理的意見</li>
+</ul>
+</li>
+<li>相互學習：做code review不只是要維護品質，更重要的是大家可以彼此學習，學會更好的技巧。</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ul>
+<li>說明code review規則，以及建立正確的心態</li>
+<li>事先訂定公司開發的文化，如coding style，命名規則</li>
+<li>使用工具在處理機械化作業，如coding style統一，減少人為介入</li>
+</ul>
+<h3 id="開發功能前"><a href="#開發功能前" class="headerlink" title="開發功能前"></a>開發功能前</h3><ul>
+<li>開發時間需要預估code review的時間</li>
+<li>先規劃如何將大功能切成小部分：<ul>
+<li>控制在reviewer 15min內可以看完的程度，這樣reviewer可以在工作一段落時稍微看一下，不佔用太多時間</li>
+<li>如果功能出了大問題，也可以把風險控制在最小</li>
+</ul>
+</li>
+</ul>
+<h3 id="review前"><a href="#review前" class="headerlink" title="review前"></a>review前</h3><ul>
+<li>review前要先準備好環境，可以demo或讓reviewer測試</li>
+<li>如果有使用分析工具，先使用工具產生報表<ul>
+<li>review時可以針對上面的重點討論</li>
+<li>減少review的effort</li>
+</ul>
+</li>
+</ul>
+<h3 id="review中"><a href="#review中" class="headerlink" title="review中"></a>review中</h3><ul>
+<li>讓reviewer主導review的過程，這樣才能發現盲點</li>
+<li>code review時間不要超過半小時</li>
+<li>利用checklist來檢查<ul>
+<li>功能需求是什麼？設計方式是否有達到目的？</li>
+<li>是否可以做未來擴充？</li>
+<li>是否足夠安全？有沒有邏輯漏洞？</li>
+<li>Error handling和corner case是否都有處理好？</li>
+<li>程式是否易讀？複雜地方是否有註解？可以再精簡嗎？</li>
+<li>有符合團隊coding style嗎？命名好嗎？有沒有通過工具測試？</li>
+<li>效能是否可以再提升？</li>
+</ul>
+</li>
+<li>review過程不改code，用todo list先記錄</li>
+</ul>
+<h3 id="review後"><a href="#review後" class="headerlink" title="review後"></a>review後</h3><ul>
+<li>要留下reviewer是誰，不是要抓戰犯，而是當開發者不在時，可以知道有誰懂這段code</li>
+<li>review後要留下紀錄提供學習使用</li>
+<li>定期開會評估code review流程和效用<ul>
+<li>review的方式要不要調整？</li>
+<li>工具是否要調整？</li>
+<li>checklist是否要更新？</li>
+</ul>
+</li>
+</ul>
+<h2 id="輔助工具"><a href="#輔助工具" class="headerlink" title="輔助工具"></a>輔助工具</h2><p>下面工具只是先整理起來，我並沒有每個都用過，等真正用過再來寫心得吧！</p>
+<ul>
+<li>統一Glossary：<ul>
+<li>可以使用wiki等文件建立</li>
+</ul>
+</li>
+<li>找重複程式碼：<ul>
+<li>Simian：商用需付費，可參考<a href="http://ithelp.ithome.com.tw/articles/10106013">CI Server 13 - 找出重複的程式碼 (Simian)</a></li>
+</ul>
+</li>
+<li>判斷複雜度：<ul>
+<li>SourceMonitor：免費，可參考<a href="https://dotblogs.com.tw/hatelove/archive/2010/02/10/sourcemonitor.aspx">[Tool]SourceMonitor - 程式碼掃瞄</a></li>
+<li>Complexity：GNU tool，可參考<a href="http://hao.jobbole.com/complexity/">Complexity：一个测量 C 代码复杂性的工具</a></li>
+</ul>
+</li>
+<li>分析綜合品質：<ul>
+<li>FxCop：微軟出的，可參考<a href="https://dotblogs.com.tw/hatelove/2011/12/18/introducing-fxcop-and-vs2010-static-code-analysis-tool">[Tool]靜態程式碼分析－FxCop</a></li>
+<li>Adlint：Open source，但似乎很久沒更新了</li>
+<li>SonarQube：可參考<a href="https://poychang.github.io/sonarqube-csharp/">SonarQube 程式碼品質分析工具</a></li>
+</ul>
+</li>
+<li>程式法風格：<ul>
+<li>StyleCop：似乎只能用在C#，可參考<a href="http://ithelp.ithome.com.tw/articles/10079546">[如何提升系統品質-Day17]品質量測工具-StyleCop</a></li>
+<li>Artistic Style：可以自動統一所有程式碼的風格，甚至可以綁在git的commit hook上，確保大家不會commit風格不對的code</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何實際落實"><a href="#如何實際落實" class="headerlink" title="如何實際落實"></a>如何實際落實</h2><p>通常要在運作一段時間的團隊加入新機制並不是那麼的容易，特別是怕會影響正常業務。<br>所以可以試試沙盒的概念，先少部分的人開始測試使用，<br>而且也不要一下子就把所有機制加上去，以不一下子造成過多改變為主，慢慢調整<br>最後相信可以找到適合團隊的做法。</p>
+<h3 id="可以調整的選項"><a href="#可以調整的選項" class="headerlink" title="可以調整的選項"></a>可以調整的選項</h3><p>code review的基本概念是要讓其他人來看開發者的code，以客觀角度檢視，藉此提高品質和增進彼此相互學習<br>所以只要能達到這個目標的手段其實都是可以接受的，重點是要找到適合團隊的方式<br>這邊有幾項可以思考的方向：</p>
+<ul>
+<li>review的方式：網路上找到大部分的方式都是git的Pull Request功能，可以線上直接看code，不過或許直接到對方位置看也是個選項。</li>
+<li>review的頻率：這個可以隨團隊開發內容的性質作調整</li>
+<li>review的大小：有些review是多人一起，這個比較適合有很多新進人員，需要一起建立開發文化。不然一般是用peer review即可。</li>
+</ul>
+<h2 id="如何評估效用"><a href="#如何評估效用" class="headerlink" title="如何評估效用"></a>如何評估效用</h2><p>當然code review一定是好處大於壞處才會讓大家採用，那要怎麼評估好處部分呢？<br>可以從下面幾個方向來想：</p>
+<ol>
+<li>執行前後，bug減少的數量(這是品質部分)</li>
+<li>執行前後，團隊多花費的時間(這是成本部分)</li>
+<li>大家在執行後的感想？是否有所學習？(畢竟學習這種東西很難用數據衡量)</li>
+<li>在code review中發現哪些問題？(bug減少數量如果不好統計，可以看有哪些潛在問題被發掘)</li>
+<li>code品質部分？這部分可以用工具評分或是問問開發者的感受。</li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="https://msdn.microsoft.com/zh-tw/communitydocs/visual-studio/ta14052601">Code Review Guidance</a>：這篇微軟的文章非常值得一看，該講的都有講出來。</li>
+<li><a href="http://ithelp.ithome.com.tw/articles/10081797">[如何提升系統品質-Day30]Code Review與總結</a>：這邊有提到許多工具，可以研究看看</li>
+<li><a href="https://blog.mz026.rocks/20170812/did-you-code-review-today">你今天 code review 了嗎？</a>：這篇也很推薦，對code review的本質和方法有不錯的論述</li>
+<li><a href="https://www.zhihu.com/question/41089988">參考腾讯Bugly的回答</a>：這邊提到code review如何實現在不同種類團隊上，偏實務方面的文章</li>
+<li><a href="https://buzzorange.com/techorange/2016/08/16/airbnb-code-review/">Airbnb 資深工程師分享：怎樣才是正確、有效的 code review</a>：提到了code review的正確態度</li>
+<li><a href="https://read01.com/JmzyoG.html#.WaJAatOg_OQ">我們是怎麼做Code Review的</a>：別人實現code review的經驗</li>
 </ul>
 ]]></content>
       <categories>
@@ -1745,6 +1745,75 @@
       </tags>
   </entry>
   <entry>
+    <title>gnuplot：報告必備的繪圖工具</title>
+    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
+<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
+<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
+<p>我們先存資料到data.txt，中間用空格隔開</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
+
+<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要開啟多個檔案</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>進入gnuplot後輸入如下指令即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
+
+<p>plot上其實也可以做一些操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
+
+<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
+<li>折線圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>長條圖<ul>
+<li>先產生出data.txt</li>
+<li>使用在gnuplot中load如下plt檔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
+<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo 教學</title>
     <url>/2017/09/09/hexo%E6%95%99%E5%AD%B8/</url>
     <content><![CDATA[<p>我之前一直想要自己寫 blog，可以留下些記錄，但是一方面不想要自己架 server，管理有點麻煩。另一方面又希望可以有 markdown 的功能，而這是 Google 的 blogger 所欠缺的，後來發現可以使用 hexo+Github 架設自己的 blog，對我而言是最佳選擇。Github 讓我不用自己架 server，hexo 讓我可以快速有個漂亮的介面，而且還可以用 markdown 來寫 blog。</p>
@@ -1886,75 +1955,6 @@
 </ol>
 <p>可參考 <a href="https://bearbeargo.com/posts/how-to-play-with-live2d-on-hexo/">用Live2D让看板喵入住你的Hexo博客吧(^o^)&#x2F;~</a></p>
 <p>不過這邊提一下，<a href="https://github.com/EYHN/hexo-helper-live2d">EYHN&#x2F;hexo-helper-live2d</a> 已經沒有再更新了，如果上到 GitHub，可能會有些套件安全疑慮，以後可能需要找些替代套件了。</p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>gnuplot：報告必備的繪圖工具</title>
-    <url>/2018/12/02/gnuplot%EF%BC%9A%E5%A0%B1%E5%91%8A%E5%BF%85%E5%82%99%E7%9A%84%E7%B9%AA%E5%9C%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="簡介"><a href="#簡介" class="headerlink" title="簡介"></a>簡介</h2><p>當我們要製作報告或論文的圖表時，除了excel以外，其實也可以使用gnuplot這套工具。<a href="http://www.gnuplot.info/">gnuplot</a>非常的強大，除了可以畫各種圖表以外，還可以跨不同平台使用。</p>
-<p>我們這邊簡單紀錄一些常用圖表怎麼繪畫。</p>
-<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><h3 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h3><p>如果我們要正常顯示圖表的話需要有x11，這部分可以安裝APPLE的<a href="https://www.xquartz.org/">XQuartz</a>即可，這樣啟動gnuplot的時候就會自動啟動XQuartz了，可參考<a href="https://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac">Can’t plot with gnuplot on my Mac</a></p>
-<p>接下來安裝gnuplot的時候要特別注意，如果沒有加上<code>--with-x11</code>的話，可能會造成<code>Terminal type set to &#39;unknown&#39;</code>的warning，可參考<a href="https://stackoverflow.com/questions/24721305/cant-find-x11-terminal-in-gnuplot-octave-on-mac-os">Can’t find x11 terminal in gnuplot Octave on Mac OS</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew install gnuplot --with-x11</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 啟動</span></span><br><span class="line">gnuplot</span><br><span class="line"><span class="comment"># 畫出sin(x)的圖</span></span><br><span class="line">plot sin(x)</span><br><span class="line"><span class="comment"># 設定範圍，x軸是-10到10，y軸是0到2的cos(x)</span></span><br><span class="line">plot [x=-10:10] [0:2] cos(x)</span><br><span class="line"><span class="comment"># 清空之前的設定</span></span><br><span class="line">reset</span><br><span class="line"><span class="comment"># 結束</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="讀取檔案"><a href="#讀取檔案" class="headerlink" title="讀取檔案"></a>讀取檔案</h3><p>我們可以把多筆資料先存成檔案，然後再讓gnuplot來讀</p>
-<p>我們先存資料到data.txt，中間用空格隔開</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 5</span><br><span class="line">2 10</span><br><span class="line">3 15</span><br><span class="line">4 10</span><br><span class="line">5 5</span><br></pre></td></tr></table></figure>
-
-<p>執行gnuplot就會看到有許多一點一點資料散佈在plot上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gnuplot</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>如果要開啟多個檔案</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data1.txt&quot;</span>, <span class="string">&quot;data2.txt&quot;</span>, <span class="string">&quot;data3.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="存成程式"><a href="#存成程式" class="headerlink" title="存成程式"></a>存成程式</h3><p>每次都要自己一個個輸入指令說實在太麻煩了，我們可以存成.plt檔，以下面為例存成plot.plt</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">plot <span class="string">&quot;data.txt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>進入gnuplot後輸入如下指令即可</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">load <span class="string">&quot;plot.plt&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表上的文字"><a href="#圖表上的文字" class="headerlink" title="圖表上的文字"></a>圖表上的文字</h3><p>圖表上面總是要有些文字說明，可參考如下設定</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 設定標題</span></span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="comment"># x軸說明</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="comment"># y軸說明</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="comment"># 設定線條說明外框</span></span><br><span class="line"><span class="built_in">set</span> key box</span><br><span class="line"><span class="comment"># 不要線條說明</span></span><br><span class="line"><span class="built_in">set</span> nokey</span><br><span class="line"><span class="comment"># 如果要修改線條說明</span></span><br><span class="line">plot <span class="string">&quot;data1.txt&quot;</span> title <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;data2.txt&quot;</span> title <span class="string">&quot;title 2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="圖表的顯示"><a href="#圖表的顯示" class="headerlink" title="圖表的顯示"></a>圖表的顯示</h3><p>也許我們會想改變圖表上面的顯示</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加格線</span></span><br><span class="line"><span class="built_in">set</span> grid</span><br><span class="line"><span class="comment"># 數據連成一條線</span></span><br><span class="line"><span class="built_in">set</span> style data lines</span><br><span class="line"><span class="comment"># x軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> xrange [-10:10]</span><br><span class="line"><span class="comment"># y軸的範圍</span></span><br><span class="line"><span class="built_in">set</span> yrange [-10:10]</span><br><span class="line"><span class="comment"># X軸的單位</span></span><br><span class="line"><span class="built_in">set</span> xtics x: 每次x軸都增加x</span><br></pre></td></tr></table></figure>
-
-<p>plot上其實也可以做一些操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用data.txt，並且畫成線，linestyle為1，linewidth也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with lines linestyle 1 linewidth 1</span><br><span class="line"><span class="comment"># 使用data.txt，pointtype為1，pointsize也為1</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with point pointtype 1 pointsize 1</span><br><span class="line"><span class="comment"># 如果線和點都要的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints</span><br><span class="line"><span class="comment"># 如果要變成長條圖的話</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes</span><br></pre></td></tr></table></figure>
-
-<h3 id="儲存成圖片"><a href="#儲存成圖片" class="headerlink" title="儲存成圖片"></a>儲存成圖片</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 要存成png檔案</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="comment"># 可以加上size資訊</span></span><br><span class="line"><span class="built_in">set</span> terminal png size 1200,800</span><br><span class="line"><span class="comment"># 輸出圖片，這個指令會等待後續的plot</span></span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 輸出圖片</span></span><br><span class="line">plot .....</span><br><span class="line"><span class="comment"># 記得要再改回x11</span></span><br><span class="line"><span class="built_in">set</span> terminal x11</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h3><ul>
-<li>折線圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with linespoints title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>長條圖<ul>
-<li>先產生出data.txt</li>
-<li>使用在gnuplot中load如下plt檔</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reset</span><br><span class="line"><span class="built_in">set</span> title <span class="string">&quot;pic_title&quot;</span></span><br><span class="line"><span class="built_in">set</span> xlabel <span class="string">&quot;x(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> ylabel <span class="string">&quot;y(unit)&quot;</span></span><br><span class="line"><span class="built_in">set</span> terminal png</span><br><span class="line"><span class="built_in">set</span> output <span class="string">&quot;output.png&quot;</span></span><br><span class="line"><span class="comment"># 設定長條圖的size</span></span><br><span class="line"><span class="built_in">set</span> boxwidth 0.3</span><br><span class="line">plot <span class="string">&quot;data.txt&quot;</span> with boxes title <span class="string">&quot;title 1&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
-<li><a href="http://applezulab.netdpi.net/08-useful-tools/gnuplot_basic">實驗基本數據製圖指令 gnuplot</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10158860">Gnuplot 簡單數據繪圖</a></li>
-<li><a href="https://hackmd.io/s/Skwp-alOg">gnuplot 語法解說和示範</a></li>
-</ul>
 ]]></content>
       <categories>
         <category>技術</category>
@@ -2285,61 +2285,6 @@
       </tags>
   </entry>
   <entry>
-    <title>三年的工作省思</title>
-    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
-<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
-<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
-<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
-<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
-<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
-<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
-<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
-<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
-<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
-<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
-<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
-<ol>
-<li>發問前一定要再三思考<ul>
-<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
-<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
-</ul>
-</li>
-<li>定期反省，找出更有效率的做法<ul>
-<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
-<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
-</ul>
-</li>
-<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
-<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
-<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
-</ul>
-</li>
-<li>溝通的時候，站在對方的立場思考<ul>
-<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
-<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
-</ul>
-</li>
-<li>要定期盤點自己的能力<ul>
-<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
-</ul>
-</li>
-<li>負起責任<ul>
-<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
-<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
-</ul>
-</li>
-</ol>
-<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-      <tags>
-        <tag>自我成長</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>一些減少code size的方法</title>
     <url>/2019/08/03/%E4%B8%80%E4%BA%9B%E6%B8%9B%E5%B0%91code-size%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發嵌入式系統的時候，很常遇到需要在資源緊張的環境上進行開發，所謂的資源緊張大概不外乎memory不夠使用、flash不夠大，但是老闆或PM仍然希望RD在產品上面新增feature，這時候就只能針對code size進行優化了。我自己待的部門剛好就是遇到這種產品已經維護10年以上，可是又希望加新feature的狀況，因此開始尋找減少code size的方法，這邊分享一些我自己的心得。</p>
@@ -2401,6 +2346,61 @@
       </categories>
       <tags>
         <tag>系統程式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>三年的工作省思</title>
+    <url>/2019/06/23/%E4%B8%89%E5%B9%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%9C%81%E6%80%9D/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作到現在已經三年半了，雖然有許多成長，但也看見自己很多的不足，可以再進步的地方。個人覺得如果要能夠更快速地成長，需要定期總結自己的經驗以及所學習的東西，並且思考未來可以再怎麼做會更好。平常我有做日記的習慣，但是還沒有為自己統整工作上面的心得，這邊除了當作紀錄以外，也是可以提供給跟我差不多狀況的人參考。不過老實說，這些分享並不一定正確，但是至少是此時此刻的我最真實的想法，也歡迎大家多多指教。</p>
+<h2 id="經歷"><a href="#經歷" class="headerlink" title="經歷"></a>經歷</h2><h3 id="畢業前"><a href="#畢業前" class="headerlink" title="畢業前"></a>畢業前</h3><p>我是從研替開始軟體工程師的生涯，以前在大學、研究所時，雖然有寫程式，但是畢竟都還是學生等級的程式，個人是覺得不夠深入與成熟。不過另一方面其實也累積了不少基礎，有許多重要的知識都是那時紮根的，包括Linux的使用、git的使用、Network的概念、Security的概念，這些對後來的自己都有很多幫助。雖然有時會想要是現在的自己回到過去的話，肯定可以學得更快更好、更有效率，畢竟產業和學術上還是有多少落差，但這也都有點後見之明了，而且正是因為曾經經歷過，才會有不同看事情的角度。會覺得過去要是怎樣怎樣現在就會更好，大概是人免不了的通病吧！</p>
+<h3 id="第一年"><a href="#第一年" class="headerlink" title="第一年"></a>第一年</h3><p>進到職場後，最不習慣的是每件事都要很清楚是在做什麼，過去在學校基本上只要code能work就行了，所以最常做的就是上stack overflow找找，然後copy &amp; paste，不太會去理清背後的原理，或是思考怎麼做才會更有效率。然而在職場上，如果只是剪剪貼貼的話，遲早會出問題的，被同事問回答不出來還是小事，更慘的是自己做完了導致其他的bug出現。另外一點是動作需要很迅速，我記得剛過試用期後就被交付了要porting BSP上的ICMP的功能到FreeRTOS，時間給我3天，結果最後花費的時間還是超過，這跟學校其實差異很大，我在學校光是改一個memory leak的bug就改了2個月(雖然是因為還要兼顧課業)。最後，關於品質的部分，也是那時的我需要克服的坎，我不喜歡做測試，可是當時的主管就很強調要做自我驗證，才不會提供的程式上面有很多顯而易見的問題，給出去的程式也是代表自己的品牌，需要細心驗證才行。</p>
+<p>其實整體來說，我在職場上的第一年大概是以調整心態並且適應工作為主，而工作內容大概都是偏向AP層的修改，或是開發些應用程式。最常見的case大概是做客製化的firmware以及處理客戶回報的問題，改的內容不外乎是web上的修改，或是AP層上面的邏輯的問題。不過也不是沒有要寫新feature，包括在JAVA應用程式上用JNI連結到C library、Linux command line tool、帳號管理API等等，或多或少訓練了怎麼設計程式架構。</p>
+<h3 id="第二年"><a href="#第二年" class="headerlink" title="第二年"></a>第二年</h3><p>第二年開始我已經有能力解決比較困難的問題，那時團隊遇到SDRAM不足的問題，後來我透過分析map檔找到一個沒有必要使用的巨大global variable，克服這個難關。不過老實說，我現在回想起來這個問題也不是太難，只是要對firmware compile過程有比較深一點的認知而已。另外當時遇到了過熱當機的問題，這個老實說是幫助我成長最大的問題，我把NXP的MCU spec讀了好幾次，了解了ARM的exception架構，另外也深入理解FreeRTOS以及lwip等NXP提供的BSP是怎麼與MCU互動的。除此之外，我基於資深同事提出的proprietary protocol架構上做改進，並且設計提供給AP使用的API，其實也理解了設計protocol的原則，包括易用、相容性、功能獨立性等等。</p>
+<p>這一年對我來說是技術成長最快的一年，開始練習解決問題需要有系統的思維，除了AP層以外，更加理解軟體與硬體的相依性，BSP的概念等等。那時候我常常都是在ARM的exception handler中加上dump stack的功能，然後反推造成當機的原因。這些經驗對後來看待問題時有很大的幫助，會思考這個OS的運作性質是什麼，怎麼去分配記憶體的，比較能夠有系統觀去解決問題。</p>
+<h3 id="第三年"><a href="#第三年" class="headerlink" title="第三年"></a>第三年</h3><p>第三年因為要做經驗傳承，開始跟資深同事學習公司既有的proprietary OS，除了AP以外，更重要的是底層kernel的運作，類似UNIX上面STREAM的架構。由於FreeRTOS的架構相對來說比較簡單(有些人甚至認為比較像library)，所以proprietary OS也是強化了我對OS的理解，而且多了可以比較的參照物。除此之外，因緣巧合下我開始有了機會可以當project leader，雖然團隊加上我只有3個人，不過也算是個不錯的經驗。我主要負責的是與PM、測試溝通，然後分配feature &amp; bug給團隊，並且確保merge的code沒有任何問題。同時間，我也開始和其他同事合作導入CI&#x2F;CD、code review的概念，剛好就在我的project上進行實驗。</p>
+<p>這個時間點對我來說除了技術以外，開始有了與人相關的任務，不論是領導還是溝通。另外因為自己有比較多一點的權力，所以也嘗試導入自己所喜歡的文化，如CI&#x2F;CD。比較有趣的是，我發現以前的同學也差不多在這個時間擔任leader的角色，也許大家走的路都差不多吧！</p>
+<h3 id="現在"><a href="#現在" class="headerlink" title="現在"></a>現在</h3><p>延續前一年，我開始擔任既有產品的maintain窗口，學習分配工作給團隊的其他人，並且思考要怎麼進行有效率的溝通，不論是團隊內還團隊外。技術方面則是開始接觸eCos這個系統，雖然外界已經沒人在用了，但是這個產品仍然需要有人maintain。發現挺有趣的是我差不多一年接觸一種OS，也加深了以前學OS的一些概念，例如synchronization、scheduler等等。</p>
+<p>其實到了現在我覺得已經進入了一個坎，技術開始進步緩慢，而且因為既有產品線眾多，有許多maintain的effort，沒有心力去學新技術。目前，不得不好好反思自己的職涯規劃，以往我都是認為只要有學習成長就可以了，沒有想太多自己未來的走向，包括什麼是自己的強項，我接下來的時間要學什麼，可以成長多少等等。如果再宏觀一點，從人生角度來說，我規劃學習這些技術對工作有什麼幫助？在我的生命中是什麼樣的地位？我的人生究竟是想要什麼？成就感嗎？還是只要賺夠多錢就行了？這些都是以前有想過，但是沒有仔細思量的，現在因爲工作上面遇到了些障礙，所以會開始思考什麼才是自己想要的。</p>
+<p>雖然我是因為感覺沒有成長所以思考是不是要改變跑道，但是另一方面來說，我覺得也是因為這個契機才開始會反省工作在自己人生中的意義是什麼，這倒也不是什麼壞事。人本來就應該要很清楚自己想要什麼，留在某個地方就是要承擔自己失去的其他機會成本，離開某個地方就是要能捨棄當前環境的舒適以及穩定，沒有好或壞，就只是要自己承擔相對應的責任。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這職場三年多下來，其實我也學習了很多事情，比起技術而言，我覺得最重要的是觀念的改變。從一個人的觀念和面對事情的態度，大概就可以推估他的未來發展。技術要學其實是可以很快，但是個人特質是很難短時間內改變，因此我覺得這是影響個人成就非常深遠的關鍵。以下就我的觀點分享認為重要的事情。</p>
+<ol>
+<li>發問前一定要再三思考<ul>
+<li>在問別人問題的時候，要先思考想從對方那邊得到什麼樣的答案。簡單來說就是不要無腦發問，同事都是很忙的，所以相對應來說可以問問題的次數是有限制。因此每次發問都先思考：我問的問題是否其實查一查資料或做做實驗就可以解決？我想問的問題到底是什麼？有時候整理一下自己的想法後，就赫然發現其實問題已經得到了解答，根本不需要問人，這也是常聽到的<a href="https://zh.wikipedia.org/wiki/%E5%B0%8F%E9%BB%84%E9%B8%AD%E8%B0%83%E8%AF%95%E6%B3%95">Rubber Duck Debugging</a>。</li>
+<li>一般來說我們遇到不確定的問題都會去請教主管，看要怎麼做會比較好，這個做法在剛進公司時是OK的，畢竟對工作內容還不熟，但是隨著自己慢慢熟悉，要做的應該是自己能夠做主並且決策。以公司的角度來說，多請人就是要減少大家的工作量，如果事事都要去問人的話，那就不需要多請人了。當然有些問題可能是一定要主管做決策的，那可以提出自己的想法以及建議的解決方式，主管只要確認我們的解法沒有什麼大問題就可以了。</li>
+</ul>
+</li>
+<li>定期反省，找出更有效率的做法<ul>
+<li>可以的話，建議每天做日記，思考今天的工作內容有什麼可以改進之處。不過老實說這樣確實是蠻累的，而且會變成無腦的慣性，所以也可以改成每週一次。一個人在工作上的表現，大概就是解決問題的能力和效率，如果這個能力能不斷提升，能創造的價值就越高。</li>
+<li>舉例來說，在我的公司就是要處理很多文件流程，每次要跑大家就都要到處問人，後來我受不了了，乾脆自己整理一份跑流程的SOP，每次跑我就參考SOP執行，如果有錯再修改SOP，大大減少我在工作上的煩躁感。而且後來有新人進來要跑流程時，我也可以請他們看SOP，而不需要手把手教學，減少時間的浪費。</li>
+</ul>
+</li>
+<li>用目的論思考，了解自己做的事情是為了什麼，要解決什麼問題<ul>
+<li>我發現有時候自己做的事情和別人對我的期待其實是有落差，我認為重要的東西，別人卻覺得那個不是重點。因此面對任何任務，都要確定做這件事的目的是什麼，例如是要給客戶滿意的解釋，還是要百分之百肯定問題的根因，然後是不是值得投入相對應的資源。</li>
+<li>常常做事情都會不小心過度鑽研在細節上面，大家各自提出自己的意見，而無法做出正確的決策，這時候最好都是要回到最初的問題：我們到底是要解決什麼，怎麼決策才能符合我們最一開始的目的。不會有完美的解答，但是只要能達到設定的目標，那就是可以接受的答案。</li>
+</ul>
+</li>
+<li>溝通的時候，站在對方的立場思考<ul>
+<li>工作上基本上一定會有cowork的機會，而很多的爭論幾乎都是來自於溝通不夠完全。回應他人的問題時，可以站在他的角度思考，他想得到什麼答案，我能提供什麼答案，怎麼在中間取得平衡，不要變成事情都是某一方去承擔，另一方面也是提高溝通效率，不會信件來回很多次都得不到共識。</li>
+<li>有時候不要太依賴信件，有些情況直接面對面溝通會來得有效率，且也不會太過生硬，讓人有距離感，有時候都是因為雙方文字上彼此誤會而吵起來。</li>
+</ul>
+</li>
+<li>要定期盤點自己的能力<ul>
+<li>我會強烈建議要隨時maintain一份A4的履歷，並不是說要騎驢找馬，而是為了把自己重點且精華的能力精簡成一份履歷，其實也是認識自我的一種方式。整理完後會發現原來自己的強項是什麼、還欠缺什麼，工作的時候就比較不會得過且過，而是會用宏觀的視野思考為什麼要做，還能怎麼做會更好，因為這些都將變成未來與人談判的籌碼。當然如果有好的機會的話，已經有一份履歷在手，就可以隨時把握。</li>
+</ul>
+</li>
+<li>負起責任<ul>
+<li>負起責任有幾個方面，首先就是對自己做的事情，任務交到自己的手上，那就是要把它做好，如果發現有任何問題就是要隨時反應，不要到了最後一刻才說。另外這也隱含了一點：我不是機器人，別人說什麼就做什麼，而是要有能力自己判斷、決策並且承擔最後的結果。能做到這點，周圍的人就可以放心與自己合作了。</li>
+<li>另外一方面是對自己負責，<strong>永遠要記得不管做什麼決定，承擔結果的是自己</strong>。不管是想要加班做事情、針對某個問題作深入鑽研、隱藏遇到的問題裝做表面一片和諧，其實都無妨，只要能夠接受最終結果就好。既然都已經是成年人了，就不要想著拿盡所有好處而且可以逃避責任。以職業生涯來說，選擇自己的去留也是同樣的道理，如果放棄了現在的位置，那就別未來才後悔失去了許多福利，如果選擇留著，那也別再抱怨沒有新的成長，一切都是在於自己的選擇。</li>
+</ul>
+</li>
+</ol>
+<p>不過老實說，上面的分享也只適用於想不斷提升自己的情況，但是人生是有很多面向的，我也曾經看過有人工作只出五分力，剩下的時間都是專注在自己的生活品質上面。這並沒有什麼不好，甚至如果以長遠來看，他說不定活得還比認真努力打拼的人更快樂。反正，最重要的還是要記得<strong>人生是自己的，做什麼決定都沒關係，只要肯承擔後果就好</strong>。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
+      <tags>
+        <tag>自我成長</tag>
       </tags>
   </entry>
   <entry>
@@ -3725,38 +3725,6 @@
       </tags>
   </entry>
   <entry>
-    <title>閱讀是一種朋友間的對話</title>
-    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
-    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
-<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
-<ol>
-<li>為什麼我想要看這本書？我想從中得到什麼？</li>
-<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
-</ol>
-<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
-<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
-<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
-<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
-<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
-<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
-<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
-<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
-<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
-<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
-<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
-<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
-<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
-<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
-<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
-<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
-]]></content>
-      <categories>
-        <category>雜七雜八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>開源軟體的商業策略</title>
     <url>/2025/07/20/%E9%96%8B%E6%BA%90%E8%BB%9F%E9%AB%94%E7%9A%84%E5%95%86%E6%A5%AD%E7%AD%96%E7%95%A5/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>開源軟體，或者說開放原始碼，最早是由 Richard Stallman 的 Free Software Foundation 所提出。這個概念最初源於他想自己修復辦公室印表機的 bug，卻苦於無法取得程式碼。他因此主張，所謂的自由軟體應允許使用者不限任何目的，皆可自由修改及分發。</p>
@@ -3894,6 +3862,38 @@
       <tags>
         <tag>開源</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>閱讀是一種朋友間的對話</title>
+    <url>/2024/09/29/%E9%96%B1%E8%AE%80%E6%98%AF%E4%B8%80%E7%A8%AE%E6%9C%8B%E5%8F%8B%E9%96%93%E7%9A%84%E5%B0%8D%E8%A9%B1/</url>
+    <content><![CDATA[<p>我喜歡閱讀，而且很多人也很熱愛閱讀。儘管如此享受讀書，但有時候不免會被問到你看了那麼多書，到底學到了什麼？又或是聊天間提到某本書，你很興奮自己有看過，然而卻支支吾吾講不出其中的重點。當時間一久，書中內容逐漸忘去，自己也會感覺好像白讀那麼多書。雖然還是很愛閱讀，但是這些種種有時候還是很困擾。<br>以上這些都是我之前遇到的問題。為此，我慢慢摸索出一套方法讓閱讀的過程更加充實。在這個過程中，也逐漸理解讀書對自身的意義為何，可以用什麼心態來看待閱讀。下面會分成方法和心態來分別分享我的作法。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>我閱讀每本書時都會創一個筆記檔案，其中記錄下面幾項內容，方便自己未來追蹤閱讀時的收穫和想法。不過要特別注意的是這樣的方式並不適合任何書籍，至少像是小說、詩集等文學類型就不能用這種方式。</p>
+<h3 id="閱讀前先問自己"><a href="#閱讀前先問自己" class="headerlink" title="閱讀前先問自己"></a>閱讀前先問自己</h3><p>這邊我會先問兩個問題：</p>
+<ol>
+<li>為什麼我想要看這本書？我想從中得到什麼？</li>
+<li>這本書的架構是什麼？作者用什麼方法來論述？</li>
+</ol>
+<p>第一個問題主要是先知道自己的目的是什麼、想解決什麼問題。這樣在閱讀的過程中可以不斷反問自己作者是怎麼回答的。另外也會比較清楚這本書對自己的意義為何。第二個問題則是從宏觀的角度來觀察作者怎麼論述一個主題，我可以直接針對感興趣的部分先下手。其實這兩個問題都是用來釐清自己是否要閱讀這本書。深入了解一本書是需要幾個小時的時間，在投入之前先初步認識一下「新朋友」也是必要的。除此之外，也可以先去查查別人對這本書的評價和讀書心得，避免到後來才發現這本書和自己的預期差別太大。</p>
+<h3 id="劃線上加上原因"><a href="#劃線上加上原因" class="headerlink" title="劃線上加上原因"></a>劃線上加上原因</h3><p>我想大部分的人都會在讀書的過程中劃線，記錄自己感動的句子。然而有時候會發現這些句子只是當下感動自己而已，事後回過頭來卻不知道為何要記錄下來。這個的原因在於我們會被感動是因為要搭配當下的那個情境，也就是那句話的上下文。失去了當時的脈絡，再好的句子也會讓人不知其所以然。</p>
+<p><strong>劃線就如同是單向的輸入而已，要有效率的學習，需要有雙向的溝通，也就是輸出</strong>。我通常會在每句有感觸的劃線上，加上一些筆記，記錄當下的想法。這些包括但不僅限於：為何這句話有感觸？我聯想到了什麼？有什麼樣新的想法？這樣的好處是能夠強迫去思考這句話觸動自己的真正原因，這個原因才是我們真正想要記錄下來的本質。</p>
+<h3 id="歸納數個重點"><a href="#歸納數個重點" class="headerlink" title="歸納數個重點"></a>歸納數個重點</h3><p>當閱讀完一本書，會有幾十、甚至上百道劃線。這時從這些劃線和我們記錄的想法精煉中出幾個重點。<strong>記得一定要用自己的話來重新寫出來，代表是經過自己思考過後的結論</strong>。這些重點就是簡化版的你從書中獲得的收穫。當別人問你對這本書的看法時，你可以直接回答這些歸納重點，藉此介紹這本書。重點越少越好，如果太多，反而會失去焦點。我個人建議是盡量在五個內，最多不要超過十個。</p>
+<p>做這些歸納還有一個好處，未來你要回過頭複習這本書在講什麼時，可以直接先看這些歸納就好。因為有經過自己的思考，只要看到很快就可以回憶起這本書的內容。如果你想要更多細節，這時還可以回去看劃線的句子以及記錄的筆記。透過這樣的方式，基本上就不會有忘記這本書內容的情況發生了。</p>
+<h3 id="如何採取行動"><a href="#如何採取行動" class="headerlink" title="如何採取行動"></a>如何採取行動</h3><p>對我而言，讀書的目的是要改變自己。可能是改變生活方式，可能是改變心態，也可能是發掘自己對某個領域的興趣。這時我會記錄下未來要採取什麼行動。一本書論述再好、內容再精采，如果只是看過就好，那其實幫助並不是很大。反過來說，閱讀一本書後，只要有改變自己，不論多麼微小，這本書就功德圓滿了。<strong>透過寫下要做的改變，正是強迫讓書真正進入生活影響自己的一種方法</strong>。</p>
+<h3 id="心得發表"><a href="#心得發表" class="headerlink" title="心得發表"></a>心得發表</h3><p>最好的學習方式是能夠用自己的話把這本書複述出來。寫成心得需要對書有足夠的了解以及思考，最終轉換成有架構的文章。當然大部分的人沒有這麼多時間做這件事情。我自己是只有在看到很喜歡的書時才會透過心得分享來整理想法，這樣才更方便推坑給其他朋友。</p>
+<h2 id="心態"><a href="#心態" class="headerlink" title="心態"></a>心態</h2><p>除了方法以外，我認為重新認知閱讀這件事非常重要。用不恰當的心態來閱讀，不但無法享受讀書本身，更無法吸收其中內容，只是帶來焦慮感而已。下面分享四點我對閱讀的想法。</p>
+<h3 id="閱讀是作者與自己對話的過程"><a href="#閱讀是作者與自己對話的過程" class="headerlink" title="閱讀是作者與自己對話的過程"></a>閱讀是作者與自己對話的過程</h3><p>以前我會想，有很多人把各種書的重點整理好了，像是幾分鐘了解一本書這類的文章、影音，是不是我就可以不用去看了，直接吸收他人的重點整理就好。甚至現在 AI 已經很方便，讓 AI 幫忙抓重點就好，根本沒必要自己去閱讀。畢竟很多書就只是為了講述一兩個道理而不斷論證而已。後來我才察覺，如果只是一兩句話就可以改變一個人的認知，那世界上大家都只要去讀讀格言佳句就好，書籍根本沒存在必要。</p>
+<p>閱讀是一種對話的過程，作者提出了想法，刺激我們的思考，激發出了創意。在這個過程中我們和作者的認知世界開始交疊產生影響，有了新的思維方式。<strong>我們真正想要收穫的從來不是作者的思想理論，而是藉由這些所帶來的刺激</strong>。在閱讀某些書籍時，可能有人覺得內容了無新意，但是有些人卻很喜愛，因為作者的敘述方法能夠不斷激發他產生出新的想法。這些想法而非內容，才是閱讀的價值所在。</p>
+<h3 id="閱讀沒有-KPI"><a href="#閱讀沒有-KPI" class="headerlink" title="閱讀沒有 KPI"></a>閱讀沒有 KPI</h3><p>我個人的閱讀經驗是從一開始很愛讀書，到後來追求讀書速度和數量，最終才回歸閱讀的本質。閱讀的目的在於改變自己的思維方式，但很多人都會搞錯方向以為讀越多書越好。最終出現了很多怎麼一年讀 N 本書的理論，或是怎麼樣練成速讀的方法。我明白看到明確數字的提高是對人類成就感的一種刺激，會讓人更願意努力去達成。然而，我還是覺得這樣雖然能達成目標但是卻會養成畸形的心態。</p>
+<p>由於現在清楚知道讀書是為了有新的思考，我更願意放慢速度，有意識拉長讀一本書的時間。我們都知道跟優秀的人相處會改變自己，相處越久影響越大，那為什麼不願意多花點時間跟優秀的書慢慢相處呢？每天都接觸一點，拉長時間，這樣更可以潛移默化影響思考習慣。人總是有慣性的，<strong>看完一本書後的刺激往往只能維持短短數天，但是透過長時間每天相處，這樣的影響力才能滲入生活之中</strong>。</p>
+<h3 id="閱讀不該形式化"><a href="#閱讀不該形式化" class="headerlink" title="閱讀不該形式化"></a>閱讀不該形式化</h3><p>從過去的學校教育中，其實制約了我們書要從頭開始看到尾的習慣。不但要按照順序看，還需要注意課本中的每個細節，因為考試很有可能就是從某個沒注意到的地方出題的。然而這樣的習慣並不適用真的想要從書中得到收穫。我們會想看一本書，大部分情況都是懷抱著某個課題希望獲得解答，想看看作者對此的看法。既然是想得到答案，那就沒必要用傳統方式閱讀，可以隨意跳著看，尋找解答。有些對自己幫助不大的內容基本上都可以跳過或快速帶過。不需要有強迫症一定要每個地方都看過才是真正讀完。</p>
+<p>除此之外，看書這個行為，只要有從書中一句話獲得啟發，就值回票價了。過去我會希望把這本書提到的所有道理方法都記錄下來，並且細細理解。特別是有些作者會把方法或想法列點出來，這讓人覺得是重點，一定要記起來。但是後來發現這樣並沒有意義，有些自己沒有觸動的知識就算紀錄起來也沒有幫助，很快就忘記了。不如全心專注在真正為自己帶來影響地方，好好品味理解。<strong>一本好書在不同的人生階段看本來就會有不同的理解，劃線的地方也會不一樣</strong>。接受這個事實，知道未來可能會在合適的時間重新閱讀，因此現在只要享受這本書就好。就算是重讀，透過比較過去的筆記和擁有更多人生經驗現在自己的想法，也是一種有趣的體悟。</p>
+<h3 id="閱讀就像與朋友相處"><a href="#閱讀就像與朋友相處" class="headerlink" title="閱讀就像與朋友相處"></a>閱讀就像與朋友相處</h3><p>閱讀本質上就是用比較低的成本認識跟你有不一樣視野的朋友。我們都有過這樣的體會，跟朋友聊天，透過分享他的經歷，看見了不同的選擇、不同的人生，拓展了認知圈。然而這樣的朋友，特別是和自己性質相異的，並不是那麼多，大部分認識的朋友還是在同溫層中的居多。不過，閱讀卻可以帶來相似的效果。閱讀的過程就是在和作者交流，他分享自己的人生視角，為讀者帶來新的啟發。這也是突破同溫層，看見不一樣世界的好方法。</p>
+<p>把書當成朋友還有一個好處，我們不再著急要把書看完了。試想，有哪個人會為了交更多朋友，只是跟眼前的人快速聊聊就結束嗎？<strong>我們會更專注跟這位「朋友」互動交流，從他身上獲得知識，並且反饋自己的想法，建立起一種「對話」</strong>。透過思考他的生命和我的有什麼不同，啟發了新的想法，開啟自己人生不一樣的可能性。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>以上分享是從我過去看書的經歷中摸索出的作法，在享受閱讀的同時也能從中獲得扎實的收穫。當然，每個人都有自己一套和書相處的方式，適合自己最重要。如果我的分享能有稍稍為你帶來啟發，那就再好不過了。</p>
+]]></content>
+      <categories>
+        <category>雜七雜八</category>
+      </categories>
   </entry>
   <entry>
     <title>雙重授權：兼顧開源和商業的模式</title>
